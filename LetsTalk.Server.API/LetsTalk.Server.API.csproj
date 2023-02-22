@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\LetsTalk.Server.Application\LetsTalk.Server.Application.csproj" />
   </ItemGroup>
 
 </Project>

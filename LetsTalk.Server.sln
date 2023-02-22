@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{A561CE66-E97D-4520-B4EB-5AA4F199CDEE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{70D0EDDE-0720-4497-8171-A5A54C491B5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{859FF76A-263A-4C97-A9BE-944BEF6BC3DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{4F15F7E9-505F-452C-8A90-937A5B39DAEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.API", "LetsTalk.Server.API\LetsTalk.Server.API.csproj", "{9E40559E-A172-43FE-AEA9-53F5F9EF03E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E40559E-A172-43FE-AEA9-53F5F9EF03E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E40559E-A172-43FE-AEA9-53F5F9EF03E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E40559E-A172-43FE-AEA9-53F5F9EF03E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E40559E-A172-43FE-AEA9-53F5F9EF03E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5686F7F7-B6BB-40D6-A0BC-BA7D8A853981} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
+		{859FF76A-263A-4C97-A9BE-944BEF6BC3DF} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
+		{AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
+		{4F15F7E9-505F-452C-8A90-937A5B39DAEC} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
+		{9E40559E-A172-43FE-AEA9-53F5F9EF03E6} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}
+	EndGlobalSection
+EndGlobal

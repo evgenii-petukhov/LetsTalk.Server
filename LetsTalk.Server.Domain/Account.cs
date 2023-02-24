@@ -6,6 +6,8 @@ public class Account
 
     public AccountType? AccountType { get; set; }
 
+    public int AccountTypeId { get; set; }
+
     public string? ExternalId { get; set; }
 
     public string? Email { get; set; }

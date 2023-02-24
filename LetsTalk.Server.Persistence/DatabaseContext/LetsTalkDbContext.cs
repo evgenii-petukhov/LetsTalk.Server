@@ -1,0 +1,27 @@
+﻿using LetsTalk.Server.Domain;
+using Microsoft.EntityFrameworkCore;
+
+namespace LetsTalk.Server.Persistence.DatabaseContext;
+
+public class LetsTalkDbContext : DbContext
+{
+	public LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : base(options)
+    {
+
+	}
+
+    public DbSet<AccountType> AccountTypes { get; set; }
+
+    public DbSet<Account> Accounts { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(LetsTalkDbContext).Assembly);
+        base.OnModelCreating(modelBuilder);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return base.SaveChangesAsync(cancellationToken);
+    }
+}

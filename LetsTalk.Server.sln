@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Core", "Let
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Domain", "LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj", "{3E3C835C-05D1-4F67-9184-E205F723791D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence", "LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj", "{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3E3C835C-05D1-4F67-9184-E205F723791D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E3C835C-05D1-4F67-9184-E205F723791D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E3C835C-05D1-4F67-9184-E205F723791D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{9E40559E-A172-43FE-AEA9-53F5F9EF03E6} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{92A60644-12D4-4696-AA35-0DBAAC6AACE6} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
 		{3E3C835C-05D1-4F67-9184-E205F723791D} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
+		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

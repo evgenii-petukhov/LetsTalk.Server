@@ -1,7 +1,9 @@
 using LetsTalk.Server.Core;
+using LetsTalk.Server.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCoreServices();
+builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {

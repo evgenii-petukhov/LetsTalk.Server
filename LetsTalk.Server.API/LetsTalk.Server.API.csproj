@@ -9,13 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Application\LetsTalk.Server.Application.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Core\LetsTalk.Server.Core.csproj" />
   </ItemGroup>
 
 </Project>

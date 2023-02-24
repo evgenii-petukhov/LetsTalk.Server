@@ -1,1 +1,7 @@
 dotnet new gitignore
+
+EF core
+https://jasonwatmore.com/post/2022/03/25/net-6-connect-to-mysql-database-with-entity-framework-core
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet ef migrations add InitialCreate --project LetsTalk.Server.Persistence --startup-project LetsTalk.Server.API (in the solution folder)
+dotnet ef database update (in the API project folder)

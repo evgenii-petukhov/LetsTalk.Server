@@ -26,8 +26,6 @@ public class AuthenticationController : ControllerBase
     {
         var result = await _mediator.Send(_mapper.Map<LoginCommand>(model));
 
-        Console.WriteLine("Login post");
-
-        return Ok(new LoginResponseDto());
+        return Ok(result);
     }
 }

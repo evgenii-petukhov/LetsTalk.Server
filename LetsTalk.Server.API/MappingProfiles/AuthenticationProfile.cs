@@ -10,6 +10,5 @@ public class AuthenticationProfile : Profile
     {
         CreateMap<LoginRequest, LoginCommand>();
         CreateMap<LoginCommand, LoginServiceInput>();
-        CreateMap<LoginServiceResult, LoginResponseDto>();
     }
 }

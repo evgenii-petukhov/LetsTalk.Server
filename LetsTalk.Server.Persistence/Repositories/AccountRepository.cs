@@ -1,0 +1,22 @@
+﻿using LetsTalk.Server.Abstractions.Repositories;
+using LetsTalk.Server.Domain;
+using LetsTalk.Server.Persistence.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
+
+namespace LetsTalk.Server.Persistence.Repositories
+{
+    public class AccountRepository : GenericRepository<Account>, IAccountRepository
+    {
+        public AccountRepository(LetsTalkDbContext context) : base(context)
+        {
+
+        }
+
+        public async Task<Account> GetByExternalIdAsync(string externalId)
+        {
+            return await _context.Set<Account>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(q => q.ExternalId == externalId);
+        }
+    }
+}

@@ -1,4 +1,6 @@
-﻿using LetsTalk.Server.Persistence.DatabaseContext;
+﻿using LetsTalk.Server.Abstractions.Repositories;
+using LetsTalk.Server.Persistence.DatabaseContext;
+using LetsTalk.Server.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,8 @@ public static class PersistenceServiceRegistration
             var connectionString = configuration.GetConnectionString("DbConnectionString");
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         });
+        services.AddTransient<IAccountRepository, AccountRepository>();
+        services.AddTransient<IAccountTypeRepository, AccountTypeRepository>();
         return services;
     }
 }

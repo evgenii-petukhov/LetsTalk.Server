@@ -1,9 +1,7 @@
 ﻿namespace LetsTalk.Server.Domain;
 
-public class Account
+public class Account : BaseEntity
 {
-    public int Id { get; set; }
-
     public AccountType? AccountType { get; set; }
 
     public int AccountTypeId { get; set; }

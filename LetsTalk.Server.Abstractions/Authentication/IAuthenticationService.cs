@@ -4,5 +4,5 @@ namespace LetsTalk.Server.Abstractions.Authentication;
 
 public interface IAuthenticationService
 {
-    Task<LoginServiceResult> Login(LoginServiceInput model);
+    Task<LoginResponseDto> Login(LoginServiceInput model);
 }

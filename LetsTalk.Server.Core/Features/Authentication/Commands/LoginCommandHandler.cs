@@ -21,8 +21,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDt
     public async Task<LoginResponseDto> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
         var model = _mapper.Map<LoginServiceInput>(command);
-        var response = await _authenticationService.Login(model);
-
-        return _mapper.Map<LoginResponseDto>(response);
+        return await _authenticationService.Login(model);
     }
 }

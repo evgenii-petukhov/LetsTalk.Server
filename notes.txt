@@ -1,7 +1,27 @@
-dotnet new gitignore
+==================================================
+ ASP.NET Core + Facebook authentication
+==================================================
+https://jasonwatmore.com/post/2023/01/18/net-7-facebook-authentication-api-tutorial-with-example#authenticate-response-cs
 
-EF core
+==================================================
+ EF core
+==================================================
 https://jasonwatmore.com/post/2022/03/25/net-6-connect-to-mysql-database-with-entity-framework-core
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet ef migrations add InitialCreate --project LetsTalk.Server.Persistence --startup-project LetsTalk.Server.API (in the solution folder)
 dotnet ef database update (in the API project folder)
+
+==================================================
+ NSwag Studio: generate typescript client
+==================================================
+https://levelup.gitconnected.com/how-to-jwt-authenticate-with-angular-to-an-asp-net-4cfab5298d08
+
+==================================================
+ Angular routing on IIS
+==================================================
+https://stackoverflow.com/questions/54704866/deploy-angular-to-iis-7-5-not-working-normal
+
+==================================================
+ Generate gitignore in Visual Studio
+==================================================
+dotnet new gitignore

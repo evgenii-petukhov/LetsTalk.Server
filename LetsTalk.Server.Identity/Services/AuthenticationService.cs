@@ -1,6 +1,5 @@
-﻿using LetsTalk.Server.Core.Contracts.Authentication;
+﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Core.Exceptions;
-using LetsTalk.Server.Core.Features.Authentication.Commands;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Identity.Models;
 using LetsTalk.Server.Models.Authentication;
@@ -28,7 +27,7 @@ public class AuthenticationService : IAuthenticationService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public async Task<LoginResponse> Login(LoginCommand model)
+    public async Task<LoginServiceResult> Login(LoginServiceInput model)
     {
         // verify access token with facebook API to authenticate
         var client = new RestClient("https://graph.facebook.com/");
@@ -61,9 +60,9 @@ public class AuthenticationService : IAuthenticationService
         }
 
         // generate jwt token to access secure routes on this API
-        var token = _jwtService.GenerateJwtToken(account);
+        var token = _jwtService.GenerateJwtToken(account.Id);
 
-        return new LoginResponse();
+        return new LoginServiceResult();
     }
 }
 

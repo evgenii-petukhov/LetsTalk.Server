@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Core.Contracts.Authentication;
+﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Identity.Models;
 using LetsTalk.Server.Identity.Services;
 using Microsoft.Extensions.Configuration;

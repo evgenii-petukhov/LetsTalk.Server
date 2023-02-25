@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models.Authentication;
 using LetsTalk.Server.Core.Features.Authentication.Commands;
 using LetsTalk.Server.Models.Authentication;
 using MediatR;
@@ -23,12 +22,12 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponse>> Login(LoginRequest model)
+    public async Task<ActionResult<LoginResponseDto>> Login(LoginRequest model)
     {
         var result = await _mediator.Send(_mapper.Map<LoginCommand>(model));
 
         Console.WriteLine("Login post");
 
-        return Ok(new LoginResponse());
+        return Ok(new LoginResponseDto());
     }
 }

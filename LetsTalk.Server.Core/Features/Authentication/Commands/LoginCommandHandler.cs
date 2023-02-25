@@ -1,20 +1,28 @@
-﻿using LetsTalk.Server.Core.Contracts.Authentication;
+﻿using AutoMapper;
+using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Models.Authentication;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Authentication.Commands;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDto>
 {
     private readonly IAuthenticationService _authenticationService;
+    private readonly IMapper _mapper;
 
-    public LoginCommandHandler(IAuthenticationService authenticationService)
+    public LoginCommandHandler(
+        IAuthenticationService authenticationService,
+        IMapper mapper)
     {
         _authenticationService = authenticationService;
+        _mapper = mapper;
     }
 
-    public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResponseDto> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        return await _authenticationService.Login(request);
+        var model = _mapper.Map<LoginServiceInput>(command);
+        var response = await _authenticationService.Login(model);
+
+        return _mapper.Map<LoginResponseDto>(response);
     }
 }

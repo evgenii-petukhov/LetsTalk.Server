@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Core.Contracts.Authentication;
+﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Core.Exceptions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Identity.Models;
@@ -22,14 +22,14 @@ public class JwtService : IJwtService
             throw new AppException("JWT secret not configured");
     }
 
-    public string GenerateJwtToken(Account account)
+    public string GenerateJwtToken(int accountId)
     {
         // generate token that is valid for 15 minutes
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtSettings.Key!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", account.Id.ToString()) }),
+            Subject = new ClaimsIdentity(new[] { new Claim("id", accountId.ToString()) }),
             Expires = DateTime.UtcNow.AddMinutes(15),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };

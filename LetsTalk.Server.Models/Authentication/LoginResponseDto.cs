@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Models.Authentication;
 
-public class LoginResponse
+public class LoginResponseDto
 {
     public string? Id { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace LetsTalk.Server.Core.Features.Authentication.Commands;
 
-public class LoginCommand : MediatR.IRequest<LoginResponse>
+public class LoginCommand : MediatR.IRequest<LoginResponseDto>
 {
     public string? Provider { get; set; }
 

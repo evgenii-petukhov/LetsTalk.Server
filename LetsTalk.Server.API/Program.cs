@@ -1,9 +1,13 @@
 using LetsTalk.Server.Core;
+using LetsTalk.Server.Identity;
 using LetsTalk.Server.Persistence;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddCoreServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {

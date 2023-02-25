@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Models.Authentication;
+﻿namespace LetsTalk.Server.Models.Authentication;
 
 public class LoginResponse
 {
@@ -10,3 +10,4 @@ public class LoginResponse
 
     public string? Token { get; set; }
 }
+

@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Domain", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence", "LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj", "{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Identity", "LetsTalk.Server.Identity\LetsTalk.Server.Identity.csproj", "{48DB852C-195B-4F22-8B6E-2FAA76D03D0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Models", "LetsTalk.Server.Models\LetsTalk.Server.Models.csproj", "{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48DB852C-195B-4F22-8B6E-2FAA76D03D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48DB852C-195B-4F22-8B6E-2FAA76D03D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48DB852C-195B-4F22-8B6E-2FAA76D03D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48DB852C-195B-4F22-8B6E-2FAA76D03D0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +70,8 @@ Global
 		{92A60644-12D4-4696-AA35-0DBAAC6AACE6} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
 		{3E3C835C-05D1-4F67-9184-E205F723791D} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
+		{48DB852C-195B-4F22-8B6E-2FAA76D03D0B} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
+		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

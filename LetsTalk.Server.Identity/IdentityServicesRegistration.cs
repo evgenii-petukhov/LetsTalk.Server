@@ -14,6 +14,7 @@ public static class IdentityServicesRegistration
     {
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.AddTransient<IAuthenticationService, AuthenticationService>();
+        services.AddTransient<IFacebookService, FacebookService>();
         services.AddTransient<IJwtService, JwtService>();
 
         return services;

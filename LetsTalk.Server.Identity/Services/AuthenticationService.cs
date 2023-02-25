@@ -40,7 +40,7 @@ public class AuthenticationService : IAuthenticationService
             var response = await client.GetAsync(request);
 
             if (!response.IsSuccessful)
-                throw new AppException(response.ErrorMessage!);
+                throw new BadRequestException(response.ErrorMessage!);
 
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
@@ -72,12 +72,13 @@ public class AuthenticationService : IAuthenticationService
                 Token = token
             };
         }
-        catch
+        catch (HttpRequestException e)
         {
-            return new LoginResponseDto
-            {
-                Success = false
-            };
+            throw new BadRequestException($"Facebook response: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            throw new BadRequestException(e.Message);
         }
     }
 }

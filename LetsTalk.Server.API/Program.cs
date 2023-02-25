@@ -1,3 +1,4 @@
+using LetsTalk.Server.API.Middleware;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Identity;
 using LetsTalk.Server.Persistence;
@@ -18,7 +19,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCustomExceptionHandling();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

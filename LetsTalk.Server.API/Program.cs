@@ -31,7 +31,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("all");
 
-app.UseAuthorization();
+app.UseJwtMiddleware();
 
 app.MapControllers();
 

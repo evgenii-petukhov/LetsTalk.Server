@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
+using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,16 +10,10 @@ public class AccountTypeConfiguration : IEntityTypeConfiguration<AccountType>
     public void Configure(EntityTypeBuilder<AccountType> builder)
     {
         builder.HasData(
-            new AccountType
+            Enum.GetValues<AccountTypes>().Select(x => new AccountType
             {
-                Id = 1,
-                Name = "Facebook"
-            },
-            new AccountType
-            {
-                Id = 2,
-                Name = "VK"
-            }
-        );
+                Id = (int)x,
+                Name = Enum.GetName(x)
+            }));
     }
 }

@@ -11,13 +11,13 @@ using RestSharp;
 
 namespace LetsTalk.Server.Identity.Services;
 
-public class FacebookService : IFacebookService
+public class VkService : IVkService
 {
     private readonly IJwtService _jwtService;
     private readonly IAccountRepository _accountRepository;
     private readonly JwtSettings _jwtSettings;
 
-    public FacebookService(
+    public VkService(
         IJwtService jwtService,
         IOptions<JwtSettings> jwtSettings,
         IAccountRepository accountRepository)
@@ -30,8 +30,8 @@ public class FacebookService : IFacebookService
     public async Task<LoginResponseDto> Login(LoginServiceInput model)
     {
         // verify access token with facebook API to authenticate
-        var client = new RestClient("https://graph.facebook.com/");
-        var request = new RestRequest($"{model.Id}?fields=id,email,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
+        var client = new RestClient("https://api.vk.com/");
+        var request = new RestRequest($"method/users.get?user_ids={model.Id}&fields=id,first_name,last_name,photo_max&access_token={model.AuthToken}&v=5.131");
         try
         {
             var response = await client.GetAsync(request);
@@ -40,8 +40,8 @@ public class FacebookService : IFacebookService
                 throw new BadRequestException(response.ErrorMessage!);
 
             // get data from response and account from db
-            var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
-            string externalId = data.Id!;
+            var data = JsonConvert.DeserializeObject<VkResponse>(response.Content!)!;
+            string externalId = data.Response[0].Id!;
             var account = await _accountRepository.GetByExternalIdAsync(externalId);
 
             // create new account if first time logging in
@@ -50,11 +50,10 @@ public class FacebookService : IFacebookService
                 account = new Account
                 {
                     ExternalId = externalId,
-                    AccountTypeId = (int)AccountTypes.Facebook,
-                    FirstName = data.FirstName,
-                    LastName = data.LastName,
-                    Email = data.Email,
-                    PhotoUrl = data.Picture!.Data!.Url
+                    AccountTypeId = (int)AccountTypes.VK,
+                    FirstName = data.Response[0].FirstName,
+                    LastName = data.Response[0].LastName,
+                    PhotoUrl = data.Response[0].PictureUrl
                 };
                 await _accountRepository.CreateAsync(account);
             }

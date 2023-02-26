@@ -14,10 +14,14 @@ namespace LetsTalk.Server.Identity.Services;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly IFacebookService _facebookService;
+    private readonly IVkService _vkService;
 
-    public AuthenticationService(IFacebookService facebookService)
+    public AuthenticationService(
+        IFacebookService facebookService,
+        IVkService vkService)
     {
         _facebookService = facebookService;
+        _vkService = vkService;
     }
 
     public async Task<LoginResponseDto> Login(LoginServiceInput model)
@@ -25,6 +29,10 @@ public class AuthenticationService : IAuthenticationService
         if (string.Equals(model.Provider, "FACEBOOK", StringComparison.Ordinal))
         {
             return await _facebookService.Login(model);
+        }
+        else if (string.Equals(model.Provider, "VK", StringComparison.Ordinal))
+        {
+            return await _vkService.Login(model);
         }
         else
         {

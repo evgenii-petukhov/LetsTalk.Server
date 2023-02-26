@@ -25,3 +25,8 @@ https://stackoverflow.com/questions/54704866/deploy-angular-to-iis-7-5-not-worki
  Generate gitignore in Visual Studio
 ==================================================
 dotnet new gitignore
+
+==================================================
+ Swagger authorize via bearer token
+==================================================
+https://codeburst.io/api-security-in-swagger-f2afff82fb8e

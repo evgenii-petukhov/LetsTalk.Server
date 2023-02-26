@@ -1,13 +1,6 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
-using LetsTalk.Server.Abstractions.Repositories;
 using LetsTalk.Server.Core.Exceptions;
-using LetsTalk.Server.Domain;
-using LetsTalk.Server.Identity.Models;
 using LetsTalk.Server.Models.Authentication;
-using LetsTalk.Server.Persistence.Enums;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace LetsTalk.Server.Identity.Services;
 

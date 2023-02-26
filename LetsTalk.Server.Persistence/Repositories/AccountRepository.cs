@@ -18,5 +18,13 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(q => q.ExternalId == externalId);
         }
+
+        public async Task<IReadOnlyList<Account>> GetOtherAsync(int id)
+        {
+            return await _context.Set<Account>()
+                .Where(account => account.Id != id)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }

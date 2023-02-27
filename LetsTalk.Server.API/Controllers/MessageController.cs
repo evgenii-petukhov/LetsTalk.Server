@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.SignalR;
 using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.API.SignalR;
@@ -18,15 +19,18 @@ namespace LetsTalk.Server.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private IHubContext<MessageHub, IMessageHubClient> _messageHub;
+        private readonly IMessageHubConnectionManager _connectionManager;
+        private readonly IHubContext<MessageHub, IMessageHubClient> _messageHub;
 
         public MessageController(
             IMediator mediator,
             IMapper mapper,
+            IMessageHubConnectionManager connectionManager,
             IHubContext<MessageHub, IMessageHubClient> messageHub)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _connectionManager = connectionManager;
             _messageHub = messageHub;
         }
 
@@ -45,7 +49,11 @@ namespace LetsTalk.Server.API.Controllers
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var result = await _mediator.Send(cmd);
-            _messageHub.Clients.All.SendOffersToUser(new List<string> {"test"});
+            var connectionId = _connectionManager.GetConnectionId(request.RecipientId);
+            if (connectionId != null)
+            {
+                _messageHub.Clients.Client(connectionId).SendOffersToUser(new List<string> { "test" });
+            }
             return Ok(result);
         }
     }

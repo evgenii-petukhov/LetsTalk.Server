@@ -1,4 +1,5 @@
 using LetsTalk.Server.API.Middleware;
+using LetsTalk.Server.API.SignalR;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Identity;
 using LetsTalk.Server.Persistence;
@@ -11,7 +12,9 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddCoreServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("all", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -50,12 +53,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors("all");
-
+app.UseRouting();
 app.UseJwtMiddleware();
-
+app.UseEndpoints(endpoints => {
+    endpoints.MapControllers();
+    endpoints.MapHub<MessageHub>("/messagehub");
+});
+app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();

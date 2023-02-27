@@ -9,6 +9,7 @@ public class MessageProfile : Profile
 {
 	public MessageProfile()
 	{
+		CreateMap<CreateMessageRequest, CreateMessageCommand>();
 		CreateMap<CreateMessageCommand, Message>();
 		CreateMap<Message, MessageDto>();
 	}

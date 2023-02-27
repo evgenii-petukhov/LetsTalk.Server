@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Core.Exceptions;
-using LetsTalk.Server.Domain;
 using LetsTalk.Server.Identity.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

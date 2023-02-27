@@ -3,4 +3,11 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
-public record CreateMessageCommand(int SenderId, int RecipientId, string Text): IRequest<MessageDto>;
+public class CreateMessageCommand: IRequest<MessageDto>
+{
+    public int SenderId { get; set; }
+
+    public int RecipientId { get; set; }
+
+    public string? Text { get; set; }
+}

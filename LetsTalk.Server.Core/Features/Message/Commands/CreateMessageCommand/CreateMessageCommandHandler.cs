@@ -1,0 +1,27 @@
+﻿using AutoMapper;
+using LetsTalk.Server.Abstractions.Repositories;
+using LetsTalk.Server.Models.Message;
+using MediatR;
+
+namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+
+public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, MessageDto>
+{
+    private readonly IMessageRepository _messageRepository;
+    private readonly IMapper _mapper;
+
+    public CreateMessageCommandHandler(
+        IMessageRepository messageRepository,
+        IMapper mapper)
+    {
+        _messageRepository = messageRepository;
+        _mapper = mapper;
+    }
+
+    public async Task<MessageDto> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
+    {
+        var entity = _mapper.Map<Domain.Message>(request);
+        await _messageRepository.CreateAsync(entity);
+        return _mapper.Map<MessageDto>(entity);
+    }
+}

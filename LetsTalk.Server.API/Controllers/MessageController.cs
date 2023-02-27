@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Models.Message;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,15 @@ namespace LetsTalk.Server.API.Controllers
         {
             _mediator = mediator;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<MessageDto>>> Get(int recipientId)
+        {
+            var senderId = (int)HttpContext.Items["AccountId"]!;
+            var query = new GetMessagesQuery(senderId, recipientId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpPost]

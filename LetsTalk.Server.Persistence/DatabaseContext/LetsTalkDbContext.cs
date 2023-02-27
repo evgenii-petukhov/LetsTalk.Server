@@ -14,6 +14,8 @@ public class LetsTalkDbContext : DbContext
 
     public DbSet<Account> Accounts { get; set; }
 
+    public DbSet<Message> Messages { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LetsTalkDbContext).Assembly);
@@ -22,6 +24,13 @@ public class LetsTalkDbContext : DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        foreach (var entry in base.ChangeTracker.Entries<Message>().Where(q => q.State == EntityState.Added))
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.Created = DateTime.Now;
+            }
+        }
         return base.SaveChangesAsync(cancellationToken);
     }
 }

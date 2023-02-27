@@ -19,7 +19,6 @@ public static class PersistenceServiceRegistration
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         });
         services.AddTransient<IAccountRepository, AccountRepository>();
-        services.AddTransient<IAccountTypeRepository, AccountTypeRepository>();
         return services;
     }
 }

@@ -2,10 +2,10 @@
 using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.SignalR;
 using LetsTalk.Server.API.Attributes;
-using LetsTalk.Server.API.SignalR;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Models.Message;
+using LetsTalk.Server.SignalR.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -52,7 +52,7 @@ namespace LetsTalk.Server.API.Controllers
             var connectionId = _connectionManager.GetConnectionId(request.RecipientId);
             if (connectionId != null)
             {
-                _messageHub.Clients.Client(connectionId).SendOffersToUser(new List<string> { "test" });
+                await _messageHub.Clients.Client(connectionId).SendOffersToUser(new List<string> { "test" });
             }
             return Ok(result);
         }

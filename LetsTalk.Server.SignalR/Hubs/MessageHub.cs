@@ -2,7 +2,7 @@
 using LetsTalk.Server.Abstractions.SignalR;
 using Microsoft.AspNetCore.SignalR;
 
-namespace LetsTalk.Server.API.SignalR;
+namespace LetsTalk.Server.SignalR.Hubs;
 
 public class MessageHub : Hub<IMessageHubClient>
 {

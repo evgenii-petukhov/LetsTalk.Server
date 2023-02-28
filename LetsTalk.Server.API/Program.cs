@@ -1,8 +1,8 @@
 using LetsTalk.Server.API.Middleware;
-using LetsTalk.Server.API.SignalR;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Identity;
 using LetsTalk.Server.Persistence;
+using LetsTalk.Server.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -54,13 +54,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("all");
+
 app.UseRouting();
+
 app.UseJwtMiddleware();
-app.UseEndpoints(endpoints => {
-    endpoints.MapControllers();
-    endpoints.MapHub<MessageHub>("/messagehub");
-});
+
+app.MapHub<MessageHub>("/messagehub");
+
 app.UseHttpsRedirection();
+
 app.MapControllers();
 
 app.Run();

@@ -1,6 +1,8 @@
-﻿namespace LetsTalk.Server.Abstractions.SignalR;
+﻿using LetsTalk.Server.Models.Message;
+
+namespace LetsTalk.Server.Abstractions.SignalR;
 
 public interface IMessageHubClient
 {
-    Task SendOffersToUser(List<string> message);
+    Task SendMessageNotification(MessageDto message);
 }

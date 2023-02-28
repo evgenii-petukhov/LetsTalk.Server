@@ -48,13 +48,13 @@ namespace LetsTalk.Server.API.Controllers
         {
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
-            var result = await _mediator.Send(cmd);
+            var message = await _mediator.Send(cmd);
             var connectionId = _connectionManager.GetConnectionId(request.RecipientId);
             if (connectionId != null)
             {
-                await _messageHub.Clients.Client(connectionId).SendOffersToUser(new List<string> { "test" });
+                await _messageHub.Clients.Client(connectionId).SendMessageNotification(message);
             }
-            return Ok(result);
+            return Ok(message);
         }
     }
 }

@@ -17,11 +17,6 @@ public class MessageHub : Hub<IMessageHubClient>
         _connectionManager = connectionManager;
     }
 
-    public async Task SendOffersToUser(List<string> message)
-    {
-        await Clients.All.SendOffersToUser(message);
-    }
-
     public void Authorize(string token)
     {
         var accountId = _jwtService.ValidateJwtToken(token);

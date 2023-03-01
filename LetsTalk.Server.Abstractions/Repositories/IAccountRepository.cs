@@ -7,5 +7,7 @@ namespace LetsTalk.Server.Abstractions.Repositories
         Task<Account> GetByExternalIdAsync(string externalId);
 
         Task<IReadOnlyList<Account>> GetOtherAsync(int id);
+
+        Task<Account> GetByIdAsync(int id);
     }
 }

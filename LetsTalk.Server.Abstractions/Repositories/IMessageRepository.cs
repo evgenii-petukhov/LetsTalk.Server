@@ -4,5 +4,5 @@ namespace LetsTalk.Server.Abstractions.Repositories;
 
 public interface IMessageRepository : IGenericRepository<Message>
 {
-    Task<IReadOnlyList<Message>> GetBySenderAndRecipientIdsAsync(int senderId, int recipientId);
+    Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId);
 }

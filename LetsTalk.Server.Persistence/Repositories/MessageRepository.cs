@@ -11,7 +11,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
     }
 
-    public async Task<IReadOnlyList<Message>> GetBySenderAndRecipientIdsAsync(int senderId, int recipientId)
+    public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId)
     {
         return await _context.Messages
             .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)

@@ -26,5 +26,11 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        public async Task<Account> GetByIdAsync(int id)
+        {
+            return await _context.Set<Account>()
+                .SingleOrDefaultAsync(account => account.Id == id);
+        }
     }
 }

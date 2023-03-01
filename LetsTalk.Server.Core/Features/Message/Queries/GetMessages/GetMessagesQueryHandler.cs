@@ -20,7 +20,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messages = await _messageRepository.GetBySenderAndRecipientIdsAsync(request.SenderId, request.RecipientId);
+        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId);
         return _mapper.Map<List<MessageDto>>(messages);
     }
 }

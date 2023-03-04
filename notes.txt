@@ -36,3 +36,10 @@ https://codeburst.io/api-security-in-swagger-f2afff82fb8e
  Put request returned Error 405
 ==================================================
 https://fantinel.dev/dotnet-core-405-error
+
+==================================================
+ MySQL query logging
+==================================================
+[mysqld]
+general_log = on
+general_log_file=C:\Program Files\MariaDB 10.11\data\queries.log

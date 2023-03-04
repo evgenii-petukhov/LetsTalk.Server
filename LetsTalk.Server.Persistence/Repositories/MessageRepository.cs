@@ -13,8 +13,14 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
 
     public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId)
     {
+        var now = DateTime.Now;
+
+        await _context.Messages
+            .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && message.DateCreated <= now && message.IsRead == false)
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateRead, DateTime.Now));
+
         return await _context.Messages
-            .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)
+            .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId) && message.DateCreated <= now)
             .OrderBy(mesage => mesage.DateCreated)
             .ToListAsync();
     }
@@ -23,7 +29,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         await _context.Messages
             .Where(message => message.Id == messageId && message.RecipientId == recipientId)
-            .ExecuteUpdateAsync(message => message.SetProperty(x => x.IsRead, true).SetProperty(x => x.DateRead, DateTime.Now));
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateRead, DateTime.Now));
         await _context.SaveChangesAsync();
     }
 }

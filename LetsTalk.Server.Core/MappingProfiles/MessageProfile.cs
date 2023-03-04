@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Models.Message;
 
@@ -12,5 +13,6 @@ public class MessageProfile : Profile
 		CreateMap<CreateMessageRequest, CreateMessageCommand>();
 		CreateMap<CreateMessageCommand, Message>();
 		CreateMap<Message, MessageDto>();
-	}
+        CreateMap<MarkAsReadRequest, ReadMessageCommand>();
+    }
 }

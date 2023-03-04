@@ -28,7 +28,7 @@ public class LetsTalkDbContext : DbContext
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.Created = DateTime.Now;
+                entry.Entity.DateCreated = DateTime.Now;
             }
         }
         return base.SaveChangesAsync(cancellationToken);

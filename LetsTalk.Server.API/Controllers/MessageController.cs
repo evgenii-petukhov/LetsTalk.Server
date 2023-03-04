@@ -3,6 +3,7 @@ using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.SignalR;
 using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Models.Message;
 using LetsTalk.Server.SignalR.Hubs;
@@ -55,6 +56,15 @@ namespace LetsTalk.Server.API.Controllers
                 await _messageHub.Clients.Client(connectionId).SendMessageNotification(message);
             }
             return Ok(message);
+        }
+
+        [HttpPut("MarkAsRead")]
+        public async Task<ActionResult> MarkAsRead(MarkAsReadRequest request)
+        {
+            var cmd = _mapper.Map<ReadMessageCommand>(request);
+            cmd.RecipientId = (int)HttpContext.Items["AccountId"]!;
+            await _mediator.Send(cmd);
+            return Ok();
         }
     }
 }

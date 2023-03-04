@@ -28,7 +28,7 @@ namespace LetsTalk.Server.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("me")]
+        [HttpGet("Me")]
         public async Task<ActionResult<AccountDto>> GetMe()
         {
             var accountId = (int)HttpContext.Items["AccountId"]!;

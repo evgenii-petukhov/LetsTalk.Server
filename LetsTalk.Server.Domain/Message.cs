@@ -12,5 +12,9 @@ public class Message: BaseEntity
 
     public int RecipientId { get; set; }
 
-    public DateTime Created { get; set; }
+    public bool IsRead { get; set; }
+
+    public DateTime DateCreated { get; set; }
+
+    public DateTime? DateRead { get; set; }
 }

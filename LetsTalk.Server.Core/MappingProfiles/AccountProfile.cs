@@ -9,6 +9,7 @@ namespace LetsTalk.Server.Core.MappingProfiles
         public AccountProfile()
         {
             CreateMap<Account, AccountDto>();
+            CreateMap<AccountWithUnreadCount, AccountDto>();
         }
     }
 }

@@ -19,11 +19,45 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(q => q.ExternalId == externalId);
         }
 
-        public async Task<IReadOnlyList<Account>> GetOtherAsync(int id)
+        public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id)
         {
-            return await _context.Set<Account>()
+            var accountsWithUnread = _context.Set<Account>()
                 .Where(account => account.Id != id)
-                .AsNoTracking()
+                .Join(
+                    _context.Set<Message>().Where(message => message.RecipientId == id && message.DateCreated <= DateTime.Now && message.IsRead == false),
+                    account => account.Id,
+                    message => message.SenderId,
+                    (account, message) => new
+                    {
+                        Account = account,
+                        Message = message
+                    })
+                .GroupBy(g => g.Account)
+                .Where(g => g.Any())
+                .Select(g => new A
+                {
+                    AccountId = g.Key.Id,
+                    UnreadCount = g.Count()
+                });
+
+            return await _context.Set<Account>().Where(account => account.Id != id)
+                .GroupJoin(accountsWithUnread, x => x.Id, x => x.AccountId, (x, y) => new
+                {
+                    Account = x,
+                    AccountWithUnreads = y
+                })
+                .SelectMany(
+                    x => x.AccountWithUnreads.DefaultIfEmpty(),
+                    (x, y) => new { x.Account, AccountWithUnread = y })
+                .Select(x => new AccountWithUnreadCount
+                {
+                    Id = x.Account.Id,
+                    FirstName = x.Account.FirstName,
+                    LastName = x.Account.LastName,
+                    PhotoUrl = x.Account.PhotoUrl,
+                    AccountTypeId = x.Account.AccountTypeId,
+                    UnreadCount = x.AccountWithUnread.UnreadCount
+                })
                 .ToListAsync();
         }
 
@@ -33,4 +67,10 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
     }
+}
+
+class A
+{
+    public int AccountId {get; set;}
+    public int UnreadCount { get; set; }
 }

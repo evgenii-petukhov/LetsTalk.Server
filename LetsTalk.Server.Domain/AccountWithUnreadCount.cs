@@ -1,9 +1,7 @@
-﻿namespace LetsTalk.Server.Models.Account;
+﻿namespace LetsTalk.Server.Domain;
 
-public class AccountDto
+public class AccountWithUnreadCount : BaseEntity
 {
-    public int Id { get; set; }
-
     public int AccountTypeId { get; set; }
 
     public string? PhotoUrl { get; set; }
@@ -12,5 +10,5 @@ public class AccountDto
 
     public string? LastName { get; set; }
 
-    public int UnreadCount { get; set; }
+    public int? UnreadCount { get; set; }
 }

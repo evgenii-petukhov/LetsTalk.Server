@@ -5,6 +5,13 @@ cat /etc/os-release
 https://snqa.ucsd.edu/its?id=kb_article_view&sysparm_article=KB0032481
 
 ==================================================
+ Linux GUI
+==================================================
+sudo systemctl set-default multi-user.target
+sudo systemctl set-default graphical.target
+startx
+
+==================================================
  Install dotnet
 ==================================================
 preparations for ubuntu 20.04
@@ -17,37 +24,18 @@ rm packages-microsoft-prod.deb
 https://www.youtube.com/watch?v=WUAhKhWgsIg
 
 ==================================================
- Service conf
-==================================================             
-[Unit]
-Description=Example .NET Web API App running on CentOS 7
-
-[Service]
-WorkingDirectory=/home/petukhoven/Downloads/LetsTalk.Server-linux-host/LetsTalk>
-ExecStart=dotnet /home/petukhoven/Downloads/LetsTalk.Server-linux-host/LetsTalk>
-Restart=always
-# Restart service after 10 seconds if the dotnet service crashes:
-RestartSec=10
-KillSignal=SIGINT
-SyslogIdentifier=dotnet-example
-#Environment=ASPNETCORE_ENVIRONMENT=Production 
-
-[Install]
-WantedBy=multi-user.target
-
-==================================================
  NGINX
 ==================================================
 https://linuxhint.com/install-nginx-linux-mint/
 https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-7.0&tabs=linux-ubuntu
-https://www.keycdn.com/support/nginx-virtual-host#:~:text=A%20virtual%20host%20is%20an,websites%20on%20a%20single%20server.
+https://www.keycdn.com/support/nginx-virtual-host
 https://github.com/nodesource/distributions/blob/master/README.md
 https://github.com/creativetimofficial/notus-angular/issues/4
 sudo nginx -t
 sudo nginx -s reload
 
 virtual hosts
-https://www.keycdn.com/support/nginx-virtual-host#:~:text=A%20virtual%20host%20is%20an,websites%20on%20a%20single%20server.
+https://www.keycdn.com/support/nginx-virtual-host
 
 certificates
 https://www.digicert.com/kb/csr-ssl-installation/nginx-openssl.htm
@@ -56,6 +44,16 @@ https://www.ibm.com/docs/en/api-connect/2018.x?topic=overview-generating-self-si
 https://stackoverflow.com/questions/3016956/how-do-i-install-the-openssl-libraries-on-ubuntu
 https://stackoverflow.com/questions/73997363/host-asp-net-core-grpc-service-on-linux-with-nginx
 
-
 openssl req -new -newkey rsa:2048 -nodes -out letstalk_local.pem -keyout letstalk_local.pem -x509 -days 365 -subj "/C=US/ST=US/L=letstalk.local/O=letstalk.local/OU=letstalk.local/CN=letstalk.local"
 
+==================================================
+ CURL
+==================================================
+curl -i http://reqbin.com/echo
+curl -k https://reqbin.com/echo
+
+==================================================
+ MySQL
+==================================================
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04
+https://devanswers.co/how-to-fix-failed-error-set-password-has-no-significance-for-user-rootlocalhost/

@@ -1,5 +1,8 @@
-﻿namespace LetsTalk.Server.Domain;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace LetsTalk.Server.Domain;
+
+[Table("messages")]
 public class Message: BaseEntity
 {
     public string? Text { get; set; }

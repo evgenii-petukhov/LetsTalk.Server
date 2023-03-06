@@ -4,7 +4,9 @@ using LetsTalk.Server.Identity;
 using LetsTalk.Server.Persistence;
 using LetsTalk.Server.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
+using System.Net;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,20 +44,37 @@ builder.Services.AddSwaggerGen(c =>
         {securityScheme, Array.Empty<string>()}
     });
 });
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+    options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));
+});
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ConfigureEndpointDefaults(listenOptions => { });
+}).ConfigureAppConfiguration((builderContext, config) =>
+{
+    config.AddJsonFile(AppDomain.CurrentDomain.BaseDirectory + "appsettings.json", optional: false);
+});
 
 var app = builder.Build();
 
 app.UseCustomExceptionHandling();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseCors("all");
 
 app.UseRouting();
+
+app.UseForwardedHeaders();
 
 app.UseJwtMiddleware();
 

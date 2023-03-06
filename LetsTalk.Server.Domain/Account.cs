@@ -1,5 +1,8 @@
-﻿namespace LetsTalk.Server.Domain;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace LetsTalk.Server.Domain;
+
+[Table("accounts")]
 public class Account : BaseEntity
 {
     public AccountType? AccountType { get; set; }

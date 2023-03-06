@@ -2,6 +2,7 @@
  ASP.NET Core + Facebook authentication
 ==================================================
 https://jasonwatmore.com/post/2023/01/18/net-7-facebook-authentication-api-tutorial-with-example#authenticate-response-cs
+https://charlehsin.github.io/coding/dotnet5/2021/11/19/oauth2-in-aspnet5-webapi.html
 
 ==================================================
  EF core

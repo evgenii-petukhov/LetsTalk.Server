@@ -12,7 +12,8 @@ public class MessageProfile : Profile
 	{
 		CreateMap<CreateMessageRequest, CreateMessageCommand>();
 		CreateMap<CreateMessageCommand, Message>();
-		CreateMap<Message, MessageDto>();
+		CreateMap<Message, MessageDto>()
+			.ForMember(x => x.AccountId, x => x.MapFrom(s => s.SenderId));
         CreateMap<MarkAsReadRequest, ReadMessageCommand>();
     }
 }

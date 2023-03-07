@@ -21,6 +21,11 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
         var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId);
-        return _mapper.Map<List<MessageDto>>(messages);
+        var messageDtos = _mapper.Map<List<MessageDto>>(messages);
+        messageDtos.ForEach(message =>
+        {
+            message.IsMine = message.AccountId == request.SenderId;
+        });
+        return messageDtos;
     }
 }

@@ -19,9 +19,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("all", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+    options.AddPolicy("all", builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     var securityScheme = new OpenApiSecurityScheme
@@ -46,19 +51,21 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
     options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));
 });
-
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ConfigureEndpointDefaults(listenOptions => { });
-}).ConfigureAppConfiguration((builderContext, config) =>
-{
-    config.AddJsonFile(AppDomain.CurrentDomain.BaseDirectory + "appsettings.json", optional: false);
-});
+builder.WebHost
+    .ConfigureKestrel(serverOptions =>
+    {
+        serverOptions.ConfigureEndpointDefaults(listenOptions =>
+        {
+        
+        });
+    })
+    .ConfigureAppConfiguration((builderContext, config) =>
+    {
+        config.AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
+    });
 
 var app = builder.Build();
 

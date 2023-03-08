@@ -39,8 +39,29 @@ https://codeburst.io/api-security-in-swagger-f2afff82fb8e
 https://fantinel.dev/dotnet-core-405-error
 
 ==================================================
- MySQL query logging
+ MySQL: query logging
 ==================================================
 [mysqld]
 general_log = on
 general_log_file=C:\Program Files\MariaDB 10.11\data\queries.log
+
+==================================================
+ Kestrel: configure port
+==================================================
+https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-7.0
+https://stackoverflow.com/questions/63774926/use-kestrel-in-net-core-worker-project
+
+{
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://localhost:5000"
+      },
+      "Https": {
+        "Url": "https://localhost:5001"
+      }
+    }
+  }
+}
+
+

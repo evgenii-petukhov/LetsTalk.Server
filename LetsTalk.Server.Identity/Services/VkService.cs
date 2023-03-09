@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
+using LetsTalk.Server.Abstractions.Logging;
 using LetsTalk.Server.Abstractions.Repositories;
 using LetsTalk.Server.Core.Exceptions;
 using LetsTalk.Server.Domain;
@@ -16,15 +17,18 @@ public class VkService : IVkService
     private readonly IJwtService _jwtService;
     private readonly IAccountRepository _accountRepository;
     private readonly JwtSettings _jwtSettings;
+    private readonly IAppLogger<VkService> _appLogger;
 
     public VkService(
         IJwtService jwtService,
         IOptions<JwtSettings> jwtSettings,
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository,
+        IAppLogger<VkService> appLogger)
     {
         _jwtService = jwtService;
         _accountRepository = accountRepository;
         _jwtSettings = jwtSettings.Value;
+        _appLogger = appLogger;
     }
 
     public async Task<LoginResponseDto> Login(LoginServiceInput model)
@@ -38,6 +42,8 @@ public class VkService : IVkService
 
             if (!response.IsSuccessful)
                 throw new BadRequestException(response.ErrorMessage!);
+
+            _appLogger.LogInformation("VK response = {response}", response.Content);
 
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<VkResponse>(response.Content!)!;

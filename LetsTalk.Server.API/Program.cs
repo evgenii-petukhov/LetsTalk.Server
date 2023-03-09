@@ -7,6 +7,7 @@ using LetsTalk.Server.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Net;
 using System.Reflection;
 
@@ -68,6 +69,9 @@ builder.WebHost
     {
         config.AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
     });
+builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
+    .WriteTo.Console()
+    .ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 
@@ -88,6 +92,8 @@ app.UseForwardedHeaders();
 app.UseJwtMiddleware();
 
 app.MapHub<MessageHub>("/messagehub");
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

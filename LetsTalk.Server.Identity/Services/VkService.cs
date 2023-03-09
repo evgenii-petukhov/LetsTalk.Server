@@ -43,7 +43,7 @@ public class VkService : IVkService
             if (!response.IsSuccessful)
                 throw new BadRequestException(response.ErrorMessage!);
 
-            _appLogger.LogInformation("VK response = {response}", response.Content);
+            _appLogger.LogInformation("VK response = {@response}", response);
 
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<VkResponse>(response.Content!)!;

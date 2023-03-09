@@ -4,10 +4,10 @@ namespace LetsTalk.Server.Identity.Models;
 
 public class VkInnerResponse
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     [JsonProperty("photo_max")]
-    public string PictureUrl { get; set; }
+    public string? PictureUrl { get; set; }
 
     [JsonProperty("first_name")]
     public string? FirstName { get; set; }

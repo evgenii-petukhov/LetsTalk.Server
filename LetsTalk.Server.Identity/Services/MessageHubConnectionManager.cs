@@ -5,11 +5,11 @@ namespace LetsTalk.Server.Identity.Services
 {
     public class MessageHubConnectionManager: IMessageHubConnectionManager
     {
-        public readonly ConcurrentDictionary<int, string> _connectionIdAccountIdBy = new();
+        public readonly ConcurrentDictionary<int, string?> _connectionIdAccountIdBy = new();
 
         public string GetConnectionId(int accountId)
         {
-            return _connectionIdAccountIdBy.GetValueOrDefault(accountId);
+            return _connectionIdAccountIdBy.GetValueOrDefault(accountId)!;
         }
 
         public void RemoveConnectionId(string connectionId)

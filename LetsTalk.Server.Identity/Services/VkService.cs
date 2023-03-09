@@ -43,16 +43,15 @@ public class VkService : IVkService
             if (!response.IsSuccessful)
                 throw new BadRequestException(response.ErrorMessage!);
 
-            _appLogger.LogInformation("VK response = {@response}", response);
-
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<VkResponse>(response.Content!)!;
+            _appLogger.LogInformation("VK response: {@response}", response.Content!);
             if (data.Error != null)
             {
-                throw new BadRequestException(data.Error.Message);
+                throw new BadRequestException(data.Error.Message!);
             }
 
-            string externalId = data.Response[0].Id!;
+            string externalId = data.Response![0].Id!;
             var account = await _accountRepository.GetByExternalIdAsync(externalId);
 
             // create new account if first time logging in

@@ -38,8 +38,7 @@ public class CustomExceptionMiddleware
                     Title = badRequestException.Message,
                     Status = (int)statusCode,
                     Type = nameof(BadRequestException),
-                    Detail = badRequestException.InnerException?.Message,
-                    StackTrace = ex.StackTrace
+                    Detail = badRequestException.InnerException?.Message
                 };
                 break;
             case NotFoundException notFoundException:
@@ -49,12 +48,11 @@ public class CustomExceptionMiddleware
                     Title = notFoundException.Message,
                     Status = (int)statusCode,
                     Type = nameof(NotFoundException),
-                    Detail = notFoundException.InnerException?.Message,
-                    StackTrace = ex.StackTrace
+                    Detail = notFoundException.InnerException?.Message
                 };
                 break;
             default:
-                statusCode = HttpStatusCode.NotFound;
+                statusCode = HttpStatusCode.InternalServerError;
                 problem = new CustomProblemDetails
                 {
                     Title = ex.Message,

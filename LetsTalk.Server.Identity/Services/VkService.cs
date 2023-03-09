@@ -47,6 +47,11 @@ public class VkService : IVkService
 
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<VkResponse>(response.Content!)!;
+            if (data.Error != null)
+            {
+                throw new BadRequestException(data.Error.Message);
+            }
+
             string externalId = data.Response[0].Id!;
             var account = await _accountRepository.GetByExternalIdAsync(externalId);
 

@@ -41,6 +41,7 @@ public class FacebookService : IFacebookService
 
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
+
             string externalId = data.Id!;
             var account = await _accountRepository.GetByExternalIdAsync(externalId);
 

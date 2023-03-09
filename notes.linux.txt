@@ -43,6 +43,7 @@ https://phoenixnap.com/kb/install-ssl-certificate-nginx
 https://www.ibm.com/docs/en/api-connect/2018.x?topic=overview-generating-self-signed-certificate-using-openssl
 https://stackoverflow.com/questions/3016956/how-do-i-install-the-openssl-libraries-on-ubuntu
 https://stackoverflow.com/questions/73997363/host-asp-net-core-grpc-service-on-linux-with-nginx
+cat certificate.crt ca_bundle.crt >> certificate.crt
 
 openssl req -new -newkey rsa:2048 -nodes -out letstalk_local.pem -keyout letstalk_local.pem -x509 -days 365 -subj "/C=US/ST=US/L=letstalk.local/O=letstalk.local/OU=letstalk.local/CN=letstalk.local"
 

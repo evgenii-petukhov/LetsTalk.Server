@@ -1,0 +1,21 @@
+1 update /ets/hosts
+
+2 install nginx
+  2.1 configure the default conf file
+
+3 install git
+  3.1 clone client
+    3.1.1 install nodejs and npm
+    *** nodejs installation guide: https://github.com/nodesource/distributions/blob/master/README.md
+    *** check version: node -v, npm -v
+    3.1.2 npm install
+    3.1.3 npm run build:dev
+
+  3.2 clone server
+    3.2.1 install dotnet
+	*** dotnet installation guide: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian
+    3.2.2 dotnet publish
+    3.2.3 install mariadb
+    3.2.4 set up database
+    *** EF guide https://learn.microsoft.com/en-us/ef/core/cli/dotnet
+    

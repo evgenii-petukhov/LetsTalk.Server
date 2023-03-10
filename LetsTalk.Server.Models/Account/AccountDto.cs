@@ -13,4 +13,6 @@ public class AccountDto
     public string? LastName { get; set; }
 
     public int UnreadCount { get; set; }
+
+    public DateTime? LastMessageDate { get; set; }
 }

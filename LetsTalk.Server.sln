@@ -31,7 +31,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Abstraction
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.SignalR", "LetsTalk.Server.SignalR\LetsTalk.Server.SignalR.csproj", "{77C0E818-DE55-481F-A696-693C352FFC0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Infrastructure", "LetsTalk.Server.Infrastructure\LetsTalk.Server.Infrastructure.csproj", "{A3B56666-FA3A-4996-BE22-51F66E060594}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Infrastructure", "LetsTalk.Server.Infrastructure\LetsTalk.Server.Infrastructure.csproj", "{A3B56666-FA3A-4996-BE22-51F66E060594}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E58EDC86-8B48-4A22-96D3-3A873E09ADBD}"
+	ProjectSection(SolutionItems) = preProject
+		rebuild.sh = rebuild.sh
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

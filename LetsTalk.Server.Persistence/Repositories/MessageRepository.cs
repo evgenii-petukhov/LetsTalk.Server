@@ -13,14 +13,12 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
 
     public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId)
     {
-        var now = DateTime.Now;
-
         await _context.Messages
-            .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && message.DateCreated <= now && message.IsRead == false)
+            .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && message.IsRead == false)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateRead, DateTime.Now));
 
         return await _context.Messages
-            .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId) && message.DateCreated <= now)
+            .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)
             .OrderBy(mesage => mesage.DateCreated)
             .ToListAsync();
     }

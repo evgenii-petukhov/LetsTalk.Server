@@ -24,7 +24,7 @@ namespace LetsTalk.Server.Persistence.Repositories
             var accountsWithUnread = _context.Set<Account>()
                 .Where(account => account.Id != id)
                 .Join(
-                    _context.Set<Message>().Where(message => message.RecipientId == id && message.DateCreated <= DateTime.Now && message.IsRead == false),
+                    _context.Set<Message>().Where(message => message.RecipientId == id && message.IsRead == false),
                     account => account.Id,
                     message => message.SenderId,
                     (account, message) => new
@@ -33,7 +33,6 @@ namespace LetsTalk.Server.Persistence.Repositories
                         Message = message
                     })
                 .GroupBy(g => g.Account)
-                .Where(g => g.Any())
                 .Select(g => new
                 {
                     AccountId = g.Key.Id,
@@ -41,7 +40,8 @@ namespace LetsTalk.Server.Persistence.Repositories
                     LastMessageDate = g.Max(x => x.Message.DateCreated)
                 });
 
-            return await _context.Set<Account>().Where(account => account.Id != id)
+            return await _context.Set<Account>()
+                .Where(account => account.Id != id)
                 .GroupJoin(accountsWithUnread, x => x.Id, x => x.AccountId, (x, y) => new
                 {
                     Account = x,

@@ -12,7 +12,7 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         }
 
-        public async Task<Account> GetByExternalIdAsync(string externalId)
+        public async Task<Account?> GetByExternalIdAsync(string externalId)
         {
             return await _context.Set<Account>()
                 .AsNoTracking()
@@ -21,7 +21,34 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id)
         {
-            var accountsWithUnread = _context.Set<Account>()
+            var sentMessageDates = _context.Set<Message>()
+                .Where(x => x.SenderId == id)
+                .GroupBy(x => x.RecipientId)
+                .Select(g => new
+                {
+                    AccountId = g.Key,
+                    LastMessageDate = g.Max(x => x.DateCreated)
+                });
+                
+            var receivedMessageDates = _context.Set<Message>()
+                .Where(x => x.RecipientId == id)
+                .GroupBy(x => x.SenderId)
+                .Select(g => new
+                {
+                    AccountId = g.Key,
+                    LastMessageDate = g.Max(x => x.DateCreated)
+                });
+
+            var lastMessageDates = sentMessageDates
+                .Concat(receivedMessageDates)
+                .GroupBy(x => x.AccountId)
+                .Select(x => new
+                {
+                    AccountId = x.Key,
+                    LastMessageDate = x.Select(a => a.LastMessageDate).Max()
+                });
+
+            var unreadMessageCounts = _context.Set<Account>()
                 .Where(account => account.Id != id)
                 .Join(
                     _context.Set<Message>().Where(message => message.RecipientId == id && message.IsRead == false),
@@ -36,47 +63,57 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .Select(g => new
                 {
                     AccountId = g.Key.Id,
-                    UnreadCount = g.Count(),
-                    LastMessageDate = g.Max(x => x.Message.DateCreated)
+                    UnreadCount = g.Count()
                 });
 
             return await _context.Set<Account>()
                 .Where(account => account.Id != id)
-                .GroupJoin(accountsWithUnread, x => x.Id, x => x.AccountId, (x, y) => new
+                .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
                 {
                     Account = x,
-                    AccountWithUnreads = y
+                    LastMessageDates = y
                 })
                 .SelectMany(
-                    x => x.AccountWithUnreads.DefaultIfEmpty(),
+                    x => x.LastMessageDates.DefaultIfEmpty(),
                     (x, y) => new
                     {
                         x.Account,
-                        AccountWithUnread = y
+                        LastMessageDates = y
+                    })
+                .Select(x => new
+                {
+                    x.Account,
+                    x.LastMessageDates!.LastMessageDate
+                })
+                .GroupJoin(unreadMessageCounts, x => x.Account.Id, x => x.AccountId, (x, y) => new
+                {
+                    Account = x,
+                    UnreadMessageCounts = y
+                })
+                .SelectMany(
+                    x => x.UnreadMessageCounts.DefaultIfEmpty(),
+                    (x, y) => new
+                    {
+                        AccountInfo = x.Account,
+                        UnreadMessageCounts = y
                     })
                 .Select(x => new AccountWithUnreadCount
                 {
-                    Id = x.Account.Id,
-                    FirstName = x.Account.FirstName,
-                    LastName = x.Account.LastName,
-                    PhotoUrl = x.Account.PhotoUrl,
-                    AccountTypeId = x.Account.AccountTypeId,
-                    UnreadCount = x.AccountWithUnread.UnreadCount,
-                    LastMessageDate = x.AccountWithUnread.LastMessageDate
+                    Id = x.AccountInfo.Account.Id,
+                    FirstName = x.AccountInfo.Account.FirstName,
+                    LastName = x.AccountInfo.Account.LastName,
+                    PhotoUrl = x.AccountInfo.Account.PhotoUrl,
+                    AccountTypeId = x.AccountInfo.Account.AccountTypeId,
+                    LastMessageDate = x.AccountInfo.LastMessageDate,
+                    UnreadCount = x.UnreadMessageCounts!.UnreadCount
                 })
                 .ToListAsync();
         }
 
-        public async Task<Account> GetByIdAsync(int id)
+        public async Task<Account?> GetByIdAsync(int id)
         {
             return await _context.Set<Account>()
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
     }
-}
-
-class A
-{
-    public int AccountId {get; set;}
-    public int UnreadCount { get; set; }
 }

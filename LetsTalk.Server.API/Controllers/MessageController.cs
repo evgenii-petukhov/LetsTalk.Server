@@ -53,8 +53,10 @@ namespace LetsTalk.Server.API.Controllers
             var connectionId = _connectionManager.GetConnectionId(request.RecipientId);
             if (connectionId != null)
             {
+                message.IsMine = false;
                 await _messageHub.Clients.Client(connectionId).SendMessageNotification(message);
             }
+            message.IsMine = true;
             return Ok(message);
         }
 

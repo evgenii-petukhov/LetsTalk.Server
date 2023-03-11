@@ -33,11 +33,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.SignalR", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Infrastructure", "LetsTalk.Server.Infrastructure\LetsTalk.Server.Infrastructure.csproj", "{A3B56666-FA3A-4996-BE22-51F66E060594}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E58EDC86-8B48-4A22-96D3-3A873E09ADBD}"
-	ProjectSection(SolutionItems) = preProject
-		rebuild.sh = rebuild.sh
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

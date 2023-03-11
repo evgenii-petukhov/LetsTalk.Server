@@ -15,7 +15,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         await _context.Messages
             .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && message.IsRead == false)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateRead, DateTime.Now));
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateRead, DateTime.UtcNow));
 
         return await _context.Messages
             .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)
@@ -27,7 +27,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         await _context.Messages
             .Where(message => message.Id == messageId && message.RecipientId == recipientId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateRead, DateTime.Now));
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateRead, DateTime.UtcNow));
         await _context.SaveChangesAsync();
     }
 }

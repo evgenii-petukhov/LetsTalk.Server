@@ -17,7 +17,6 @@ public static class IdentityServicesRegistration
         services.AddTransient<IFacebookService, FacebookService>();
         services.AddTransient<IVkService, VkService>();
         services.AddTransient<IJwtService, JwtService>();
-        services.AddSingleton<IMessageHubConnectionManager, MessageHubConnectionManager>();
 
         return services;
     }

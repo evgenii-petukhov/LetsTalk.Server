@@ -20,8 +20,10 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<MessageDto> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var entity = _mapper.Map<Domain.Message>(request);
-        await _messageRepository.CreateAsync(entity);
-        return _mapper.Map<MessageDto>(entity);
+        var messageEntity = _mapper.Map<Domain.Message>(request);
+        await _messageRepository.CreateAsync(messageEntity);
+        var messageDto = _mapper.Map<MessageDto>(messageEntity);
+        messageDto.IsMine = true;
+        return messageDto;
     }
 }

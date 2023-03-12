@@ -1,6 +1,6 @@
-﻿namespace LetsTalk.Server.Abstractions.Authentication;
+﻿namespace LetsTalk.Server.Abstractions.SignalR;
 
-public interface IMessageHubConnectionManager
+public interface IConnectionManager
 {
     string GetConnectionId(int accountId);
 

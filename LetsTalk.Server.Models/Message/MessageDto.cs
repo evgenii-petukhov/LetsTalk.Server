@@ -11,4 +11,9 @@ public class MessageDto
     public bool IsMine { get; set; }
 
     public DateTime Created { get; set; }
+
+    public MessageDto GetClone()
+    {
+        return (MessageDto)MemberwiseClone();
+    }
 }

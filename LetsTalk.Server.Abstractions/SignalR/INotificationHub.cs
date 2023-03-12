@@ -2,7 +2,7 @@
 
 namespace LetsTalk.Server.Abstractions.SignalR;
 
-public interface IMessageHubClient
+public interface INotificationHub
 {
     Task SendMessageNotification(MessageDto message);
 }

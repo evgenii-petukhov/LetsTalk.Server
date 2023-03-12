@@ -6,10 +6,9 @@ using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Models.Message;
-using LetsTalk.Server.SignalR.Hubs;
+using LetsTalk.Server.SignalR.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace LetsTalk.Server.API.Controllers
 {
@@ -20,19 +19,16 @@ namespace LetsTalk.Server.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly IMessageHubConnectionManager _connectionManager;
-        private readonly IHubContext<MessageHub, IMessageHubClient> _messageHub;
+        private readonly INotificationService _notificationService;
 
         public MessageController(
             IMediator mediator,
             IMapper mapper,
-            IMessageHubConnectionManager connectionManager,
-            IHubContext<MessageHub, IMessageHubClient> messageHub)
+            INotificationService notificationService)
         {
             _mediator = mediator;
             _mapper = mapper;
-            _connectionManager = connectionManager;
-            _messageHub = messageHub;
+            _notificationService = notificationService;
         }
 
         [HttpGet]
@@ -50,13 +46,10 @@ namespace LetsTalk.Server.API.Controllers
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var message = await _mediator.Send(cmd);
-            var connectionId = _connectionManager.GetConnectionId(request.RecipientId);
-            if (connectionId != null)
-            {
-                message.IsMine = false;
-                await _messageHub.Clients.Client(connectionId).SendMessageNotification(message);
-            }
-            message.IsMine = true;
+
+            var messageToNotify = message.GetClone();
+            messageToNotify.IsMine = false;
+            _ = _notificationService.SendMessageNotification(request.RecipientId, messageToNotify);
             return Ok(message);
         }
 

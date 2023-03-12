@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace LetsTalk.Server.SignalR.Hubs;
 
-public class MessageHub : Hub<IMessageHubClient>
+public class NotificationHub : Hub<INotificationHub>
 {
     private readonly IJwtService _jwtService;
-    private readonly IMessageHubConnectionManager _connectionManager;
+    private readonly IConnectionManager _connectionManager;
 
-    public MessageHub(
+    public NotificationHub(
         IJwtService jwtService,
-        IMessageHubConnectionManager connectionManager)
+        IConnectionManager connectionManager)
     {
         _jwtService = jwtService;
         _connectionManager = connectionManager;

@@ -93,7 +93,7 @@ app.UseForwardedHeaders();
 
 app.UseJwtMiddleware();
 
-app.MapHub<MessageHub>("/messagehub");
+app.MapHub<NotificationHub>("/messagehub");
 
 app.UseSerilogRequestLogging();
 

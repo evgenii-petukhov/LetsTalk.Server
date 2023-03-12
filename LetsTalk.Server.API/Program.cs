@@ -1,4 +1,5 @@
 using LetsTalk.Server.API.Middleware;
+using LetsTalk.Server.API.Services;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Identity;
 using LetsTalk.Server.Infrastructure;
@@ -6,6 +7,8 @@ using LetsTalk.Server.Persistence;
 using LetsTalk.Server.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Net;
@@ -17,7 +20,8 @@ builder.Services.AddCoreServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
-builder.Services.AddSignalR();
+//builder.Services.AddSignalR();
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
@@ -60,9 +64,10 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.WebHost
     .ConfigureKestrel(serverOptions =>
     {
+        // ??? port 7264?
+        serverOptions.ListenLocalhost(7264, o => o.Protocols = HttpProtocols.Http2);
         serverOptions.ConfigureEndpointDefaults(listenOptions =>
         {
-        
         });
     })
     .ConfigureAppConfiguration((builderContext, config) =>
@@ -91,7 +96,10 @@ app.UseForwardedHeaders();
 
 app.UseJwtMiddleware();
 
-app.MapHub<MessageHub>("/messagehub");
+//app.MapHub<MessageHub>("/messagehub");
+app.UseGrpcWeb();
+
+app.MapGrpcService<StreamImplService>().EnableGrpcWeb();
 
 app.UseSerilogRequestLogging();
 

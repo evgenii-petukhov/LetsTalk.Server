@@ -64,4 +64,13 @@ https://stackoverflow.com/questions/63774926/use-kestrel-in-net-core-worker-proj
   }
 }
 
-
+==================================================
+ GRPC streaming
+==================================================
+https://ably.com/topic/grpc-vs-websocket
+https://itnext.io/a-complete-guide-to-grpc-web-with-angular-and-net-c4ae2500bd24
+https://github.com/grpc/grpc-web
+https://github.com/grpc/grpc-web/blob/master/net/grpc/gateway/examples/echo/tutorial.md
+https://stackoverflow.com/questions/74597406/grpc-how-to-find-a-specific-client-in-the-stream-grpc
+https://referbruv.com/blog/implementing-stream-based-communication-with-grpc-and-aspnet-core/
+https://daily.dev/blog/build-a-chat-app-using-grpc-and-reactjs

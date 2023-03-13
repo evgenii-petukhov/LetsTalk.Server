@@ -104,7 +104,7 @@ namespace LetsTalk.Server.Persistence.Repositories
                     LastName = x.AccountInfo.Account.LastName,
                     PhotoUrl = x.AccountInfo.Account.PhotoUrl,
                     AccountTypeId = x.AccountInfo.Account.AccountTypeId,
-                    LastMessageDateUnix = x.AccountInfo.LastMessageDate,
+                    LastMessageDate = x.AccountInfo.LastMessageDate,
                     UnreadCount = x.UnreadMessageCounts!.UnreadCount
                 })
                 .ToListAsync();

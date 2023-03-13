@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.SignalR;
 using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Models.Message;
-using LetsTalk.Server.SignalR.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

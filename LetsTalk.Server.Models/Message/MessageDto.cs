@@ -10,5 +10,5 @@ public class MessageDto
 
     public bool? IsMine { get; set; }
 
-    public long CreatedUnixTime { get; set; }
+    public long Created { get; set; }
 }

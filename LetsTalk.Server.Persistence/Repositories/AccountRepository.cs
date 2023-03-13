@@ -27,7 +27,7 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .Select(g => new
                 {
                     AccountId = g.Key,
-                    LastMessageDate = g.Max(x => x.DateCreated)
+                    LastMessageDate = g.Max(x => x.DateCreatedUnix)
                 });
                 
             var receivedMessageDates = _context.Set<Message>()
@@ -36,7 +36,7 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .Select(g => new
                 {
                     AccountId = g.Key,
-                    LastMessageDate = g.Max(x => x.DateCreated)
+                    LastMessageDate = g.Max(x => x.DateCreatedUnix)
                 });
 
             var lastMessageDates = sentMessageDates
@@ -104,7 +104,7 @@ namespace LetsTalk.Server.Persistence.Repositories
                     LastName = x.AccountInfo.Account.LastName,
                     PhotoUrl = x.AccountInfo.Account.PhotoUrl,
                     AccountTypeId = x.AccountInfo.Account.AccountTypeId,
-                    LastMessageDate = x.AccountInfo.LastMessageDate,
+                    LastMessageDateUnix = x.AccountInfo.LastMessageDate,
                     UnreadCount = x.UnreadMessageCounts!.UnreadCount
                 })
                 .ToListAsync();

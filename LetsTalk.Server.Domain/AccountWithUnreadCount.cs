@@ -12,5 +12,5 @@ public class AccountWithUnreadCount : BaseEntity
 
     public int? UnreadCount { get; set; }
 
-    public DateTime? LastMessageDate { get; set; }
+    public long? LastMessageDateUnix { get; set; }
 }

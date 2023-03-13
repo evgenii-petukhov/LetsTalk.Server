@@ -19,5 +19,7 @@ public class Message: BaseEntity
 
     public DateTime DateCreated { get; set; }
 
+    public long? DateCreatedUnix { get; set; }
+
     public DateTime? DateRead { get; set; }
 }

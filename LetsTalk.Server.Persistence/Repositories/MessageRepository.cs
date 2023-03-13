@@ -19,7 +19,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
 
         return await _context.Messages
             .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)
-            .OrderBy(mesage => mesage.DateCreated)
+            .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync();
     }
 

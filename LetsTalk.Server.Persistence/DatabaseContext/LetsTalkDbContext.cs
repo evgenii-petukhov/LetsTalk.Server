@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
+using LetsTalk.Server.Persistence.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.DatabaseContext;
@@ -28,16 +29,9 @@ public class LetsTalkDbContext : DbContext
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.DateCreatedUnix = GetUnixTimestamp();
+                entry.Entity.DateCreatedUnix = DateHelper.GetUnixTimestamp();
             }
         }
         return base.SaveChangesAsync(cancellationToken);
-    }
-
-    private long GetUnixTimestamp()
-    {
-        DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        TimeSpan diff = DateTime.UtcNow - origin;
-        return (long)diff.TotalSeconds;
     }
 }

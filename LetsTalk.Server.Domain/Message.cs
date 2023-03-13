@@ -20,4 +20,6 @@ public class Message: BaseEntity
     public long? DateCreatedUnix { get; set; }
 
     public DateTime? DateRead { get; set; }
+
+    public long? DateReadUnix { get; set; }
 }

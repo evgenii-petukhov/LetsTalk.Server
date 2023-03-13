@@ -8,12 +8,7 @@ public class MessageDto
 
     public int AccountId { get; set; }
 
-    public bool IsMine { get; set; }
+    public bool? IsMine { get; set; }
 
     public DateTime Created { get; set; }
-
-    public MessageDto GetClone()
-    {
-        return (MessageDto)MemberwiseClone();
-    }
 }

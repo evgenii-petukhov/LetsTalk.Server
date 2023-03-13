@@ -23,7 +23,6 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         var messageEntity = _mapper.Map<Domain.Message>(request);
         await _messageRepository.CreateAsync(messageEntity);
         var messageDto = _mapper.Map<MessageDto>(messageEntity);
-        messageDto.IsMine = true;
         return messageDto;
     }
 }

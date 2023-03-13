@@ -46,10 +46,7 @@ namespace LetsTalk.Server.API.Controllers
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var message = await _mediator.Send(cmd);
-
-            var messageToNotify = message.GetClone();
-            messageToNotify.IsMine = false;
-            _ = _notificationService.SendMessageNotification(request.RecipientId, messageToNotify);
+            _ = _notificationService.SendMessageNotification(request.RecipientId, message);
             return Ok(message);
         }
 

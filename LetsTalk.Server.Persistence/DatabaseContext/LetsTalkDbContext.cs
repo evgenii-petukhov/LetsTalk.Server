@@ -28,17 +28,16 @@ public class LetsTalkDbContext : DbContext
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.DateCreated = DateTime.UtcNow;
-                entry.Entity.DateCreatedUnix = ConvertToUnixTimestamp(DateTime.Now);
+                entry.Entity.DateCreatedUnix = GetUnixTimestamp();
             }
         }
         return base.SaveChangesAsync(cancellationToken);
     }
 
-    private long ConvertToUnixTimestamp(DateTime date)
+    private long GetUnixTimestamp()
     {
         DateTime origin = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        TimeSpan diff = date.ToUniversalTime() - origin;
+        TimeSpan diff = DateTime.UtcNow - origin;
         return (long)diff.TotalSeconds;
     }
 }

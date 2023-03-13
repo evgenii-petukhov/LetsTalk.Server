@@ -17,8 +17,6 @@ public class Message: BaseEntity
 
     public bool IsRead { get; set; }
 
-    public DateTime DateCreated { get; set; }
-
     public long? DateCreatedUnix { get; set; }
 
     public DateTime? DateRead { get; set; }

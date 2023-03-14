@@ -6,8 +6,8 @@ do
     esac
 done
 
-systemctl stop letstalk.service
-systemctl status letstalk.service --no-pager
+systemctl stop letstalk-api.service
+systemctl status letstalk-api.service --no-pager
 git reset --hard
 git fetch origin
 git checkout origin/${branch}
@@ -16,5 +16,5 @@ cd LetsTalk.Server.API
 dotnet ef database update
 cd ..
 dotnet publish
-systemctl start letstalk.service
-systemctl status letstalk.service --no-pager
+systemctl start letstalk-api.service
+systemctl status letstalk-api.service --no-pager

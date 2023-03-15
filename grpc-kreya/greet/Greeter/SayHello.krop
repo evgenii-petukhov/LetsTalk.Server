@@ -1,0 +1,15 @@
+{
+  "details": {
+    "methodFqn": "greet.Greeter.SayHello",
+    "mode": "grpcWeb",
+    "disableServerCertificateValidation": true
+  },
+  "requests": [
+    {
+      "location": "SayHello-request.json"
+    }
+  ],
+  "operationType": "unary",
+  "invokerName": "grpc",
+  "importStreamId": "84309ad6-8145-42d7-85a3-3d66b4372cea"
+}

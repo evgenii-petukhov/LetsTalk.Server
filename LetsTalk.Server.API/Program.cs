@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddInfrastructureServices();
+builder.Services.AddLoggingServices();
 builder.Services.AddSignalrServices();
 builder.Services.AddAuthenticationClientServices();
 builder.Services.AddSignalR();

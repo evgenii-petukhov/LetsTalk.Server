@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Domain;
 
-namespace LetsTalk.Server.Abstractions.Repositories;
+namespace LetsTalk.Server.Persistence.Abstractions;
 
 public interface IMessageRepository : IGenericRepository<Message>
 {

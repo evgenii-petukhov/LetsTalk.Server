@@ -1,7 +1,7 @@
-﻿using LetsTalk.Server.Abstractions.Logging;
+﻿using LetsTalk.Server.Logging.Abstractions;
 using Microsoft.Extensions.Logging;
 
-namespace LetsTalk.Server.Infrastructure.Logging;
+namespace LetsTalk.Server.Logging;
 
 public class LoggerAdapter<T> : IAppLogger<T>
 {

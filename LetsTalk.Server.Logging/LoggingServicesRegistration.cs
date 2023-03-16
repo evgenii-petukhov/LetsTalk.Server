@@ -1,12 +1,12 @@
-﻿using LetsTalk.Server.Abstractions.Logging;
-using LetsTalk.Server.Infrastructure.Logging;
+﻿using LetsTalk.Server.Logging;
+using LetsTalk.Server.Logging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LetsTalk.Server.Infrastructure;
 
-public static class InfrastructureServicesRegistration
+public static class LoggingServicesRegistration
 {
-    public static IServiceCollection AddInfrastructureServices(
+    public static IServiceCollection AddLoggingServices(
         this IServiceCollection services)
     {
         services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));

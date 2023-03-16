@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Models\LetsTalk.Server.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Core\LetsTalk.Server.Core.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Infrastructure\LetsTalk.Server.Infrastructure.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.SignalR\LetsTalk.Server.SignalR.csproj" />
   </ItemGroup>

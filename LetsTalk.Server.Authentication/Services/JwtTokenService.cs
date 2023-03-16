@@ -1,5 +1,5 @@
 using Grpc.Core;
-using LetsTalk.Server.Abstractions.Authentication;
+using LetsTalk.Server.Authentication.Abstractions;
 
 namespace LetsTalk.Server.Authentication.Services;
 

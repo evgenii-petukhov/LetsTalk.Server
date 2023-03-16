@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Abstractions.Authentication;
+using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Models.Authentication;
 using MediatR;
 

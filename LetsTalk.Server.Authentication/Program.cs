@@ -1,4 +1,4 @@
-using LetsTalk.Server.Abstractions.Authentication;
+using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Authentication.Services;
 using LetsTalk.Server.Models.Authentication;
 

@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Abstractions\LetsTalk.Server.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Models\LetsTalk.Server.Models.csproj" />
   </ItemGroup>
 
 </Project>

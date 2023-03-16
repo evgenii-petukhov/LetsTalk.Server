@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Abstractions.Logging;
+﻿namespace LetsTalk.Server.Logging.Abstractions;
 
 public interface IAppLogger<T>
 {

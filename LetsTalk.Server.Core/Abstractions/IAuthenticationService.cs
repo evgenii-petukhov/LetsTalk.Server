@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Models.Authentication;
 
-namespace LetsTalk.Server.Abstractions.Authentication;
+namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IAuthenticationService
 {

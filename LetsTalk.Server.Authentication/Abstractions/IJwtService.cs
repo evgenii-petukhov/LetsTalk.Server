@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Abstractions.Authentication;
+﻿namespace LetsTalk.Server.Authentication.Abstractions;
 
 public interface IJwtService
 {

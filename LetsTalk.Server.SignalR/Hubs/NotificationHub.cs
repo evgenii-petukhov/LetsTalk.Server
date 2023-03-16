@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.Abstractions.Authentication;
-using LetsTalk.Server.Abstractions.SignalR;
+﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Models.Authentication;
+using LetsTalk.Server.SignalR.Abstractions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 

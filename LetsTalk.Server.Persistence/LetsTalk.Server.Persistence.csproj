@@ -11,8 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Abstractions\LetsTalk.Server.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Models\LetsTalk.Server.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.Abstractions\LetsTalk.Server.Persistence.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

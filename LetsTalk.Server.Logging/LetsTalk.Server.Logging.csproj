@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Abstractions\LetsTalk.Server.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Logging.Abstractions\LetsTalk.Server.Logging.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Abstractions.Authentication;
+﻿using LetsTalk.Server.Authentication.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LetsTalk.Server.AuthenticationClient;

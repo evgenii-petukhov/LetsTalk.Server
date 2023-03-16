@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Abstractions.Repositories;
 using LetsTalk.Server.Models.Account;
+using LetsTalk.Server.Persistence.Abstractions;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Account.Queries.GetAccount;

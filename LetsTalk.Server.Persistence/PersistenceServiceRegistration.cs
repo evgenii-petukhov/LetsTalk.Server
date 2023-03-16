@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Abstractions.Repositories;
+﻿using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;

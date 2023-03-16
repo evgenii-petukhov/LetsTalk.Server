@@ -1,5 +1,5 @@
-﻿using LetsTalk.Server.Abstractions.SignalR;
-using LetsTalk.Server.Models.Message;
+﻿using LetsTalk.Server.Models.Message;
+using LetsTalk.Server.SignalR.Abstractions;
 using LetsTalk.Server.SignalR.Hubs;
 using Microsoft.AspNetCore.SignalR;
 

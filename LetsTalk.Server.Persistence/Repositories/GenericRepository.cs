@@ -1,5 +1,5 @@
-﻿using LetsTalk.Server.Abstractions.Repositories;
-using LetsTalk.Server.Domain;
+﻿using LetsTalk.Server.Domain;
+using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
 
 namespace LetsTalk.Server.Persistence.Repositories;

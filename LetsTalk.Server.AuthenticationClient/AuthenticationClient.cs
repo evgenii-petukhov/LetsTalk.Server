@@ -2,7 +2,7 @@
 using Grpc.Net.Client;
 using LetsTalk.Server.Authentication;
 using static LetsTalk.Server.Authentication.JwtTokenGrpcService;
-using LetsTalk.Server.Abstractions.Authentication;
+using LetsTalk.Server.Authentication.Abstractions;
 
 namespace LetsTalk.Server.AuthenticationClient;
 

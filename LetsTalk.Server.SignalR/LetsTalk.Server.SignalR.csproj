@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Abstractions\LetsTalk.Server.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Authentication.Abstractions\LetsTalk.Server.Authentication.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.SignalR.Abstractions\LetsTalk.Server.SignalR.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

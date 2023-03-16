@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Abstractions.SignalR;
+﻿using LetsTalk.Server.SignalR.Abstractions;
 using System.Collections.Concurrent;
 
 namespace LetsTalk.Server.SignalR.Services;

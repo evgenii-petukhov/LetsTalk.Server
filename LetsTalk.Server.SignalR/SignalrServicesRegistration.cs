@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Abstractions.SignalR;
+﻿using LetsTalk.Server.SignalR.Abstractions;
 using LetsTalk.Server.SignalR.Services;
 using Microsoft.Extensions.DependencyInjection;
 

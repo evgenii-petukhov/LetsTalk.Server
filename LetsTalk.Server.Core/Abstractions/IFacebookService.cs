@@ -1,8 +1,8 @@
 ﻿using LetsTalk.Server.Models.Authentication;
 
-namespace LetsTalk.Server.Abstractions.Authentication;
+namespace LetsTalk.Server.Core.Abstractions;
 
-public interface IVkService
+public interface IFacebookService
 {
     Task<LoginResponseDto> Login(LoginServiceInput model);
 }

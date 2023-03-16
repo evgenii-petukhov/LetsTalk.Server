@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
-using LetsTalk.Server.Identity.Models;
+using LetsTalk.Server.Models.Authentication;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.API.Middleware;

@@ -1,7 +1,6 @@
 using LetsTalk.Server.API.Middleware;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
-using LetsTalk.Server.Identity;
 using LetsTalk.Server.Infrastructure;
 using LetsTalk.Server.Persistence;
 using LetsTalk.Server.SignalR;
@@ -15,9 +14,8 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddCoreServices();
+builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddSignalrServices();
 builder.Services.AddAuthenticationClientServices();

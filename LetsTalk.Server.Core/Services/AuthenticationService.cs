@@ -2,7 +2,7 @@
 using LetsTalk.Server.Core.Exceptions;
 using LetsTalk.Server.Models.Authentication;
 
-namespace LetsTalk.Server.Identity.Services;
+namespace LetsTalk.Server.Core.Services;
 
 public class AuthenticationService : IAuthenticationService
 {

@@ -13,14 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.52.0" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.52.0" />
     <PackageReference Include="Grpc.AspNetCore.Web" Version="2.52.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Identity\LetsTalk.Server.Identity.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Abstractions\LetsTalk.Server.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Core\LetsTalk.Server.Core.csproj" />
   </ItemGroup>
 
 </Project>

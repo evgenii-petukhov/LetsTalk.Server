@@ -3,14 +3,13 @@ using LetsTalk.Server.Abstractions.Logging;
 using LetsTalk.Server.Abstractions.Repositories;
 using LetsTalk.Server.Core.Exceptions;
 using LetsTalk.Server.Domain;
-using LetsTalk.Server.Identity.Models;
 using LetsTalk.Server.Models.Account.Enums;
 using LetsTalk.Server.Models.Authentication;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace LetsTalk.Server.Identity.Services;
+namespace LetsTalk.Server.Core.Services;
 
 public class VkService : IVkService
 {

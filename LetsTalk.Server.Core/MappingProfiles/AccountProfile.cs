@@ -2,14 +2,13 @@
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Models.Account;
 
-namespace LetsTalk.Server.Core.MappingProfiles
+namespace LetsTalk.Server.Core.MappingProfiles;
+
+public class AccountProfile: Profile
 {
-    public class AccountProfile: Profile
+    public AccountProfile()
     {
-        public AccountProfile()
-        {
-            CreateMap<Account, AccountDto>();
-            CreateMap<AccountWithUnreadCount, AccountDto>();
-        }
+        CreateMap<Account, AccountDto>();
+        CreateMap<AccountWithUnreadCount, AccountDto>();
     }
 }

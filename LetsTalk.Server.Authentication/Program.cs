@@ -1,5 +1,6 @@
+using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Authentication.Services;
-using LetsTalk.Server.Identity;
+using LetsTalk.Server.Models.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
-builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddTransient<IJwtService, JwtService>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 var app = builder.Build();
 

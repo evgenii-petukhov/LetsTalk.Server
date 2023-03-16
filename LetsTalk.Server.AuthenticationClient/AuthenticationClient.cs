@@ -1,7 +1,7 @@
 ﻿using Grpc.Net.Client.Web;
 using Grpc.Net.Client;
 using LetsTalk.Server.Authentication;
-using static LetsTalk.Server.Authentication.JwtTokenService;
+using static LetsTalk.Server.Authentication.JwtTokenGrpcService;
 using LetsTalk.Server.Abstractions.Authentication;
 
 namespace LetsTalk.Server.AuthenticationClient;
@@ -28,7 +28,7 @@ public class AuthenticationClient: IAuthenticationClient
         return response.AccountId;
     }
 
-    private JwtTokenServiceClient GetGrpcClient(string url)
+    private JwtTokenGrpcServiceClient GetGrpcClient(string url)
     {
         var httpHandler = new HttpClientHandler
         {
@@ -40,6 +40,6 @@ public class AuthenticationClient: IAuthenticationClient
             HttpHandler = new GrpcWebHandler(httpHandler)
         });
 
-        return new JwtTokenServiceClient(channel);
+        return new JwtTokenGrpcServiceClient(channel);
     }
 }

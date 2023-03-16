@@ -1,13 +1,13 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Core.Exceptions;
-using LetsTalk.Server.Identity.Models;
+using LetsTalk.Server.Models.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace LetsTalk.Server.Identity.Services;
+namespace LetsTalk.Server.Authentication.Services;
 
 public class JwtService : IJwtService
 {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace LetsTalk.Server.Identity.Models;
+namespace LetsTalk.Server.Models.Authentication;
 
 public class VkError
 {

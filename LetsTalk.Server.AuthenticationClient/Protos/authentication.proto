@@ -5,7 +5,7 @@ option csharp_namespace = "LetsTalk.Server.Authentication";
 
 package authentication;
 
-service JwtTokenService {
+service JwtTokenGrpcService {
   rpc GenerateJwtToken (GenerateJwtTokenRequest) returns (GenerateJwtTokenResponse);
   rpc ValidateJwtToken (ValidateJwtTokenRequest) returns (ValidateJwtTokenResponse);
 }

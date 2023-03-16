@@ -1,25 +1,30 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.SignalR;
+using LetsTalk.Server.Models.Authentication;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.SignalR.Hubs;
 
 public class NotificationHub : Hub<INotificationHub>
 {
-    private readonly IJwtService _jwtService;
     private readonly IConnectionManager _connectionManager;
+    private readonly IAuthenticationClient _authenticationClient;
+    private readonly AuthenticationSettings _authenticationSettings;
 
     public NotificationHub(
-        IJwtService jwtService,
-        IConnectionManager connectionManager)
+        IConnectionManager connectionManager,
+        IAuthenticationClient authenticationClient,
+        IOptions<AuthenticationSettings> options)
     {
-        _jwtService = jwtService;
         _connectionManager = connectionManager;
+        _authenticationClient = authenticationClient;
+        _authenticationSettings = options.Value;
     }
 
-    public void Authorize(string token)
+    public async Task Authorize(string token)
     {
-        var accountId = _jwtService.ValidateJwtToken(token);
+        var accountId = await _authenticationClient.ValidateJwtToken(_authenticationSettings.Url, token);
         if (accountId != null)
         {
             _connectionManager.SetConnectionId(accountId.Value, Context.ConnectionId);

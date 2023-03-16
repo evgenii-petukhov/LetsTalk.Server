@@ -1,4 +1,5 @@
 using LetsTalk.Server.API.Middleware;
+using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Identity;
 using LetsTalk.Server.Infrastructure;
@@ -19,6 +20,7 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddSignalrServices();
+builder.Services.AddAuthenticationClientServices();
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

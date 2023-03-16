@@ -1,0 +1,27 @@
+syntax = "proto3";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "LetsTalk.Server.Authentication";
+
+package authentication;
+
+service JwtTokenService {
+  rpc GenerateJwtToken (GenerateJwtTokenRequest) returns (GenerateJwtTokenResponse);
+  rpc ValidateJwtToken (ValidateJwtTokenRequest) returns (ValidateJwtTokenResponse);
+}
+
+message GenerateJwtTokenRequest {
+  int32 account_id = 1;
+}
+
+message GenerateJwtTokenResponse {
+  string token = 1;
+}
+
+message ValidateJwtTokenRequest {
+  optional string token = 1;
+}
+
+message ValidateJwtTokenResponse {
+  google.protobuf.Int32Value account_id = 1;
+}

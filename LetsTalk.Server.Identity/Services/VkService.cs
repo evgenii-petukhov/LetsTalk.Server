@@ -14,21 +14,21 @@ namespace LetsTalk.Server.Identity.Services;
 
 public class VkService : IVkService
 {
-    private readonly IJwtService _jwtService;
     private readonly IAccountRepository _accountRepository;
-    private readonly JwtSettings _jwtSettings;
     private readonly IAppLogger<VkService> _appLogger;
+    private readonly IAuthenticationClient _authenticationClient;
+    private readonly Models.AuthenticationSettings _authenticationSettings;
 
     public VkService(
-        IJwtService jwtService,
-        IOptions<JwtSettings> jwtSettings,
         IAccountRepository accountRepository,
-        IAppLogger<VkService> appLogger)
+        IAppLogger<VkService> appLogger,
+        IAuthenticationClient authenticationClient,
+        IOptions<Models.AuthenticationSettings> options)
     {
-        _jwtService = jwtService;
         _accountRepository = accountRepository;
-        _jwtSettings = jwtSettings.Value;
         _appLogger = appLogger;
+        _authenticationClient = authenticationClient;
+        _authenticationSettings = options.Value;
     }
 
     public async Task<LoginResponseDto> Login(LoginServiceInput model)
@@ -69,7 +69,7 @@ public class VkService : IVkService
             }
 
             // generate jwt token to access secure routes on this API
-            var token = _jwtService.GenerateJwtToken(account.Id);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url, account.Id);
 
             return new LoginResponseDto
             {

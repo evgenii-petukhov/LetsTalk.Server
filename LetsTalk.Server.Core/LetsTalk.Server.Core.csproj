@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Abstractions\LetsTalk.Server.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Models\LetsTalk.Server.Models.csproj" />
   </ItemGroup>

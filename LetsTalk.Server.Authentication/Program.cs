@@ -1,4 +1,5 @@
 using LetsTalk.Server.Authentication.Services;
+using LetsTalk.Server.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,14 +15,18 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
+builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
+
 app.UseCors("all");
+
 app.UseGrpcWeb();
+
 app.MapGrpcReflectionService();
-// Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>().EnableGrpcWeb()
+
+app.MapGrpcService<JwtTokenService>()
+    .EnableGrpcWeb()
     .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();

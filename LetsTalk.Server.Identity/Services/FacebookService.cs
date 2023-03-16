@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.Repositories;
+using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core.Exceptions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Identity.Models;
@@ -13,18 +14,18 @@ namespace LetsTalk.Server.Identity.Services;
 
 public class FacebookService : IFacebookService
 {
-    private readonly IJwtService _jwtService;
     private readonly IAccountRepository _accountRepository;
-    private readonly JwtSettings _jwtSettings;
+    private readonly IAuthenticationClient _authenticationClient;
+    private readonly Models.AuthenticationSettings _authenticationSettings;
 
     public FacebookService(
-        IJwtService jwtService,
-        IOptions<JwtSettings> jwtSettings,
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository,
+        IAuthenticationClient authenticationClient,
+        IOptions<Models.AuthenticationSettings> options)
     {
-        _jwtService = jwtService;
         _accountRepository = accountRepository;
-        _jwtSettings = jwtSettings.Value;
+        _authenticationClient = authenticationClient;
+        _authenticationSettings = options.Value;
     }
 
     public async Task<LoginResponseDto> Login(LoginServiceInput model)
@@ -61,7 +62,7 @@ public class FacebookService : IFacebookService
             }
 
             // generate jwt token to access secure routes on this API
-            var token = _jwtService.GenerateJwtToken(account.Id);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url, account.Id);
 
             return new LoginResponseDto
             {

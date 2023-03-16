@@ -1,12 +1,10 @@
 {
   "details": {
-    "methodFqn": "greet.Greeter.SayHello",
-    "mode": "grpcWeb",
-    "disableServerCertificateValidation": true
+    "methodFqn": "authentication.JwtTokenService.GenerateJwtToken"
   },
   "requests": [
     {
-      "location": "SayHello-request.json"
+      "location": "GenerateJwtToken-request.json"
     }
   ],
   "operationType": "unary",

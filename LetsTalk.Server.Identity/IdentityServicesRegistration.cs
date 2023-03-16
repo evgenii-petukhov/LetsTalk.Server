@@ -13,6 +13,7 @@ public static class IdentityServicesRegistration
         IConfiguration configuration)
     {
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<IFacebookService, FacebookService>();
         services.AddTransient<IVkService, VkService>();

@@ -17,13 +17,13 @@ public class VkService : IVkService
     private readonly IAccountRepository _accountRepository;
     private readonly IAppLogger<VkService> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
-    private readonly Models.AuthenticationSettings _authenticationSettings;
+    private readonly AuthenticationSettings _authenticationSettings;
 
     public VkService(
         IAccountRepository accountRepository,
         IAppLogger<VkService> appLogger,
         IAuthenticationClient authenticationClient,
-        IOptions<Models.AuthenticationSettings> options)
+        IOptions<AuthenticationSettings> options)
     {
         _accountRepository = accountRepository;
         _appLogger = appLogger;

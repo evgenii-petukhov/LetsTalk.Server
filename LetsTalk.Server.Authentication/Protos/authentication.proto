@@ -19,7 +19,7 @@ message GenerateJwtTokenResponse {
 }
 
 message ValidateJwtTokenRequest {
-  optional string token = 1;
+  google.protobuf.StringValue token = 1;
 }
 
 message ValidateJwtTokenResponse {

@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.Repositories;
-using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core.Exceptions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Identity.Models;
@@ -16,12 +15,12 @@ public class FacebookService : IFacebookService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IAuthenticationClient _authenticationClient;
-    private readonly Models.AuthenticationSettings _authenticationSettings;
+    private readonly AuthenticationSettings _authenticationSettings;
 
     public FacebookService(
         IAccountRepository accountRepository,
         IAuthenticationClient authenticationClient,
-        IOptions<Models.AuthenticationSettings> options)
+        IOptions<AuthenticationSettings> options)
     {
         _accountRepository = accountRepository;
         _authenticationClient = authenticationClient;

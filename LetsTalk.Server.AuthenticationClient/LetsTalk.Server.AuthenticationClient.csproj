@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Authentication.Abstractions\LetsTalk.Server.Authentication.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Models\LetsTalk.Server.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

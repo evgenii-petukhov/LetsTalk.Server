@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.Domain;
+﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Models.Account.Enums;
 using LetsTalk.Server.Models.Authentication;
 using Microsoft.Extensions.Options;
@@ -8,6 +7,7 @@ using RestSharp;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Authentication.Abstractions;
+using LetsTalk.Server.Exceptions;
 
 namespace LetsTalk.Server.Core.Services;
 

@@ -1,6 +1,6 @@
 using LetsTalk.Server.Authentication.Abstractions;
+using LetsTalk.Server.Authentication.Models;
 using LetsTalk.Server.Authentication.Services;
-using LetsTalk.Server.Models.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 

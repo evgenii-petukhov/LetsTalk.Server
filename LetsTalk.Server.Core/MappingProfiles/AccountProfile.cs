@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Domain;
-using LetsTalk.Server.Models.Account;
+using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 

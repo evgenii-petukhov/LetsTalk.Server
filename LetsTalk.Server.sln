@@ -21,27 +21,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Domain", "L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence", "LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj", "{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Models", "LetsTalk.Server.Models\LetsTalk.Server.Models.csproj", "{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.SignalR", "LetsTalk.Server.SignalR\LetsTalk.Server.SignalR.csproj", "{77C0E818-DE55-481F-A696-693C352FFC0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Authentication", "LetsTalk.Server.Authentication\LetsTalk.Server.Authentication.csproj", "{E1024876-8C47-4EF0-B883-D926CB0AADED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.AuthenticationClient", "LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj", "{C6EEB58A-B080-4916-BECC-C6CF978A964A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Exceptions", "LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj", "{BDC1EA71-2D06-44C8-9BAF-003658579D71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Exceptions", "LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj", "{BDC1EA71-2D06-44C8-9BAF-003658579D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Logging", "LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj", "{0DF8748A-056D-4271-AD56-927A41FD8989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Logging", "LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj", "{0DF8748A-056D-4271-AD56-927A41FD8989}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Logging.Abstractions", "LetsTalk.Server.Logging.Abstractions\LetsTalk.Server.Logging.Abstractions.csproj", "{C58A2D30-C0F1-4B53-A0D5-7C05AC37CB0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Logging.Abstractions", "LetsTalk.Server.Logging.Abstractions\LetsTalk.Server.Logging.Abstractions.csproj", "{C58A2D30-C0F1-4B53-A0D5-7C05AC37CB0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.Abstractions", "LetsTalk.Server.Persistence.Abstractions\LetsTalk.Server.Persistence.Abstractions.csproj", "{3863150D-E4B6-4CF9-95E9-A2F812C18A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Abstractions", "LetsTalk.Server.Persistence.Abstractions\LetsTalk.Server.Persistence.Abstractions.csproj", "{3863150D-E4B6-4CF9-95E9-A2F812C18A97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.SignalR.Abstractions", "LetsTalk.Server.SignalR.Abstractions\LetsTalk.Server.SignalR.Abstractions.csproj", "{B1C4405C-2596-48C5-B651-84682CA7217F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.SignalR.Abstractions", "LetsTalk.Server.SignalR.Abstractions\LetsTalk.Server.SignalR.Abstractions.csproj", "{B1C4405C-2596-48C5-B651-84682CA7217F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Authentication.Abstractions", "LetsTalk.Server.Authentication.Abstractions\LetsTalk.Server.Authentication.Abstractions.csproj", "{7E06E09F-C254-4DC5-8D64-9E5E3DF179FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Authentication.Abstractions", "LetsTalk.Server.Authentication.Abstractions\LetsTalk.Server.Authentication.Abstractions.csproj", "{7E06E09F-C254-4DC5-8D64-9E5E3DF179FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Authentication.Models", "LetsTalk.Server.Authentication.Models\LetsTalk.Server.Authentication.Models.csproj", "{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.Models", "LetsTalk.Server.Persistence.Models\LetsTalk.Server.Persistence.Models.csproj", "{912B63EF-A462-471E-B7A6-C2523EC6D9B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.API.Models", "LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj", "{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Dto.Models", "LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj", "{2F5F3051-A77E-494F-8149-597D341FD4B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +73,6 @@ Global
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{77C0E818-DE55-481F-A696-693C352FFC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77C0E818-DE55-481F-A696-693C352FFC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77C0E818-DE55-481F-A696-693C352FFC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -105,6 +109,22 @@ Global
 		{7E06E09F-C254-4DC5-8D64-9E5E3DF179FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E06E09F-C254-4DC5-8D64-9E5E3DF179FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E06E09F-C254-4DC5-8D64-9E5E3DF179FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{912B63EF-A462-471E-B7A6-C2523EC6D9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{912B63EF-A462-471E-B7A6-C2523EC6D9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{912B63EF-A462-471E-B7A6-C2523EC6D9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{912B63EF-A462-471E-B7A6-C2523EC6D9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F5F3051-A77E-494F-8149-597D341FD4B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F5F3051-A77E-494F-8149-597D341FD4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F5F3051-A77E-494F-8149-597D341FD4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F5F3051-A77E-494F-8149-597D341FD4B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,17 +137,21 @@ Global
 		{92A60644-12D4-4696-AA35-0DBAAC6AACE6} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
 		{3E3C835C-05D1-4F67-9184-E205F723791D} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{EABF9426-D71D-4398-95CC-7FAF9B8D2DA0} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
-		{0C99F524-8D89-4F6C-AF49-C17A1A5A72D7} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{77C0E818-DE55-481F-A696-693C352FFC0F} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{E1024876-8C47-4EF0-B883-D926CB0AADED} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{C6EEB58A-B080-4916-BECC-C6CF978A964A} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
 		{BDC1EA71-2D06-44C8-9BAF-003658579D71} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{0DF8748A-056D-4271-AD56-927A41FD8989} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
-		{C58A2D30-C0F1-4B53-A0D5-7C05AC37CB0E} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
-		{3863150D-E4B6-4CF9-95E9-A2F812C18A97} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
-		{B1C4405C-2596-48C5-B651-84682CA7217F} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
-		{7E06E09F-C254-4DC5-8D64-9E5E3DF179FF} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
+		{C58A2D30-C0F1-4B53-A0D5-7C05AC37CB0E} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{3863150D-E4B6-4CF9-95E9-A2F812C18A97} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{B1C4405C-2596-48C5-B651-84682CA7217F} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{7E06E09F-C254-4DC5-8D64-9E5E3DF179FF} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
+		{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
+		{912B63EF-A462-471E-B7A6-C2523EC6D9B4} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
+		{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
+		{2F5F3051-A77E-494F-8149-597D341FD4B3} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

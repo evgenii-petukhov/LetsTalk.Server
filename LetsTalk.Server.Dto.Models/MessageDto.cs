@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Models.Message;
+﻿namespace LetsTalk.Server.Dto.Models;
 
 public class MessageDto
 {

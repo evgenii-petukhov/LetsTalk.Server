@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Models.Message;
+﻿using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.SignalR.Abstractions;
 

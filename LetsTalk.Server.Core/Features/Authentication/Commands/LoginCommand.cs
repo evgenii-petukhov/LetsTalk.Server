@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Models.Authentication;
+﻿using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.Features.Authentication.Commands;
 

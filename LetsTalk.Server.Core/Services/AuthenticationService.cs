@@ -1,6 +1,7 @@
-﻿using LetsTalk.Server.Core.Abstractions;
+﻿using LetsTalk.Server.API.Models;
+using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.Models.Authentication;
 
 namespace LetsTalk.Server.Core.Services;
 

@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Models.Authentication;
+﻿namespace LetsTalk.Server.Core.Models;
 
 public class FacebookPicture
 {

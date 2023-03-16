@@ -2,7 +2,8 @@
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Domain;
-using LetsTalk.Server.Models.Message;
+using LetsTalk.Server.API.Models;
+using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 

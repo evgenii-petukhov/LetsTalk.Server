@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using LetsTalk.Server.API.Models;
 using LetsTalk.Server.Core.Features.Authentication.Commands;
-using LetsTalk.Server.Models.Authentication;
+using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

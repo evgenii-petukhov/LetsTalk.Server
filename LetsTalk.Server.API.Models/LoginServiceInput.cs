@@ -1,6 +1,6 @@
-﻿namespace LetsTalk.Server.Models.Authentication;
+﻿namespace LetsTalk.Server.API.Models;
 
-public class LoginRequest
+public class LoginServiceInput
 {
     public string? Provider { get; set; }
 

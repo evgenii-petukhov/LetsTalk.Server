@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Models.Authentication;
+﻿using LetsTalk.Server.API.Models;
+using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 

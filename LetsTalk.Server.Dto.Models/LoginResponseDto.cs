@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Models.Authentication;
+﻿namespace LetsTalk.Server.Dto.Models;
 
 public class LoginResponseDto
 {

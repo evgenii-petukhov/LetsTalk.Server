@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Models.Message;
+﻿using LetsTalk.Server.Dto.Models;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Queries.GetMessages;

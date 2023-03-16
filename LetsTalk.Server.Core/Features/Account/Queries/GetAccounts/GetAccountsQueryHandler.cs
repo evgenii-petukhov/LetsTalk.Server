@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Models.Account;
+using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Abstractions;
 using MediatR;
 

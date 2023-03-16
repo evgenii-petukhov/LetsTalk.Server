@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Models.Account.Enums;
+using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

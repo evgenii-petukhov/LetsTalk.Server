@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Models.Account;
+﻿namespace LetsTalk.Server.Dto.Models;
 
 public class AccountDto
 {

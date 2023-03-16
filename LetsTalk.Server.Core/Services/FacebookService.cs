@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Models.Account.Enums;
 using LetsTalk.Server.Models.Authentication;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -8,6 +7,10 @@ using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.Persistence.Models;
+using LetsTalk.Server.API.Models;
+using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.Services;
 

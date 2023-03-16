@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
 using LetsTalk.Server.Abstractions.Repositories;
-using LetsTalk.Server.Core.Exceptions;
+using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Models.Account.Enums;
 using LetsTalk.Server.Models.Authentication;

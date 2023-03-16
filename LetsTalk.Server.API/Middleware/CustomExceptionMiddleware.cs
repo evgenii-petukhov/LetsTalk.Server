@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.API.Middleware.Models;
-using LetsTalk.Server.Core.Exceptions;
+using LetsTalk.Server.Exceptions;
 using System.Net;
 
 namespace LetsTalk.Server.API.Middleware;

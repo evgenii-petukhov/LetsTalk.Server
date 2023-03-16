@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Abstractions.Authentication;
-using LetsTalk.Server.Core.Exceptions;
+using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Models.Authentication;
 
 namespace LetsTalk.Server.Core.Services;

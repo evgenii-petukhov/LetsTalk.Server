@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Authenticat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Exceptions", "LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj", "{BDC1EA71-2D06-44C8-9BAF-003658579D71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{C6EEB58A-B080-4916-BECC-C6CF978A964A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6EEB58A-B080-4916-BECC-C6CF978A964A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6EEB58A-B080-4916-BECC-C6CF978A964A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDC1EA71-2D06-44C8-9BAF-003658579D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDC1EA71-2D06-44C8-9BAF-003658579D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDC1EA71-2D06-44C8-9BAF-003658579D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDC1EA71-2D06-44C8-9BAF-003658579D71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{E1024876-8C47-4EF0-B883-D926CB0AADED} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{C6EEB58A-B080-4916-BECC-C6CF978A964A} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
+		{BDC1EA71-2D06-44C8-9BAF-003658579D71} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

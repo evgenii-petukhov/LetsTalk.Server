@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Exceptions;
+﻿namespace LetsTalk.Server.Exceptions;
 
 public class BadRequestException : Exception
 {

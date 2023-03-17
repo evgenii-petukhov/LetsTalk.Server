@@ -84,3 +84,4 @@ https://learn.microsoft.com/en-us/aspnet/core/grpc/troubleshoot?view=aspnetcore-
 https://dev.to/techiesdiary/net-60-grpc-server-and-client-implementation-77m
 https://stackoverflow.com/questions/65136901/asp-net-application-grpc-web-is-not-supported
 https://github.com/grpc/grpc-dotnet/issues/1164
+https://tehgm.net/blog/nginx-aspnetcore-grpc-rest/

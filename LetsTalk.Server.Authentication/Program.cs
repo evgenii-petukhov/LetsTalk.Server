@@ -18,6 +18,18 @@ builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.WebHost
+    .ConfigureKestrel(serverOptions =>
+    {
+        serverOptions.ConfigureEndpointDefaults(listenOptions =>
+        {
+
+        });
+    })
+    .ConfigureAppConfiguration((builderContext, config) =>
+    {
+        config.AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
+    });
 
 var app = builder.Build();
 

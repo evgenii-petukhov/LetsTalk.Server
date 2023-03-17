@@ -8,6 +8,8 @@ done
 
 systemctl stop letstalk-api.service
 systemctl status letstalk-api.service --no-pager
+systemctl stop letstalk-auth.service
+systemctl status letstalk-auth.service --no-pager
 git reset --hard
 git fetch origin
 git checkout origin/${branch}
@@ -15,6 +17,11 @@ git pull origin ${branch}
 cd LetsTalk.Server.API
 dotnet ef database update
 cd ..
+rm -rf /repos/LetsTalk.Server/LetsTalk.Server.API/bin/Debug/net7.0/publish/*
+rm -rf /repos/LetsTalk.Server/LetsTalk.Server.Authentication/bin/Debug/net7.0/publish/*
+cp LetsTalk.Server.API.appsettings.json /repos/LetsTalk.Server/LetsTalk.Server.API/bin/Debug/net7.0/publish/appsettings.json
 dotnet publish
 systemctl start letstalk-api.service
 systemctl status letstalk-api.service --no-pager
+systemctl start letstalk-auth.service
+systemctl status letstalk-auth.service --no-pager

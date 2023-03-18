@@ -17,10 +17,10 @@ git pull origin ${branch}
 cd LetsTalk.Server.API
 dotnet ef database update
 cd ..
-rm -rf /repos/LetsTalk.Server/LetsTalk.Server.API/bin/Debug/net7.0/publish/*
-rm -rf /repos/LetsTalk.Server/LetsTalk.Server.Authentication/bin/Debug/net7.0/publish/*
-cp /repos/LetsTalk.Private/config/applications/LetsTalk.Server.API.appsettings.json /repos/LetsTalk.Server/LetsTalk.Server.API/bin/Debug/net7.0/publish/appsettings.json
+rm -rf LetsTalk.Server.API/bin/Debug/net7.0/publish/*
+rm -rf LetsTalk.Server.Authentication/bin/Debug/net7.0/publish/*
 dotnet publish
+cp ../LetsTalk.Private/config/applications/LetsTalk.Server.API.appsettings.json LetsTalk.Server.API/bin/Debug/net7.0/publish/appsettings.json
 systemctl start letstalk-api.service
 systemctl status letstalk-api.service --no-pager
 systemctl start letstalk-auth.service

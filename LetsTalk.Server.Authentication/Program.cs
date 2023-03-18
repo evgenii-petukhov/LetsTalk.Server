@@ -49,7 +49,7 @@ app.UseGrpcWeb();
 
 app.MapGrpcReflectionService();
 
-app.MapGrpcService<JwtTokenService>()
+app.MapGrpcService<JwtTokenGrpcService>()
     .EnableGrpcWeb()
     .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 

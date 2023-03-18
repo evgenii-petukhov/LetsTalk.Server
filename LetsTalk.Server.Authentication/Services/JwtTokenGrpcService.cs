@@ -1,13 +1,14 @@
 using Grpc.Core;
 using LetsTalk.Server.Authentication.Abstractions;
+using static LetsTalk.Server.Authentication.JwtTokenGrpcService;
 
 namespace LetsTalk.Server.Authentication.Services;
 
-public class JwtTokenService : JwtTokenGrpcService.JwtTokenGrpcServiceBase
+public class JwtTokenGrpcService : JwtTokenGrpcServiceBase
 {
     private readonly IJwtService _jwtService;
 
-    public JwtTokenService(IJwtService jwtService)
+    public JwtTokenGrpcService(IJwtService jwtService)
     {
         _jwtService = jwtService;
     }

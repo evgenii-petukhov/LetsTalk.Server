@@ -6,10 +6,8 @@ using LetsTalk.Server.Persistence;
 using LetsTalk.Server.SignalR;
 using LetsTalk.Server.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using System.Net;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +19,6 @@ builder.Services.AddSignalrServices();
 builder.Services.AddAuthenticationClientServices();
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("all", builder =>
@@ -54,23 +51,8 @@ builder.Services.AddSwaggerGen(c =>
         {securityScheme, Array.Empty<string>()}
     });
 });
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));
-});
-builder.WebHost
-    .ConfigureKestrel(serverOptions =>
-    {
-        serverOptions.ConfigureEndpointDefaults(listenOptions =>
-        {
-        
-        });
-    })
-    .ConfigureAppConfiguration((builderContext, config) =>
-    {
-        config.AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
-    });
+builder.Configuration
+    .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
     .WriteTo.Console()
     .ReadFrom.Configuration(context.Configuration));
@@ -88,8 +70,6 @@ app.UseCustomExceptionHandling();
 app.UseCors("all");
 
 app.UseRouting();
-
-app.UseForwardedHeaders();
 
 app.UseJwtMiddleware();
 

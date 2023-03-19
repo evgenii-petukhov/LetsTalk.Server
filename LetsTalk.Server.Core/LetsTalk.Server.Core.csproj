@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RestSharp" Version="108.0.3" />
+    <PackageReference Include="RestSharp" Version="109.0.1" />
   </ItemGroup>
 
   <ItemGroup>

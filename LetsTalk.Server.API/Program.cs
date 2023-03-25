@@ -1,5 +1,7 @@
 using KafkaFlow;
 using KafkaFlow.Serializer;
+using KafkaFlow.TypedHandler;
+using LetsTalk.Server.API;
 using LetsTalk.Server.API.Middleware;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
@@ -70,6 +72,16 @@ builder.Services.AddKafka(
                             m.AddSerializer<JsonCoreSerializer>()
                             )
                 )
+                .AddConsumer(consumer => consumer
+                    .Topic(topicName)
+                    .WithGroupId("sample-group")
+                    .WithBufferSize(100)
+                    .WithWorkersCount(10)
+                    .AddMiddlewares(middlewares => middlewares
+                        .AddSerializer<JsonCoreSerializer>()
+                        .AddTypedHandlers(h => h.AddHandler<MessageNotificationHandler>())
+                    )
+                )
         )
 );
 builder.Configuration
@@ -101,5 +113,8 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+var kafkaBus = app.Services.CreateKafkaBus();
+await kafkaBus.StartAsync();
 
 app.Run();

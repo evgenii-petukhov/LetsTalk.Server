@@ -6,7 +6,7 @@ using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.SignalR.Abstractions;
+using LetsTalk.Server.Notifications.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,18 +19,15 @@ namespace LetsTalk.Server.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly INotificationService _notificationService;
         private readonly IProducerAccessor _producerAccessor;
 
         public MessageController(
             IMediator mediator,
             IMapper mapper,
-            INotificationService notificationService,
             IProducerAccessor producerAccessor)
         {
             _mediator = mediator;
             _mapper = mapper;
-            _notificationService = notificationService;
             _producerAccessor = producerAccessor;
         }
 
@@ -49,9 +46,15 @@ namespace LetsTalk.Server.API.Controllers
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var message = await _mediator.Send(cmd);
-            _ = _notificationService.SendMessageNotification(request.RecipientId, message);
             var producer = _producerAccessor.GetProducer("say-hello");
-            await producer.ProduceAsync("key", "value");
+            await producer.ProduceAsync(
+                "sample-topic",
+                Guid.NewGuid().ToString(),
+                new MessageNotification
+                {
+                    RecipientId = request.RecipientId,
+                    Message = message
+                });
             return Ok(message);
         }
 

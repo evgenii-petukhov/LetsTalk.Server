@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KafkaFlow.Producers;
 using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.API.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
@@ -19,15 +20,18 @@ namespace LetsTalk.Server.API.Controllers
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly IProducerAccessor _producerAccessor;
 
         public MessageController(
             IMediator mediator,
             IMapper mapper,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IProducerAccessor producerAccessor)
         {
             _mediator = mediator;
             _mapper = mapper;
             _notificationService = notificationService;
+            _producerAccessor = producerAccessor;
         }
 
         [HttpGet]
@@ -46,6 +50,8 @@ namespace LetsTalk.Server.API.Controllers
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var message = await _mediator.Send(cmd);
             _ = _notificationService.SendMessageNotification(request.RecipientId, message);
+            var producer = _producerAccessor.GetProducer("say-hello");
+            await producer.ProduceAsync("key", "value");
             return Ok(message);
         }
 

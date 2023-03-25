@@ -43,13 +43,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Authenticat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Authentication.Models", "LetsTalk.Server.Authentication.Models\LetsTalk.Server.Authentication.Models.csproj", "{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Authentication.Models", "LetsTalk.Server.Authentication.Models\LetsTalk.Server.Authentication.Models.csproj", "{D649445A-19CA-4EDC-A4A6-19B4B37A9D3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.Models", "LetsTalk.Server.Persistence.Models\LetsTalk.Server.Persistence.Models.csproj", "{912B63EF-A462-471E-B7A6-C2523EC6D9B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Models", "LetsTalk.Server.Persistence.Models\LetsTalk.Server.Persistence.Models.csproj", "{912B63EF-A462-471E-B7A6-C2523EC6D9B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.API.Models", "LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj", "{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.API.Models", "LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj", "{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Dto.Models", "LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj", "{2F5F3051-A77E-494F-8149-597D341FD4B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Dto.Models", "LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj", "{2F5F3051-A77E-494F-8149-597D341FD4B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Notifications.Models", "LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj", "{EAFA58D3-360E-4024-98A7-B11DC739668D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +127,10 @@ Global
 		{2F5F3051-A77E-494F-8149-597D341FD4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F5F3051-A77E-494F-8149-597D341FD4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F5F3051-A77E-494F-8149-597D341FD4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAFA58D3-360E-4024-98A7-B11DC739668D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAFA58D3-360E-4024-98A7-B11DC739668D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAFA58D3-360E-4024-98A7-B11DC739668D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAFA58D3-360E-4024-98A7-B11DC739668D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +158,7 @@ Global
 		{912B63EF-A462-471E-B7A6-C2523EC6D9B4} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{7271F543-2F6B-4BEB-B05F-9AB1D68AA5E9} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{2F5F3051-A77E-494F-8149-597D341FD4B3} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
+		{EAFA58D3-360E-4024-98A7-B11DC739668D} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

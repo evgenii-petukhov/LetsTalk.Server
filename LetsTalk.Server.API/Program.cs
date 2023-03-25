@@ -1,3 +1,5 @@
+using KafkaFlow;
+using KafkaFlow.Serializer;
 using LetsTalk.Server.API.Middleware;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
@@ -9,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
+
+const string topicName = "sample-topic";
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -51,6 +55,23 @@ builder.Services.AddSwaggerGen(c =>
         {securityScheme, Array.Empty<string>()}
     });
 });
+builder.Services.AddKafka(
+    kafka => kafka
+        .UseConsoleLog()
+        .AddCluster(
+            cluster => cluster
+                .WithBrokers(new[] { "localhost:9092" })
+                .CreateTopicIfNotExists(topicName, 1, 1)
+                .AddProducer(
+                    "say-hello",
+                    producer => producer
+                        .DefaultTopic(topicName)
+                        .AddMiddlewares(m =>
+                            m.AddSerializer<JsonCoreSerializer>()
+                            )
+                )
+        )
+);
 builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig

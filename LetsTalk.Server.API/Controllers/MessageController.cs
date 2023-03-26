@@ -51,7 +51,7 @@ namespace LetsTalk.Server.API.Controllers
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var message = await _mediator.Send(cmd);
             var producer = _producerAccessor.GetProducer(_kafkaSettings.MessageNotificationProducer);
-            await producer.ProduceAsync(
+            _ = producer.ProduceAsync(
                 _kafkaSettings.MessageNotificationTopic,
                 Guid.NewGuid().ToString(),
                 new MessageNotification

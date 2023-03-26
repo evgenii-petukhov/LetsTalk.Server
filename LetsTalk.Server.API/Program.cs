@@ -3,6 +3,7 @@ using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.API;
 using LetsTalk.Server.API.Middleware;
+using LetsTalk.Server.API.Models;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Infrastructure;
@@ -14,9 +15,18 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
 
-const string topicName = "sample-topic";
-
 var builder = WebApplication.CreateBuilder(args);
+
+var confiruration = builder.Configuration
+    .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
+
+builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("Kafka"));
+
+var kafkaUrl = builder.Configuration.GetValue<string>("Kafka:Url");
+var messageNotificationTopic = builder.Configuration.GetValue<string>("Kafka:MessageNotificationTopic");
+var messageNotificationProducer = builder.Configuration.GetValue<string>("Kafka:MessageNotificationProducer");
+var messageNotificationGroupId = builder.Configuration.GetValue<string>("Kafka:MessageNotificationGroupId");
+
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
@@ -62,19 +72,22 @@ builder.Services.AddKafka(
         .UseConsoleLog()
         .AddCluster(
             cluster => cluster
-                .WithBrokers(new[] { "localhost:9092" })
-                .CreateTopicIfNotExists(topicName, 1, 1)
+                .WithBrokers(new[]
+                {
+                    kafkaUrl
+                })
+                .CreateTopicIfNotExists(messageNotificationTopic, 1, 1)
                 .AddProducer(
-                    "say-hello",
+                    messageNotificationProducer,
                     producer => producer
-                        .DefaultTopic(topicName)
+                        .DefaultTopic(messageNotificationTopic)
                         .AddMiddlewares(m =>
                             m.AddSerializer<JsonCoreSerializer>()
-                            )
+                        )
                 )
                 .AddConsumer(consumer => consumer
-                    .Topic(topicName)
-                    .WithGroupId("sample-group")
+                    .Topic(messageNotificationTopic)
+                    .WithGroupId(messageNotificationGroupId)
                     .WithBufferSize(100)
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
@@ -84,8 +97,6 @@ builder.Services.AddKafka(
                 )
         )
 );
-builder.Configuration
-    .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
     .WriteTo.Console()
     .ReadFrom.Configuration(context.Configuration));

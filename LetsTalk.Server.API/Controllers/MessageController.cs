@@ -9,6 +9,7 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Notifications.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.API.Controllers
 {
@@ -20,15 +21,18 @@ namespace LetsTalk.Server.API.Controllers
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly IProducerAccessor _producerAccessor;
+        private readonly KafkaSettings _kafkaSettings;
 
         public MessageController(
             IMediator mediator,
             IMapper mapper,
-            IProducerAccessor producerAccessor)
+            IProducerAccessor producerAccessor,
+            IOptions<KafkaSettings> kafkaSettings)
         {
             _mediator = mediator;
             _mapper = mapper;
             _producerAccessor = producerAccessor;
+            _kafkaSettings = kafkaSettings.Value;
         }
 
         [HttpGet]
@@ -46,9 +50,9 @@ namespace LetsTalk.Server.API.Controllers
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var message = await _mediator.Send(cmd);
-            var producer = _producerAccessor.GetProducer("say-hello");
+            var producer = _producerAccessor.GetProducer(_kafkaSettings.MessageNotificationProducer);
             await producer.ProduceAsync(
-                "sample-topic",
+                _kafkaSettings.MessageNotificationTopic,
                 Guid.NewGuid().ToString(),
                 new MessageNotification
                 {

@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Domain;
-using LetsTalk.Server.Models.Authentication;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
@@ -12,6 +11,7 @@ using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Persistence.Models;
 using LetsTalk.Server.API.Models;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Configuration.Models;
 
 namespace LetsTalk.Server.Core.Services;
 
@@ -72,7 +72,7 @@ public class VkService : IVkService
             }
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url, account.Id);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id);
 
             return new LoginResponseDto
             {

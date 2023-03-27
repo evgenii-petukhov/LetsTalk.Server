@@ -19,10 +19,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Authentication.Abstractions\LetsTalk.Server.Authentication.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Configuration.Models\LetsTalk.Server.Configuration.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

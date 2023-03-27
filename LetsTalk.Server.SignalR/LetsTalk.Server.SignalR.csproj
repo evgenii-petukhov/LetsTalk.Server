@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Authentication.Abstractions\LetsTalk.Server.Authentication.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Authentication.Models\LetsTalk.Server.Authentication.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.SignalR.Abstractions\LetsTalk.Server.SignalR.Abstractions.csproj" />
   </ItemGroup>
 

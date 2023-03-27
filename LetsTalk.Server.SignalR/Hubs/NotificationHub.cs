@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Models.Authentication;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.SignalR.Abstractions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
@@ -24,7 +24,7 @@ public class NotificationHub : Hub<INotificationHub>
 
     public async Task Authorize(string token)
     {
-        var accountId = await _authenticationClient.ValidateJwtToken(_authenticationSettings.Url, token);
+        var accountId = await _authenticationClient.ValidateJwtToken(_authenticationSettings.Url!, token);
         if (accountId != null)
         {
             _connectionManager.SetConnectionId(accountId.Value, Context.ConnectionId);

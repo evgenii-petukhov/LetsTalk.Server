@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Authentication.Models;
+﻿namespace LetsTalk.Server.Configuration.Models;
 
 public class JwtSettings
 {

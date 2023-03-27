@@ -1,9 +1,9 @@
-﻿using KafkaFlow;
-using KafkaFlow.TypedHandler;
-using LetsTalk.Server.Notifications.Models;
+﻿using KafkaFlow.TypedHandler;
+using KafkaFlow;
 using LetsTalk.Server.SignalR.Abstractions;
+using LetsTalk.Server.Notifications.Models;
 
-namespace LetsTalk.Server.API;
+namespace LetsTalk.Server.Notifications;
 
 public class MessageNotificationHandler : IMessageHandler<MessageNotification>
 {

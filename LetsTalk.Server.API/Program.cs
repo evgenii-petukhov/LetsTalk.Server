@@ -1,15 +1,11 @@
 using KafkaFlow;
 using KafkaFlow.Serializer;
-using KafkaFlow.TypedHandler;
-using LetsTalk.Server.API;
 using LetsTalk.Server.API.Middleware;
-using LetsTalk.Server.API.Models;
 using LetsTalk.Server.AuthenticationClient;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Infrastructure;
 using LetsTalk.Server.Persistence;
-using LetsTalk.Server.SignalR;
-using LetsTalk.Server.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -17,7 +13,7 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var confiruration = builder.Configuration
+builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("Kafka"));
@@ -28,12 +24,11 @@ var messageNotificationProducer = builder.Configuration.GetValue<string>("Kafka:
 var messageNotificationGroupId = builder.Configuration.GetValue<string>("Kafka:MessageNotificationGroupId");
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddCoreServices(builder.Configuration);
+builder.Services.AddCoreServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddLoggingServices();
-builder.Services.AddSignalrServices();
-builder.Services.AddAuthenticationClientServices();
-builder.Services.AddSignalR();
+
+builder.Services.AddAuthenticationClientServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
@@ -85,16 +80,6 @@ builder.Services.AddKafka(
                             m.AddSerializer<JsonCoreSerializer>()
                         )
                 )
-                .AddConsumer(consumer => consumer
-                    .Topic(messageNotificationTopic)
-                    .WithGroupId(messageNotificationGroupId)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(10)
-                    .AddMiddlewares(middlewares => middlewares
-                        .AddSerializer<JsonCoreSerializer>()
-                        .AddTypedHandlers(h => h.AddHandler<MessageNotificationHandler>())
-                    )
-                )
         )
 );
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
@@ -116,8 +101,6 @@ app.UseCors("all");
 app.UseRouting();
 
 app.UseJwtMiddleware();
-
-app.MapHub<NotificationHub>("/messagehub");
 
 app.UseSerilogRequestLogging();
 

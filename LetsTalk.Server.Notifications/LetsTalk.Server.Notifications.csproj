@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a3312acf-557a-4812-9bce-73d6aca0630a</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KafkaFlow" Version="2.2.15" />
+    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.2.15" />
+    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.2.15" />
+    <PackageReference Include="KafkaFlow.Serializer" Version="2.2.15" />
+    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.2.15" />
+    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.2.15" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Configuration.Models\LetsTalk.Server.Configuration.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.SignalR\LetsTalk.Server.SignalR.csproj" />
+  </ItemGroup>
+
+</Project>

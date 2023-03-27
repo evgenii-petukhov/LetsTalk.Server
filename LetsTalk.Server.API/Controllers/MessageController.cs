@@ -2,6 +2,7 @@
 using KafkaFlow.Producers;
 using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.API.Models;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;

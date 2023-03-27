@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Models.Authentication;
+using LetsTalk.Server.Configuration.Models;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.API.Middleware;
@@ -23,7 +23,7 @@ public class JwtMiddleware
             .Split(" ")
             .Last();
 
-        var accountId = await authenticationClient.ValidateJwtToken(options.Value.Url, token);
+        var accountId = await authenticationClient.ValidateJwtToken(options.Value.Url!, token);
         if (accountId != null)
         {
             context.Items["AccountId"] = accountId;

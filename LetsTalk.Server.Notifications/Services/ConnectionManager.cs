@@ -1,7 +1,7 @@
-﻿using LetsTalk.Server.SignalR.Abstractions;
+﻿using LetsTalk.Server.Notifications.Abstractions;
 using System.Collections.Concurrent;
 
-namespace LetsTalk.Server.SignalR.Services;
+namespace LetsTalk.Server.Notifications.Services;
 
 public class ConnectionManager : IConnectionManager
 {

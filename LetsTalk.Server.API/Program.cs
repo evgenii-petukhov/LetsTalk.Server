@@ -21,7 +21,6 @@ builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("Kafk
 var kafkaUrl = builder.Configuration.GetValue<string>("Kafka:Url");
 var messageNotificationTopic = builder.Configuration.GetValue<string>("Kafka:MessageNotificationTopic");
 var messageNotificationProducer = builder.Configuration.GetValue<string>("Kafka:MessageNotificationProducer");
-var messageNotificationGroupId = builder.Configuration.GetValue<string>("Kafka:MessageNotificationGroupId");
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddCoreServices();

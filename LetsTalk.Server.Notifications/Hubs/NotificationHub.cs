@@ -1,10 +1,10 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.SignalR.Abstractions;
+using LetsTalk.Server.Notifications.Abstractions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.SignalR.Hubs;
+namespace LetsTalk.Server.Notifications.Hubs;
 
 public class NotificationHub : Hub<INotificationHub>
 {

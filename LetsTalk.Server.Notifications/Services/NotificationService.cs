@@ -1,9 +1,9 @@
 ﻿using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.SignalR.Abstractions;
-using LetsTalk.Server.SignalR.Hubs;
+using LetsTalk.Server.Notifications.Abstractions;
+using LetsTalk.Server.Notifications.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
-namespace LetsTalk.Server.SignalR.Services;
+namespace LetsTalk.Server.Notifications.Services;
 
 public class NotificationService : INotificationService
 {

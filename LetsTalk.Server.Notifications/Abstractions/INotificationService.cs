@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Dto.Models;
 
-namespace LetsTalk.Server.SignalR.Abstractions;
+namespace LetsTalk.Server.Notifications.Abstractions;
 
 public interface INotificationService
 {

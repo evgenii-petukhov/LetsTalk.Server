@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.SignalR.Abstractions;
+﻿namespace LetsTalk.Server.Notifications.Abstractions;
 
 public interface IConnectionManager
 {

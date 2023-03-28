@@ -23,7 +23,6 @@
     <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration.Models\LetsTalk.Server.Configuration.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.SignalR\LetsTalk.Server.SignalR.csproj" />
   </ItemGroup>
 
 </Project>

@@ -21,6 +21,7 @@ rm -rf LetsTalk.Server.API/bin/Debug/net7.0/publish/*
 rm -rf LetsTalk.Server.Authentication/bin/Debug/net7.0/publish/*
 dotnet publish
 cp ../LetsTalk.Private/config/applications/LetsTalk.Server.API.appsettings.json LetsTalk.Server.API/bin/Debug/net7.0/publish/appsettings.json
+cp ../LetsTalk.Private/config/applications/LetsTalk.Server.Notifications.appsettings.json LetsTalk.Server.Notifications/bin/Debug/net7.0/publish/appsettings.json
 systemctl start letstalk-api.service
 systemctl status letstalk-api.service --no-pager
 systemctl start letstalk-auth.service

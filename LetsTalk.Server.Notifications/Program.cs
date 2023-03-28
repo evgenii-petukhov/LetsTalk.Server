@@ -2,6 +2,7 @@ using KafkaFlow;
 using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.AuthenticationClient;
+using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Notifications;
 using LetsTalk.Server.Notifications.Hubs;
 
@@ -14,8 +15,9 @@ var kafkaUrl = builder.Configuration.GetValue<string>("Kafka:Url");
 var messageNotificationTopic = builder.Configuration.GetValue<string>("Kafka:MessageNotificationTopic");
 var messageNotificationGroupId = builder.Configuration.GetValue<string>("Kafka:MessageNotificationGroupId");
 
-builder.Services.AddNotificationsServices(builder.Configuration);
-builder.Services.AddAuthenticationClientServices(builder.Configuration);
+builder.Services.AddNotificationsServices();
+builder.Services.AddAuthenticationClientServices();
+builder.Services.AddConfigurationServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddSignalR(o =>
 {

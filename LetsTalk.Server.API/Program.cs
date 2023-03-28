@@ -2,7 +2,7 @@ using KafkaFlow;
 using KafkaFlow.Serializer;
 using LetsTalk.Server.API.Middleware;
 using LetsTalk.Server.AuthenticationClient;
-using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Infrastructure;
 using LetsTalk.Server.Persistence;
@@ -16,8 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
-builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("Kafka"));
-
 var kafkaUrl = builder.Configuration.GetValue<string>("Kafka:Url");
 var messageNotificationTopic = builder.Configuration.GetValue<string>("Kafka:MessageNotificationTopic");
 var messageNotificationProducer = builder.Configuration.GetValue<string>("Kafka:MessageNotificationProducer");
@@ -26,8 +24,8 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddCoreServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddLoggingServices();
-
-builder.Services.AddAuthenticationClientServices(builder.Configuration);
+builder.Services.AddAuthenticationClientServices();
+builder.Services.AddConfigurationServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {

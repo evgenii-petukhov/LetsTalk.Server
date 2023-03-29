@@ -61,12 +61,6 @@ app.UseCors("all");
 
 app.MapHub<NotificationHub>("/messagehub");
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
 var kafkaBus = app.Services.CreateKafkaBus();
 await kafkaBus.StartAsync();
 

@@ -10,6 +10,8 @@ systemctl stop letstalk-api.service
 systemctl status letstalk-api.service --no-pager
 systemctl stop letstalk-auth.service
 systemctl status letstalk-auth.service --no-pager
+systemctl stop letstalk-notifications.service
+systemctl status letstalk-notifications.service --no-pager
 git reset --hard
 git fetch origin
 git checkout origin/${branch}
@@ -26,3 +28,5 @@ systemctl start letstalk-api.service
 systemctl status letstalk-api.service --no-pager
 systemctl start letstalk-auth.service
 systemctl status letstalk-auth.service --no-pager
+systemctl start letstalk-notifications.service
+systemctl status letstalk-notifications.service --no-pager

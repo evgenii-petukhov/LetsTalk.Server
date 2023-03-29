@@ -11,10 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
-var kafkaUrl = builder.Configuration.GetValue<string>("Kafka:Url");
-var messageNotificationTopic = builder.Configuration.GetValue<string>("Kafka:MessageNotificationTopic");
-var messageNotificationGroupId = builder.Configuration.GetValue<string>("Kafka:MessageNotificationGroupId");
-
 builder.Services.AddNotificationsServices();
 builder.Services.AddAuthenticationClientServices();
 builder.Services.AddConfigurationServices(builder.Configuration);
@@ -33,6 +29,9 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+var kafkaSettings = ConfigurationHelper.GetKafkaSettings(builder.Configuration);
+
 builder.Services.AddKafka(
     kafka => kafka
         .UseConsoleLog()
@@ -40,12 +39,12 @@ builder.Services.AddKafka(
             cluster => cluster
                 .WithBrokers(new[]
                 {
-                    kafkaUrl
+                    kafkaSettings.Url
                 })
-                .CreateTopicIfNotExists(messageNotificationTopic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.MessageNotificationTopic, 1, 1)
                 .AddConsumer(consumer => consumer
-                    .Topic(messageNotificationTopic)
-                    .WithGroupId(messageNotificationGroupId)
+                    .Topic(kafkaSettings.MessageNotificationTopic)
+                    .WithGroupId(kafkaSettings.MessageNotificationGroupId)
                     .WithBufferSize(100)
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares

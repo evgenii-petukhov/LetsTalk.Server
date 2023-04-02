@@ -18,6 +18,8 @@ public static class CoreServicesRegistration
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<IFacebookService, FacebookService>();
         services.AddTransient<IVkService, VkService>();
+        services.AddTransient<IMessageProcessor, MessageProcessor>();
+        services.AddTransient<IRegexService, RegexService>();
 
         return services;
     }

@@ -31,4 +31,12 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
         await _context.SaveChangesAsync();
     }
+
+    public async Task SetTextHtmlAsync(int messageId, string html)
+    {
+        await _context.Messages
+            .Where(message => message.Id == messageId)
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html));
+        await _context.SaveChangesAsync();
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Persistence.Abstractions;
 
 namespace LetsTalk.Server.Core.Services;
 
@@ -10,18 +9,15 @@ public class MessageProcessor : IMessageProcessor
         "\r\n",
         "\n"
     };
-    private readonly IMessageRepository _messageRepository;
-    private readonly IRegexService _messageParsingService;
 
-    public MessageProcessor(
-        IMessageRepository messageRepository,
-        IRegexService messageParsingService)
+    private readonly IRegexService _regexService;
+
+    public MessageProcessor(IRegexService regexService)
     {
-        _messageRepository = messageRepository;
-        _messageParsingService = messageParsingService;
+        _regexService = regexService;
     }
 
-    public async Task<string> GetHtml(string text, int? messageId = null)
+    public string GetHtml(string text, int? messageId = null)
     {
         var lines = text
             .Split(_separators, StringSplitOptions.TrimEntries)
@@ -29,12 +25,7 @@ public class MessageProcessor : IMessageProcessor
             .Select(s => $"<p>{s}</p>");
 
         var html = string.Join(string.Empty, lines);
-        html = _messageParsingService.ReplaceUrlsByHref(html);
-
-        if (messageId.HasValue)
-        {
-            await _messageRepository.SetTextHtmlAsync(messageId.Value, html);
-        }
+        html = _regexService.ReplaceUrlsByHref(html);
 
         return html;
     }

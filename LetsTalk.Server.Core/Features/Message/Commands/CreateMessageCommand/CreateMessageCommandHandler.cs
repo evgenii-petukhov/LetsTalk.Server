@@ -25,7 +25,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     public async Task<MessageDto> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
         var messageEntity = _mapper.Map<Domain.Message>(request);
-        messageEntity.TextHtml = await _messageProcessor.GetHtml(messageEntity.Text!);
+        messageEntity.TextHtml = _messageProcessor.GetHtml(messageEntity.Text!);
         await _messageRepository.CreateAsync(messageEntity);
         var messageDto = _mapper.Map<MessageDto>(messageEntity);
         return messageDto;

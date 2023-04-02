@@ -2,5 +2,5 @@
 
 public interface IMessageProcessor
 {
-    Task<string> GetHtml(string text, int? messageId = null);
+    string GetHtml(string text, int? messageId = null);
 }

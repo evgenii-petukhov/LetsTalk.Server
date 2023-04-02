@@ -1,6 +1,8 @@
-﻿namespace LetsTalk.Server.Core.Abstractions;
+﻿using LetsTalk.Server.Core.Models;
+
+namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IRegexService
 {
-    string ReplaceUrlsByHref(string input);
+    MessageProcessingResult ReplaceUrlsByHref(string input);
 }

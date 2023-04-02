@@ -1,9 +1,9 @@
-﻿using LetsTalk.Server.Dto.Models;
+﻿using LetsTalk.Server.API.Models;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
-public class CreateMessageCommand: IRequest<MessageDto>
+public class CreateMessageCommand: IRequest<CreateMessageResponse>
 {
     public int SenderId { get; set; }
 

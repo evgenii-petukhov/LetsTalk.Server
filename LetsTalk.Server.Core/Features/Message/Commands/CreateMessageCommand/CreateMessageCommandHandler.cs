@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LetsTalk.Server.API.Models;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Abstractions;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
-public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, MessageDto>
+public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IMapper _mapper;
@@ -22,12 +23,16 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         _messageProcessor = messageProcessor;
     }
 
-    public async Task<MessageDto> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
+    public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
         var messageEntity = _mapper.Map<Domain.Message>(request);
-        messageEntity.TextHtml = _messageProcessor.GetHtml(messageEntity.Text!);
+        var htmlResult = _messageProcessor.ConvertToHtml(messageEntity.Text!);
+        messageEntity.TextHtml = htmlResult.Html;
         await _messageRepository.CreateAsync(messageEntity);
-        var messageDto = _mapper.Map<MessageDto>(messageEntity);
-        return messageDto;
+        return new CreateMessageResponse
+        {
+            Dto = _mapper.Map<MessageDto>(messageEntity),
+            Url = htmlResult.Url
+        };
     }
 }

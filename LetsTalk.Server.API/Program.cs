@@ -68,6 +68,7 @@ builder.Services.AddKafka(
                     kafkaSettings.Url
                 })
                 .CreateTopicIfNotExists(kafkaSettings.MessageNotificationTopic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewTopic, 1, 1)
                 .AddProducer(
                     kafkaSettings.MessageNotificationProducer,
                     producer => producer

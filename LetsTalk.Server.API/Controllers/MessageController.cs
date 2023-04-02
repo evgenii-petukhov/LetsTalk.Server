@@ -7,6 +7,7 @@ using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Notifications.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace LetsTalk.Server.API.Controllers
         {
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
-            var message = await _mediator.Send(cmd);
+            var response = await _mediator.Send(cmd);
             var producer = _producerAccessor.GetProducer(_kafkaSettings.MessageNotificationProducer);
             _ = producer.ProduceAsync(
                 _kafkaSettings.MessageNotificationTopic,
@@ -58,9 +59,17 @@ namespace LetsTalk.Server.API.Controllers
                 new MessageNotification
                 {
                     RecipientId = request.RecipientId,
-                    Message = message
+                    Message = response.Dto
                 });
-            return Ok(message);
+            _ = producer.ProduceAsync(
+                _kafkaSettings.LinkPreviewTopic,
+                Guid.NewGuid().ToString(),
+                new LinkPreviewRequest
+                {
+                    MessageId = response.Dto!.Id,
+                    Url = response.Url
+                });
+            return Ok(response.Dto);
         }
 
         [HttpPut("MarkAsRead")]

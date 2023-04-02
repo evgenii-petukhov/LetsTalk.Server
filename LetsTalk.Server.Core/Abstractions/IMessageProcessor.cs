@@ -1,6 +1,8 @@
-﻿namespace LetsTalk.Server.Core.Abstractions;
+﻿using LetsTalk.Server.Core.Models;
+
+namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IMessageProcessor
 {
-    string GetHtml(string text, int? messageId = null);
+    MessageProcessingResult ConvertToHtml(string text);
 }

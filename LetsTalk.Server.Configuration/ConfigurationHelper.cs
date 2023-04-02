@@ -12,7 +12,8 @@ public static class ConfigurationHelper
             Url = configuration.GetValue<string>("Kafka:Url"),
             MessageNotificationTopic = configuration.GetValue<string>("Kafka:MessageNotificationTopic"),
             MessageNotificationProducer = configuration.GetValue<string>("Kafka:MessageNotificationProducer"),
-            MessageNotificationGroupId = configuration.GetValue<string>("Kafka:MessageNotificationGroupId")
+            MessageNotificationGroupId = configuration.GetValue<string>("Kafka:MessageNotificationGroupId"),
+            LinkPreviewTopic = configuration.GetValue<string>("Kafka:LinkPreviewTopic")
         };
     }
 }

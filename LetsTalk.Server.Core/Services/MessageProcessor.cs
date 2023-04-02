@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Core.Models;
 
 namespace LetsTalk.Server.Core.Services;
 
@@ -17,7 +18,7 @@ public class MessageProcessor : IMessageProcessor
         _regexService = regexService;
     }
 
-    public string GetHtml(string text, int? messageId = null)
+    public MessageProcessingResult ConvertToHtml(string text)
     {
         var lines = text
             .Split(_separators, StringSplitOptions.TrimEntries)
@@ -25,8 +26,6 @@ public class MessageProcessor : IMessageProcessor
             .Select(s => $"<p>{s}</p>");
 
         var html = string.Join(string.Empty, lines);
-        html = _regexService.ReplaceUrlsByHref(html);
-
-        return html;
+        return _regexService.ReplaceUrlsByHref(html);
     }
 }

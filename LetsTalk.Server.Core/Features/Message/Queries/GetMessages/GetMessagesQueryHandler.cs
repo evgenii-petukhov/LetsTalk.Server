@@ -32,7 +32,8 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
                 messageDto.IsMine = message.SenderId == request.SenderId;
                 if (messageDto.Text == null)
                 {
-                    messageDto.Text = _messageProcessor.GetHtml(message.Text!);
+                    var result = _messageProcessor.ConvertToHtml(message.Text!);
+                    messageDto.Text = result.Html;
                     await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.Text);
                 }                
                 return messageDto;

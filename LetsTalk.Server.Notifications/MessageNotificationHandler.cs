@@ -1,7 +1,7 @@
 ﻿using KafkaFlow.TypedHandler;
 using KafkaFlow;
-using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Notifications.Abstractions;
+using LetsTalk.Server.Kafka.Models;
 
 namespace LetsTalk.Server.Notifications;
 

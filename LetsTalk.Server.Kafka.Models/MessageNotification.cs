@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Dto.Models;
 
-namespace LetsTalk.Server.Notifications.Models;
+namespace LetsTalk.Server.Kafka.Models;
 
 public class MessageNotification
 {

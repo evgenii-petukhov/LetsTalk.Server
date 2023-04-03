@@ -87,9 +87,12 @@ builder.Services.AddKafka(
                 )
         )
 );
-builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
+builder.Host.UseSerilog((context, loggerConfig) =>
+{
+    loggerConfig
     .WriteTo.Console()
-    .ReadFrom.Configuration(context.Configuration));
+    .ReadFrom.Configuration(context.Configuration);
+});
 
 var app = builder.Build();
 

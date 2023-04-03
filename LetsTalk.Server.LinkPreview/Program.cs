@@ -8,6 +8,7 @@ using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 using var host = CreateDefaultBuilder().Build();
 using var serviceScope = host.Services.CreateScope();
@@ -37,6 +38,7 @@ static IHostBuilder CreateDefaultBuilder()
             var kafkaSettings = ConfigurationHelper.GetKafkaSettings(context.Configuration);
 
             services.AddTransient<IDownloadService, DownloadService>();
+            services.AddTransient<IRegexService, RegexService>();
             services.AddKafka(
                 kafka => kafka
                     .UseConsoleLog()
@@ -59,5 +61,12 @@ static IHostBuilder CreateDefaultBuilder()
                             )
                     )
             );
+        })
+        .UseSerilog((context, loggerConfig) =>
+        {
+            loggerConfig
+                .ReadFrom.Configuration(context.Configuration)
+                .Enrich.FromLogContext()
+                .WriteTo.Console();
         });
 }

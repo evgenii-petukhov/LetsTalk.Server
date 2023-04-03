@@ -77,6 +77,14 @@ builder.Services.AddKafka(
                             m.AddSerializer<JsonCoreSerializer>()
                         )
                 )
+                .AddProducer(
+                    kafkaSettings.LinkPreviewProducer,
+                    producer => producer
+                        .DefaultTopic(kafkaSettings.LinkPreviewTopic)
+                        .AddMiddlewares(m =>
+                            m.AddSerializer<JsonCoreSerializer>()
+                        )
+                )
         )
 );
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig

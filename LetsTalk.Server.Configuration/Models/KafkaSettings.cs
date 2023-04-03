@@ -7,4 +7,6 @@ public class KafkaSettings
     public string? MessageNotificationProducer { get; set; }
     public string? MessageNotificationGroupId { get; set; }
     public string? LinkPreviewTopic { get; set; }
+    public string? LinkPreviewGroupId { get; set; }
+    public string? LinkPreviewProducer { get; set; }
 }

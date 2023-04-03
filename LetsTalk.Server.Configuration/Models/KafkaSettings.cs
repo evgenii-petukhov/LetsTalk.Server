@@ -9,4 +9,6 @@ public class KafkaSettings
     public string? LinkPreviewTopic { get; set; }
     public string? LinkPreviewGroupId { get; set; }
     public string? LinkPreviewProducer { get; set; }
+    public string? UpdateLinkPreviewNotificationTopic { get; set; }
+    public string? UpdateLinkPreviewNotificationProducer { get; set; }
 }

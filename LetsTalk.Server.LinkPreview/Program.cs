@@ -39,6 +39,7 @@ static IHostBuilder CreateDefaultBuilder()
 
             services.AddTransient<IDownloadService, DownloadService>();
             services.AddTransient<IRegexService, RegexService>();
+            services.AddConfigurationServices(context.Configuration);
             services.AddKafka(
                 kafka => kafka
                     .UseConsoleLog()
@@ -58,6 +59,14 @@ static IHostBuilder CreateDefaultBuilder()
                                     .AddSerializer<JsonCoreSerializer>()
                                     .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>())
                                 )
+                            )
+                            .AddProducer(
+                                kafkaSettings.UpdateLinkPreviewNotificationProducer,
+                                producer => producer
+                                    .DefaultTopic(kafkaSettings.UpdateLinkPreviewNotificationTopic)
+                                    .AddMiddlewares(m =>
+                                        m.AddSerializer<JsonCoreSerializer>()
+                                    )
                             )
                     )
             );

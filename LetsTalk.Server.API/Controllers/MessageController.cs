@@ -65,6 +65,7 @@ namespace LetsTalk.Server.API.Controllers
                 Guid.NewGuid().ToString(),
                 new LinkPreviewRequest
                 {
+                    RecipientId = request.RecipientId,
                     MessageId = response.Dto!.Id,
                     Url = response.Url
                 });

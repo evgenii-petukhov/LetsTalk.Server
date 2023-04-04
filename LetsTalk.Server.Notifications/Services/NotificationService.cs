@@ -18,12 +18,21 @@ public class NotificationService : INotificationService
         _messageHub = messageHub;
     }
 
-    public async Task SendMessageNotification(int accountId, MessageDto message)
+    public async Task SendLinkPreviewNotification(int accountId, LinkPreviewNotificationDto notification)
     {
         var connectionId = _connectionManager.GetConnectionId(accountId);
         if (connectionId != null)
         {
-            await _messageHub.Clients.Client(connectionId).SendMessageNotification(message);
+            await _messageHub.Clients.Client(connectionId).SendLinkPreviewNotification(notification);
+        }
+    }
+
+    public async Task SendMessageNotification(int accountId, MessageDto notification)
+    {
+        var connectionId = _connectionManager.GetConnectionId(accountId);
+        if (connectionId != null)
+        {
+            await _messageHub.Clients.Client(connectionId).SendMessageNotification(notification);
         }
     }
 }

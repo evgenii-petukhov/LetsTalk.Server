@@ -54,6 +54,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                     Guid.NewGuid().ToString(),
                     new LinkPreviewNotification
                     {
+                        RecipientId = request.RecipientId,
                         MessageId = request.MessageId,
                         Title = m.Title,
                         ImageUrl = m.ImageUrl

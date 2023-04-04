@@ -2,6 +2,8 @@
 
 public class LinkPreviewRequest
 {
+    public int RecipientId { get; set; }
+
     public int MessageId { get; set; }
 
     public string? Url { get; set; }

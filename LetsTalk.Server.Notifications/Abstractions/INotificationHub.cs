@@ -4,5 +4,7 @@ namespace LetsTalk.Server.Notifications.Abstractions;
 
 public interface INotificationHub
 {
-    Task SendMessageNotification(MessageDto message);
+    Task SendMessageNotification(MessageDto notification);
+
+    Task SendLinkPreviewNotification(LinkPreviewNotificationDto notification);
 }

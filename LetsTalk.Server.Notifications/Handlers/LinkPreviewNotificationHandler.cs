@@ -1,28 +1,18 @@
-﻿using AutoMapper;
-using KafkaFlow;
-using KafkaFlow.TypedHandler;
+﻿using KafkaFlow;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Abstractions;
+using LetsTalk.Server.Notifications.Models;
 
 namespace LetsTalk.Server.Notifications.Handlers;
 
-public class LinkPreviewNotificationHandler : IMessageHandler<LinkPreviewNotification>
+public class LinkPreviewNotificationHandler : NotificationHandler<LinkPreviewDto>
 {
-    private readonly INotificationService _notificationService;
-    private readonly IMapper _mapper;
-
-    public LinkPreviewNotificationHandler(
-        INotificationService notificationService,
-        IMapper mapper)
+    public LinkPreviewNotificationHandler(INotificationService notificationService) : base(notificationService)
     {
-        _notificationService = notificationService;
-        _mapper = mapper;
     }
 
-    public async Task Handle(IMessageContext context, LinkPreviewNotification notification)
+    public override async Task Handle(IMessageContext context, Notification<LinkPreviewDto> notification)
     {
-        var notificationDto = _mapper.Map<LinkPreviewNotificationDto>(notification);
-        await _notificationService.SendLinkPreviewNotification(notification.RecipientId, notificationDto);
+        await _notificationService.SendLinkPreviewNotification(notification.RecipientId, notification.Message!);
     }
 }

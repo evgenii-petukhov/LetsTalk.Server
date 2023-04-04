@@ -6,5 +6,5 @@ public interface INotificationHub
 {
     Task SendMessageNotification(MessageDto notification);
 
-    Task SendLinkPreviewNotification(LinkPreviewNotificationDto notification);
+    Task SendLinkPreviewNotification(LinkPreviewDto notification);
 }

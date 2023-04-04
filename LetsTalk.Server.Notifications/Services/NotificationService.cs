@@ -18,7 +18,7 @@ public class NotificationService : INotificationService
         _messageHub = messageHub;
     }
 
-    public async Task SendLinkPreviewNotification(int accountId, LinkPreviewNotificationDto notification)
+    public async Task SendLinkPreviewNotification(int accountId, LinkPreviewDto notification)
     {
         var connectionId = _connectionManager.GetConnectionId(accountId);
         if (connectionId != null)

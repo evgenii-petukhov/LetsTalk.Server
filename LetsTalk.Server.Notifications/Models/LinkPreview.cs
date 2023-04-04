@@ -1,10 +1,10 @@
-﻿namespace LetsTalk.Server.Kafka.Models;
+﻿namespace LetsTalk.Server.Notifications.Models;
 
-public class LinkPreviewNotification
+public class LinkPreview
 {
-    public int RecipientId { get; set; }
-
     public int MessageId { get; set; }
+
+    public int AccountId { get; set; }
 
     public string? Title { get; set; }
 

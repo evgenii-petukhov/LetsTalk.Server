@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Dto.Models;
 
-public class LinkPreviewNotificationDto
+public class LinkPreviewDto
 {
     public int MessageId { get; set; }
 

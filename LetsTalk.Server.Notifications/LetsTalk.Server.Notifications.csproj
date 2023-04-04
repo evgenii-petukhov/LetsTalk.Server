@@ -9,8 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="KafkaFlow" Version="2.2.15" />
     <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.2.15" />
     <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.2.15" />
@@ -25,7 +23,11 @@
     <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MappingProfiles\" />
   </ItemGroup>
 
 </Project>

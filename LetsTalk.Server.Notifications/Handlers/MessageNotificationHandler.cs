@@ -1,20 +1,17 @@
-﻿using KafkaFlow.TypedHandler;
-using KafkaFlow;
+﻿using KafkaFlow;
 using LetsTalk.Server.Notifications.Abstractions;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Notifications.Models;
 
 namespace LetsTalk.Server.Notifications.Handlers;
 
-public class MessageNotificationHandler : IMessageHandler<MessageNotification>
+public class MessageNotificationHandler : NotificationHandler<MessageDto>
 {
-    private readonly INotificationService _notificationService;
-
-    public MessageNotificationHandler(INotificationService notificationService)
+    public MessageNotificationHandler(INotificationService notificationService) : base(notificationService)
     {
-        _notificationService = notificationService;
     }
 
-    public async Task Handle(IMessageContext context, MessageNotification notification)
+    public override async Task Handle(IMessageContext context, Notification<MessageDto> notification)
     {
         await _notificationService.SendMessageNotification(notification.RecipientId, notification.Message!);
     }

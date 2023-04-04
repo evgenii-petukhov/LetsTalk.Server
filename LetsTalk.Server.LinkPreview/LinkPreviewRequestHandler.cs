@@ -1,11 +1,13 @@
 ﻿using KafkaFlow.TypedHandler;
 using KafkaFlow;
-using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.LinkPreview.Abstractions;
 using Microsoft.Extensions.Logging;
 using LetsTalk.Server.Configuration.Models;
 using KafkaFlow.Producers;
 using Microsoft.Extensions.Options;
+using LetsTalk.Server.Notifications.Models;
+using LetsTalk.Server.LinkPreview.Models;
+using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -51,12 +53,16 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                 await producer.ProduceAsync(
                     _kafkaSettings.LinkPreviewNotification.Topic,
                     Guid.NewGuid().ToString(),
-                    new LinkPreviewNotification
+                    new Notification<LinkPreviewDto>
                     {
                         RecipientId = request.RecipientId,
-                        MessageId = request.MessageId,
-                        Title = m.Title,
-                        ImageUrl = m.ImageUrl
+                        Message = new LinkPreviewDto
+                        {
+                            AccountId = request.SenderId,
+                            MessageId = request.MessageId,
+                            Title = m.Title,
+                            ImageUrl = m.ImageUrl
+                        }
                     });
             }
         }

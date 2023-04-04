@@ -4,7 +4,6 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.LinkPreview.Abstractions;
 using Microsoft.Extensions.Logging;
 using LetsTalk.Server.Configuration.Models;
-using static Confluent.Kafka.ConfigPropertyNames;
 using KafkaFlow.Producers;
 using Microsoft.Extensions.Options;
 
@@ -49,7 +48,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             if (!string.IsNullOrWhiteSpace(m.Title))
             {
                 var producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
-                _ = producer.ProduceAsync(
+                await producer.ProduceAsync(
                     _kafkaSettings.LinkPreviewNotification.Topic,
                     Guid.NewGuid().ToString(),
                     new LinkPreviewNotification

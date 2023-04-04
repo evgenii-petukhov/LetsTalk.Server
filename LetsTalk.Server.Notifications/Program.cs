@@ -61,7 +61,7 @@ builder.Services.AddKafka(
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
                         .AddSerializer<JsonCoreSerializer>()
-                        .AddTypedHandlers(h => h.AddHandler<MessageNotificationHandler>())
+                        .AddTypedHandlers(h => h.AddHandler<LinkPreviewNotificationHandler>())
                     )
                 )
         )

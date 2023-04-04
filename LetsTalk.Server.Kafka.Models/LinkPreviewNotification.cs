@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Kafka.Models;
 
-public class UpdateLinkPreviewNotification
+public class LinkPreviewNotification
 {
     public int MessageId { get; set; }
 

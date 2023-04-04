@@ -10,22 +10,19 @@ public static class ConfigurationHelper
         return new KafkaSettings
         {
             Url = configuration.GetValue<string>("Kafka:Url"),
-            MessageNotificationTopic = 
-                configuration.GetValue<string>("Kafka:MessageNotificationTopic"),
-            MessageNotificationProducer = 
-                configuration.GetValue<string>("Kafka:MessageNotificationProducer"),
-            MessageNotificationGroupId = 
-                configuration.GetValue<string>("Kafka:MessageNotificationGroupId"),
-            LinkPreviewTopic = 
-                configuration.GetValue<string>("Kafka:LinkPreviewTopic"),
-            LinkPreviewProducer = 
-                configuration.GetValue<string>("Kafka:LinkPreviewProducer"),
-            LinkPreviewGroupId = 
-                configuration.GetValue<string>("Kafka:LinkPreviewGroupId"),
-            UpdateLinkPreviewNotificationTopic = 
-                configuration.GetValue<string>("Kafka:UpdateLinkPreviewNotificationTopic"),
-            UpdateLinkPreviewNotificationProducer = 
-                configuration.GetValue<string>("Kafka:UpdateLinkPreviewNotificationProducer"),
+            MessageNotification = GetKafkaEventSettings(configuration, "Kafka:MessageNotification"),
+            LinkPreviewRequest = GetKafkaEventSettings(configuration, "Kafka:LinkPreviewRequest"),
+            LinkPreviewNotification = GetKafkaEventSettings(configuration, "Kafka:LinkPreviewNotification")
+        };
+    }
+
+    private static KafkaEventSettings GetKafkaEventSettings(IConfiguration configuration, string sectionPath)
+    {
+        return new KafkaEventSettings
+        {
+            Topic = configuration.GetValue<string>(sectionPath + ":Topic"),
+            Producer = configuration.GetValue<string>(sectionPath + ":Producer"),
+            GroupId = configuration.GetValue<string>(sectionPath + ":GroupId")
         };
     }
 }

@@ -49,10 +49,11 @@ static IHostBuilder CreateDefaultBuilder()
                             {
                                 kafkaSettings.Url
                             })
-                            .CreateTopicIfNotExists(kafkaSettings.LinkPreviewTopic, 1, 1)
+                            .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
+                            .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
                             .AddConsumer(consumer => consumer
-                                .Topic(kafkaSettings.LinkPreviewTopic)
-                                .WithGroupId(kafkaSettings.LinkPreviewGroupId)
+                                .Topic(kafkaSettings.LinkPreviewRequest.Topic)
+                                .WithGroupId(kafkaSettings.LinkPreviewRequest.GroupId)
                                 .WithBufferSize(100)
                                 .WithWorkersCount(10)
                                 .AddMiddlewares(middlewares => middlewares
@@ -61,9 +62,9 @@ static IHostBuilder CreateDefaultBuilder()
                                 )
                             )
                             .AddProducer(
-                                kafkaSettings.UpdateLinkPreviewNotificationProducer,
+                                kafkaSettings.LinkPreviewNotification.Producer,
                                 producer => producer
-                                    .DefaultTopic(kafkaSettings.UpdateLinkPreviewNotificationTopic)
+                                    .DefaultTopic(kafkaSettings.LinkPreviewNotification.Topic)
                                     .AddMiddlewares(m =>
                                         m.AddSerializer<JsonCoreSerializer>()
                                     )

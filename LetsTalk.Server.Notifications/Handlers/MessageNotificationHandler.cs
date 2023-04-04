@@ -3,7 +3,7 @@ using KafkaFlow;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Kafka.Models;
 
-namespace LetsTalk.Server.Notifications;
+namespace LetsTalk.Server.Notifications.Handlers;
 
 public class MessageNotificationHandler : IMessageHandler<MessageNotification>
 {

@@ -4,6 +4,7 @@ using KafkaFlow.TypedHandler;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Notifications;
+using LetsTalk.Server.Notifications.Handlers;
 using LetsTalk.Server.Notifications.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,10 +42,21 @@ builder.Services.AddKafka(
                 {
                     kafkaSettings.Url
                 })
-                .CreateTopicIfNotExists(kafkaSettings.MessageNotificationTopic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
                 .AddConsumer(consumer => consumer
-                    .Topic(kafkaSettings.MessageNotificationTopic)
-                    .WithGroupId(kafkaSettings.MessageNotificationGroupId)
+                    .Topic(kafkaSettings.MessageNotification.Topic)
+                    .WithGroupId(kafkaSettings.MessageNotification.GroupId)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(10)
+                    .AddMiddlewares(middlewares => middlewares
+                        .AddSerializer<JsonCoreSerializer>()
+                        .AddTypedHandlers(h => h.AddHandler<MessageNotificationHandler>())
+                    )
+                )
+                .AddConsumer(consumer => consumer
+                    .Topic(kafkaSettings.LinkPreviewNotification.Topic)
+                    .WithGroupId(kafkaSettings.LinkPreviewNotification.GroupId)
                     .WithBufferSize(100)
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares

@@ -3,12 +3,7 @@
 public class KafkaSettings
 {
     public string? Url { get; set; }
-    public string? MessageNotificationTopic { get; set; }
-    public string? MessageNotificationProducer { get; set; }
-    public string? MessageNotificationGroupId { get; set; }
-    public string? LinkPreviewTopic { get; set; }
-    public string? LinkPreviewGroupId { get; set; }
-    public string? LinkPreviewProducer { get; set; }
-    public string? UpdateLinkPreviewNotificationTopic { get; set; }
-    public string? UpdateLinkPreviewNotificationProducer { get; set; }
+    public KafkaEventSettings? MessageNotification { get; set; }
+    public KafkaEventSettings? LinkPreviewRequest { get; set; }
+    public KafkaEventSettings? LinkPreviewNotification { get; set; }
 }

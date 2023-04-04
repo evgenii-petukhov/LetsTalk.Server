@@ -51,9 +51,9 @@ namespace LetsTalk.Server.API.Controllers
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             cmd.SenderId = (int)HttpContext.Items["AccountId"]!;
             var response = await _mediator.Send(cmd);
-            var producer = _producerAccessor.GetProducer(_kafkaSettings.MessageNotificationProducer);
+            var producer = _producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
             _ = producer.ProduceAsync(
-                _kafkaSettings.MessageNotificationTopic,
+                _kafkaSettings.MessageNotification.Topic,
                 Guid.NewGuid().ToString(),
                 new MessageNotification
                 {
@@ -61,7 +61,7 @@ namespace LetsTalk.Server.API.Controllers
                     Message = response.Dto
                 });
             _ = producer.ProduceAsync(
-                _kafkaSettings.LinkPreviewTopic,
+                _kafkaSettings.LinkPreviewRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new LinkPreviewRequest
                 {

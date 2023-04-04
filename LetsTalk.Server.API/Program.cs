@@ -67,20 +67,20 @@ builder.Services.AddKafka(
                 {
                     kafkaSettings.Url
                 })
-                .CreateTopicIfNotExists(kafkaSettings.MessageNotificationTopic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewTopic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
                 .AddProducer(
-                    kafkaSettings.MessageNotificationProducer,
+                    kafkaSettings.MessageNotification.Producer,
                     producer => producer
-                        .DefaultTopic(kafkaSettings.MessageNotificationTopic)
+                        .DefaultTopic(kafkaSettings.MessageNotification.Topic)
                         .AddMiddlewares(m =>
                             m.AddSerializer<JsonCoreSerializer>()
                         )
                 )
                 .AddProducer(
-                    kafkaSettings.LinkPreviewProducer,
+                    kafkaSettings.LinkPreviewRequest.Producer,
                     producer => producer
-                        .DefaultTopic(kafkaSettings.LinkPreviewTopic)
+                        .DefaultTopic(kafkaSettings.LinkPreviewRequest.Topic)
                         .AddMiddlewares(m =>
                             m.AddSerializer<JsonCoreSerializer>()
                         )

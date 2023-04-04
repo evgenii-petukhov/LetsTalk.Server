@@ -48,11 +48,11 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
             if (!string.IsNullOrWhiteSpace(m.Title))
             {
-                var producer = _producerAccessor.GetProducer(_kafkaSettings.UpdateLinkPreviewNotificationProducer);
+                var producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
                 _ = producer.ProduceAsync(
-                    _kafkaSettings.UpdateLinkPreviewNotificationTopic,
+                    _kafkaSettings.LinkPreviewNotification.Topic,
                     Guid.NewGuid().ToString(),
-                    new UpdateLinkPreviewNotification
+                    new LinkPreviewNotification
                     {
                         MessageId = request.MessageId,
                         Title = m.Title,

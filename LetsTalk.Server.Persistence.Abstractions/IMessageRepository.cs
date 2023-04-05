@@ -9,4 +9,6 @@ public interface IMessageRepository : IGenericRepository<Message>
     Task MarkAsReadAsync(int messageId, int recipientId);
 
     Task SetTextHtmlAsync(int messageId, string html);
+
+    Task SetLinkPreviewAsync(int messageId, int linkPreviewId);
 }

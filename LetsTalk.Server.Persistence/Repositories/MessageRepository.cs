@@ -39,4 +39,12 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html));
         await _context.SaveChangesAsync();
     }
+
+    public async Task SetLinkPreviewAsync(int messageId, int linkPreviewId)
+    {
+        await _context.Messages
+            .Where(message => message.Id == messageId)
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.LinkPreviewId, linkPreviewId));
+        await _context.SaveChangesAsync();
+    }
 }

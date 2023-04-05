@@ -5,6 +5,7 @@ using LetsTalk.Server.Configuration;
 using LetsTalk.Server.LinkPreview;
 using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Services;
+using LetsTalk.Server.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,6 +41,7 @@ static IHostBuilder CreateDefaultBuilder()
             services.AddTransient<IDownloadService, DownloadService>();
             services.AddTransient<IRegexService, RegexService>();
             services.AddConfigurationServices(context.Configuration);
+            services.AddPersistenceServices(context.Configuration);
             services.AddKafka(
                 kafka => kafka
                     .UseConsoleLog()

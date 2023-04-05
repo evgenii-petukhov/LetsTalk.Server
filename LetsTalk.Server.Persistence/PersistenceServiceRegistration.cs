@@ -20,6 +20,7 @@ public static class PersistenceServiceRegistration
         });
         services.AddTransient<IAccountRepository, AccountRepository>();
         services.AddTransient<IMessageRepository, MessageRepository>();
+        services.AddTransient<ILinkPreviewRepository, LinkPreviewRepository>();
         return services;
     }
 }

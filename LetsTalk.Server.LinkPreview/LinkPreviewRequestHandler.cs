@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Persistence.Abstractions;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -17,6 +18,8 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     private readonly IRegexService _regexService;
     private readonly ILogger<LinkPreviewRequest> _logger;
     private readonly IProducerAccessor _producerAccessor;
+    private readonly ILinkPreviewRepository _linkPreviewRepository;
+    private readonly IMessageRepository _messageRepository;
     private readonly KafkaSettings _kafkaSettings;
 
     public LinkPreviewRequestHandler(
@@ -24,13 +27,17 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         IRegexService regexService,
         ILogger<LinkPreviewRequest> logger,
         IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings)
+        IOptions<KafkaSettings> kafkaSettings,
+        ILinkPreviewRepository linkPreviewRepository,
+        IMessageRepository messageRepository)
     {
         _downloadService = downloadService;
         _regexService = regexService;
         _logger = logger;
         _producerAccessor = producerAccessor;
         _kafkaSettings = kafkaSettings.Value;
+        _linkPreviewRepository = linkPreviewRepository;
+        _messageRepository = messageRepository;
     }
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
@@ -44,12 +51,20 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         }
         else
         {
-            var m = _regexService.GetOpenGraphModel(pageString);
-            _logger.LogInformation("{@m}", m);
+            var opModel = _regexService.GetOpenGraphModel(pageString);
+            _logger.LogInformation("{@opModel}", opModel);
 
-            if (!string.IsNullOrWhiteSpace(m.Title))
+            if (!string.IsNullOrWhiteSpace(opModel.Title))
             {
                 var producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
+                var linkPreview = await _linkPreviewRepository.GetByUrlAsync(request.Url);
+                linkPreview ??= await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
+                    {
+                        Url = request.Url,
+                        Title = opModel.Title,
+                        ImageUrl = opModel.ImageUrl
+                    });
+                await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id);
                 await producer.ProduceAsync(
                     _kafkaSettings.LinkPreviewNotification.Topic,
                     Guid.NewGuid().ToString(),
@@ -60,8 +75,8 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                         {
                             AccountId = request.SenderId,
                             MessageId = request.MessageId,
-                            Title = m.Title,
-                            ImageUrl = m.ImageUrl
+                            Title = opModel.Title,
+                            ImageUrl = opModel.ImageUrl
                         }
                     });
             }

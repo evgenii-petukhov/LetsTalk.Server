@@ -19,6 +19,8 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
 
         return await _context.Messages
+            .Include(message => message.LinkPreview)
+            .AsNoTracking()
             .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)
             .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync();

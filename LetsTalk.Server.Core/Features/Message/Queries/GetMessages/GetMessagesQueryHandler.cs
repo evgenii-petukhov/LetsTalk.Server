@@ -30,11 +30,11 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
             {
                 var messageDto = _mapper.Map<MessageDto>(message);
                 messageDto.IsMine = message.SenderId == request.SenderId;
-                if (messageDto.Text == null)
+                if (messageDto.TextHtml == null)
                 {
                     var result = _messageProcessor.ConvertToHtml(message.Text!);
-                    messageDto.Text = result.Html;
-                    await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.Text);
+                    messageDto.TextHtml = result.Html;
+                    await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.TextHtml!);
                 }                
                 return messageDto;
             })

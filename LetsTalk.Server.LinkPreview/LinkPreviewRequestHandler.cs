@@ -79,6 +79,20 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                             ImageUrl = opModel.ImageUrl
                         }
                     });
+                await producer.ProduceAsync(
+                    _kafkaSettings.LinkPreviewNotification.Topic,
+                    Guid.NewGuid().ToString(),
+                    new Notification<LinkPreviewDto>
+                    {
+                        RecipientId = request.SenderId,
+                        Message = new LinkPreviewDto
+                        {
+                            AccountId = request.RecipientId,
+                            MessageId = request.MessageId,
+                            Title = opModel.Title,
+                            ImageUrl = opModel.ImageUrl
+                        }
+                    });
             }
         }
     }

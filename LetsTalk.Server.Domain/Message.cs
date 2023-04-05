@@ -22,4 +22,8 @@ public class Message: BaseEntity
     public long? DateCreatedUnix { get; set; }
 
     public long? DateReadUnix { get; set; }
+
+    public int? LinkPreviewId { get; set; }
+
+    public LinkPreview? LinkPreview { get; set; }
 }

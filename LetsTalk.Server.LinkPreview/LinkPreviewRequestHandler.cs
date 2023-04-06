@@ -45,57 +45,71 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     {
         if (request.Url == null) return;
 
-        var pageString = await _downloadService.DownloadAsString(request.Url);
-        if (string.IsNullOrEmpty(pageString))
+        var linkPreview = await _linkPreviewRepository.GetByUrlAsync(request.Url);
+        if (linkPreview == null)
         {
-            Console.WriteLine("error");
+            var pageString = await _downloadService.DownloadAsString(request.Url);
+            if (string.IsNullOrEmpty(pageString))
+            {
+                _logger.LogInformation("Unable to download: {url}", request.Url);
+                return;
+            }
+            else
+            {
+                var opModel = _regexService.GetOpenGraphModel(pageString);
+                _logger.LogInformation("{@opModel}", opModel);
+
+                if (string.IsNullOrWhiteSpace(opModel.Title))
+                {
+                    _logger.LogInformation("og:title not found: {url}", request.Url);
+                    return;
+                }
+
+                opModel.Title = HttpUtility.HtmlDecode(opModel.Title);
+                linkPreview = await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
+                {
+                    Url = request.Url,
+                    Title = opModel.Title,
+                    ImageUrl = opModel.ImageUrl
+                });
+
+                _logger.LogInformation("{@linkPreview}", linkPreview);
+            }
         }
         else
         {
-            var opModel = _regexService.GetOpenGraphModel(pageString);
-            _logger.LogInformation("{@opModel}", opModel);
-
-            if (!string.IsNullOrWhiteSpace(opModel.Title))
-            {
-                var decodedTitle = HttpUtility.HtmlDecode(opModel.Title);
-                var producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
-                var linkPreview = await _linkPreviewRepository.GetByUrlAsync(request.Url);
-                linkPreview ??= await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
-                    {
-                        Url = request.Url,
-                        Title = decodedTitle,
-                        ImageUrl = opModel.ImageUrl
-                    });
-                await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id);
-                await producer.ProduceAsync(
-                    _kafkaSettings.LinkPreviewNotification.Topic,
-                    Guid.NewGuid().ToString(),
-                    new Notification<LinkPreviewDto>
-                    {
-                        RecipientId = request.RecipientId,
-                        Message = new LinkPreviewDto
-                        {
-                            AccountId = request.SenderId,
-                            MessageId = request.MessageId,
-                            Title = decodedTitle,
-                            ImageUrl = opModel.ImageUrl
-                        }
-                    });
-                await producer.ProduceAsync(
-                    _kafkaSettings.LinkPreviewNotification.Topic,
-                    Guid.NewGuid().ToString(),
-                    new Notification<LinkPreviewDto>
-                    {
-                        RecipientId = request.SenderId,
-                        Message = new LinkPreviewDto
-                        {
-                            AccountId = request.RecipientId,
-                            MessageId = request.MessageId,
-                            Title = decodedTitle,
-                            ImageUrl = opModel.ImageUrl
-                        }
-                    });
-            }
+            _logger.LogInformation("Fetched from DB: {url}", request.Url);
         }
+
+        await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id);
+        var producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
+        await producer.ProduceAsync(
+            _kafkaSettings.LinkPreviewNotification.Topic,
+            Guid.NewGuid().ToString(),
+            new Notification<LinkPreviewDto>
+            {
+                RecipientId = request.RecipientId,
+                Message = new LinkPreviewDto
+                {
+                    AccountId = request.SenderId,
+                    MessageId = request.MessageId,
+                    Title = linkPreview.Title,
+                    ImageUrl = linkPreview.ImageUrl
+                }
+            });
+        await producer.ProduceAsync(
+            _kafkaSettings.LinkPreviewNotification.Topic,
+            Guid.NewGuid().ToString(),
+            new Notification<LinkPreviewDto>
+            {
+                RecipientId = request.SenderId,
+                Message = new LinkPreviewDto
+                {
+                    AccountId = request.RecipientId,
+                    MessageId = request.MessageId,
+                    Title = linkPreview.Title,
+                    ImageUrl = linkPreview.ImageUrl
+                }
+            });
     }
 }

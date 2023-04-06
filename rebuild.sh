@@ -6,6 +6,7 @@ do
     esac
 done
 
+systemctl daemon-reload
 systemctl stop letstalk-api.service
 systemctl status letstalk-api.service --no-pager
 systemctl stop letstalk-auth.service

@@ -56,21 +56,21 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             }
             else
             {
-                var opModel = _regexService.GetOpenGraphModel(pageString);
-                _logger.LogInformation("{@opModel}", opModel);
+                var openGraphModel = _regexService.GetOpenGraphModel(pageString);
+                _logger.LogInformation("{@opModel}", openGraphModel);
 
-                if (string.IsNullOrWhiteSpace(opModel.Title))
+                if (string.IsNullOrWhiteSpace(openGraphModel.Title))
                 {
                     _logger.LogInformation("og:title not found: {url}", request.Url);
                     return;
                 }
 
-                opModel.Title = HttpUtility.HtmlDecode(opModel.Title);
+                openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
                 linkPreview = await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
                 {
                     Url = request.Url,
-                    Title = opModel.Title,
-                    ImageUrl = opModel.ImageUrl
+                    Title = openGraphModel.Title,
+                    ImageUrl = openGraphModel.ImageUrl
                 });
 
                 _logger.LogInformation("{@linkPreview}", linkPreview);

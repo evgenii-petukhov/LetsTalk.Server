@@ -57,12 +57,13 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
             if (!string.IsNullOrWhiteSpace(opModel.Title))
             {
+                var decodedTitle = HttpUtility.HtmlDecode(opModel.Title);
                 var producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
                 var linkPreview = await _linkPreviewRepository.GetByUrlAsync(request.Url);
                 linkPreview ??= await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
                     {
                         Url = request.Url,
-                        Title = HttpUtility.HtmlDecode(opModel.Title),
+                        Title = decodedTitle,
                         ImageUrl = opModel.ImageUrl
                     });
                 await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id);
@@ -76,7 +77,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                         {
                             AccountId = request.SenderId,
                             MessageId = request.MessageId,
-                            Title = opModel.Title,
+                            Title = decodedTitle,
                             ImageUrl = opModel.ImageUrl
                         }
                     });
@@ -90,7 +91,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                         {
                             AccountId = request.RecipientId,
                             MessageId = request.MessageId,
-                            Title = opModel.Title,
+                            Title = decodedTitle,
                             ImageUrl = opModel.ImageUrl
                         }
                     });

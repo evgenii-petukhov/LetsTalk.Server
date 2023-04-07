@@ -62,7 +62,7 @@ namespace LetsTalk.Server.API.Controllers
                     RecipientId = request.RecipientId,
                     Message = response.Dto
                 });
-            if (string.IsNullOrWhiteSpace(response.Url))
+            if (!string.IsNullOrWhiteSpace(response.Url))
             {
                 await producer.ProduceAsync(
                     _kafkaSettings.LinkPreviewRequest!.Topic,

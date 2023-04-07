@@ -10,20 +10,24 @@ public class AuthenticationClient: IAuthenticationClient
 {
     public async Task<string> GenerateJwtToken(string url, int accountId)
     {
-        var response = await GetGrpcClient(url).GenerateJwtTokenAsync(new GenerateJwtTokenRequest
-        {
-            AccountId = accountId
-        });
+        var response = await GetGrpcClient(url)
+            .GenerateJwtTokenAsync(new GenerateJwtTokenRequest
+            {
+                AccountId = accountId
+            })
+            .ConfigureAwait(false);
 
         return response.Token;
     }
 
     public async Task<int?> ValidateJwtToken(string url, string? token)
     {
-        var response = await GetGrpcClient(url).ValidateJwtTokenAsync(new ValidateJwtTokenRequest
-        {
-            Token = token
-        });
+        var response = await GetGrpcClient(url)
+            .ValidateJwtTokenAsync(new ValidateJwtTokenRequest
+            {
+                Token = token
+            })
+            .ConfigureAwait(false);
 
         return response.AccountId;
     }

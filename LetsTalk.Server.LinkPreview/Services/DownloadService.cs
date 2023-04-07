@@ -9,7 +9,8 @@ public class DownloadService : IDownloadService
         using var client = new HttpClient();
         try
         {
-            return await client.GetStringAsync(url);
+            return await client.GetStringAsync(url)
+                .ConfigureAwait(false);
         }
         catch
         {

@@ -62,16 +62,19 @@ namespace LetsTalk.Server.API.Controllers
                     RecipientId = request.RecipientId,
                     Message = response.Dto
                 });
-            await producer.ProduceAsync(
-                _kafkaSettings.LinkPreviewRequest!.Topic,
-                Guid.NewGuid().ToString(),
-                new LinkPreviewRequest
-                {
-                    SenderId = senderId,
-                    RecipientId = request.RecipientId,
-                    MessageId = response.Dto!.Id,
-                    Url = response.Url
-                });
+            if (string.IsNullOrWhiteSpace(response.Url))
+            {
+                await producer.ProduceAsync(
+                    _kafkaSettings.LinkPreviewRequest!.Topic,
+                    Guid.NewGuid().ToString(),
+                    new LinkPreviewRequest
+                    {
+                        SenderId = senderId,
+                        RecipientId = request.RecipientId,
+                        MessageId = response.Dto!.Id,
+                        Url = response.Url
+                    });
+            }
             return Ok(response.Dto);
         }
 

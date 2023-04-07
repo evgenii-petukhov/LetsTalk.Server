@@ -27,7 +27,7 @@ public class NotificationHub : Hub<INotificationHub>
         var accountId = await _authenticationClient.ValidateJwtToken(_authenticationSettings.Url!, token);
         if (accountId != null)
         {
-            _connectionManager.SetConnectionId(accountId.Value, Context.ConnectionId);
+            _connectionManager.AddConnectionId(accountId.Value, Context.ConnectionId);
         }
     }
 

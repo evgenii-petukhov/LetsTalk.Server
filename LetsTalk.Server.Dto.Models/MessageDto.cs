@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Dto.Models;
 
-public class MessageDto
+public record MessageDto
 {
     public int Id { get; set; }
 

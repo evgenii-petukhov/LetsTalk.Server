@@ -18,7 +18,6 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     private readonly IDownloadService _downloadService;
     private readonly IRegexService _regexService;
     private readonly ILogger<LinkPreviewRequest> _logger;
-    private readonly IProducerAccessor _producerAccessor;
     private readonly ILinkPreviewRepository _linkPreviewRepository;
     private readonly IMessageRepository _messageRepository;
     private readonly KafkaSettings _kafkaSettings;
@@ -37,12 +36,11 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         _downloadService = downloadService;
         _regexService = regexService;
         _logger = logger;
-        _producerAccessor = producerAccessor;
         _kafkaSettings = kafkaSettings.Value;
         _linkPreviewRepository = linkPreviewRepository;
         _messageRepository = messageRepository;
 
-        _producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
+        _producer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
     }
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)

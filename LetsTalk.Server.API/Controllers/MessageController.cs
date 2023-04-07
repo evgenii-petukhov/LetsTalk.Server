@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.API.Models;
@@ -22,8 +23,9 @@ namespace LetsTalk.Server.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly IProducerAccessor _producerAccessor;
         private readonly KafkaSettings _kafkaSettings;
+        private readonly IMessageProducer _messageNotificationProducer;
+        private readonly IMessageProducer _linkPreviewRequestProducer;
 
         public MessageController(
             IMediator mediator,
@@ -33,8 +35,9 @@ namespace LetsTalk.Server.API.Controllers
         {
             _mediator = mediator;
             _mapper = mapper;
-            _producerAccessor = producerAccessor;
             _kafkaSettings = kafkaSettings.Value;
+            _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
+            _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
         }
 
         [HttpGet]
@@ -53,9 +56,8 @@ namespace LetsTalk.Server.API.Controllers
             var senderId = (int)HttpContext.Items["AccountId"]!;
             cmd.SenderId = senderId;
             var response = await _mediator.Send(cmd);
-            var producer = _producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
-            await producer.ProduceAsync(
-                _kafkaSettings.MessageNotification.Topic,
+            await _messageNotificationProducer.ProduceAsync(
+                _kafkaSettings.MessageNotification!.Topic,
                 Guid.NewGuid().ToString(),
                 new Notification<MessageDto>
                 {
@@ -64,7 +66,7 @@ namespace LetsTalk.Server.API.Controllers
                 });
             if (!string.IsNullOrWhiteSpace(response.Url))
             {
-                await producer.ProduceAsync(
+                await _linkPreviewRequestProducer.ProduceAsync(
                     _kafkaSettings.LinkPreviewRequest!.Topic,
                     Guid.NewGuid().ToString(),
                     new LinkPreviewRequest

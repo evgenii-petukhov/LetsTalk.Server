@@ -32,7 +32,7 @@ public class AuthenticationClient: IAuthenticationClient
         return response.AccountId;
     }
 
-    private JwtTokenGrpcServiceClient GetGrpcClient(string url)
+    private static JwtTokenGrpcServiceClient GetGrpcClient(string url)
     {
         var httpHandler = new HttpClientHandler
         {

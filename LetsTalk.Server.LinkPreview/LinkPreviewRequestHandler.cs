@@ -23,6 +23,8 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     private readonly IMessageRepository _messageRepository;
     private readonly KafkaSettings _kafkaSettings;
 
+    private readonly IMessageProducer _producer;
+
     public LinkPreviewRequestHandler(
         IDownloadService downloadService,
         IRegexService regexService,
@@ -39,6 +41,8 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         _kafkaSettings = kafkaSettings.Value;
         _linkPreviewRepository = linkPreviewRepository;
         _messageRepository = messageRepository;
+
+        _producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
     }
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
@@ -82,32 +86,22 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         }
 
         await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id);
-        var producer = _producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
-        await producer.ProduceAsync(
-            _kafkaSettings.LinkPreviewNotification.Topic,
+        await SendNotification(request.RecipientId, request.SenderId, request.MessageId, linkPreview);
+        await SendNotification(request.SenderId, request.RecipientId, request.MessageId, linkPreview);
+    }
+
+    private async Task SendNotification(int recipientId, int senderId, int messageId, Domain.LinkPreview linkPreview)
+    {
+        await _producer.ProduceAsync(
+            _kafkaSettings.LinkPreviewNotification!.Topic,
             Guid.NewGuid().ToString(),
             new Notification<LinkPreviewDto>
             {
-                RecipientId = request.RecipientId,
+                RecipientId = recipientId,
                 Message = new LinkPreviewDto
                 {
-                    AccountId = request.SenderId,
-                    MessageId = request.MessageId,
-                    Title = linkPreview.Title,
-                    ImageUrl = linkPreview.ImageUrl,
-                    Url = linkPreview.Url
-                }
-            });
-        await producer.ProduceAsync(
-            _kafkaSettings.LinkPreviewNotification.Topic,
-            Guid.NewGuid().ToString(),
-            new Notification<LinkPreviewDto>
-            {
-                RecipientId = request.SenderId,
-                Message = new LinkPreviewDto
-                {
-                    AccountId = request.RecipientId,
-                    MessageId = request.MessageId,
+                    AccountId = senderId,
+                    MessageId = messageId,
                     Title = linkPreview.Title,
                     ImageUrl = linkPreview.ImageUrl,
                     Url = linkPreview.Url

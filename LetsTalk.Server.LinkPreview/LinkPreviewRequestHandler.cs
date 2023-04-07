@@ -94,7 +94,8 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                     AccountId = request.SenderId,
                     MessageId = request.MessageId,
                     Title = linkPreview.Title,
-                    ImageUrl = linkPreview.ImageUrl
+                    ImageUrl = linkPreview.ImageUrl,
+                    Url = linkPreview.Url
                 }
             });
         await producer.ProduceAsync(
@@ -108,7 +109,8 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                     AccountId = request.RecipientId,
                     MessageId = request.MessageId,
                     Title = linkPreview.Title,
-                    ImageUrl = linkPreview.ImageUrl
+                    ImageUrl = linkPreview.ImageUrl,
+                    Url = linkPreview.Url
                 }
             });
     }

@@ -46,7 +46,7 @@ public class ConnectionManager : IConnectionManager
             else
             {
                 _connectionIdAccountIdBy.Add(
-                    accountId, 
+                    accountId,
                     new HashSet<string>(StringComparer.Ordinal)
                     {
                         connectionId

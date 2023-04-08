@@ -106,7 +106,8 @@ namespace LetsTalk.Server.Persistence.Repositories
                     LastMessageDate = x.AccountInfo.LastMessageDate,
                     UnreadCount = x.UnreadMessageCounts!.UnreadCount
                 })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         public Task<Account?> GetByIdAsync(int id)

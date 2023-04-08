@@ -71,6 +71,6 @@ app.UseCors("all");
 app.MapHub<NotificationHub>("/messagehub");
 
 var kafkaBus = app.Services.CreateKafkaBus();
-await kafkaBus.StartAsync();
+await kafkaBus.StartAsync().ConfigureAwait(false);
 
 app.Run();

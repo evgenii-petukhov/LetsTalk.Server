@@ -24,24 +24,26 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId);
-        var messageDtos = messages
-            .Select(async message =>
-            {
-                var messageDto = _mapper.Map<MessageDto>(message);
-                messageDto.IsMine = message.SenderId == request.SenderId;
-                if (messageDto.TextHtml == null)
-                {
-                    var result = _messageProcessor.ConvertToHtml(message.Text!);
-                    messageDto.TextHtml = result.Html;
-                    await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.TextHtml!);
-                }
-                return messageDto;
-            })
-            .Select(async t => await t)
+        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId)
+            .ConfigureAwait(false);
+        return messages
+            .Select(message => GetMessageDto(message, request.SenderId))
+            .Select(async t => await t.ConfigureAwait(false))
             .Select(t => t.Result)
             .ToList();
+    }
 
-        return messageDtos;
+    private async Task<MessageDto> GetMessageDto(Domain.Message message, int senderId)
+    {
+        var messageDto = _mapper.Map<MessageDto>(message);
+        messageDto.IsMine = message.SenderId == senderId;
+        if (messageDto.TextHtml == null)
+        {
+            var result = _messageProcessor.ConvertToHtml(message.Text!);
+            messageDto.TextHtml = result.Html;
+            await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.TextHtml!)
+                .ConfigureAwait(false);
+        }
+        return messageDto;
     }
 }

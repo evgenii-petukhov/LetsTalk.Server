@@ -24,7 +24,8 @@ namespace LetsTalk.Server.API.Controllers
         {
             var accountId = (int)HttpContext.Items["AccountId"]!;
             var query = new GetAccountsQuery(accountId);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query)
+                .ConfigureAwait(false);
             return Ok(result);
         }
 
@@ -33,7 +34,8 @@ namespace LetsTalk.Server.API.Controllers
         {
             var accountId = (int)HttpContext.Items["AccountId"]!;
             var query = new GetAccountQuery(accountId);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query)
+                .ConfigureAwait(false);
             return Ok(result);
         }
     }

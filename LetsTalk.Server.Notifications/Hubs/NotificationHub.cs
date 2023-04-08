@@ -24,7 +24,8 @@ public class NotificationHub : Hub<INotificationHub>
 
     public async Task Authorize(string token)
     {
-        var accountId = await _authenticationClient.ValidateJwtToken(_authenticationSettings.Url!, token);
+        var accountId = await _authenticationClient.ValidateJwtToken(_authenticationSettings.Url!, token)
+            .ConfigureAwait(false);
         if (accountId != null)
         {
             _connectionManager.AddConnectionId(accountId.Value, Context.ConnectionId);

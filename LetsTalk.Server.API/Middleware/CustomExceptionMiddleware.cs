@@ -17,11 +17,12 @@ public class CustomExceptionMiddleware
     {
         try
         {
-            await _next(ctx);
+            await _next(ctx).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(ctx, ex);
+            await HandleExceptionAsync(ctx, ex)
+                .ConfigureAwait(false);
         }
     }
 

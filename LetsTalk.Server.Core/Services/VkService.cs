@@ -41,7 +41,8 @@ public class VkService : IVkService
         var request = new RestRequest($"method/users.get?user_ids={model.Id}&fields=id,first_name,last_name,photo_max&access_token={model.AuthToken}&v=5.131");
         try
         {
-            var response = await client.GetAsync(request);
+            var response = await client.GetAsync(request)
+                .ConfigureAwait(false);
 
             if (!response.IsSuccessful)
                 throw new BadRequestException(response.ErrorMessage!);
@@ -55,7 +56,8 @@ public class VkService : IVkService
             }
 
             string externalId = data.Response![0].Id!;
-            var account = await _accountRepository.GetByExternalIdAsync(externalId);
+            var account = await _accountRepository.GetByExternalIdAsync(externalId)
+                .ConfigureAwait(false);
 
             // create new account if first time logging in
             if (account == null)
@@ -68,11 +70,13 @@ public class VkService : IVkService
                     LastName = data.Response[0].LastName,
                     PhotoUrl = data.Response[0].PictureUrl
                 };
-                await _accountRepository.CreateAsync(account);
+                await _accountRepository.CreateAsync(account)
+                    .ConfigureAwait(false);
             }
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id)
+                .ConfigureAwait(false);
 
             return new LoginResponseDto
             {

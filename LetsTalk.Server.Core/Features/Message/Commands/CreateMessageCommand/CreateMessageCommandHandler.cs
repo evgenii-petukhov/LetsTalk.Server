@@ -28,7 +28,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         var messageEntity = _mapper.Map<Domain.Message>(request);
         var htmlResult = _messageProcessor.ConvertToHtml(messageEntity.Text!);
         messageEntity.TextHtml = htmlResult.Html;
-        await _messageRepository.CreateAsync(messageEntity);
+        await _messageRepository.CreateAsync(messageEntity)
+            .ConfigureAwait(false);
         return new CreateMessageResponse
         {
             Dto = _mapper.Map<MessageDto>(messageEntity),

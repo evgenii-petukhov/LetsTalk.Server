@@ -47,10 +47,12 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     {
         if (request.Url == null) return;
 
-        var linkPreview = await _linkPreviewRepository.GetByUrlAsync(request.Url);
+        var linkPreview = await _linkPreviewRepository.GetByUrlAsync(request.Url)
+            .ConfigureAwait(false);
         if (linkPreview == null)
         {
-            var pageString = await _downloadService.DownloadAsString(request.Url);
+            var pageString = await _downloadService.DownloadAsString(request.Url)
+                .ConfigureAwait(false);
             if (string.IsNullOrEmpty(pageString))
             {
                 _logger.LogInformation("Unable to download: {url}", request.Url);
@@ -73,7 +75,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                     Url = request.Url,
                     Title = openGraphModel.Title,
                     ImageUrl = openGraphModel.ImageUrl
-                });
+                }).ConfigureAwait(false);
 
                 _logger.LogInformation("{@linkPreview}", linkPreview);
             }
@@ -83,9 +85,12 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             _logger.LogInformation("Fetched from DB: {url}", request.Url);
         }
 
-        await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id);
-        await SendNotification(request.RecipientId, request.SenderId, request.MessageId, linkPreview);
-        await SendNotification(request.SenderId, request.RecipientId, request.MessageId, linkPreview);
+        await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id)
+            .ConfigureAwait(false);
+        await SendNotification(request.RecipientId, request.SenderId, request.MessageId, linkPreview)
+            .ConfigureAwait(false);
+        await SendNotification(request.SenderId, request.RecipientId, request.MessageId, linkPreview)
+            .ConfigureAwait(false);
     }
 
     private Task SendNotification(int recipientId, int senderId, int messageId, Domain.LinkPreview linkPreview)

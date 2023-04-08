@@ -25,7 +25,8 @@ public class AuthenticationController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> Login(LoginRequest model)
     {
-        var result = await _mediator.Send(_mapper.Map<LoginCommand>(model));
+        var result = await _mediator.Send(_mapper.Map<LoginCommand>(model))
+            .ConfigureAwait(false);
 
         return Ok(result);
     }

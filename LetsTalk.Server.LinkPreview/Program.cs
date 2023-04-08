@@ -17,9 +17,9 @@ using var serviceScope = host.Services.CreateScope();
 var provider = serviceScope.ServiceProvider;
 var bus = provider.CreateKafkaBus();
 
-await bus.StartAsync();
-await host.RunAsync();
-await bus.StopAsync();
+await bus.StartAsync().ConfigureAwait(false);
+await host.RunAsync().ConfigureAwait(false);
+await bus.StopAsync().ConfigureAwait(false);
 
 // https://thecodeblogger.com/2021/05/04/how-to-use-appsettings-json-config-file-with-net-console-applications/
 static IHostBuilder CreateDefaultBuilder()

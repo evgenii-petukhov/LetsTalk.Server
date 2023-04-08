@@ -37,7 +37,8 @@ public class FacebookService : IFacebookService
         var request = new RestRequest($"{model.Id}?fields=id,email,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
         try
         {
-            var response = await client.GetAsync(request);
+            var response = await client.GetAsync(request)
+                .ConfigureAwait(false);
 
             if (!response.IsSuccessful)
                 throw new BadRequestException(response.ErrorMessage!);
@@ -46,7 +47,8 @@ public class FacebookService : IFacebookService
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
 
             string externalId = data.Id!;
-            var account = await _accountRepository.GetByExternalIdAsync(externalId);
+            var account = await _accountRepository.GetByExternalIdAsync(externalId)
+                .ConfigureAwait(false);
 
             // create new account if first time logging in
             if (account == null)
@@ -60,11 +62,13 @@ public class FacebookService : IFacebookService
                     Email = data.Email,
                     PhotoUrl = data.Picture!.Data!.Url
                 };
-                await _accountRepository.CreateAsync(account);
+                await _accountRepository.CreateAsync(account)
+                    .ConfigureAwait(false);
             }
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id)
+                .ConfigureAwait(false);
 
             return new LoginResponseDto
             {

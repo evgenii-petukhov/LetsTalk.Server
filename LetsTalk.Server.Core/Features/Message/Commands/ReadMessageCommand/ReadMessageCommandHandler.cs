@@ -14,7 +14,8 @@ public class ReadMessageCommandHandler : IRequestHandler<ReadMessageCommand, Uni
 
     public async Task<Unit> Handle(ReadMessageCommand request, CancellationToken cancellationToken)
     {
-        await _messageRepository.MarkAsReadAsync(request.MessageId, request.RecipientId);
+        await _messageRepository.MarkAsReadAsync(request.MessageId, request.RecipientId)
+            .ConfigureAwait(false);
         return Unit.Value;
     }
 }

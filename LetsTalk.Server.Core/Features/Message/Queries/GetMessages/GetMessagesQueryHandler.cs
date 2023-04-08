@@ -35,7 +35,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
                     var result = _messageProcessor.ConvertToHtml(message.Text!);
                     messageDto.TextHtml = result.Html;
                     await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.TextHtml!);
-                }                
+                }
                 return messageDto;
             })
             .Select(async t => await t)

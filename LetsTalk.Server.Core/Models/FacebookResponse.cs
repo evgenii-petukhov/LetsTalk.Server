@@ -13,6 +13,6 @@ public class FacebookResponse
 
     [JsonProperty("last_name")]
     public string? LastName { get; set; }
-    
+
     public FacebookPicture? Picture { get; set; }
 }

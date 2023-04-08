@@ -8,7 +8,6 @@ public class LetsTalkDbContext : DbContext
 {
 	public LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : base(options)
     {
-
 	}
 
     public DbSet<AccountType> AccountTypes { get; set; }

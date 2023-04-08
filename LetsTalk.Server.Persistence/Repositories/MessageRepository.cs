@@ -15,13 +15,13 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId)
     {
         await _context.Messages
-            .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && message.IsRead == false)
+            .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
 
         return await _context.Messages
             .Include(message => message.LinkPreview)
             .AsNoTracking()
-            .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)
+            .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
             .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync();
     }

@@ -12,9 +12,9 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         }
 
-        public async Task<Account?> GetByExternalIdAsync(string externalId)
+        public Task<Account?> GetByExternalIdAsync(string externalId)
         {
-            return await _context.Set<Account>()
+            return _context.Set<Account>()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(q => q.ExternalId == externalId);
         }
@@ -110,9 +110,9 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Account?> GetByIdAsync(int id)
+        public Task<Account?> GetByIdAsync(int id)
         {
-            return await _context.Set<Account>()
+            return _context.Set<Account>()
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
     }

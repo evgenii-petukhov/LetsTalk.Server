@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AsyncFixer" Version="1.6.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="KafkaFlow" Version="2.2.15" />
     <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.2.15" />
     <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.2.15" />

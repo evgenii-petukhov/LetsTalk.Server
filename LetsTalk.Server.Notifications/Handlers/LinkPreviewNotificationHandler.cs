@@ -11,8 +11,8 @@ public class LinkPreviewNotificationHandler : NotificationHandler<LinkPreviewDto
     {
     }
 
-    public override async Task Handle(IMessageContext context, Notification<LinkPreviewDto> notification)
+    public override Task Handle(IMessageContext context, Notification<LinkPreviewDto> notification)
     {
-        await _notificationService.SendLinkPreviewNotification(notification.RecipientId, notification.Message!);
+        return _notificationService.SendLinkPreviewNotification(notification.RecipientId, notification.Message!);
     }
 }

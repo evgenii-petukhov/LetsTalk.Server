@@ -18,15 +18,15 @@ public class AuthenticationService : IAuthenticationService
         _vkService = vkService;
     }
 
-    public async Task<LoginResponseDto> Login(LoginServiceInput model)
+    public Task<LoginResponseDto> Login(LoginServiceInput model)
     {
         if (string.Equals(model.Provider, "FACEBOOK", StringComparison.Ordinal))
         {
-            return await _facebookService.Login(model);
+            return _facebookService.Login(model);
         }
         else if (string.Equals(model.Provider, "VK", StringComparison.Ordinal))
         {
-            return await _vkService.Login(model);
+            return _vkService.Login(model);
         }
         else
         {

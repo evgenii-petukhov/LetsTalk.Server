@@ -11,8 +11,8 @@ public class MessageNotificationHandler : NotificationHandler<MessageDto>
     {
     }
 
-    public override async Task Handle(IMessageContext context, Notification<MessageDto> notification)
+    public override Task Handle(IMessageContext context, Notification<MessageDto> notification)
     {
-        await _notificationService.SendMessageNotification(notification.RecipientId, notification.Message!);
+        return _notificationService.SendMessageNotification(notification.RecipientId, notification.Message!);
     }
 }

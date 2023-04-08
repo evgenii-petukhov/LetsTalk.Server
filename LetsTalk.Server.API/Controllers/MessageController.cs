@@ -84,9 +84,9 @@ namespace LetsTalk.Server.API.Controllers
             return Ok();
         }
 
-        private async Task SendMessageNotification(int accountId, MessageDto messageDto)
+        private Task SendMessageNotification(int accountId, MessageDto messageDto)
         {
-            await _messageNotificationProducer.ProduceAsync(
+            return _messageNotificationProducer.ProduceAsync(
                 _kafkaSettings.MessageNotification!.Topic,
                 Guid.NewGuid().ToString(),
                 new Notification<MessageDto>

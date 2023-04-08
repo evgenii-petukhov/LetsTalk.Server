@@ -14,7 +14,7 @@ public class JwtMiddleware
     }
 
     public async Task Invoke(
-        HttpContext context, 
+        HttpContext context,
         IAuthenticationClient authenticationClient,
         IOptions<AuthenticationSettings> options)
     {

@@ -25,7 +25,7 @@ public class MessageProcessor : IMessageProcessor
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Select(s => $"<p>{s}</p>");
 
-        var html = string.Join(string.Empty, lines);
+        var html = string.Concat(lines);
         return _regexService.ReplaceUrlsByHref(html);
     }
 }

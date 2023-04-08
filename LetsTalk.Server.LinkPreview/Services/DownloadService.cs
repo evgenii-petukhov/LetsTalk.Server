@@ -7,6 +7,7 @@ public class DownloadService : IDownloadService
     public async Task<string?> DownloadAsString(string url)
     {
         using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("User-Agent", "Other");
         try
         {
             return await client.GetStringAsync(url)

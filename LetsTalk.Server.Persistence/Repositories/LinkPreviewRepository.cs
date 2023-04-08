@@ -11,9 +11,9 @@ public class LinkPreviewRepository : GenericRepository<LinkPreview>, ILinkPrevie
     {
     }
 
-    public async Task<LinkPreview?> GetByUrlAsync(string url)
+    public Task<LinkPreview?> GetByUrlAsync(string url)
     {
-        return await _context.Set<LinkPreview>()
+        return _context.Set<LinkPreview>()
             .AsNoTracking()
             .SingleOrDefaultAsync(q => q.Url == url);
     }

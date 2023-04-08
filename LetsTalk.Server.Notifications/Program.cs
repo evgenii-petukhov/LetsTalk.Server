@@ -16,10 +16,7 @@ builder.Services.AddNotificationsServices();
 builder.Services.AddAuthenticationClientServices();
 builder.Services.AddConfigurationServices(builder.Configuration);
 builder.Services.AddControllers();
-builder.Services.AddSignalR(o =>
-{
-    o.EnableDetailedErrors = true;
-});
+builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("all", builder =>

@@ -38,6 +38,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
                 }                
                 return messageDto;
             })
+            .Select(async t => await t)
             .Select(t => t.Result)
             .ToList();
 

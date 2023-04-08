@@ -25,7 +25,7 @@ public class CustomExceptionMiddleware
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext ctx, Exception ex)
+    private Task HandleExceptionAsync(HttpContext ctx, Exception ex)
     {
         CustomProblemDetails problem;
         HttpStatusCode statusCode;
@@ -64,6 +64,6 @@ public class CustomExceptionMiddleware
         }
 
         ctx.Response.StatusCode = (int)statusCode;
-        await ctx.Response.WriteAsJsonAsync(problem);
+        return ctx.Response.WriteAsJsonAsync(problem);
     }
 }

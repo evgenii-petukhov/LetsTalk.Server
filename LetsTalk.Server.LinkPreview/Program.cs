@@ -18,10 +18,6 @@ var provider = serviceScope.ServiceProvider;
 var bus = provider.CreateKafkaBus();
 
 await bus.StartAsync();
-AppDomain.CurrentDomain.ProcessExit += new EventHandler(async (sender, e) =>
-{
-    await bus.StopAsync();
-});
 await host.RunAsync();
 await bus.StopAsync();
 

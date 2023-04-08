@@ -88,9 +88,9 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         await SendNotification(request.SenderId, request.RecipientId, request.MessageId, linkPreview);
     }
 
-    private async Task SendNotification(int recipientId, int senderId, int messageId, Domain.LinkPreview linkPreview)
+    private Task SendNotification(int recipientId, int senderId, int messageId, Domain.LinkPreview linkPreview)
     {
-        await _producer.ProduceAsync(
+        return _producer.ProduceAsync(
             _kafkaSettings.LinkPreviewNotification!.Topic,
             Guid.NewGuid().ToString(),
             new Notification<LinkPreviewDto>

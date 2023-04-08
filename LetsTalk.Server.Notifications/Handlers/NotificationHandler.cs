@@ -9,7 +9,7 @@ public abstract class NotificationHandler<T> : IMessageHandler<Notification<T>> 
 {
     protected readonly INotificationService _notificationService;
 
-    public NotificationHandler(INotificationService notificationService)
+    protected NotificationHandler(INotificationService notificationService)
     {
         _notificationService = notificationService;
     }

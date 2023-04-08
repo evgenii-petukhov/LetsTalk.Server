@@ -9,12 +9,11 @@ namespace LetsTalk.Server.Persistence.Repositories
     {
         public AccountRepository(LetsTalkDbContext context) : base(context)
         {
-
         }
 
-        public async Task<Account?> GetByExternalIdAsync(string externalId)
+        public Task<Account?> GetByExternalIdAsync(string externalId)
         {
-            return await _context.Set<Account>()
+            return _context.Set<Account>()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(q => q.ExternalId == externalId);
         }
@@ -29,7 +28,7 @@ namespace LetsTalk.Server.Persistence.Repositories
                     AccountId = g.Key,
                     LastMessageDate = g.Max(x => x.DateCreatedUnix)
                 });
-                
+
             var receivedMessageDates = _context.Set<Message>()
                 .Where(x => x.RecipientId == id)
                 .GroupBy(x => x.SenderId)
@@ -45,13 +44,13 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .Select(x => new
                 {
                     AccountId = x.Key,
-                    LastMessageDate = x.Select(a => a.LastMessageDate).Max()
+                    LastMessageDate = x.Max(a => a.LastMessageDate)
                 });
 
             var unreadMessageCounts = _context.Set<Account>()
                 .Where(account => account.Id != id)
                 .Join(
-                    _context.Set<Message>().Where(message => message.RecipientId == id && message.IsRead == false),
+                    _context.Set<Message>().Where(message => message.RecipientId == id && !message.IsRead),
                     account => account.Id,
                     message => message.SenderId,
                     (account, message) => new
@@ -110,9 +109,9 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Account?> GetByIdAsync(int id)
+        public Task<Account?> GetByIdAsync(int id)
         {
-            return await _context.Set<Account>()
+            return _context.Set<Account>()
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
     }

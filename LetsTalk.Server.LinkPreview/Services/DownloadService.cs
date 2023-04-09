@@ -4,18 +4,11 @@ namespace LetsTalk.Server.LinkPreview.Services;
 
 public class DownloadService : IDownloadService
 {
-    public async Task<string?> DownloadAsString(string url)
+    public async Task<string> DownloadAsString(string url)
     {
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "Other");
-        try
-        {
-            return await client.GetStringAsync(url)
-                .ConfigureAwait(false);
-        }
-        catch
-        {
-            return null;
-        }
+        return await client.GetStringAsync(url)
+            .ConfigureAwait(false);
     }
 }

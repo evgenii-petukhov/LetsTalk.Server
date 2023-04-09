@@ -49,17 +49,14 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
         var linkPreview = await _linkPreviewRepository.GetByUrlAsync(request.Url)
             .ConfigureAwait(false);
+
         if (linkPreview == null)
         {
-            var pageString = await _downloadService.DownloadAsString(request.Url)
-                .ConfigureAwait(false);
-            if (string.IsNullOrEmpty(pageString))
+            try
             {
-                _logger.LogInformation("Unable to download: {url}", request.Url);
-                return;
-            }
-            else
-            {
+                var pageString = await _downloadService.DownloadAsString(request.Url)
+                    .ConfigureAwait(false);
+
                 var openGraphModel = _regexService.GetOpenGraphModel(pageString);
                 _logger.LogInformation("{@opModel}", openGraphModel);
 
@@ -78,6 +75,11 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                 }).ConfigureAwait(false);
 
                 _logger.LogInformation("{@linkPreview}", linkPreview);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Unable to download: {url}", request.Url);
+                return;
             }
         }
         else

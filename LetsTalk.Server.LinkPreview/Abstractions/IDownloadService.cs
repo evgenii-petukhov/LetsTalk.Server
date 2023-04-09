@@ -2,5 +2,5 @@
 
 public interface IDownloadService
 {
-    public Task<string?> DownloadAsString(string url);
+    public Task<string> DownloadAsString(string url);
 }

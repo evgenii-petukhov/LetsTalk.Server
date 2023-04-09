@@ -11,12 +11,12 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IMapper _mapper;
-    private readonly IMessageProcessor _messageProcessor;
+    private readonly IHtmlGenerator _messageProcessor;
 
     public CreateMessageCommandHandler(
         IMessageRepository messageRepository,
         IMapper mapper,
-        IMessageProcessor messageProcessor)
+        IHtmlGenerator messageProcessor)
     {
         _messageRepository = messageRepository;
         _mapper = mapper;
@@ -26,7 +26,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
         var messageEntity = _mapper.Map<Domain.Message>(request);
-        var htmlResult = _messageProcessor.ConvertToHtml(messageEntity.Text!);
+        var htmlResult = _messageProcessor.GetHtml(messageEntity.Text!);
         messageEntity.TextHtml = htmlResult.Html;
         await _messageRepository.CreateAsync(messageEntity)
             .ConfigureAwait(false);

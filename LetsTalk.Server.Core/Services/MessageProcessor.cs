@@ -1,31 +1,37 @@
-﻿using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Models;
+﻿using AutoMapper;
+using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Persistence.Abstractions;
 
 namespace LetsTalk.Server.Core.Services;
 
 public class MessageProcessor : IMessageProcessor
 {
-    private readonly string[] _separators = new string[]
-    {
-        "\r\n",
-        "\n"
-    };
+    private readonly IMessageRepository _messageRepository;
+    private readonly IMapper _mapper;
+    private readonly IHtmlGenerator _htmlGenerator;
 
-    private readonly IRegexService _regexService;
-
-    public MessageProcessor(IRegexService regexService)
+    public MessageProcessor(
+        IMessageRepository messageRepository,
+        IHtmlGenerator htmlGenerator,
+        IMapper mapper)
     {
-        _regexService = regexService;
+        _messageRepository = messageRepository;
+        _htmlGenerator = htmlGenerator;
+        _mapper = mapper;
     }
 
-    public MessageProcessingResult ConvertToHtml(string text)
+    public async Task<MessageDto> GetMessageDto(Domain.Message message, int senderId)
     {
-        var lines = text
-            .Split(_separators, StringSplitOptions.TrimEntries)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Select(s => $"<p>{s}</p>");
-
-        var html = string.Concat(lines);
-        return _regexService.ReplaceUrlsByHref(html);
+        var messageDto = _mapper.Map<MessageDto>(message);
+        messageDto.IsMine = message.SenderId == senderId;
+        if (messageDto.TextHtml == null)
+        {
+            var result = _htmlGenerator.GetHtml(message.Text!);
+            messageDto.TextHtml = result.Html;
+            await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.TextHtml!)
+                .ConfigureAwait(false);
+        }
+        return messageDto;
     }
 }

@@ -15,10 +15,10 @@ public partial class RegexService : IRegexService
     matchTimeoutMilliseconds: 1000)]
     private static partial Regex MatchUrls();
 
-    public MessageProcessingResult ReplaceUrlsByHref(string input)
+    public HtmlGeneratorResult ReplaceUrlsByHref(string input)
     {
         var regex = MatchUrls();
-        return new MessageProcessingResult
+        return new HtmlGeneratorResult
         {
             Html = regex.Replace(input, LINK_REPLACEMENT),
             Url = regex.Matches(input).FirstOrDefault()?.Value

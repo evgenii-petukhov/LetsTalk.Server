@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Core.Models;
 
-public class MessageProcessingResult
+public class HtmlGeneratorResult
 {
     public string? Html { get; set; }
 

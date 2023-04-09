@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Core.Models;
+﻿using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IMessageProcessor
 {
-    MessageProcessingResult ConvertToHtml(string text);
+    public Task<MessageDto> GetMessageDto(Domain.Message message, int senderId);
 }

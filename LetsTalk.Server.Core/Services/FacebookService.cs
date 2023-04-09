@@ -47,6 +47,9 @@ public class FacebookService : IFacebookService
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
 
             string externalId = data.Id!;
+            var firstName = data.FirstName;
+            var lastName = data.LastName;
+            var photoUrl = data.Picture!.Data!.Url;
             var account = await _accountRepository.GetByExternalIdAsync(externalId)
                 .ConfigureAwait(false);
 
@@ -57,12 +60,17 @@ public class FacebookService : IFacebookService
                 {
                     ExternalId = externalId,
                     AccountTypeId = (int)AccountTypes.Facebook,
-                    FirstName = data.FirstName,
-                    LastName = data.LastName,
+                    FirstName = firstName,
+                    LastName = lastName,
                     Email = data.Email,
-                    PhotoUrl = data.Picture!.Data!.Url
+                    PhotoUrl = photoUrl
                 };
                 await _accountRepository.CreateAsync(account)
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl)
                     .ConfigureAwait(false);
             }
 

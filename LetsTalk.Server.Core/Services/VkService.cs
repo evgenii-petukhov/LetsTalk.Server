@@ -56,6 +56,9 @@ public class VkService : IVkService
             }
 
             string externalId = data.Response![0].Id!;
+            var firstName = data.Response[0].FirstName;
+            var lastName = data.Response[0].LastName;
+            var photoUrl = data.Response[0].PictureUrl;
             var account = await _accountRepository.GetByExternalIdAsync(externalId)
                 .ConfigureAwait(false);
 
@@ -66,11 +69,16 @@ public class VkService : IVkService
                 {
                     ExternalId = externalId,
                     AccountTypeId = (int)AccountTypes.VK,
-                    FirstName = data.Response[0].FirstName,
-                    LastName = data.Response[0].LastName,
-                    PhotoUrl = data.Response[0].PictureUrl
+                    FirstName = firstName,
+                    LastName = lastName,
+                    PhotoUrl = photoUrl
                 };
                 await _accountRepository.CreateAsync(account)
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl)
                     .ConfigureAwait(false);
             }
 

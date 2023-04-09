@@ -115,5 +115,18 @@ namespace LetsTalk.Server.Persistence.Repositories
             return _context.Set<Account>()
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
+
+        public async Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl)
+        {
+            await _context.Accounts
+                .Where(account => account.Id == accountId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(account => account.FirstName, firstName)
+                    .SetProperty(account => account.LastName, lastName)
+                    .SetProperty(account => account.PhotoUrl, photoUrl))
+                .ConfigureAwait(false);
+            await _context.SaveChangesAsync()
+                .ConfigureAwait(false);
+        }
     }
 }

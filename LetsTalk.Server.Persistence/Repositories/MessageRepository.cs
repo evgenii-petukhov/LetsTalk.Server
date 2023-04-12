@@ -16,45 +16,37 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         await _context.Messages
             .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()))
-            .ConfigureAwait(false);
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
 
         return await _context.Messages
             .Include(message => message.LinkPreview)
             .AsNoTracking()
             .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
             .OrderBy(mesage => mesage.DateCreatedUnix)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
     }
 
     public async Task MarkAsReadAsync(int messageId, int recipientId)
     {
         await _context.Messages
             .Where(message => message.Id == messageId && message.RecipientId == recipientId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()))
-            .ConfigureAwait(false);
-        await _context.SaveChangesAsync()
-            .ConfigureAwait(false);
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
+        await _context.SaveChangesAsync();
     }
 
     public async Task SetTextHtmlAsync(int messageId, string html)
     {
         await _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html))
-            .ConfigureAwait(false);
-        await _context.SaveChangesAsync()
-            .ConfigureAwait(false);
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html));
+        await _context.SaveChangesAsync();
     }
 
     public async Task SetLinkPreviewAsync(int messageId, int linkPreviewId)
     {
         await _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.LinkPreviewId, linkPreviewId))
-            .ConfigureAwait(false);
-        await _context.SaveChangesAsync()
-            .ConfigureAwait(false);
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.LinkPreviewId, linkPreviewId));
+        await _context.SaveChangesAsync();
     }
 }

@@ -20,8 +20,7 @@ public class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, AccountDt
 
     public async Task<AccountDto> Handle(GetAccountQuery request, CancellationToken cancellationToken)
     {
-        var accounts = await _accountRepository.GetByIdAsync(request.Id)
-            .ConfigureAwait(false);
+        var accounts = await _accountRepository.GetByIdAsync(request.Id);
         return _mapper.Map<AccountDto>(accounts);
     }
 }

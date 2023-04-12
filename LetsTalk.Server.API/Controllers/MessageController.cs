@@ -46,8 +46,7 @@ namespace LetsTalk.Server.API.Controllers
         {
             var senderId = (int)HttpContext.Items["AccountId"]!;
             var query = new GetMessagesQuery(senderId, recipientId);
-            var result = await _mediator.Send(query)
-                .ConfigureAwait(false);
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -57,12 +56,15 @@ namespace LetsTalk.Server.API.Controllers
             var cmd = _mapper.Map<CreateMessageCommand>(request);
             var senderId = (int)HttpContext.Items["AccountId"]!;
             cmd.SenderId = senderId;
-            var response = await _mediator.Send(cmd)
-                .ConfigureAwait(false);
-            await SendMessageNotification(request.RecipientId, response.Dto! with { IsMine = false })
-                .ConfigureAwait(false);
-            await SendMessageNotification(senderId, response.Dto! with { IsMine = true })
-                .ConfigureAwait(false);
+            var response = await _mediator.Send(cmd);
+            await SendMessageNotification(request.RecipientId, response.Dto! with
+            {
+                IsMine = false
+            });
+            await SendMessageNotification(senderId, response.Dto! with
+            {
+                IsMine = true
+            });
             if (!string.IsNullOrWhiteSpace(response.Url))
             {
                 await _linkPreviewRequestProducer.ProduceAsync(
@@ -74,8 +76,7 @@ namespace LetsTalk.Server.API.Controllers
                         RecipientId = request.RecipientId,
                         MessageId = response.Dto!.Id,
                         Url = response.Url
-                    })
-                    .ConfigureAwait(false);
+                    });
             }
             return Ok(response.Dto);
         }
@@ -85,8 +86,7 @@ namespace LetsTalk.Server.API.Controllers
         {
             var cmd = _mapper.Map<ReadMessageCommand>(request);
             cmd.RecipientId = (int)HttpContext.Items["AccountId"]!;
-            await _mediator.Send(cmd)
-                .ConfigureAwait(false);
+            await _mediator.Send(cmd);
             return Ok();
         }
 

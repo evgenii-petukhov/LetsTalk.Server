@@ -40,6 +40,6 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 var kafkaBus = app.Services.CreateKafkaBus();
-await kafkaBus.StartAsync().ConfigureAwait(false);
+await kafkaBus.StartAsync();
 
 app.Run();

@@ -29,8 +29,7 @@ public class MessageProcessor : IMessageProcessor
         {
             var result = _htmlGenerator.GetHtml(message.Text!);
             messageDto.TextHtml = result.Html;
-            await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.TextHtml!)
-                .ConfigureAwait(false);
+            await _messageRepository.SetTextHtmlAsync(message.Id, messageDto.TextHtml!);
         }
         return messageDto;
     }

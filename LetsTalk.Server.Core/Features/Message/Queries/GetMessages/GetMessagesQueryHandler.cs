@@ -20,11 +20,10 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId)
-            .ConfigureAwait(false);
+        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId);
         return messages
             .Select(message => _messageProcessor.GetMessageDto(message, request.SenderId))
-            .Select(async t => await t.ConfigureAwait(false))
+            .Select(async t => await t)
             .Select(t => t.Result)
             .ToList();
     }

@@ -14,8 +14,7 @@ public class AuthenticationClient: IAuthenticationClient
             .GenerateJwtTokenAsync(new GenerateJwtTokenRequest
             {
                 AccountId = accountId
-            })
-            .ConfigureAwait(false);
+            });
 
         return response.Token;
     }
@@ -26,8 +25,7 @@ public class AuthenticationClient: IAuthenticationClient
             .ValidateJwtTokenAsync(new ValidateJwtTokenRequest
             {
                 Token = token
-            })
-            .ConfigureAwait(false);
+            });
 
         return response.AccountId;
     }

@@ -23,14 +23,12 @@ public class JwtMiddleware
             .Split(" ")
             .Last();
 
-        var accountId = await authenticationClient.ValidateJwtToken(options.Value.Url!, token)
-            .ConfigureAwait(false);
+        var accountId = await authenticationClient.ValidateJwtToken(options.Value.Url!, token);
         if (accountId != null)
         {
             context.Items["AccountId"] = accountId;
         }
 
-        await _next(context)
-            .ConfigureAwait(false);
+        await _next(context);
     }
 }

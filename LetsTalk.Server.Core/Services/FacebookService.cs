@@ -37,8 +37,7 @@ public class FacebookService : IFacebookService
         var request = new RestRequest($"{model.Id}?fields=id,email,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
         try
         {
-            var response = await client.GetAsync(request)
-                .ConfigureAwait(false);
+            var response = await client.GetAsync(request);
 
             if (!response.IsSuccessful)
                 throw new BadRequestException(response.ErrorMessage!);
@@ -50,8 +49,7 @@ public class FacebookService : IFacebookService
             var firstName = data.FirstName;
             var lastName = data.LastName;
             var photoUrl = data.Picture!.Data!.Url;
-            var account = await _accountRepository.GetByExternalIdAsync(externalId)
-                .ConfigureAwait(false);
+            var account = await _accountRepository.GetByExternalIdAsync(externalId);
 
             // create new account if first time logging in
             if (account == null)
@@ -65,18 +63,15 @@ public class FacebookService : IFacebookService
                     Email = data.Email,
                     PhotoUrl = photoUrl
                 };
-                await _accountRepository.CreateAsync(account)
-                    .ConfigureAwait(false);
+                await _accountRepository.CreateAsync(account);
             }
             else
             {
-                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl)
-                    .ConfigureAwait(false);
+                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl);
             }
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id)
-                .ConfigureAwait(false);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id);
 
             return new LoginResponseDto
             {

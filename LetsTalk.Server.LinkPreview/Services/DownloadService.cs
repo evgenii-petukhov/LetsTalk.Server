@@ -8,7 +8,6 @@ public class DownloadService : IDownloadService
     {
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "Other");
-        return await client.GetStringAsync(url)
-            .ConfigureAwait(false);
+        return await client.GetStringAsync(url);
     }
 }

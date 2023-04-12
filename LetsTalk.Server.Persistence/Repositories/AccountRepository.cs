@@ -106,8 +106,7 @@ namespace LetsTalk.Server.Persistence.Repositories
                     LastMessageDate = x.AccountInfo.LastMessageDate,
                     UnreadCount = x.UnreadMessageCounts!.UnreadCount
                 })
-                .ToListAsync()
-                .ConfigureAwait(false);
+                .ToListAsync();
         }
 
         public Task<Account?> GetByIdAsync(int id)
@@ -123,10 +122,8 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .ExecuteUpdateAsync(x => x
                     .SetProperty(account => account.FirstName, firstName)
                     .SetProperty(account => account.LastName, lastName)
-                    .SetProperty(account => account.PhotoUrl, photoUrl))
-                .ConfigureAwait(false);
-            await _context.SaveChangesAsync()
-                .ConfigureAwait(false);
+                    .SetProperty(account => account.PhotoUrl, photoUrl));
+            await _context.SaveChangesAsync();
         }
     }
 }

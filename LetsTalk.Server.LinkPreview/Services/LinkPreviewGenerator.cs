@@ -27,8 +27,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
 
     public async Task<Domain.LinkPreview?> GetLinkPreview(string url)
     {
-        var linkPreview = await _linkPreviewRepository.GetByUrlAsync(url)
-            .ConfigureAwait(false);
+        var linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
 
         if (linkPreview != null)
         {
@@ -38,8 +37,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
 
         try
         {
-            var pageString = await _downloadService.DownloadAsString(url)
-                .ConfigureAwait(false);
+            var pageString = await _downloadService.DownloadAsString(url);
 
             var openGraphModel = _regexService.GetOpenGraphModel(pageString);
             _logger.LogInformation("{@opModel}", openGraphModel);
@@ -56,7 +54,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 Url = url,
                 Title = openGraphModel.Title,
                 ImageUrl = openGraphModel.ImageUrl
-            }).ConfigureAwait(false);
+            });
 
             _logger.LogInformation("{@linkPreview}", linkPreview);
             return linkPreview;

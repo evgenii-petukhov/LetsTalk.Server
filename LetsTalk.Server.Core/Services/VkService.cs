@@ -41,8 +41,7 @@ public class VkService : IVkService
         var request = new RestRequest($"method/users.get?user_ids={model.Id}&fields=id,first_name,last_name,photo_max&access_token={model.AuthToken}&v=5.131");
         try
         {
-            var response = await client.GetAsync(request)
-                .ConfigureAwait(false);
+            var response = await client.GetAsync(request);
 
             if (!response.IsSuccessful)
                 throw new BadRequestException(response.ErrorMessage!);
@@ -59,8 +58,7 @@ public class VkService : IVkService
             var firstName = data.Response[0].FirstName;
             var lastName = data.Response[0].LastName;
             var photoUrl = data.Response[0].PictureUrl;
-            var account = await _accountRepository.GetByExternalIdAsync(externalId)
-                .ConfigureAwait(false);
+            var account = await _accountRepository.GetByExternalIdAsync(externalId);
 
             // create new account if first time logging in
             if (account == null)
@@ -73,18 +71,15 @@ public class VkService : IVkService
                     LastName = lastName,
                     PhotoUrl = photoUrl
                 };
-                await _accountRepository.CreateAsync(account)
-                    .ConfigureAwait(false);
+                await _accountRepository.CreateAsync(account);
             }
             else
             {
-                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl)
-                    .ConfigureAwait(false);
+                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl);
             }
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id)
-                .ConfigureAwait(false);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id);
 
             return new LoginResponseDto
             {

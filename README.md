@@ -27,3 +27,11 @@ The back-end implements microservice architecture. There are a few microservices
 The API and the Notification microservice communicate with the Authentication microservice via GRPC.
 
 The API, the LinkPreview, and the Notification microservice communicate with each other via Apache Kafka.
+
+## Deployment
+The back-end can be deployed on Linux. For this you need to make the following steps
+* Clone the repository
+* [Install dotnet](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu)
+* Install and [configure nginx](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-7.0&tabs=linux-ubuntu) as reverse proxy
+* Set up SSL certificates. I prefer using Certbot + Let's Encrypt.
+* Register microservices as Linux daemons

@@ -10,11 +10,20 @@
 ![scheme](demo.gif)
 
 [Live demo](https://chat.epetukhov.cyou/)
-
-![scheme](scheme-compressed.svg)
 ## Description
 The idea behind this project is to demonstrate that 
 * I'm be able to create modern ASP.NET Core applications
 * I understand the main principles of microservice architecture and event-driven development
 * I know basic approaches of work with Apache Kafka
 * I can deploy .NET applications on Linux
+## Architecture
+![scheme](scheme-compressed.svg)
+
+The back-end implements microservice architecture. There are a few microservices, such as
+* **Authentication microservice** generates and validates JWT tokens
+* **Notification microservice** sends notifications to the Angular application via SignalR
+* **Link preview microservice** processes links inside messages and generates a preview
+
+The API and the Notification microservice communicate with the Authentication microservice via GRPC.
+
+The API, the LinkPreview, and the Notification microservice communicate with each other via Apache Kafka.

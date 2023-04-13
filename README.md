@@ -8,6 +8,8 @@
 ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white)
 ![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white)
 
-![scheme](scheme/scheme.svg)
+![scheme](demo.gif)
 
 [Live demo](https://chat.epetukhov.cyou/)
+
+![scheme](scheme/scheme.svg)

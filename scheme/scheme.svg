@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="176.23807mm"
-   height="129.80948mm"
-   viewBox="0 0 176.23807 129.80948"
+   width="139.63681mm"
+   height="102.85054mm"
+   viewBox="0 0 139.63681 102.85054"
    version="1.1"
    id="svg5"
    inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
@@ -46,7 +46,7 @@
      fit-margin-bottom="0"
      inkscape:zoom="0.93974427"
      inkscape:cx="277.73513"
-     inkscape:cy="229.31771"
+     inkscape:cy="127.16225"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
@@ -57,10 +57,10 @@
      id="defs2">
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 24.809482 : 1"
+       inkscape:vp_x="0 : -2.149457 : 1"
        inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="296.99997 : 24.809482 : 1"
-       inkscape:persp3d-origin="148.49999 : -10.19052 : 1"
+       inkscape:vp_z="296.99996 : -2.149457 : 1"
+       inkscape:persp3d-origin="148.49999 : -37.149459 : 1"
        id="perspective57646" />
     <marker
        style="overflow:visible"
@@ -225,11 +225,12 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-57.898475,17.160042)">
+     transform="translate(-57.898476,-9.7988989)">
     <g
        id="g85963">
       <g
-         id="g1556">
+         id="g1556"
+         transform="matrix(0.79231917,0,0,0.79231917,12.024404,23.395129)">
         <rect
            style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.3"
            id="rect1067"
@@ -407,11 +408,11 @@
                transform="matrix(0.08580021,0,0,0.08580021,114.81211,-55.490672)">
               <polygon
                  class="st0"
-                 points="31.9,63.2 46.1,186.3 125,230 203.9,186.3 218.1,63.2 125,30 "
+                 points="203.9,186.3 218.1,63.2 125,30 31.9,63.2 46.1,186.3 125,230 "
                  id="polygon65516" />
               <polygon
                  class="st1"
-                 points="125,52.1 125,153.4 125,230 203.9,186.3 218.1,63.2 125,30 125,52.2 "
+                 points="203.9,186.3 218.1,63.2 125,30 125,52.2 125,52.1 125,153.4 125,230 "
                  id="polygon65518" />
               <path
                  class="st2"

@@ -1,3 +1,3 @@
-# LetsTalk Server
+# LetsTalk back-end
 
 ![scheme](scheme/scheme.svg)

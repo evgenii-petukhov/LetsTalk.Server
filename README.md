@@ -29,6 +29,8 @@ The API and the Notification microservice communicate with the Authentication mi
 The API, the LinkPreview, and the Notification microservice communicate with each other via Apache Kafka.
 
 ## Deployment
+This is an instant messaging service with authentication via social media, such as Facebook. The service allows users to send text messages and share links. 
+
 The back-end can be deployed on Linux. For this you need to make the following steps
 * Clone the repository
 * [Install dotnet](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu)

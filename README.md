@@ -1,5 +1,4 @@
 # LetsTalk back-end
-
 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
@@ -13,3 +12,9 @@
 [Live demo](https://chat.epetukhov.cyou/)
 
 ![scheme](scheme-compressed.svg)
+## Description
+The idea behind this project is to demonstrate that 
+* I'm be able to create modern ASP.NET Core applications
+* I understand the main principles of microservice architecture and event-driven development
+* I know basic approaches of work with Apache Kafka
+* I can deploy .NET applications on Linux

@@ -23,7 +23,7 @@ namespace LetsTalk.Server.Authentication
             services.AddGrpc();
             services.AddGrpcReflection();
             services.AddConfigurationServices(configuration);
-            services.AddTransient<IJwtService, JwtService>();
+            services.AddSingleton<IJwtService, JwtService>();
             return services;
         }
     }

@@ -5,7 +5,7 @@ namespace LetsTalk.Server.Core.Services;
 
 public class HtmlGenerator : IHtmlGenerator
 {
-    private readonly string[] _separators = new string[]
+    private static readonly string[] _separators = new string[]
     {
         "\r\n",
         "\n"

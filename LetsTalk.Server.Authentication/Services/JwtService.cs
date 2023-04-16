@@ -11,11 +11,18 @@ namespace LetsTalk.Server.Authentication.Services;
 
 public class JwtService : IJwtService
 {
+    private const string CLAIM_ID = "id";
+
     private readonly JwtSettings _jwtSettings;
+    private readonly SigningCredentials _signingCredentials;
+    private readonly SymmetricSecurityKey _symmetricSecurityKey;
 
     public JwtService(IOptions<JwtSettings> jwtSettings)
     {
         _jwtSettings = jwtSettings.Value;
+        var key = Encoding.ASCII.GetBytes(_jwtSettings.Key!);
+        _signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
+        _symmetricSecurityKey = new SymmetricSecurityKey(key);
 
         if (string.IsNullOrEmpty(_jwtSettings.Key))
             throw new AppException("JWT secret not configured");
@@ -25,12 +32,11 @@ public class JwtService : IJwtService
     {
         // generate token that is valid for 15 minutes
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_jwtSettings.Key!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", accountId.ToString()) }),
+            Subject = new ClaimsIdentity(new[] { new Claim(CLAIM_ID, accountId.ToString()) }),
             Expires = DateTime.UtcNow.AddYears(1),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = _signingCredentials
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
@@ -42,13 +48,12 @@ public class JwtService : IJwtService
             return null;
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_jwtSettings.Key!);
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
+                IssuerSigningKey = _symmetricSecurityKey,
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
@@ -56,10 +61,9 @@ public class JwtService : IJwtService
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
             // return account id from JWT token if validation successful
-            return accountId;
+            return int.Parse(jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value);
         }
         catch
         {

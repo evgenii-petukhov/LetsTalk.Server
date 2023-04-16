@@ -16,6 +16,8 @@ public class LetsTalkDbContext : DbContext
 
     public DbSet<Message> Messages { get; set; }
 
+    public DbSet<LinkPreview> LinkPreviews { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LetsTalkDbContext).Assembly);

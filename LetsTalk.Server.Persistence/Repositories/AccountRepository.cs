@@ -13,14 +13,15 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         public Task<Account?> GetByExternalIdAsync(string externalId)
         {
-            return _context.Set<Account>()
+            return _context.Accounts
                 .AsNoTracking()
                 .SingleOrDefaultAsync(q => q.ExternalId == externalId);
         }
 
         public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id)
         {
-            var sentMessageDates = _context.Set<Message>()
+            var sentMessageDates = _context.Messages
+                .AsNoTracking()
                 .Where(x => x.SenderId == id)
                 .GroupBy(x => x.RecipientId)
                 .Select(g => new
@@ -29,7 +30,8 @@ namespace LetsTalk.Server.Persistence.Repositories
                     LastMessageDate = g.Max(x => x.DateCreatedUnix)
                 });
 
-            var receivedMessageDates = _context.Set<Message>()
+            var receivedMessageDates = _context.Messages
+                .AsNoTracking()
                 .Where(x => x.RecipientId == id)
                 .GroupBy(x => x.SenderId)
                 .Select(g => new
@@ -50,7 +52,9 @@ namespace LetsTalk.Server.Persistence.Repositories
             var unreadMessageCounts = _context.Set<Account>()
                 .Where(account => account.Id != id)
                 .Join(
-                    _context.Set<Message>().Where(message => message.RecipientId == id && !message.IsRead),
+                    _context.Messages
+                        .AsNoTracking()
+                        .Where(message => message.RecipientId == id && !message.IsRead),
                     account => account.Id,
                     message => message.SenderId,
                     (account, message) => new
@@ -65,7 +69,8 @@ namespace LetsTalk.Server.Persistence.Repositories
                     UnreadCount = g.Count()
                 });
 
-            return await _context.Set<Account>()
+            return await _context.Accounts
+                .AsNoTracking()
                 .Where(account => account.Id != id)
                 .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
                 {
@@ -111,19 +116,19 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         public Task<Account?> GetByIdAsync(int id)
         {
-            return _context.Set<Account>()
+            return _context.Accounts
+                .AsNoTracking()
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
 
-        public async Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl)
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl)
         {
-            await _context.Accounts
+            return _context.Accounts
                 .Where(account => account.Id == accountId)
                 .ExecuteUpdateAsync(x => x
                     .SetProperty(account => account.FirstName, firstName)
                     .SetProperty(account => account.LastName, lastName)
                     .SetProperty(account => account.PhotoUrl, photoUrl));
-            await _context.SaveChangesAsync();
         }
     }
 }

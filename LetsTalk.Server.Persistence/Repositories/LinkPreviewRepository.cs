@@ -13,7 +13,7 @@ public class LinkPreviewRepository : GenericRepository<LinkPreview>, ILinkPrevie
 
     public Task<LinkPreview?> GetByUrlAsync(string url)
     {
-        return _context.Set<LinkPreview>()
+        return _context.LinkPreviews
             .AsNoTracking()
             .SingleOrDefaultAsync(q => q.Url == url);
     }

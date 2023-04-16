@@ -15,6 +15,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId)
     {
         await _context.Messages
+            .AsNoTracking()
             .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
 
@@ -26,27 +27,24 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ToListAsync();
     }
 
-    public async Task MarkAsReadAsync(int messageId, int recipientId)
+    public Task MarkAsReadAsync(int messageId, int recipientId)
     {
-        await _context.Messages
+        return _context.Messages
             .Where(message => message.Id == messageId && message.RecipientId == recipientId)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
-        await _context.SaveChangesAsync();
     }
 
-    public async Task SetTextHtmlAsync(int messageId, string html)
+    public Task SetTextHtmlAsync(int messageId, string html)
     {
-        await _context.Messages
+        return _context.Messages
             .Where(message => message.Id == messageId)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html));
-        await _context.SaveChangesAsync();
     }
 
-    public async Task SetLinkPreviewAsync(int messageId, int linkPreviewId)
+    public Task SetLinkPreviewAsync(int messageId, int linkPreviewId)
     {
-        await _context.Messages
+        return _context.Messages
             .Where(message => message.Id == messageId)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.LinkPreviewId, linkPreviewId));
-        await _context.SaveChangesAsync();
     }
 }

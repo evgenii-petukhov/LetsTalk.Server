@@ -20,9 +20,9 @@ public class MessageProcessor : IMessageProcessor
 
     public MessageDto GetMessageDto(Message message, int senderId)
     {
-        var messageDto = _mapper.Map<MessageDto>(message);
-        messageDto.IsMine = message.SenderId == senderId;
-        return messageDto;
+        return _mapper.Map<Message, MessageDto>(
+            message,
+            x => x.AfterMap((source, destin) => destin.IsMine = source.SenderId == senderId));
     }
 
     public void SetTextHtml(Message message)

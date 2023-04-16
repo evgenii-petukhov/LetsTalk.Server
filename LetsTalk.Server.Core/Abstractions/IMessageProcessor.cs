@@ -1,8 +1,11 @@
-﻿using LetsTalk.Server.Dto.Models;
+﻿using LetsTalk.Server.Domain;
+using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IMessageProcessor
 {
-    public Task<MessageDto> GetMessageDto(Domain.Message message, int senderId);
+    MessageDto GetMessageDto(Message message, int senderId);
+
+    void SetTextHtml(Message message);
 }

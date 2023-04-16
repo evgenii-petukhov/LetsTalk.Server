@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Core.Abstractions;
+﻿using AutoMapper;
+using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Abstractions;
 using MediatR;
@@ -9,13 +10,16 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IMessageProcessor _messageProcessor;
+    private readonly IMapper _mapper;
 
     public GetMessagesQueryHandler(
         IMessageRepository messageRepository,
-        IMessageProcessor messageProcessor)
+        IMessageProcessor messageProcessor,
+        IMapper mapper)
     {
         _messageRepository = messageRepository;
         _messageProcessor = messageProcessor;
+        _mapper = mapper;
     }
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
@@ -33,8 +37,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
             await _messageRepository.SetTextHtmlAsync(message.Id, message.TextHtml!);
         }
 
-        return messages
-            .Select(message => _messageProcessor.GetMessageDto(message, request.SenderId))
-            .ToList();
+        return _mapper.Map<List<MessageDto>>(messages)
+            .ConvertAll(messageDto => messageDto with { IsMine = messageDto.AccountId == request.SenderId });
     }
 }

@@ -7,7 +7,6 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
-using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Notifications.Models;
@@ -57,17 +56,16 @@ namespace LetsTalk.Server.API.Controllers
             var senderId = (int)HttpContext.Items["AccountId"]!;
             cmd.SenderId = senderId;
             var response = await _mediator.Send(cmd);
-            await SendMessageNotification(request.RecipientId, response.Dto! with
-            {
-                IsMine = false
-            });
-            await SendMessageNotification(senderId, response.Dto! with
-            {
-                IsMine = true
-            });
-            if (!string.IsNullOrWhiteSpace(response.Url))
-            {
-                await _linkPreviewRequestProducer.ProduceAsync(
+            await Task.WhenAll(
+                SendMessageNotification(request.RecipientId, response.Dto! with
+                {
+                    IsMine = false
+                }),
+                SendMessageNotification(senderId, response.Dto! with
+                {
+                    IsMine = true
+                }),
+                string.IsNullOrWhiteSpace(response.Url) ? Task.CompletedTask : _linkPreviewRequestProducer.ProduceAsync(
                     _kafkaSettings.LinkPreviewRequest!.Topic,
                     Guid.NewGuid().ToString(),
                     new LinkPreviewRequest
@@ -76,8 +74,7 @@ namespace LetsTalk.Server.API.Controllers
                         RecipientId = request.RecipientId,
                         MessageId = response.Dto!.Id,
                         Url = response.Url
-                    });
-            }
+                    }));
             return Ok(response.Dto);
         }
 

@@ -39,9 +39,10 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
         if (linkPreview == null) return;
 
-        await _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id);
-        await SendNotification(request.RecipientId, request.SenderId, request.MessageId, linkPreview);
-        await SendNotification(request.SenderId, request.RecipientId, request.MessageId, linkPreview);
+        await Task.WhenAll(
+            _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id),
+            SendNotification(request.RecipientId, request.SenderId, request.MessageId, linkPreview),
+            SendNotification(request.SenderId, request.RecipientId, request.MessageId, linkPreview));
     }
 
     private Task SendNotification(int recipientId, int senderId, int messageId, Domain.LinkPreview linkPreview)

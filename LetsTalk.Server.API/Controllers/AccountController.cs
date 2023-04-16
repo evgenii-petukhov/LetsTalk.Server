@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace LetsTalk.Server.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     [Authorize]
-    public class AccountController : ControllerBase
+    public class AccountController : ApiController
     {
         private readonly IMediator _mediator;
 
@@ -22,7 +21,7 @@ namespace LetsTalk.Server.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AccountDto>>> Get()
         {
-            var accountId = (int)HttpContext.Items["AccountId"]!;
+            var accountId = GetAccountId();
             var query = new GetAccountsQuery(accountId);
             var result = await _mediator.Send(query);
             return Ok(result);
@@ -31,7 +30,7 @@ namespace LetsTalk.Server.API.Controllers
         [HttpGet("Me")]
         public async Task<ActionResult<AccountDto>> GetMe()
         {
-            var accountId = (int)HttpContext.Items["AccountId"]!;
+            var accountId = GetAccountId();
             var query = new GetAccountQuery(accountId);
             var result = await _mediator.Send(query);
             return Ok(result);

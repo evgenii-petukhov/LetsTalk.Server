@@ -17,6 +17,8 @@ namespace LetsTalk.Server.Core.Services;
 
 public class VkService : IVkService
 {
+    private const string VK_URL = "https://api.vk.com/";
+
     private readonly IAccountRepository _accountRepository;
     private readonly IAppLogger<VkService> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
@@ -37,7 +39,7 @@ public class VkService : IVkService
     public async Task<LoginResponseDto> Login(LoginServiceInput model)
     {
         // verify access token with facebook API to authenticate
-        var client = new RestClient("https://api.vk.com/");
+        var client = new RestClient(VK_URL);
         var request = new RestRequest($"method/users.get?user_ids={model.Id}&fields=id,first_name,last_name,photo_max&access_token={model.AuthToken}&v=5.131");
         try
         {

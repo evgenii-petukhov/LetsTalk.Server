@@ -30,7 +30,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
             .Where(message => message.TextHtml == null)
             .ToList();
 
-        Parallel.ForEach(messagesToProcess, _messageProcessor.SetTextHtml);
+        Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));
 
         foreach (var message in messagesToProcess)
         {

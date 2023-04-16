@@ -17,9 +17,8 @@ using Microsoft.Extensions.Options;
 namespace LetsTalk.Server.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     [Authorize]
-    public class MessageController : ControllerBase
+    public class MessageController : ApiController
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -43,7 +42,7 @@ namespace LetsTalk.Server.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<MessageDto>>> Get(int recipientId)
         {
-            var senderId = (int)HttpContext.Items["AccountId"]!;
+            var senderId = GetAccountId();
             var query = new GetMessagesQuery(senderId, recipientId);
             var result = await _mediator.Send(query);
             return Ok(result);
@@ -53,7 +52,7 @@ namespace LetsTalk.Server.API.Controllers
         public async Task<ActionResult<MessageDto>> Post(CreateMessageRequest request)
         {
             var cmd = _mapper.Map<CreateMessageCommand>(request);
-            var senderId = (int)HttpContext.Items["AccountId"]!;
+            var senderId = GetAccountId();
             cmd.SenderId = senderId;
             var response = await _mediator.Send(cmd);
             await Task.WhenAll(
@@ -82,7 +81,7 @@ namespace LetsTalk.Server.API.Controllers
         public async Task<ActionResult> MarkAsRead(MarkAsReadRequest request)
         {
             var cmd = _mapper.Map<ReadMessageCommand>(request);
-            cmd.RecipientId = (int)HttpContext.Items["AccountId"]!;
+            cmd.RecipientId = GetAccountId();
             await _mediator.Send(cmd);
             return Ok();
         }

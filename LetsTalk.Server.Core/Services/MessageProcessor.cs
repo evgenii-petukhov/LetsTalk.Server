@@ -12,9 +12,10 @@ public class MessageProcessor : IMessageProcessor
         _htmlGenerator = htmlGenerator;
     }
 
-    public void SetTextHtml(Message message)
+    public void SetTextHtml(Message message, out string? url)
     {
         var result = _htmlGenerator.GetHtml(message.Text!);
         message.TextHtml = result.Html;
+        url = result.Url;
     }
 }

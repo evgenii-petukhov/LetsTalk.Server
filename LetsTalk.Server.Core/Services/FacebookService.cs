@@ -16,6 +16,8 @@ namespace LetsTalk.Server.Core.Services;
 
 public class FacebookService : IFacebookService
 {
+    private const string FACEBOOK_URL = "https://graph.facebook.com/";
+
     private readonly IAccountRepository _accountRepository;
     private readonly IAuthenticationClient _authenticationClient;
     private readonly AuthenticationSettings _authenticationSettings;
@@ -33,7 +35,7 @@ public class FacebookService : IFacebookService
     public async Task<LoginResponseDto> Login(LoginServiceInput model)
     {
         // verify access token with facebook API to authenticate
-        var client = new RestClient("https://graph.facebook.com/");
+        var client = new RestClient(FACEBOOK_URL);
         var request = new RestRequest($"{model.Id}?fields=id,email,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
         try
         {

@@ -7,6 +7,9 @@ namespace LetsTalk.Server.Core.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
+    private const string FACEBOOK = "FACEBOOK";
+    private const string VK = "VK";
+
     private readonly IFacebookService _facebookService;
     private readonly IVkService _vkService;
 
@@ -20,17 +23,11 @@ public class AuthenticationService : IAuthenticationService
 
     public Task<LoginResponseDto> Login(LoginServiceInput model)
     {
-        if (string.Equals(model.Provider, "FACEBOOK", StringComparison.Ordinal))
+        return model.Provider switch
         {
-            return _facebookService.Login(model);
-        }
-        else if (string.Equals(model.Provider, "VK", StringComparison.Ordinal))
-        {
-            return _vkService.Login(model);
-        }
-        else
-        {
-            throw new BadRequestException("Authorization provider is not suppoted");
-        }
+            FACEBOOK => _facebookService.Login(model),
+            VK => _vkService.Login(model),
+            _ => throw new BadRequestException("Authorization provider is not suppoted")
+        };
     }
 }

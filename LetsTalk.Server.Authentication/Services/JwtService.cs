@@ -21,8 +21,8 @@ public class JwtService : IJwtService
     {
         _jwtSettings = jwtSettings.Value;
         var key = Encoding.ASCII.GetBytes(_jwtSettings.Key!);
-        _signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
         _symmetricSecurityKey = new SymmetricSecurityKey(key);
+        _signingCredentials = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
         if (string.IsNullOrEmpty(_jwtSettings.Key))
             throw new AppException("JWT secret not configured");

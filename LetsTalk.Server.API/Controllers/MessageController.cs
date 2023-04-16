@@ -41,7 +41,7 @@ namespace LetsTalk.Server.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MessageDto>>> Get(int recipientId)
+        public async Task<ActionResult<MessageDto[]>> Get(int recipientId)
         {
             var senderId = (int)HttpContext.Items["AccountId"]!;
             var query = new GetMessagesQuery(senderId, recipientId);

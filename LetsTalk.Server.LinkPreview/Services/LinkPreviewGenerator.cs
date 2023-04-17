@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Persistence.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Web;
 
@@ -49,12 +50,19 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             }
 
             openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
-            linkPreview = await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
+            try
             {
-                Url = url,
-                Title = openGraphModel.Title,
-                ImageUrl = openGraphModel.ImageUrl
-            });
+                linkPreview = await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
+                {
+                    Url = url,
+                    Title = openGraphModel.Title,
+                    ImageUrl = openGraphModel.ImageUrl
+                });
+            }
+            catch(DbUpdateException)
+            {
+                linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
+            }
 
             _logger.LogInformation("{@linkPreview}", linkPreview);
             return linkPreview;

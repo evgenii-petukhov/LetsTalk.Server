@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LetsTalk.Server.Domain;
 
 [Table("linkpreviews")]
-[Index(nameof(Url))]
+[Index(nameof(Url), IsUnique = true)]
 public class LinkPreview: BaseEntity
 {
     [Required]

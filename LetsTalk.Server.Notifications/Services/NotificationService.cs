@@ -20,13 +20,15 @@ public class NotificationService : INotificationService
 
     public Task SendLinkPreviewNotification(int accountId, LinkPreviewDto notification)
     {
-        return Task.WhenAll(_connectionManager.GetConnectionIds(accountId)
-            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendLinkPreviewNotification(notification)));
+        var notifications = _connectionManager.GetConnectionIds(accountId)?
+            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendLinkPreviewNotification(notification));
+        return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
     }
 
     public Task SendMessageNotification(int accountId, MessageDto notification)
     {
-        return Task.WhenAll(_connectionManager.GetConnectionIds(accountId)
-            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendMessageNotification(notification)));
+        var notifications = _connectionManager.GetConnectionIds(accountId)?
+            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendMessageNotification(notification));
+        return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
     }
 }

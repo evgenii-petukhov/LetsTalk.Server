@@ -14,11 +14,6 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
 
     public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId)
     {
-        await _context.Messages
-            .AsNoTracking()
-            .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
-
         return await _context.Messages
             .Include(message => message.LinkPreview)
             .AsNoTracking()
@@ -27,10 +22,18 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ToListAsync();
     }
 
-    public Task MarkAsReadAsync(int messageId, int recipientId)
+    public Task MarkAsReadAsync(int messageId)
     {
         return _context.Messages
-            .Where(message => message.Id == messageId && message.RecipientId == recipientId)
+            .Where(message => message.Id == messageId)
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
+    }
+
+    public Task MarkAllAsReadAsync(int senderId, int recipientId)
+    {
+        return _context.Messages
+            .AsNoTracking()
+            .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
     }
 

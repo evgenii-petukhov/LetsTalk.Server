@@ -24,6 +24,8 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
+        await _messageRepository.MarkAllAsReadAsync(request.SenderId, request.RecipientId);
+
         var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId);
 
         var messagesToProcess = messages

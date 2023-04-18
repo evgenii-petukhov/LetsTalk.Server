@@ -42,7 +42,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
         return _mapper.Map<List<MessageDto>>(messages)
             .ConvertAll(messageDto =>
             {
-                messageDto.IsMine = messageDto.AccountId == request.SenderId;
+                messageDto.IsMine = messageDto.SenderId == request.SenderId;
                 return messageDto;
             });
     }

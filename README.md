@@ -11,7 +11,7 @@
 
 ![scheme](demo.gif)
 
-[Live demo](https://chat.epetukhov.cyou/)
+🔴[Live demo](https://chat.epetukhov.cyou/)
 ## Description
 The idea behind this project is to demonstrate that 
 * I'm be able to create modern ASP.NET Core applications

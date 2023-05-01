@@ -1,39 +1,28 @@
 ﻿using LetsTalk.Server.API.Attributes;
-using LetsTalk.Server.Core.Features.Account.Queries.GetAccount;
 using LetsTalk.Server.Core.Features.Account.Queries.GetAccounts;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsTalk.Server.API.Controllers
+namespace LetsTalk.Server.API.Controllers;
+
+[Route("api/[controller]")]
+[Authorize]
+public class AccountController : ApiController
 {
-    [Route("api/[controller]")]
-    [Authorize]
-    public class AccountController : ApiController
+    private readonly IMediator _mediator;
+
+    public AccountController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public AccountController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<List<AccountDto>>> Get()
-        {
-            var accountId = GetAccountId();
-            var query = new GetAccountsQuery(accountId);
-            var result = await _mediator.Send(query);
-            return Ok(result);
-        }
-
-        [HttpGet("Me")]
-        public async Task<ActionResult<AccountDto>> GetMe()
-        {
-            var accountId = GetAccountId();
-            var query = new GetAccountQuery(accountId);
-            var result = await _mediator.Send(query);
-            return Ok(result);
-        }
+    [HttpGet]
+    public async Task<ActionResult<List<AccountDto>>> Get()
+    {
+        var accountId = GetAccountId();
+        var query = new GetAccountsQuery(accountId);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 }

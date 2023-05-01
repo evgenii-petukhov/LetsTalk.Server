@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.API.Models;
+﻿using LetsTalk.Server.API.Models.CreateMessage;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;

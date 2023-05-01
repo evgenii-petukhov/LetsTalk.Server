@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.API.Models;
+﻿namespace LetsTalk.Server.API.Models.Login;
 
 public class LoginRequest
 {

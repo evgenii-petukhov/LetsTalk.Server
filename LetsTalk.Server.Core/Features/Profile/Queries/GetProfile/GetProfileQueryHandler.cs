@@ -3,14 +3,14 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Abstractions;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Account.Queries.GetAccount;
+namespace LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
 
-public class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, AccountDto>
+public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, AccountDto>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
 
-    public GetAccountQueryHandler(
+    public GetProfileQueryHandler(
         IAccountRepository accountRepository,
         IMapper mapper)
     {
@@ -18,7 +18,7 @@ public class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, AccountDt
         _mapper = mapper;
     }
 
-    public async Task<AccountDto> Handle(GetAccountQuery request, CancellationToken cancellationToken)
+    public async Task<AccountDto> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {
         var accounts = await _accountRepository.GetByIdAsync(request.Id);
         return _mapper.Map<AccountDto>(accounts);

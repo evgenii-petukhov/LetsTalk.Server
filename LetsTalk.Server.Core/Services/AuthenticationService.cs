@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.API.Models;
+﻿using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;

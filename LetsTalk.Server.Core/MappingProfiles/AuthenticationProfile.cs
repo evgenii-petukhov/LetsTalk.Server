@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models;
+using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Core.Features.Authentication.Commands;
 
 namespace LetsTalk.Server.Core.MappingProfiles;

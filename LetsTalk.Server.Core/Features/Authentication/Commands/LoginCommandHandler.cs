@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.API.Models;
 using MediatR;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.API.Models.Login;
 
 namespace LetsTalk.Server.Core.Features.Authentication.Commands;
 

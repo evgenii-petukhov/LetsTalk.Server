@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.API.Models;
+﻿namespace LetsTalk.Server.API.Models.CreateMessage;
 
 public class CreateMessageRequest
 {

@@ -8,9 +8,9 @@ using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Persistence.Models;
-using LetsTalk.Server.API.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.API.Models.Login;
 
 namespace LetsTalk.Server.Core.Services;
 
@@ -69,7 +69,8 @@ public class FacebookService : IFacebookService
             }
             else
             {
-                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl);
+                await _accountRepository.UpdateAsync(
+                    account.Id, firstName, lastName, photoUrl);
             }
 
             // generate jwt token to access secure routes on this API

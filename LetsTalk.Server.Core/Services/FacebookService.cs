@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Domain;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 using LetsTalk.Server.Core.Abstractions;
@@ -18,16 +17,16 @@ public class FacebookService : IFacebookService
 {
     private const string FACEBOOK_URL = "https://graph.facebook.com/";
 
-    private readonly IAccountRepository _accountRepository;
+    private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IAuthenticationClient _authenticationClient;
     private readonly AuthenticationSettings _authenticationSettings;
 
     public FacebookService(
-        IAccountRepository accountRepository,
+        IAccountDataLayerService accountDataLayerService,
         IAuthenticationClient authenticationClient,
         IOptions<AuthenticationSettings> options)
     {
-        _accountRepository = accountRepository;
+        _accountDataLayerService = accountDataLayerService;
         _authenticationClient = authenticationClient;
         _authenticationSettings = options.Value;
     }
@@ -47,34 +46,15 @@ public class FacebookService : IFacebookService
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
 
-            string externalId = data.Id!;
-            var firstName = data.FirstName;
-            var lastName = data.LastName;
-            var photoUrl = data.Picture!.Data!.Url;
-            var account = await _accountRepository.GetByExternalIdAsync(externalId);
-
-            // create new account if first time logging in
-            if (account == null)
-            {
-                account = new Account
-                {
-                    ExternalId = externalId,
-                    AccountTypeId = (int)AccountTypes.Facebook,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = data.Email,
-                    PhotoUrl = photoUrl
-                };
-                await _accountRepository.CreateAsync(account);
-            }
-            else
-            {
-                await _accountRepository.UpdateAsync(
-                    account.Id, firstName, lastName, photoUrl);
-            }
+            var accountId = await _accountDataLayerService.CreateOrUpdate(
+                data.Id!,
+                AccountTypes.Facebook,
+                data.FirstName,
+                data.LastName,
+                data.Picture!.Data!.Url);
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, accountId);
 
             return new LoginResponseDto
             {

@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.Domain;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
@@ -19,18 +18,18 @@ public class VkService : IVkService
 {
     private const string VK_URL = "https://api.vk.com/";
 
-    private readonly IAccountRepository _accountRepository;
+    private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IAppLogger<VkService> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
     private readonly AuthenticationSettings _authenticationSettings;
 
     public VkService(
-        IAccountRepository accountRepository,
+        IAccountDataLayerService accountDataLayerService,
         IAppLogger<VkService> appLogger,
         IAuthenticationClient authenticationClient,
         IOptions<AuthenticationSettings> options)
     {
-        _accountRepository = accountRepository;
+        _accountDataLayerService = accountDataLayerService;
         _appLogger = appLogger;
         _authenticationClient = authenticationClient;
         _authenticationSettings = options.Value;
@@ -56,32 +55,15 @@ public class VkService : IVkService
                 throw new BadRequestException(data.Error.Message!);
             }
 
-            string externalId = data.Response![0].Id!;
-            var firstName = data.Response[0].FirstName;
-            var lastName = data.Response[0].LastName;
-            var photoUrl = data.Response[0].PictureUrl;
-            var account = await _accountRepository.GetByExternalIdAsync(externalId);
-
-            // create new account if first time logging in
-            if (account == null)
-            {
-                account = new Account
-                {
-                    ExternalId = externalId,
-                    AccountTypeId = (int)AccountTypes.VK,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    PhotoUrl = photoUrl
-                };
-                await _accountRepository.CreateAsync(account);
-            }
-            else
-            {
-                await _accountRepository.UpdateAsync(account.Id, firstName, lastName, photoUrl);
-            }
+            var accountId = await _accountDataLayerService.CreateOrUpdate(
+                data.Response![0].Id!,
+                AccountTypes.VK,
+                data.Response[0].FirstName,
+                data.Response[0].LastName,
+                data.Response[0].PictureUrl);
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, account.Id);
+            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, accountId);
 
             return new LoginResponseDto
             {

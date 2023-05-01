@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
+using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.Repositories
@@ -11,11 +12,11 @@ namespace LetsTalk.Server.Persistence.Repositories
         {
         }
 
-        public Task<Account?> GetByExternalIdAsync(string externalId)
+        public Task<Account?> GetByExternalIdAsync(string externalId, AccountTypes accountTypes)
         {
             return _context.Accounts
                 .AsNoTracking()
-                .SingleOrDefaultAsync(q => q.ExternalId == externalId);
+                .SingleOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
         }
 
         public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id)
@@ -121,14 +122,29 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
 
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl)
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl, string? email)
         {
+            email = string.IsNullOrWhiteSpace(email) ? null : email;
+
             return _context.Accounts
                 .Where(account => account.Id == accountId)
                 .ExecuteUpdateAsync(x => x
                     .SetProperty(account => account.FirstName, firstName)
                     .SetProperty(account => account.LastName, lastName)
-                    .SetProperty(account => account.PhotoUrl, photoUrl));
+                    .SetProperty(account => account.PhotoUrl, photoUrl)
+                    .SetProperty(account => account.Email, email));
+        }
+
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email)
+        {
+            email = string.IsNullOrWhiteSpace(email) ? null : email;
+
+            return _context.Accounts
+                .Where(account => account.Id == accountId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(account => account.FirstName, firstName)
+                    .SetProperty(account => account.LastName, lastName)
+                    .SetProperty(account => account.Email, email));
         }
     }
 }

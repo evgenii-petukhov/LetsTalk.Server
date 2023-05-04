@@ -146,5 +146,12 @@ namespace LetsTalk.Server.Persistence.Repositories
                     .SetProperty(account => account.LastName, lastName)
                     .SetProperty(account => account.Email, email));
         }
+
+        public Task<bool> IsAccountIdValidAsync(int id)
+        {
+            return _context.Accounts
+                .AsNoTracking()
+                .AnyAsync(account => account.Id == id);
+        }
     }
 }

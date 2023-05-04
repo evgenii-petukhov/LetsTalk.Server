@@ -38,7 +38,8 @@ public class CustomExceptionMiddleware
                     Title = badRequestException.Message,
                     Status = (int)statusCode,
                     Type = nameof(BadRequestException),
-                    Detail = badRequestException.InnerException?.Message
+                    Detail = badRequestException.InnerException?.Message,
+                    Errors = badRequestException.ValidationErrors!
                 };
                 break;
             case NotFoundException notFoundException:

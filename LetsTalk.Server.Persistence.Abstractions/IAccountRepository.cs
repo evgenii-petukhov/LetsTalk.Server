@@ -14,4 +14,6 @@ public interface IAccountRepository : IGenericRepository<Account>
     Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl, string? email);
 
     Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email);
+
+    Task<bool> IsAccountIdValidAsync(int id);
 }

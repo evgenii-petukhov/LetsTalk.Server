@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Persistence.Abstractions;
+﻿using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.Persistence.Abstractions;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
@@ -12,8 +13,16 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
         _accountRepository = accountRepository;
     }
 
-    public Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        return _accountRepository.UpdateAsync(request.AccountId, request.FirstName, request.LastName, request.Email);
+        var validator = new UpdateProfileCommandValidator(_accountRepository);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
+
+        await _accountRepository.UpdateAsync(request.AccountId, request.FirstName, request.LastName, request.Email);
     }
 }

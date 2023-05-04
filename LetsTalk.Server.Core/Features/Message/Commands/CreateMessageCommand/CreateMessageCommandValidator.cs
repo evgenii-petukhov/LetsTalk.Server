@@ -16,12 +16,12 @@ public class CreateMessageCommandValidator: AbstractValidator<CreateMessageComma
         RuleFor(model => model.RecipientId)
             .NotNull().WithMessage("{PropertyName} is required")
             .NotEqual(model => model.SenderId).WithMessage("{PropertyName} can't be eaual to {ComparisonProperty}")
-            .MustAsync(IsRecipientIdValidAsync).WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
-        
+            .MustAsync(IsAccountIdValidAsync).WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
+
         _accountRepository = accountRepository;
     }
 
-    private Task<bool> IsRecipientIdValidAsync(int id, CancellationToken token)
+    private Task<bool> IsAccountIdValidAsync(int id, CancellationToken token)
     {
         return _accountRepository.IsAccountIdValidAsync(id);
     }

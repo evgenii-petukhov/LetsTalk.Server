@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.API.Models.UpdateProfile;
-using MediatR;
+﻿using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 

@@ -10,19 +10,33 @@ public class CreateMessageCommandValidator: AbstractValidator<CreateMessageComma
     public CreateMessageCommandValidator(IAccountRepository accountRepository)
     {
         RuleFor(model => model.Text)
-            .NotNull().WithMessage("{PropertyName} is required")
-            .NotEmpty().WithMessage("{PropertyName} is required");
+            .NotNull()
+            .WithMessage("{PropertyName} is required")
+            .NotEmpty()
+            .WithMessage("{PropertyName} cannot be empty");
+
+        RuleFor(model => model.SenderId)
+            .NotNull()
+            .WithMessage("{PropertyName} is required");
 
         RuleFor(model => model.RecipientId)
-            .NotNull().WithMessage("{PropertyName} is required")
-            .NotEqual(model => model.SenderId).WithMessage("{PropertyName} can't be eaual to {ComparisonProperty}")
-            .MustAsync(IsAccountIdValidAsync).WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
+            .NotNull()
+            .WithMessage("{PropertyName} is required");
+
+        When(x => x.RecipientId.HasValue, () =>
+        {
+            RuleFor(model => model.RecipientId)
+                .NotEqual(model => model.SenderId)
+                .WithMessage("{PropertyName} can't be eaual to {ComparisonProperty}")
+                .MustAsync(IsAccountIdValidAsync)
+                .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
+        });
 
         _accountRepository = accountRepository;
     }
 
-    private Task<bool> IsAccountIdValidAsync(int id, CancellationToken token)
+    private Task<bool> IsAccountIdValidAsync(int? id, CancellationToken token)
     {
-        return _accountRepository.IsAccountIdValidAsync(id);
+        return _accountRepository.IsAccountIdValidAsync(id!.Value);
     }
 }

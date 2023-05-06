@@ -181,4 +181,56 @@ public class CreateMessageCommandValidatorTests
             "Text cannot be empty"
         });
     }
+
+    [Test]
+    public async Task CreateMessageCommandValidator_TextIsEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists()
+    {
+        // Arrange
+        var request = new CreateMessageCommand
+        {
+            RecipientId = 1,
+            SenderId = 2,
+            Text = string.Empty
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountRepository
+            .Setup(m => m.IsAccountIdValidAsync(1))
+            .Returns(Task.FromResult(true));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeFalse();
+        validationResult.Errors.Should().HaveCount(1);
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
+        {
+            "Text cannot be empty"
+        });
+    }
+
+    [Test]
+    public async Task CreateMessageCommandValidator_TextIsNotEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists()
+    {
+        // Arrange
+        var request = new CreateMessageCommand
+        {
+            RecipientId = 1,
+            SenderId = 2,
+            Text = "text"
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountRepository
+            .Setup(m => m.IsAccountIdValidAsync(1))
+            .Returns(Task.FromResult(true));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeTrue();
+        validationResult.Errors.Should().BeEmpty();
+    }
 }

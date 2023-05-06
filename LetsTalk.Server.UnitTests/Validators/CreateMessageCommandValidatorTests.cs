@@ -24,9 +24,6 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand();
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
-            .Returns(Task.FromResult(false));
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -43,4 +40,60 @@ public class CreateMessageCommandValidatorTests
             "Sender Id is required"
         });
     }
+
+    [Test]
+    public async Task CreateMessageCommandValidator_SenderIsZero()
+    {
+        // Arrange
+        var request = new CreateMessageCommand
+        {
+            SenderId = 0
+        };
+        var cancellationToken = new CancellationToken();
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeFalse();
+        validationResult.Errors.Should().HaveCount(3);
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
+        {
+            "Text is required",
+            "Text cannot be empty",
+            "Recipient Id is required"
+        });
+    }
+
+    [Test]
+    public async Task CreateMessageCommandValidator_RecipientIsZero()
+    {
+        // Arrange
+        var request = new CreateMessageCommand
+        {
+            RecipientId = 0
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountRepository
+            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Returns(Task.FromResult(false));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeFalse();
+        validationResult.Errors.Should().HaveCount(4);
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
+        {
+            "Text is required",
+            "Text cannot be empty",
+            "Sender Id is required",
+            "Account with Recipient Id = 0 does not exist"
+        });
+    }
+
+
 }

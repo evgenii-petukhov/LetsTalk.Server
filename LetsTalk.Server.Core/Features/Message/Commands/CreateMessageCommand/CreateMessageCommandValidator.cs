@@ -23,7 +23,7 @@ public class CreateMessageCommandValidator: AbstractValidator<CreateMessageComma
             .NotNull()
             .WithMessage("{PropertyName} is required");
 
-        When(x => x.RecipientId.HasValue, () =>
+        When(model => model.RecipientId.HasValue, () =>
         {
             RuleFor(model => model.RecipientId)
                 .NotEqual(model => model.SenderId)

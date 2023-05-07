@@ -23,6 +23,6 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        await _accountRepository.UpdateAsync(request.AccountId, request.FirstName, request.LastName, request.Email);
+        await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
     }
 }

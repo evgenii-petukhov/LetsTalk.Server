@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 using LetsTalk.Server.Persistence.Abstractions;
 using Moq;
 
 namespace LetsTalk.Server.UnitTests.Validators;
 
 [TestFixture]
-public class CreateMessageCommandValidatorTests
+public class UpdateProfileCommandValidatorTests
 {
-    private CreateMessageCommandValidator _validator;
+    private UpdateProfileCommandValidator _validator;
     private Mock<IAccountRepository> _mockAccountRepository;
 
     [SetUp]
@@ -19,10 +19,10 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task CreateMessageCommandValidator_EmptyModel()
+    public async Task UpdateProfileCommandValidator_EmptyModel()
     {
         // Arrange
-        var request = new CreateMessageCommand();
+        var request = new UpdateProfileCommand();
         var cancellationToken = new CancellationToken();
 
         // Act
@@ -31,48 +31,24 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(4);
+        validationResult.Errors.Should().HaveCount(5);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
-            "Recipient Id is required",
-            "Sender Id is required"
+            "Account Id is required",
+            "First Name is required",
+            "First Name cannot be empty",
+            "Last Name is required",
+            "Last Name cannot be empty",
         });
     }
 
     [Test]
-    public async Task CreateMessageCommandValidator_TextIsNull_RecipientIsNull_SenderIsZero()
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountDoesNotExist_FirstNameIsNull_LastNameIsNull_EmailIsNull()
     {
         // Arrange
-        var request = new CreateMessageCommand
+        var request = new UpdateProfileCommand
         {
-            SenderId = 0
-        };
-        var cancellationToken = new CancellationToken();
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "Text is required",
-            "Text cannot be empty",
-            "Recipient Id is required"
-        });
-    }
-
-    [Test]
-    public async Task CreateMessageCommandValidator_TextIsNull_RecipientIsZero_SenderIsNull()
-    {
-        // Arrange
-        var request = new CreateMessageCommand
-        {
-            RecipientId = 0
+            AccountId = 0
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
@@ -85,29 +61,29 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(4);
+        validationResult.Errors.Should().HaveCount(5);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
-            "Sender Id is required",
-            "Account with Recipient Id = 0 does not exist"
+            "Account with Account Id = 0 does not exist",
+            "First Name is required",
+            "First Name cannot be empty",
+            "Last Name is required",
+            "Last Name cannot be empty",
         });
     }
 
     [Test]
-    public async Task CreateMessageCommandValidator_TextIsNull_RecipientIsZero_SenderIsZero()
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNull_LastNameIsNull_EmailIsNull()
     {
         // Arrange
-        var request = new CreateMessageCommand
+        var request = new UpdateProfileCommand
         {
-            RecipientId = 0,
-            SenderId = 0
+            AccountId = 0
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(0))
-            .Returns(Task.FromResult(false));
+            .Returns(Task.FromResult(true));
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -118,54 +94,26 @@ public class CreateMessageCommandValidatorTests
         validationResult.Errors.Should().HaveCount(4);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
-            "Recipient Id can't be equal to Sender Id",
-            "Account with Recipient Id = 0 does not exist"
+            "First Name is required",
+            "First Name cannot be empty",
+            "Last Name is required",
+            "Last Name cannot be empty",
         });
     }
 
     [Test]
-    public async Task CreateMessageCommandValidator_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountDoesNotExist()
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsEmpty_LastNameIsEmpty_EmailIsNull()
     {
         // Arrange
-        var request = new CreateMessageCommand
+        var request = new UpdateProfileCommand
         {
-            RecipientId = 1,
-            SenderId = 2
+            AccountId = 0,
+            FirstName = string.Empty,
+            LastName = string.Empty
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(1))
-            .Returns(Task.FromResult(false));
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "Text is required",
-            "Text cannot be empty",
-            "Account with Recipient Id = 1 does not exist"
-        });
-    }
-
-    [Test]
-    public async Task CreateMessageCommandValidator_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists()
-    {
-        // Arrange
-        var request = new CreateMessageCommand
-        {
-            RecipientId = 1,
-            SenderId = 2
-        };
-        var cancellationToken = new CancellationToken();
-        _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(1))
+            .Setup(m => m.IsAccountIdValidAsync(0))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -177,24 +125,49 @@ public class CreateMessageCommandValidatorTests
         validationResult.Errors.Should().HaveCount(2);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty"
+            "First Name cannot be empty",
+            "Last Name cannot be empty",
         });
     }
 
     [Test]
-    public async Task CreateMessageCommandValidator_TextIsEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists()
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsNull()
     {
         // Arrange
-        var request = new CreateMessageCommand
+        var request = new UpdateProfileCommand
         {
-            RecipientId = 1,
-            SenderId = 2,
-            Text = string.Empty
+            AccountId = 0,
+            FirstName = "test",
+            LastName = "test"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(1))
+            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Returns(Task.FromResult(true));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeTrue();
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty()
+    {
+        // Arrange
+        var request = new UpdateProfileCommand
+        {
+            AccountId = 0,
+            FirstName = "test",
+            LastName = "test",
+            Email = string.Empty
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountRepository
+            .Setup(m => m.IsAccountIdValidAsync(0))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -206,23 +179,56 @@ public class CreateMessageCommandValidatorTests
         validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text cannot be empty"
+            "Email is invalid"
         });
     }
 
     [Test]
-    public async Task CreateMessageCommandValidator_TextIsNotEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists()
+    [TestCase("test")]
+    [TestCase("test.com")]
+    [TestCase("@com")]
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsInvalid(string email)
     {
         // Arrange
-        var request = new CreateMessageCommand
+        var request = new UpdateProfileCommand
         {
-            RecipientId = 1,
-            SenderId = 2,
-            Text = "text"
+            AccountId = 0,
+            FirstName = "test",
+            LastName = "test",
+            Email = email
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(1))
+            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Returns(Task.FromResult(true));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeFalse();
+        validationResult.Errors.Should().HaveCount(1);
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
+        {
+            "Email is invalid"
+        });
+    }
+
+    [Test]
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid()
+    {
+        // Arrange
+        var request = new UpdateProfileCommand
+        {
+            AccountId = 0,
+            FirstName = "test",
+            LastName = "test",
+            Email = "test@localhost.com"
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountRepository
+            .Setup(m => m.IsAccountIdValidAsync(0))
             .Returns(Task.FromResult(true));
 
         // Act

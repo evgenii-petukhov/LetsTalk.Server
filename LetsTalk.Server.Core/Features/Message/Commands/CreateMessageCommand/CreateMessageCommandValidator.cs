@@ -27,7 +27,7 @@ public class CreateMessageCommandValidator: AbstractValidator<CreateMessageComma
         {
             RuleFor(model => model.RecipientId)
                 .NotEqual(model => model.SenderId)
-                .WithMessage("{PropertyName} can't be eaual to {ComparisonProperty}")
+                .WithMessage("{PropertyName} can't be equal to {ComparisonProperty}")
                 .MustAsync(IsAccountIdValidAsync)
                 .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
         });

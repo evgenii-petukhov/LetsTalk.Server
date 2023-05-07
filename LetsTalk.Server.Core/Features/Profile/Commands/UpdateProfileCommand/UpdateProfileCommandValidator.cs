@@ -10,25 +10,37 @@ public class UpdateProfileCommandValidator: AbstractValidator<UpdateProfileComma
     public UpdateProfileCommandValidator(IAccountRepository accountRepository)
     {
         RuleFor(model => model.AccountId)
-            .NotNull().WithMessage("{PropertyName} is required")
-            .MustAsync(IsAccountIdValidAsync).WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
+            .NotNull()
+            .WithMessage("{PropertyName} is required");
+
+        When(model => model.AccountId.HasValue, () =>
+        {
+            RuleFor(model => model.AccountId)
+                .MustAsync(IsAccountIdValidAsync)
+                .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
+        });
 
         RuleFor(model => model.FirstName)
-            .NotNull().WithMessage("{PropertyName} is required")
-            .NotEmpty().WithMessage("{PropertyName} is required");
+            .NotNull()
+            .WithMessage("{PropertyName} is required")
+            .NotEmpty()
+            .WithMessage("{PropertyName} cannot be empty");
 
         RuleFor(model => model.LastName)
-            .NotNull().WithMessage("{PropertyName} is required")
-            .NotEmpty().WithMessage("{PropertyName} is required");
+            .NotNull()
+            .WithMessage("{PropertyName} is required")
+            .NotEmpty()
+            .WithMessage("{PropertyName} cannot be empty");
 
         RuleFor(model => model.Email)
-            .EmailAddress();
+            .EmailAddress()
+            .WithMessage("{PropertyName} is invalid");
 
         _accountRepository = accountRepository;
     }
 
-    private Task<bool> IsAccountIdValidAsync(int id, CancellationToken token)
+    private Task<bool> IsAccountIdValidAsync(int? id, CancellationToken token)
     {
-        return _accountRepository.IsAccountIdValidAsync(id);
+        return _accountRepository.IsAccountIdValidAsync(id!.Value);
     }
 }

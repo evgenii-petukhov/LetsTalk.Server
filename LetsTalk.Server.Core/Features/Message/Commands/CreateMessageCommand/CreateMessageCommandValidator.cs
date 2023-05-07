@@ -37,6 +37,8 @@ public class CreateMessageCommandValidator: AbstractValidator<CreateMessageComma
 
     private Task<bool> IsAccountIdValidAsync(int? id, CancellationToken token)
     {
-        return _accountRepository.IsAccountIdValidAsync(id!.Value);
+        return id.HasValue
+            ? _accountRepository.IsAccountIdValidAsync(id.Value)
+            : Task.FromResult(false);
     }
 }

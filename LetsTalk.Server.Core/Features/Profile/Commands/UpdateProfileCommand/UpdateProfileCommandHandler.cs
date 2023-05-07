@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Exceptions;
+﻿using LetsTalk.Server.Core.Helpers;
+using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Abstractions;
 using MediatR;
 
@@ -23,6 +24,13 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
+        if (Base64Helper.IsValidBase64(request.PhotoUrl))
+        {
+            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, request.PhotoUrl);
+        }
+        else
+        {
+            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
+        }
     }
 }

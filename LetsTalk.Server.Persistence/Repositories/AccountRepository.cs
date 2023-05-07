@@ -124,8 +124,6 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl, string? email)
         {
-            email = string.IsNullOrWhiteSpace(email) ? null : email;
-
             return _context.Accounts
                 .Where(account => account.Id == accountId)
                 .ExecuteUpdateAsync(x => x
@@ -137,8 +135,6 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email)
         {
-            email = string.IsNullOrWhiteSpace(email) ? null : email;
-
             return _context.Accounts
                 .Where(account => account.Id == accountId)
                 .ExecuteUpdateAsync(x => x

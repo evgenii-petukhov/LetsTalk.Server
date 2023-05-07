@@ -267,7 +267,7 @@ public class UpdateProfileCommandValidatorTests
         validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Photo Url is invalid base64 string"
+            "Photo Url is invalid base64 string or url"
         });
     }
 
@@ -275,6 +275,7 @@ public class UpdateProfileCommandValidatorTests
     [TestCase("data:image/jpeg;base64,/9j/2wBDAAMCAg")]
     [TestCase("data:image/png;base64,/9j/2wBDAAMCAg")]
     [TestCase("data:image/gif;base64,/9j/2wBDAAMCAg")]
+    [TestCase("https://localhost/")]
     public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsValid(string photoUrl)
     {
         // Arrange

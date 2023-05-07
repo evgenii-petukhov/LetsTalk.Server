@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+using LetsTalk.Server.Core.Helpers;
 using LetsTalk.Server.Persistence.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommandValidator: AbstractValidator<UpdateProfileCommand>
+public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -39,8 +40,8 @@ public class UpdateProfileCommandValidator: AbstractValidator<UpdateProfileComma
         When(model => model.PhotoUrl != null, () =>
         {
             RuleFor(model => model.PhotoUrl)
-                .Matches("data:image\\/(jpeg|png|gif){1};base64,([^\\\"]*)")
-                .WithMessage("{PropertyName} is invalid base64 string");
+                .Must(IsValidPhotoUrl)
+                .WithMessage("{PropertyName} is invalid base64 string or url");
         });
 
         _accountRepository = accountRepository;
@@ -51,5 +52,18 @@ public class UpdateProfileCommandValidator: AbstractValidator<UpdateProfileComma
         return id.HasValue
             ? _accountRepository.IsAccountIdValidAsync(id.Value)
             : Task.FromResult(false);
+    }
+
+    private static bool IsValidPhotoUrl(string? input)
+    {
+        return IsValidUrl(input) || Base64Helper.IsValidBase64(input);
+    }
+
+    private static bool IsValidUrl(string? input)
+    {
+        if (input == null) return false;
+
+        return Uri.TryCreate(input, UriKind.Absolute, out var uriResult)
+            && uriResult.Scheme == Uri.UriSchemeHttps;
     }
 }

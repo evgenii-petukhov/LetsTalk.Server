@@ -51,7 +51,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
             var filename = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, Guid.NewGuid().ToString() + extension);
             filename = Environment.ExpandEnvironmentVariables(filename);
             await File.WriteAllBytesAsync(filename, data, cancellationToken);
-            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.PhotoUrl, request.Email);
+            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, request.PhotoUrl);
         }
     }
 }

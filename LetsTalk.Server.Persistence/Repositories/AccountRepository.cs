@@ -122,7 +122,7 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
 
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? photoUrl, string? email)
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl)
         {
             return _context.Accounts
                 .Where(account => account.Id == accountId)

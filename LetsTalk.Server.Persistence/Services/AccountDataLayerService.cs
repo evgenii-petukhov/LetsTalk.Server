@@ -45,7 +45,7 @@ public class AccountDataLayerService : IAccountDataLayerService
             }
         }
 
-        await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, photoUrl, email);
+        await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, photoUrl);
         return account.Id;
     }
 }

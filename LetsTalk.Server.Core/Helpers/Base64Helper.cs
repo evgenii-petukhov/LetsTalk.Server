@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using LetsTalk.Server.Core.Enums;
+using LetsTalk.Server.Core.Models;
+using System.Text.RegularExpressions;
 
 namespace LetsTalk.Server.Core.Helpers;
 
@@ -10,7 +12,27 @@ public static partial class Base64Helper
     matchTimeoutMilliseconds: 1000)]
     private static partial Regex MatchBase64();
 
-    public static bool IsValidBase64(string? input)
+    private static readonly Dictionary<string, UploadImageTypes> _imageTypeMappings = new(StringComparer.OrdinalIgnoreCase)
+    {
+        { "jpeg", UploadImageTypes.Jpeg },
+        { "png", UploadImageTypes.Png },
+        { "gif", UploadImageTypes.Gif }
+    };
+
+    public static Base64ParsingResult? ParseBase64Image(string? input)
+    {
+        if (input == null) return null;
+
+        var match = MatchBase64().Match(input);
+
+        return new Base64ParsingResult
+        {
+            Imagetype = _imageTypeMappings.GetValueOrDefault(match.Groups[1].Value, UploadImageTypes.Unknown),
+            Base64string = match.Groups[2].Value
+        };
+    }
+
+    public static bool IsBase64Image(string? input)
     {
         if (input == null) return false;
 

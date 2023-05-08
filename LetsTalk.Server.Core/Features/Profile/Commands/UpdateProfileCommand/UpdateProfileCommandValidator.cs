@@ -56,7 +56,7 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
 
     private static bool IsValidPhotoUrl(string? input)
     {
-        return IsValidUrl(input) || Base64Helper.IsValidBase64(input);
+        return IsValidUrl(input) || Base64Helper.IsBase64Image(input);
     }
 
     private static bool IsValidUrl(string? input)

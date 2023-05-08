@@ -13,6 +13,7 @@ public static class NotificationsServicesRegistration
         services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
 
         return services;
     }

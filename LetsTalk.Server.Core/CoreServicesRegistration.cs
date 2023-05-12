@@ -20,6 +20,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IBase64ParsingService, Base64ParsingService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
+        services.AddTransient<IImageFileNameGenerator, ImageFileNameGenerator>();
 
         return services;
     }

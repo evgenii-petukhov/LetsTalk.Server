@@ -12,15 +12,18 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IImageTypeService _imageTypeService;
+    private readonly IBase64ParsingService _base64ParsingService;
     private readonly FileStorageSettings _fileStorageSettings;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
         IImageTypeService imageTypeService,
+        IBase64ParsingService base64ParsingService,
         IOptions<FileStorageSettings> fileStorageSettings)
     {
         _accountRepository = accountRepository;
         _imageTypeService = imageTypeService;
+        _base64ParsingService = base64ParsingService;
         _fileStorageSettings = fileStorageSettings.Value;
     }
 
@@ -34,7 +37,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var base64ParsingResult = _imageTypeService.ParseBase64Image(request.PhotoUrl);
+        var base64ParsingResult = _base64ParsingService.ParseBase64Image(request.PhotoUrl);
         if (base64ParsingResult == null)
         {
             await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);

@@ -17,6 +17,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IVkService, VkService>();
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<IImageTypeService, ImageTypeService>();
+        services.AddTransient<IBase64ParsingService, Base64ParsingService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
 

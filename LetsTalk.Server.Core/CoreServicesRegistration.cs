@@ -16,6 +16,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IFacebookService, FacebookService>();
         services.AddTransient<IVkService, VkService>();
         services.AddTransient<IRegexService, RegexService>();
+        services.AddTransient<IImageTypeService, ImageTypeService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
 

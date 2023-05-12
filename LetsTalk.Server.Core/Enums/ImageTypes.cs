@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Core.Enums;
 
-public enum UploadImageTypes
+public enum ImageTypes
 {
     Unknown = 0,
     Jpeg = 1,

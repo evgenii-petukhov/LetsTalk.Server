@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Enums;
+using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Helpers;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Abstractions;
@@ -11,21 +11,16 @@ namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IImageTypeService _imageTypeService;
     private readonly FileStorageSettings _fileStorageSettings;
-
-    private readonly Dictionary<UploadImageTypes, string> _imageTypeMappings = new ()
-    {
-        { UploadImageTypes.Jpeg, ".jpg" },
-        { UploadImageTypes.Png, ".png" },
-        { UploadImageTypes.Gif, ".gif" },
-        { UploadImageTypes.Unknown, string.Empty }
-    };
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
+        IImageTypeService imageTypeService,
         IOptions<FileStorageSettings> fileStorageSettings)
     {
         _accountRepository = accountRepository;
+        _imageTypeService = imageTypeService;
         _fileStorageSettings = fileStorageSettings.Value;
     }
 
@@ -39,7 +34,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var base64ParsingResult = Base64Helper.ParseBase64Image(request.PhotoUrl);
+        var base64ParsingResult = _imageTypeService.ParseBase64Image(request.PhotoUrl);
         if (base64ParsingResult == null)
         {
             await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
@@ -47,7 +42,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
         else
         {
             var data = Convert.FromBase64String(base64ParsingResult.Base64string!);
-            var extension = _imageTypeMappings[base64ParsingResult.Imagetype];
+            var extension = _imageTypeService.GetExtensionByImageType(base64ParsingResult.Imagetype);
             var filename = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, Guid.NewGuid().ToString() + extension);
             filename = Environment.ExpandEnvironmentVariables(filename);
             await File.WriteAllBytesAsync(filename, data, cancellationToken);

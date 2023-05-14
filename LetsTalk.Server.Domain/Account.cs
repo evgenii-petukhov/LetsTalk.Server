@@ -18,4 +18,8 @@ public class Account : BaseEntity
     public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
+
+    public Image? Image { get; set; }
+
+    public int? ImageId { get; set; }
 }

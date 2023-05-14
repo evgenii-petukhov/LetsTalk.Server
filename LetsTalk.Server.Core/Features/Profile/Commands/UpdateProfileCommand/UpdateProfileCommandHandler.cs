@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Models;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
@@ -8,17 +9,23 @@ namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IImageRepository _imageRepository;
     private readonly IBase64ParsingService _base64ParsingService;
     private readonly IImageFileNameGenerator _imageFileNameGenerator;
+    private readonly IAccountDataLayerService _accountDataLayerService;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
+        IImageRepository imageRepository,
         IBase64ParsingService base64ParsingService,
-        IImageFileNameGenerator imageFileNameGenerator)
+        IImageFileNameGenerator imageFileNameGenerator,
+        IAccountDataLayerService accountDataLayerService)
     {
         _accountRepository = accountRepository;
+        _imageRepository = imageRepository;
         _base64ParsingService = base64ParsingService;
         _imageFileNameGenerator = imageFileNameGenerator;
+        _accountDataLayerService = accountDataLayerService;
     }
 
     public async Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
@@ -34,14 +41,20 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
         var base64ParsingResult = _base64ParsingService.ParseBase64Image(request.PhotoUrl);
         if (base64ParsingResult == null)
         {
-            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
+            await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
         }
         else
         {
             var data = Convert.FromBase64String(base64ParsingResult.Base64string!);
-            var filename = _imageFileNameGenerator.GetFilename(base64ParsingResult.ImageContentType);
-            await File.WriteAllBytesAsync(filename, data, cancellationToken);
-            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, request.PhotoUrl);
+            var filePathInfo = _imageFileNameGenerator.Generate(base64ParsingResult.ImageContentType);
+            await File.WriteAllBytesAsync(filePathInfo.FullPath!, data, cancellationToken);
+            var image = await _imageRepository.CreateAsync(new Domain.Image
+            {
+                FileName = filePathInfo.FileName,
+                ImageContentTypeId = (int)base64ParsingResult.ImageContentType,
+                ImageTypeId = (int)ImageTypes.Avatar
+            });
+            await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, image.Id);
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using LetsTalk.Server.Persistence.Models;
+﻿using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.Persistence.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IImageFileNameGenerator
 {
-    string GetFilename(ImageContentTypes contentType);
+    FilePathInfo Generate(ImageContentTypes contentType);
 }

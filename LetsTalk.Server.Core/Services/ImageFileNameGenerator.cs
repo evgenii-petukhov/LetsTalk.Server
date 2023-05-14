@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Persistence.Models;
 using Microsoft.Extensions.Options;
 
@@ -18,11 +19,16 @@ public class ImageFileNameGenerator : IImageFileNameGenerator
         _fileStorageSettings = fileStorageSettings.Value;
     }
 
-    public string GetFilename(ImageContentTypes contentType)
+    public FilePathInfo Generate(ImageContentTypes contentType)
     {
         var extension = _imageTypeService.GetExtensionByImageType(contentType);
         var filename = Guid.NewGuid().ToString() + extension;
-        filename = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, filename);
-        return Environment.ExpandEnvironmentVariables(filename);
+        var path = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, filename);
+        path = Environment.ExpandEnvironmentVariables(path);
+        return new FilePathInfo
+        {
+            FileName = filename,
+            FullPath = path
+        };
     }
 }

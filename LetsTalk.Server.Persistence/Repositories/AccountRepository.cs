@@ -122,17 +122,6 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(account => account.Id == id);
         }
 
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl)
-        {
-            return _context.Accounts
-                .Where(account => account.Id == accountId)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(account => account.FirstName, firstName)
-                    .SetProperty(account => account.LastName, lastName)
-                    .SetProperty(account => account.PhotoUrl, photoUrl)
-                    .SetProperty(account => account.Email, email));
-        }
-
         public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email)
         {
             return _context.Accounts
@@ -141,6 +130,18 @@ namespace LetsTalk.Server.Persistence.Repositories
                     .SetProperty(account => account.FirstName, firstName)
                     .SetProperty(account => account.LastName, lastName)
                     .SetProperty(account => account.Email, email));
+        }
+
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, int? imageId)
+        {
+            return _context.Accounts
+                .Where(account => account.Id == accountId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(account => account.FirstName, firstName)
+                    .SetProperty(account => account.LastName, lastName)
+                    .SetProperty(account => account.Email, email)
+                    .SetProperty(account => account.PhotoUrl, photoUrl)
+                    .SetProperty(account => account.ImageId, imageId));
         }
 
         public Task<bool> IsAccountIdValidAsync(int id)

@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
+using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,15 +10,10 @@ public class ImageTypeConfiguration : IEntityTypeConfiguration<ImageType>
     public void Configure(EntityTypeBuilder<ImageType> builder)
     {
         builder.HasData(
-            new ImageType
+            Enum.GetValues<ImageTypes>().Select(x => new ImageType
             {
-                Id = 1,
-                Name = "Avatar"
-            },
-            new ImageType
-            {
-                Id = 2,
-                Name = "Message"
-            });
+                Id = (int)x,
+                Name = Enum.GetName(x)
+            }));
     }
 }

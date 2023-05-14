@@ -22,6 +22,7 @@ public static class PersistenceServiceRegistration
         services.AddTransient<IAccountRepository, AccountRepository>();
         services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
         services.AddTransient<IMessageRepository, MessageRepository>();
+        services.AddTransient<IImageRepository, ImageRepository>();
         services.AddTransient<ILinkPreviewRepository, LinkPreviewRepository>();
         return services;
     }

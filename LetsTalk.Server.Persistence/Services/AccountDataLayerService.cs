@@ -8,10 +8,14 @@ namespace LetsTalk.Server.Persistence.Services;
 public class AccountDataLayerService : IAccountDataLayerService
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IImageRepository _imageRepository;
 
-    public AccountDataLayerService(IAccountRepository accountRepository)
+    public AccountDataLayerService(
+        IAccountRepository accountRepository,
+        IImageRepository imageRepository)
     {
         _accountRepository = accountRepository;
+        _imageRepository = imageRepository;
     }
 
     public async Task<int> CreateOrUpdate(
@@ -45,7 +49,29 @@ public class AccountDataLayerService : IAccountDataLayerService
             }
         }
 
-        await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, photoUrl);
+        await UpdateAsync(account!.Id, firstName, lastName, email, photoUrl);
         return account.Id;
+    }
+
+    public Task UpdateAsync(int id, string? firstName, string? lastName, string? email)
+    {
+        return _accountRepository.UpdateAsync(id, firstName, lastName, email);
+    }
+
+    public Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int imageId)
+    {
+        return _accountRepository.UpdateAsync(id, firstName, lastName, email, null, imageId);
+    }
+
+    public async Task UpdateAsync(int id, string? firstName, string? lastName, string? email, string? photoUrl)
+    {
+        var account = await _accountRepository.GetByIdAsync(id);
+        if (account == null) return;
+        await _accountRepository.UpdateAsync(id, firstName, lastName, email, photoUrl, null);
+
+        if (account.ImageId.HasValue)
+        {
+            await _imageRepository.DeleteAsync(account.ImageId.Value);
+        }
     }
 }

@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Core.Enums;
+﻿using LetsTalk.Server.Persistence.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IImageFileNameGenerator
 {
-    string GetFilename(ImageTypes imageType);
+    string GetFilename(ImageFileTypes imageFileType);
 }

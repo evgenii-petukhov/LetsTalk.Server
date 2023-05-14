@@ -39,7 +39,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
         else
         {
             var data = Convert.FromBase64String(base64ParsingResult.Base64string!);
-            var filename = _imageFileNameGenerator.GetFilename(base64ParsingResult.Imagetype);
+            var filename = _imageFileNameGenerator.GetFilename(base64ParsingResult.ImageFileType);
             await File.WriteAllBytesAsync(filename, data, cancellationToken);
             await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, request.PhotoUrl);
         }

@@ -1,10 +1,10 @@
-﻿using LetsTalk.Server.Core.Enums;
+﻿using LetsTalk.Server.Persistence.Models;
 
 namespace LetsTalk.Server.Core.Models;
 
 public class Base64ParsingResult
 {
-    public ImageTypes Imagetype { get; set; }
+    public ImageFileTypes ImageFileType { get; set; }
 
     public string? Base64string { get; set; }
 }

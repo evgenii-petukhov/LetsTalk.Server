@@ -1,18 +1,18 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Constants;
-using LetsTalk.Server.Core.Enums;
 using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.Persistence.Models;
 using System.Text.RegularExpressions;
 
 namespace LetsTalk.Server.Core.Services;
 
 public class Base64ParsingService: IBase64ParsingService
 {
-    private readonly Dictionary<string, ImageTypes> _imagetypeByExtension = new(StringComparer.OrdinalIgnoreCase)
+    private readonly Dictionary<string, ImageFileTypes> _imageFileTypeByExtension = new(StringComparer.OrdinalIgnoreCase)
     {
-        { "jpeg", ImageTypes.Jpeg },
-        { "png", ImageTypes.Png },
-        { "gif", ImageTypes.Gif }
+        { "jpeg", ImageFileTypes.Jpeg },
+        { "png", ImageFileTypes.Png },
+        { "gif", ImageFileTypes.Gif }
     };
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
@@ -26,7 +26,7 @@ public class Base64ParsingService: IBase64ParsingService
 
         return new Base64ParsingResult
         {
-            Imagetype = _imagetypeByExtension.GetValueOrDefault(match.Groups[1].Value, ImageTypes.Unknown),
+            ImageFileType = _imageFileTypeByExtension.GetValueOrDefault(match.Groups[1].Value, ImageFileTypes.Unknown),
             Base64string = match.Groups[2].Value
         };
     }

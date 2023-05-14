@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Core.Enums;
+﻿using LetsTalk.Server.Persistence.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IImageTypeService
 {
-    string GetExtensionByImageType(ImageTypes imageType);
+    string GetExtensionByImageType(ImageFileTypes imageFileType);
 }

@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
+using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,25 +10,10 @@ public class ImageFileTypeConfiguration : IEntityTypeConfiguration<ImageFileType
     public void Configure(EntityTypeBuilder<ImageFileType> builder)
     {
         builder.HasData(
-            new ImageFileType
+            Enum.GetValues<ImageFileTypes>().Select(x => new ImageFileType
             {
-                Id = 0,
-                Name = "Unknown"
-            },
-            new ImageFileType
-            {
-                Id = 1,
-                Name = "Jpeg"
-            },
-            new ImageFileType
-            {
-                Id = 2,
-                Name = "Png"
-            },
-            new ImageFileType
-            {
-                Id = 3,
-                Name = "Gif"
-            });
+                Id = (int)x,
+                Name = Enum.GetName(x)
+            }));
     }
 }

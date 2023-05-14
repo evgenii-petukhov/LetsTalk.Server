@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Enums;
+using LetsTalk.Server.Persistence.Models;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Services;
@@ -18,9 +18,9 @@ public class ImageFileNameGenerator : IImageFileNameGenerator
         _fileStorageSettings = fileStorageSettings.Value;
     }
 
-    public string GetFilename(ImageTypes imageType)
+    public string GetFilename(ImageFileTypes imageFileType)
     {
-        var extension = _imageTypeService.GetExtensionByImageType(imageType);
+        var extension = _imageTypeService.GetExtensionByImageType(imageFileType);
         var filename = Guid.NewGuid().ToString() + extension;
         filename = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, filename);
         return Environment.ExpandEnvironmentVariables(filename);

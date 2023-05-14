@@ -1,20 +1,20 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Enums;
+using LetsTalk.Server.Persistence.Models;
 
 namespace LetsTalk.Server.Core.Services;
 
 public class ImageTypeService : IImageTypeService
 {
-    private readonly Dictionary<ImageTypes, string> _extensionByImageType = new()
+    private readonly Dictionary<ImageFileTypes, string> _extensionByImageFileType = new()
     {
-        { ImageTypes.Jpeg, ".jpg" },
-        { ImageTypes.Png, ".png" },
-        { ImageTypes.Gif, ".gif" },
-        { ImageTypes.Unknown, string.Empty }
+        { ImageFileTypes.Jpeg, ".jpg" },
+        { ImageFileTypes.Png, ".png" },
+        { ImageFileTypes.Gif, ".gif" },
+        { ImageFileTypes.Unknown, string.Empty }
     };
-
-    public string GetExtensionByImageType(ImageTypes imageType)
+    
+    public string GetExtensionByImageType(ImageFileTypes imageFileType)
     {
-        return _extensionByImageType[imageType];
+        return _extensionByImageFileType[imageFileType];
     }
 }

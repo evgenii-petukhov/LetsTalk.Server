@@ -4,5 +4,5 @@ namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IImageTypeService
 {
-    string GetExtensionByImageType(ImageFileTypes imageFileType);
+    string GetExtensionByImageType(ImageContentTypes contentType);
 }

@@ -9,12 +9,12 @@ public class ImageTypeConfiguration : IEntityTypeConfiguration<ImageType>
     public void Configure(EntityTypeBuilder<ImageType> builder)
     {
         builder.HasData(
-            new ImageFileType
+            new ImageType
             {
                 Id = 1,
                 Name = "Avatar"
             },
-            new ImageFileType
+            new ImageType
             {
                 Id = 2,
                 Name = "Message"

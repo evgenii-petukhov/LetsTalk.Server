@@ -5,16 +5,16 @@ namespace LetsTalk.Server.Core.Services;
 
 public class ImageTypeService : IImageTypeService
 {
-    private readonly Dictionary<ImageFileTypes, string> _extensionByImageFileType = new()
+    private readonly Dictionary<ImageContentTypes, string> _extensionByContentType = new()
     {
-        { ImageFileTypes.Jpeg, ".jpg" },
-        { ImageFileTypes.Png, ".png" },
-        { ImageFileTypes.Gif, ".gif" },
-        { ImageFileTypes.Unknown, string.Empty }
+        { ImageContentTypes.Jpeg, ".jpg" },
+        { ImageContentTypes.Png, ".png" },
+        { ImageContentTypes.Gif, ".gif" },
+        { ImageContentTypes.Unknown, string.Empty }
     };
     
-    public string GetExtensionByImageType(ImageFileTypes imageFileType)
+    public string GetExtensionByImageType(ImageContentTypes contentType)
     {
-        return _extensionByImageFileType[imageFileType];
+        return _extensionByContentType[contentType];
     }
 }

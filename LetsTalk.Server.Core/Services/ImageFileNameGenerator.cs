@@ -18,9 +18,9 @@ public class ImageFileNameGenerator : IImageFileNameGenerator
         _fileStorageSettings = fileStorageSettings.Value;
     }
 
-    public string GetFilename(ImageFileTypes imageFileType)
+    public string GetFilename(ImageContentTypes contentType)
     {
-        var extension = _imageTypeService.GetExtensionByImageType(imageFileType);
+        var extension = _imageTypeService.GetExtensionByImageType(contentType);
         var filename = Guid.NewGuid().ToString() + extension;
         filename = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, filename);
         return Environment.ExpandEnvironmentVariables(filename);

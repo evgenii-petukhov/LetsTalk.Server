@@ -4,7 +4,7 @@ namespace LetsTalk.Server.Core.Models;
 
 public class Base64ParsingResult
 {
-    public ImageFileTypes ImageFileType { get; set; }
+    public ImageContentTypes ImageContentType { get; set; }
 
     public string? Base64string { get; set; }
 }

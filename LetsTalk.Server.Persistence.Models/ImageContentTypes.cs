@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Persistence.Models;
 
-public enum ImageFileTypes
+public enum ImageContentTypes
 {
     Unknown = -1,
     Jpeg = 1,

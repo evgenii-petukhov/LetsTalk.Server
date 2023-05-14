@@ -2,8 +2,8 @@
 
 namespace LetsTalk.Server.Domain;
 
-[Table("imagefiletypes")]
-public class ImageFileType: BaseEntity
+[Table("imagecontenttypes")]
+public class ImageContentType: BaseEntity
 {
     public string? Name { get; set; }
 }

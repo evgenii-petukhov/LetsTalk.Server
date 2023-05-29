@@ -49,7 +49,7 @@ public class AccountDataLayerService : IAccountDataLayerService
             }
         }
 
-        await UpdateAsync(account!.Id, firstName, lastName, email, photoUrl);
+        await UpdateFromSocialMediaAsync(account!.Id, firstName, lastName, email, photoUrl);
         return account.Id;
     }
 
@@ -63,12 +63,12 @@ public class AccountDataLayerService : IAccountDataLayerService
         return _accountRepository.UpdateAsync(id, firstName, lastName, email, null, imageId);
     }
 
-    public async Task UpdateAsync(int id, string? firstName, string? lastName, string? email, string? photoUrl)
+    private async Task UpdateFromSocialMediaAsync(int id, string? firstName, string? lastName, string? email, string? photoUrl)
     {
         var account = await _accountRepository.GetByIdAsync(id);
         if (account == null) return;
-        await _accountRepository.UpdateAsync(id, firstName, lastName, email, photoUrl, null);
 
+        await _accountRepository.UpdateAsync(id, firstName, lastName, email, photoUrl);
         if (account.ImageId.HasValue)
         {
             await _imageRepository.DeleteAsync(account.ImageId.Value);

@@ -132,6 +132,17 @@ namespace LetsTalk.Server.Persistence.Repositories
                     .SetProperty(account => account.Email, email));
         }
 
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl)
+        {
+            return _context.Accounts
+                .Where(account => account.Id == accountId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(account => account.FirstName, firstName)
+                    .SetProperty(account => account.LastName, lastName)
+                    .SetProperty(account => account.Email, email)
+                    .SetProperty(account => account.PhotoUrl, photoUrl));
+        }
+
         public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, int? imageId)
         {
             return _context.Accounts

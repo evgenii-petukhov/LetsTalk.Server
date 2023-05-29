@@ -9,6 +9,4 @@ public interface IAccountDataLayerService
     Task UpdateAsync(int id, string? firstName, string? lastName, string? email);
 
     Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int imageId);
-
-    Task UpdateAsync(int id, string? firstName, string? lastName, string? email, string? photoUrl);
 }

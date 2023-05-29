@@ -14,4 +14,6 @@ public class Image: BaseEntity
     public int ImageTypeId { get; set; }
 
     public string? FileName { get; set; }
+
+    public Account? Account { get; set; }
 }

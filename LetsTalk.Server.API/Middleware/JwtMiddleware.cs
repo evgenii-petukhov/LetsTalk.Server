@@ -13,7 +13,7 @@ public class JwtMiddleware
         _next = next;
     }
 
-    public async Task Invoke(
+    public async Task InvokeAsync(
         HttpContext context,
         IAuthenticationClient authenticationClient,
         IOptions<AuthenticationSettings> options)

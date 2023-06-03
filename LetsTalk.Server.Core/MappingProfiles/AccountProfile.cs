@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LetsTalk.Server.API.Models.UpdateProfile;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
 
@@ -10,5 +11,6 @@ public class AccountProfile: Profile
     {
         CreateMap<Account, AccountDto>();
         CreateMap<AccountWithUnreadCount, AccountDto>();
+        CreateMap<UpdateProfileResponse, AccountDto>();
     }
 }

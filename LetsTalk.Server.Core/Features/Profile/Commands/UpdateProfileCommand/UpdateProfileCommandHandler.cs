@@ -1,4 +1,6 @@
-﻿using LetsTalk.Server.Core.Abstractions;
+﻿using AutoMapper;
+using LetsTalk.Server.API.Models.UpdateProfile;
+using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Models;
@@ -6,29 +8,32 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
+public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, UpdateProfileResponse>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IImageRepository _imageRepository;
     private readonly IBase64ParsingService _base64ParsingService;
     private readonly IImageFileNameGenerator _imageFileNameGenerator;
     private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IMapper _mapper;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
         IImageRepository imageRepository,
         IBase64ParsingService base64ParsingService,
         IImageFileNameGenerator imageFileNameGenerator,
-        IAccountDataLayerService accountDataLayerService)
+        IAccountDataLayerService accountDataLayerService,
+        IMapper mapper)
     {
         _accountRepository = accountRepository;
         _imageRepository = imageRepository;
         _base64ParsingService = base64ParsingService;
         _imageFileNameGenerator = imageFileNameGenerator;
         _accountDataLayerService = accountDataLayerService;
+        _mapper = mapper;
     }
 
-    public async Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateProfileResponse> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateProfileCommandValidator(_accountRepository);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -56,5 +61,9 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
             });
             await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, image.Id);
         }
+
+        var updatedProfile = await _accountRepository.GetByIdAsync(request.AccountId!.Value);
+
+        return _mapper.Map<UpdateProfileResponse>(updatedProfile);
     }
 }

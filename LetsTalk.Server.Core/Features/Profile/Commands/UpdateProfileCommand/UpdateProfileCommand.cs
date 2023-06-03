@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using LetsTalk.Server.API.Models.UpdateProfile;
+using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommand: IRequest
+public class UpdateProfileCommand: IRequest<UpdateProfileResponse>
 {
     public int? AccountId { get; set; }
 

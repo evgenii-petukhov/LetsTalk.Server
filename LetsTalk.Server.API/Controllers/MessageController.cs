@@ -40,7 +40,7 @@ public class MessageController : ApiController
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
     }
 
-    [HttpGet]
+    [HttpGet("{recipientId}")]
     public async Task<ActionResult<List<MessageDto>>> Get(int recipientId)
     {
         var senderId = GetAccountId();

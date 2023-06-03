@@ -27,6 +27,7 @@ public class AccountDataLayerService : IAccountDataLayerService
         AccountTypes accountType,
         string? firstName,
         string? lastName,
+        string? email,
         string? photoUrl,
         CancellationToken cancellationToken)
     {
@@ -41,7 +42,8 @@ public class AccountDataLayerService : IAccountDataLayerService
                     AccountTypeId = (int)accountType,
                     FirstName = firstName,
                     LastName = lastName,
-                    PhotoUrl = photoUrl
+                    PhotoUrl = photoUrl,
+                    Email = email
                 };
                 await _accountRepository.CreateAsync(account, cancellationToken);
                 return account.Id;
@@ -54,11 +56,11 @@ public class AccountDataLayerService : IAccountDataLayerService
 
         if (account!.ImageId.HasValue)
         {
-            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, cancellationToken);
+            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, cancellationToken);
         }
         else
         {
-            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, photoUrl, cancellationToken);
+            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, photoUrl, cancellationToken);
         }
 
         return account.Id;

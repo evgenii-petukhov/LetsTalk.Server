@@ -4,7 +4,7 @@ namespace LetsTalk.Server.Persistence.Abstractions;
 
 public interface IAccountDataLayerService
 {
-    Task<int> CreateOrUpdateAsync(string externalId, AccountTypes accountType, string? firstName, string? lastName, string? photoUrl, CancellationToken cancellationToken);
+    Task<int> CreateOrUpdateAsync(string externalId, AccountTypes accountType, string? firstName, string? lastName, string? email, string? photoUrl, CancellationToken cancellationToken);
 
     Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int? imageId, CancellationToken cancellationToken);
 }

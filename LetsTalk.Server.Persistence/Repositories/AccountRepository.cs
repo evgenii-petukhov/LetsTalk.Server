@@ -123,15 +123,6 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken);
         }
 
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, CancellationToken cancellationToken = default)
-        {
-            return _context.Accounts
-                .Where(account => account.Id == accountId)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(account => account.FirstName, firstName)
-                    .SetProperty(account => account.LastName, lastName), cancellationToken: cancellationToken);
-        }
-
         public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
         {
             return _context.Accounts

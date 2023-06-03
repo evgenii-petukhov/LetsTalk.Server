@@ -11,8 +11,6 @@ public interface IAccountRepository : IGenericRepository<Account>
 
     Task<Account?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(int accountId, string? firstName, string? lastName, CancellationToken cancellationToken = default);
-
     Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, CancellationToken cancellationToken = default);

@@ -60,6 +60,7 @@ public class VkService : IVkService
                 AccountTypes.VK,
                 data.Response[0].FirstName,
                 data.Response[0].LastName,
+                null,
                 data.Response[0].PictureUrl,
                 cancellationToken);
 

@@ -51,6 +51,7 @@ public class FacebookService : IFacebookService
                 AccountTypes.Facebook,
                 data.FirstName,
                 data.LastName,
+                data.Email,
                 data.Picture!.Data!.Url,
                 cancellationToken);
 

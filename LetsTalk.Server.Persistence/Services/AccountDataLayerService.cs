@@ -49,26 +49,24 @@ public class AccountDataLayerService : IAccountDataLayerService
             }
         }
 
-        await UpdateFromSocialMediaAsync(account!.Id, firstName, lastName, email, photoUrl);
+        if (account!.ImageId.HasValue)
+        {
+            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email);
+        }
+        else
+        {
+            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, photoUrl);
+        }
+
         return account.Id;
     }
 
-    public Task UpdateAsync(int id, string? firstName, string? lastName, string? email)
-    {
-        return _accountRepository.UpdateAsync(id, firstName, lastName, email);
-    }
-
-    public Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int imageId)
-    {
-        return _accountRepository.UpdateAsync(id, firstName, lastName, email, null, imageId);
-    }
-
-    private async Task UpdateFromSocialMediaAsync(int id, string? firstName, string? lastName, string? email, string? photoUrl)
+    public async Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int? imageId)
     {
         var account = await _accountRepository.GetByIdAsync(id);
         if (account == null) return;
 
-        await _accountRepository.UpdateAsync(id, firstName, lastName, email, photoUrl);
+        await _accountRepository.UpdateAsync(id, firstName, lastName, email, null, imageId);
         if (account.ImageId.HasValue)
         {
             await _imageRepository.DeleteAsync(account.ImageId.Value);

@@ -46,7 +46,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         var base64ParsingResult = _base64ParsingService.ParseBase64String(request.PhotoUrl);
         if (base64ParsingResult == null)
         {
-            await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
+            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
         }
         else
         {

@@ -21,7 +21,7 @@ public class AuthenticationService : IAuthenticationService
         _vkService = vkService;
     }
 
-    public Task<LoginResponseDto> Login(LoginServiceInput model, CancellationToken cancellationToken)
+    public Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
     {
         return model.Provider switch
         {

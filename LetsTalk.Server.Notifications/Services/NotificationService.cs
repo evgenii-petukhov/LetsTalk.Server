@@ -18,17 +18,17 @@ public class NotificationService : INotificationService
         _messageHub = messageHub;
     }
 
-    public Task SendLinkPreviewNotification(int accountId, LinkPreviewDto notification)
+    public Task SendLinkPreviewNotificationAsync(int accountId, LinkPreviewDto notification)
     {
         var notifications = _connectionManager.GetConnectionIds(accountId)?
-            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendLinkPreviewNotification(notification));
+            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendLinkPreviewNotificationAsync(notification));
         return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
     }
 
-    public Task SendMessageNotification(int accountId, MessageDto notification)
+    public Task SendMessageNotificationAsync(int accountId, MessageDto notification)
     {
         var notifications = _connectionManager.GetConnectionIds(accountId)?
-            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendMessageNotification(notification));
+            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendMessageNotificationAsync(notification));
         return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
     }
 }

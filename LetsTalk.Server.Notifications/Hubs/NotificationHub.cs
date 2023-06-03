@@ -22,7 +22,7 @@ public class NotificationHub : Hub<INotificationHub>
         _authenticationSettings = options.Value;
     }
 
-    public async Task Authorize(string token)
+    public async Task AuthorizeAsync(string token)
     {
         var accountId = await _authenticationClient.ValidateJwtTokenAsync(_authenticationSettings.Url!, token);
         if (accountId != null)

@@ -57,11 +57,11 @@ public class MessageController : ApiController
         cmd.SenderId = senderId;
         var response = await _mediator.Send(cmd, cancellationToken);
         await Task.WhenAll(
-            SendMessageNotification(request.RecipientId, response.Dto! with
+            SendMessageNotificationAsync(request.RecipientId, response.Dto! with
             {
                 IsMine = false
             }),
-            SendMessageNotification(senderId, response.Dto! with
+            SendMessageNotificationAsync(senderId, response.Dto! with
             {
                 IsMine = true
             }),
@@ -87,7 +87,7 @@ public class MessageController : ApiController
         return Ok();
     }
 
-    private Task SendMessageNotification(int accountId, MessageDto messageDto)
+    private Task SendMessageNotificationAsync(int accountId, MessageDto messageDto)
     {
         return _messageNotificationProducer.ProduceAsync(
             _kafkaSettings.MessageNotification!.Topic,

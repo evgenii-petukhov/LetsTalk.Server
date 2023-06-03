@@ -36,7 +36,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
         foreach (var message in messagesToProcess)
         {
-            await _messageRepository.SetTextHtmlAsync(message.Id, message.TextHtml!);
+            await _messageRepository.SetTextHtmlAsync(message.Id, message.TextHtml!, cancellationToken: cancellationToken);
         }
 
         return _mapper.Map<List<MessageDto>>(messages)

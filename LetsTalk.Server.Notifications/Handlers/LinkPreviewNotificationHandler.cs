@@ -13,6 +13,6 @@ public class LinkPreviewNotificationHandler : NotificationHandler<LinkPreviewDto
 
     public override Task Handle(IMessageContext context, Notification<LinkPreviewDto> notification)
     {
-        return _notificationService.SendLinkPreviewNotification(notification.RecipientId, notification.Message!);
+        return _notificationService.SendLinkPreviewNotificationAsync(notification.RecipientId, notification.Message!);
     }
 }

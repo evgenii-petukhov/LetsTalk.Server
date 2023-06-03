@@ -23,12 +23,16 @@ public class ImageFileNameGenerator : IImageFileNameGenerator
     {
         var extension = _imageTypeService.GetExtensionByImageType(contentType);
         var filename = Guid.NewGuid().ToString() + extension;
-        var path = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, filename);
-        path = Environment.ExpandEnvironmentVariables(path);
         return new FilePathInfo
         {
             FileName = filename,
-            FullPath = path
+            FullPath = GetImagePath(filename)
         };
+    }
+
+    public string GetImagePath(string filename)
+    {
+        var path = Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, filename);
+        return Environment.ExpandEnvironmentVariables(path);
     }
 }

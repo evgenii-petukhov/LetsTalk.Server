@@ -12,7 +12,7 @@ public class ImageTypeService : IImageTypeService
         { ImageContentTypes.Gif, ".gif" },
         { ImageContentTypes.Unknown, string.Empty }
     };
-    
+
     public string GetExtensionByImageType(ImageContentTypes contentType)
     {
         return _extensionByContentType[contentType];

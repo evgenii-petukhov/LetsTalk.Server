@@ -39,14 +39,7 @@ public class ProfileController : ApiController
         var accountId = GetAccountId();
         var cmd = _mapper.Map<UpdateProfileCommand>(model);
         cmd.AccountId = accountId;
-        var response = await _mediator.Send(cmd);
-        response.PhotoUrl = response.ImageId.HasValue
-            ? Url.Action(nameof(ImageController.Get), "Image", new
-            {
-                id = response.ImageId.Value
-            })
-            : response.PhotoUrl;
-
-        return Ok(_mapper.Map<AccountDto>(response));
+        var account = await _mediator.Send(cmd);
+        return Ok(account);
     }
 }

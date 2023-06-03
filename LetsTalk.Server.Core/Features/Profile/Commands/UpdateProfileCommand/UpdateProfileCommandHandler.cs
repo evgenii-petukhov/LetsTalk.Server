@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models.UpdateProfile;
 using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Models;
@@ -8,7 +8,7 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, UpdateProfileResponse>
+public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, AccountDto>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IImageRepository _imageRepository;
@@ -33,7 +33,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         _mapper = mapper;
     }
 
-    public async Task<UpdateProfileResponse> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task<AccountDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateProfileCommandValidator(_accountRepository);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -43,7 +43,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var base64ParsingResult = _base64ParsingService.ParseBase64Image(request.PhotoUrl);
+        var base64ParsingResult = _base64ParsingService.ParseBase64String(request.PhotoUrl);
         if (base64ParsingResult == null)
         {
             await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
@@ -64,6 +64,6 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
 
         var account = await _accountRepository.GetByIdAsync(request.AccountId!.Value);
 
-        return _mapper.Map<UpdateProfileResponse>(account);
+        return _mapper.Map<AccountDto>(account);
     }
 }

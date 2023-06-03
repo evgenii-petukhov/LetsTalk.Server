@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
+﻿using LetsTalk.Server.Core.Features.Image.GetImage;
 using LetsTalk.Server.Dto.Models;
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsTalk.Server.API.Controllers
@@ -9,10 +9,20 @@ namespace LetsTalk.Server.API.Controllers
     [ApiController]
     public class ImageController : ControllerBase
     {
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AccountDto>> Get(int id)
+        private readonly IMediator _mediator;
+
+        public ImageController(IMediator mediator)
         {
-            return Ok();
+            _mediator = mediator;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ImageDto>> Get(int id)
+        {
+            var cmd = new GetImageQuery(id);
+            var response = await _mediator.Send(cmd);
+
+            return Ok(response);
         }
     }
 }

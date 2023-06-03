@@ -11,7 +11,6 @@ public class ProfileProfile: Profile
     public ProfileProfile()
     {
         CreateMap<UpdateProfileRequest, UpdateProfileCommand>();
-        CreateMap<Account, UpdateProfileResponse>();
-        CreateMap<UpdateProfileResponse, AccountDto>();
+        CreateMap<Account, AccountDto>();
     }
 }

@@ -110,7 +110,8 @@ namespace LetsTalk.Server.Persistence.Repositories
                     PhotoUrl = x.AccountInfo.Account.PhotoUrl,
                     AccountTypeId = x.AccountInfo.Account.AccountTypeId,
                     LastMessageDate = x.AccountInfo.LastMessageDate,
-                    UnreadCount = x.UnreadMessageCounts!.UnreadCount
+                    UnreadCount = x.UnreadMessageCounts!.UnreadCount,
+                    ImageId = x.AccountInfo.Account.ImageId
                 })
                 .ToListAsync();
         }

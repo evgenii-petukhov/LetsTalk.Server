@@ -11,6 +11,13 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
     {
     }
 
+    public Task<Image?> GetByIdAsync(int id)
+    {
+        return _context.Images
+            .AsNoTracking()
+            .SingleOrDefaultAsync(image => image.Id == id);
+    }
+
     public Task DeleteAsync(int id)
     {
         return _context.Images.Where(image => image.Id == id).ExecuteDeleteAsync();

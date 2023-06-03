@@ -17,4 +17,6 @@ public class AccountDto
     public int UnreadCount { get; set; }
 
     public long LastMessageDate { get; set; }
+
+    public int? ImageId { get; set; }
 }

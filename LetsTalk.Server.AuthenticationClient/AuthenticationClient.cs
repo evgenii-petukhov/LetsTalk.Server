@@ -8,7 +8,7 @@ namespace LetsTalk.Server.AuthenticationClient;
 
 public class AuthenticationClient: IAuthenticationClient
 {
-    public async Task<string> GenerateJwtToken(string url, int accountId)
+    public async Task<string> GenerateJwtTokenAsync(string url, int accountId)
     {
         var response = await GetGrpcClient(url)
             .GenerateJwtTokenAsync(new GenerateJwtTokenRequest
@@ -19,7 +19,7 @@ public class AuthenticationClient: IAuthenticationClient
         return response.Token;
     }
 
-    public async Task<int?> ValidateJwtToken(string url, string? token)
+    public async Task<int?> ValidateJwtTokenAsync(string url, string? token)
     {
         var response = await GetGrpcClient(url)
             .ValidateJwtTokenAsync(new ValidateJwtTokenRequest

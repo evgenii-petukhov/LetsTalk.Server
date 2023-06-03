@@ -18,7 +18,7 @@ public class AccountController : ApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<AccountDto>>> Get()
+    public async Task<ActionResult<List<AccountDto>>> GetAsync()
     {
         var accountId = GetAccountId();
         var query = new GetAccountsQuery(accountId);

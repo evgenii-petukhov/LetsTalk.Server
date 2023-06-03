@@ -41,7 +41,7 @@ public class MessageController : ApiController
     }
 
     [HttpGet("{recipientId}")]
-    public async Task<ActionResult<List<MessageDto>>> Get(int recipientId)
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId)
     {
         var senderId = GetAccountId();
         var query = new GetMessagesQuery(senderId, recipientId);
@@ -50,7 +50,7 @@ public class MessageController : ApiController
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageDto>> Post(CreateMessageRequest request)
+    public async Task<ActionResult<MessageDto>> PostAsync(CreateMessageRequest request)
     {
         var cmd = _mapper.Map<CreateMessageCommand>(request);
         var senderId = GetAccountId();
@@ -79,7 +79,7 @@ public class MessageController : ApiController
     }
 
     [HttpPut("MarkAsRead")]
-    public async Task<ActionResult> MarkAsRead(MarkAsReadRequest request)
+    public async Task<ActionResult> MarkAsReadAsync(MarkAsReadRequest request)
     {
         var cmd = _mapper.Map<ReadMessageCommand>(request);
         cmd.RecipientId = GetAccountId();

@@ -31,7 +31,7 @@ public class FacebookService : IFacebookService
         _authenticationSettings = options.Value;
     }
 
-    public async Task<LoginResponseDto> Login(LoginServiceInput model)
+    public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model)
     {
         // verify access token with facebook API to authenticate
         var client = new RestClient(FACEBOOK_URL);
@@ -46,7 +46,7 @@ public class FacebookService : IFacebookService
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
 
-            var accountId = await _accountDataLayerService.CreateOrUpdate(
+            var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
                 data.Id!,
                 AccountTypes.Facebook,
                 data.FirstName,
@@ -54,7 +54,7 @@ public class FacebookService : IFacebookService
                 data.Picture!.Data!.Url);
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, accountId);
+            var token = await _authenticationClient.GenerateJwtTokenAsync(_authenticationSettings.Url!, accountId);
 
             return new LoginResponseDto
             {

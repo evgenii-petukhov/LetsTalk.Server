@@ -2,5 +2,5 @@
 
 public interface ILinkPreviewGenerator
 {
-    Task<Domain.LinkPreview?> GetLinkPreview(string url);
+    Task<Domain.LinkPreview?> GetLinkPreviewAsync(string url);
 }

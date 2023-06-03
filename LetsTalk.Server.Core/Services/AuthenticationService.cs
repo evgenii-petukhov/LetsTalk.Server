@@ -25,8 +25,8 @@ public class AuthenticationService : IAuthenticationService
     {
         return model.Provider switch
         {
-            FACEBOOK => _facebookService.Login(model),
-            VK => _vkService.Login(model),
+            FACEBOOK => _facebookService.LoginAsync(model),
+            VK => _vkService.LoginAsync(model),
             _ => throw new BadRequestException("Authorization provider is not suppoted")
         };
     }

@@ -35,7 +35,7 @@ public class VkService : IVkService
         _authenticationSettings = options.Value;
     }
 
-    public async Task<LoginResponseDto> Login(LoginServiceInput model)
+    public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model)
     {
         // verify access token with facebook API to authenticate
         var client = new RestClient(VK_URL);
@@ -55,7 +55,7 @@ public class VkService : IVkService
                 throw new BadRequestException(data.Error.Message!);
             }
 
-            var accountId = await _accountDataLayerService.CreateOrUpdate(
+            var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
                 data.Response![0].Id!,
                 AccountTypes.VK,
                 data.Response[0].FirstName,
@@ -63,7 +63,7 @@ public class VkService : IVkService
                 data.Response[0].PictureUrl);
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtToken(_authenticationSettings.Url!, accountId);
+            var token = await _authenticationClient.GenerateJwtTokenAsync(_authenticationSettings.Url!, accountId);
 
             return new LoginResponseDto
             {

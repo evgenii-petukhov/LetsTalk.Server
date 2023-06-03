@@ -5,5 +5,5 @@ namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IFacebookService
 {
-    Task<LoginResponseDto> Login(LoginServiceInput model);
+    Task<LoginResponseDto> LoginAsync(LoginServiceInput model);
 }

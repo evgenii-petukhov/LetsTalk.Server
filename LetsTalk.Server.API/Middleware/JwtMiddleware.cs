@@ -23,7 +23,7 @@ public class JwtMiddleware
             .Split(" ")
             .Last();
 
-        var accountId = await authenticationClient.ValidateJwtToken(options.Value.Url!, token);
+        var accountId = await authenticationClient.ValidateJwtTokenAsync(options.Value.Url!, token);
         if (accountId != null)
         {
             context.Items["AccountId"] = accountId;

@@ -25,7 +25,7 @@ public class ProfileController : ApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<AccountDto>> Get()
+    public async Task<ActionResult<AccountDto>> GetAsync()
     {
         var accountId = GetAccountId();
         var query = new GetProfileQuery(accountId);
@@ -34,7 +34,7 @@ public class ProfileController : ApiController
     }
 
     [HttpPut]
-    public async Task<ActionResult<AccountDto>> Put(UpdateProfileRequest model)
+    public async Task<ActionResult<AccountDto>> PutAsync(UpdateProfileRequest model)
     {
         var accountId = GetAccountId();
         var cmd = _mapper.Map<UpdateProfileCommand>(model);

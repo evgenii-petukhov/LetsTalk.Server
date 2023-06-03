@@ -35,7 +35,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     {
         if (request.Url == null) return;
 
-        var linkPreview = await _linkPreviewGenerator.GetLinkPreview(request.Url);
+        var linkPreview = await _linkPreviewGenerator.GetLinkPreviewAsync(request.Url);
 
         if (linkPreview == null) return;
 

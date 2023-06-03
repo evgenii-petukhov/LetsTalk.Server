@@ -6,4 +6,3 @@ public interface IImageTypeService
 {
     string GetExtensionByImageType(ImageContentTypes contentType);
 }
-

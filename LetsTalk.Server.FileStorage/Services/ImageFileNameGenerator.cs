@@ -1,10 +1,10 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.FileStorage.Abstractions;
+using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.Persistence.Models;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.FileStorage.Services;
 
 public class ImageFileNameGenerator : IImageFileNameGenerator
 {

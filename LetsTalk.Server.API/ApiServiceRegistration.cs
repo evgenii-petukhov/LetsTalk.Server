@@ -8,6 +8,7 @@ using System.Reflection;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Infrastructure;
+using LetsTalk.Server.FileStorage;
 
 namespace LetsTalk.Server.API;
 
@@ -23,6 +24,7 @@ public static class ApiServiceRegistration
         services.AddLoggingServices();
         services.AddAuthenticationClientServices();
         services.AddConfigurationServices(configuration);
+        services.AddFileStorageServices();
         services.AddControllers();
         services.AddCors(options =>
         {

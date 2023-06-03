@@ -1,7 +1,7 @@
-﻿using LetsTalk.Server.Core.Abstractions;
+﻿using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.Persistence.Models;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.FileStorage.Services;
 
 public class ImageTypeService : IImageTypeService
 {

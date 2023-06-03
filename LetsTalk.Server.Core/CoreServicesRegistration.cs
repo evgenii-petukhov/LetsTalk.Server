@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Services;
+using LetsTalk.Server.FileStorage.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -16,11 +17,9 @@ public static class CoreServicesRegistration
         services.AddTransient<IFacebookService, FacebookService>();
         services.AddTransient<IVkService, VkService>();
         services.AddTransient<IRegexService, RegexService>();
-        services.AddTransient<IImageTypeService, ImageTypeService>();
         services.AddTransient<IBase64ParsingService, Base64ParsingService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
-        services.AddTransient<IImageFileNameGenerator, ImageFileNameGenerator>();
 
         return services;
     }

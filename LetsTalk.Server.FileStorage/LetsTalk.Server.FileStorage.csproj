@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Abstractions\LetsTalk.Server.FileStorage.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

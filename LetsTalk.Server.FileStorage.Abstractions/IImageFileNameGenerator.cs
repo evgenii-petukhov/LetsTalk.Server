@@ -1,7 +1,7 @@
-﻿using LetsTalk.Server.Core.Models;
+﻿using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.Persistence.Models;
 
-namespace LetsTalk.Server.Core.Abstractions;
+namespace LetsTalk.Server.FileStorage.Abstractions;
 
 public interface IImageFileNameGenerator
 {

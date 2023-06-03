@@ -2,6 +2,7 @@
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Models;
 using MediatR;
@@ -13,23 +14,23 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
     private readonly IAccountRepository _accountRepository;
     private readonly IImageRepository _imageRepository;
     private readonly IBase64ParsingService _base64ParsingService;
-    private readonly IImageFileNameGenerator _imageFileNameGenerator;
     private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IFileStorageManager _fileStorageManager;
     private readonly IMapper _mapper;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
         IImageRepository imageRepository,
         IBase64ParsingService base64ParsingService,
-        IImageFileNameGenerator imageFileNameGenerator,
         IAccountDataLayerService accountDataLayerService,
+        IFileStorageManager fileStorageManager,
         IMapper mapper)
     {
         _accountRepository = accountRepository;
         _imageRepository = imageRepository;
         _base64ParsingService = base64ParsingService;
-        _imageFileNameGenerator = imageFileNameGenerator;
         _accountDataLayerService = accountDataLayerService;
+        _fileStorageManager = fileStorageManager;
         _mapper = mapper;
     }
 
@@ -51,8 +52,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         else
         {
             var data = Convert.FromBase64String(base64ParsingResult.Base64string!);
-            var filePathInfo = _imageFileNameGenerator.Generate(base64ParsingResult.ImageContentType);
-            await File.WriteAllBytesAsync(filePathInfo.FullPath!, data, cancellationToken);
+            var filePathInfo = await _fileStorageManager.SaveImageAsync(data, base64ParsingResult.ImageContentType, cancellationToken);
             var image = await _imageRepository.CreateAsync(new Domain.Image
             {
                 FileName = filePathInfo.FileName,

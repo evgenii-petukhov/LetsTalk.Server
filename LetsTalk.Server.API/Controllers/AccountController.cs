@@ -18,11 +18,11 @@ public class AccountController : ApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<AccountDto>>> GetAsync()
+    public async Task<ActionResult<List<AccountDto>>> GetAsync(CancellationToken cancellationToken)
     {
         var accountId = GetAccountId();
         var query = new GetAccountsQuery(accountId);
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 }

@@ -25,21 +25,21 @@ public class ProfileController : ApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<AccountDto>> GetAsync()
+    public async Task<ActionResult<AccountDto>> GetAsync(CancellationToken cancellationToken)
     {
         var accountId = GetAccountId();
         var query = new GetProfileQuery(accountId);
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
     [HttpPut]
-    public async Task<ActionResult<AccountDto>> PutAsync(UpdateProfileRequest model)
+    public async Task<ActionResult<AccountDto>> PutAsync(UpdateProfileRequest model, CancellationToken cancellationToken)
     {
         var accountId = GetAccountId();
         var cmd = _mapper.Map<UpdateProfileCommand>(model);
         cmd.AccountId = accountId;
-        var account = await _mediator.Send(cmd);
+        var account = await _mediator.Send(cmd, cancellationToken);
         return Ok(account);
     }
 }

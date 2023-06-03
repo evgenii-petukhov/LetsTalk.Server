@@ -28,9 +28,9 @@ public class AccountDataLayerService : IAccountDataLayerService
         string? firstName,
         string? lastName,
         string? photoUrl,
-        string? email = null)
+        CancellationToken cancellationToken)
     {
-        var account = await _accountRepository.GetByExternalIdAsync(externalId, accountType);
+        var account = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
         if (account == null)
         {
             try
@@ -41,39 +41,38 @@ public class AccountDataLayerService : IAccountDataLayerService
                     AccountTypeId = (int)accountType,
                     FirstName = firstName,
                     LastName = lastName,
-                    Email = email,
                     PhotoUrl = photoUrl
                 };
-                await _accountRepository.CreateAsync(account);
+                await _accountRepository.CreateAsync(account, cancellationToken);
                 return account.Id;
             }
             catch (DbUpdateException)
             {
-                account = await _accountRepository.GetByExternalIdAsync(externalId, accountType);
+                account = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
             }
         }
 
         if (account!.ImageId.HasValue)
         {
-            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email);
+            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, cancellationToken);
         }
         else
         {
-            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, photoUrl);
+            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, photoUrl, cancellationToken);
         }
 
         return account.Id;
     }
 
-    public async Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int? imageId)
+    public async Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int? imageId, CancellationToken cancellationToken)
     {
-        var account = await _accountRepository.GetByIdAsync(id);
+        var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
         if (account == null) return;
 
-        await _accountRepository.UpdateAsync(id, firstName, lastName, email, null, imageId);
+        await _accountRepository.UpdateAsync(id, firstName, lastName, email, null, imageId, cancellationToken);
         if (account.ImageId.HasValue)
         {
-            var image = await _imageRepository.GetByIdAsync(account.ImageId.Value);
+            var image = await _imageRepository.GetByIdAsync(account.ImageId.Value, cancellationToken);
             if (image != null)
             {
                 await _imageRepository.DeleteAsync(image.Id);

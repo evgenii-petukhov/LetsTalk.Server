@@ -39,7 +39,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
         var message = _mapper.Map<Domain.Message>(request);
         _messageProcessor.SetTextHtml(message, out string? url);
-        await _messageRepository.CreateAsync(message);
+        await _messageRepository.CreateAsync(message, cancellationToken);
         return new CreateMessageResponse
         {
             Dto = _mapper.Map<MessageDto>(message),

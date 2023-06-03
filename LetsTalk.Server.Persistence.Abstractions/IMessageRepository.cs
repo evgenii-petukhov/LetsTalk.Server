@@ -4,13 +4,13 @@ namespace LetsTalk.Server.Persistence.Abstractions;
 
 public interface IMessageRepository : IGenericRepository<Message>
 {
-    Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId);
+    Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId, CancellationToken cancellationToken = default);
 
-    Task MarkAsReadAsync(int messageId);
+    Task MarkAsReadAsync(int messageId, CancellationToken cancellationToken = default);
 
-    Task MarkAllAsReadAsync(int senderId, int recipientId);
+    Task MarkAllAsReadAsync(int senderId, int recipientId, CancellationToken cancellationToken = default);
 
-    Task SetTextHtmlAsync(int messageId, string html);
+    Task SetTextHtmlAsync(int messageId, string html, CancellationToken cancellationToken = default);
 
-    Task SetLinkPreviewAsync(int messageId, int linkPreviewId);
+    Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
 }

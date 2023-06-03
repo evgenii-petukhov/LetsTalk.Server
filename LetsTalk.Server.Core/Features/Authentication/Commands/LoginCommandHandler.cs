@@ -22,6 +22,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDt
     public Task<LoginResponseDto> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
         var model = _mapper.Map<LoginServiceInput>(command);
-        return _authenticationService.Login(model);
+        return _authenticationService.Login(model, cancellationToken);
     }
 }

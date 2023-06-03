@@ -12,14 +12,14 @@ namespace LetsTalk.Server.Persistence.Repositories
         {
         }
 
-        public Task<Account?> GetByExternalIdAsync(string externalId, AccountTypes accountTypes)
+        public Task<Account?> GetByExternalIdAsync(string externalId, AccountTypes accountTypes, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
                 .AsNoTracking()
-                .SingleOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
+                .SingleOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes, cancellationToken: cancellationToken);
         }
 
-        public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id)
+        public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id, CancellationToken cancellationToken = default)
         {
             var sentMessageDates = _context.Messages
                 .AsNoTracking()
@@ -113,27 +113,36 @@ namespace LetsTalk.Server.Persistence.Repositories
                     UnreadCount = x.UnreadMessageCounts!.UnreadCount,
                     ImageId = x.AccountInfo.Account.ImageId
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
         }
 
-        public Task<Account?> GetByIdAsync(int id)
+        public Task<Account?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
                 .AsNoTracking()
-                .SingleOrDefaultAsync(account => account.Id == id);
+                .SingleOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken);
         }
 
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email)
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, CancellationToken cancellationToken = default)
+        {
+            return _context.Accounts
+                .Where(account => account.Id == accountId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(account => account.FirstName, firstName)
+                    .SetProperty(account => account.LastName, lastName), cancellationToken: cancellationToken);
+        }
+
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
                 .Where(account => account.Id == accountId)
                 .ExecuteUpdateAsync(x => x
                     .SetProperty(account => account.FirstName, firstName)
                     .SetProperty(account => account.LastName, lastName)
-                    .SetProperty(account => account.Email, email));
+                    .SetProperty(account => account.Email, email), cancellationToken: cancellationToken);
         }
 
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl)
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
                 .Where(account => account.Id == accountId)
@@ -141,10 +150,10 @@ namespace LetsTalk.Server.Persistence.Repositories
                     .SetProperty(account => account.FirstName, firstName)
                     .SetProperty(account => account.LastName, lastName)
                     .SetProperty(account => account.Email, email)
-                    .SetProperty(account => account.PhotoUrl, photoUrl));
+                    .SetProperty(account => account.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
         }
 
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, int? imageId)
+        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, int? imageId, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
                 .Where(account => account.Id == accountId)
@@ -153,14 +162,14 @@ namespace LetsTalk.Server.Persistence.Repositories
                     .SetProperty(account => account.LastName, lastName)
                     .SetProperty(account => account.Email, email)
                     .SetProperty(account => account.PhotoUrl, photoUrl)
-                    .SetProperty(account => account.ImageId, imageId));
+                    .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
         }
 
-        public Task<bool> IsAccountIdValidAsync(int id)
+        public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
                 .AsNoTracking()
-                .AnyAsync(account => account.Id == id);
+                .AnyAsync(account => account.Id == id, cancellationToken: cancellationToken);
         }
     }
 }

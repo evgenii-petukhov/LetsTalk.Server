@@ -11,11 +11,11 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
     {
     }
 
-    public Task<Image?> GetByIdAsync(int id)
+    public Task<Image?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Images
             .AsNoTracking()
-            .SingleOrDefaultAsync(image => image.Id == id);
+            .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
     }
 
     public Task DeleteAsync(int id)

@@ -41,21 +41,21 @@ public class MessageController : ApiController
     }
 
     [HttpGet("{recipientId}")]
-    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId)
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId, CancellationToken cancellationToken)
     {
         var senderId = GetAccountId();
         var query = new GetMessagesQuery(senderId, recipientId);
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageDto>> PostAsync(CreateMessageRequest request)
+    public async Task<ActionResult<MessageDto>> PostAsync(CreateMessageRequest request, CancellationToken cancellationToken)
     {
         var cmd = _mapper.Map<CreateMessageCommand>(request);
         var senderId = GetAccountId();
         cmd.SenderId = senderId;
-        var response = await _mediator.Send(cmd);
+        var response = await _mediator.Send(cmd, cancellationToken);
         await Task.WhenAll(
             SendMessageNotification(request.RecipientId, response.Dto! with
             {
@@ -79,11 +79,11 @@ public class MessageController : ApiController
     }
 
     [HttpPut("MarkAsRead")]
-    public async Task<ActionResult> MarkAsReadAsync(MarkAsReadRequest request)
+    public async Task<ActionResult> MarkAsReadAsync(MarkAsReadRequest request, CancellationToken cancellationToken)
     {
         var cmd = _mapper.Map<ReadMessageCommand>(request);
         cmd.RecipientId = GetAccountId();
-        await _mediator.Send(cmd);
+        await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }
 

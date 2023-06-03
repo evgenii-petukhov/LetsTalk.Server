@@ -17,10 +17,10 @@ namespace LetsTalk.Server.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ImageDto>> GetAsync(int id)
+        public async Task<ActionResult<ImageDto>> GetAsync(int id, CancellationToken cancellationToken)
         {
             var cmd = new GetImageQuery(id);
-            var response = await _mediator.Send(cmd);
+            var response = await _mediator.Send(cmd, cancellationToken);
 
             return Ok(response);
         }

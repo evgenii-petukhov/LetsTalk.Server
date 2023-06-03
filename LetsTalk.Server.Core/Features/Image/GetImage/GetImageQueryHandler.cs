@@ -26,7 +26,7 @@ public class GetImageQueryHandler : IRequestHandler<GetImageQuery, ImageDto>
 
     public async Task<ImageDto> Handle(GetImageQuery request, CancellationToken cancellationToken)
     {
-        var image = await _imageRepository.GetByIdAsync(request.Id) ?? throw new BadRequestException("Invalid request");
+        var image = await _imageRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new BadRequestException("Invalid request");
         var content = await _fileStorageManager.GetImageContentAsync(image.FileName!, cancellationToken);
 
         return new ImageDto

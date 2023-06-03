@@ -47,7 +47,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         var base64ParsingResult = _base64ParsingService.ParseBase64String(request.PhotoUrl);
         if (base64ParsingResult == null)
         {
-            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email);
+            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, cancellationToken);
         }
         else
         {
@@ -58,11 +58,11 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
                 FileName = filePathInfo.FileName,
                 ImageContentTypeId = (int)base64ParsingResult.ImageContentType,
                 ImageTypeId = (int)ImageTypes.Avatar
-            });
-            await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, image.Id);
+            }, cancellationToken);
+            await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, image.Id, cancellationToken);
         }
 
-        var account = await _accountRepository.GetByIdAsync(request.AccountId!.Value);
+        var account = await _accountRepository.GetByIdAsync(request.AccountId!.Value, cancellationToken);
 
         return _mapper.Map<AccountDto>(account);
     }

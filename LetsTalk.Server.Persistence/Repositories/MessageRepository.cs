@@ -12,42 +12,42 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
     }
 
-    public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId)
+    public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId, CancellationToken cancellationToken = default)
     {
         return await _context.Messages
             .Include(message => message.LinkPreview)
             .AsNoTracking()
             .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
             .OrderBy(mesage => mesage.DateCreatedUnix)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public Task MarkAsReadAsync(int messageId)
+    public Task MarkAsReadAsync(int messageId, CancellationToken cancellationToken = default)
     {
         return _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
     }
 
-    public Task MarkAllAsReadAsync(int senderId, int recipientId)
+    public Task MarkAllAsReadAsync(int senderId, int recipientId, CancellationToken cancellationToken = default)
     {
         return _context.Messages
             .AsNoTracking()
             .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()));
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
     }
 
-    public Task SetTextHtmlAsync(int messageId, string html)
+    public Task SetTextHtmlAsync(int messageId, string html, CancellationToken cancellationToken = default)
     {
         return _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html));
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html), cancellationToken: cancellationToken);
     }
 
-    public Task SetLinkPreviewAsync(int messageId, int linkPreviewId)
+    public Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default)
     {
         return _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.LinkPreviewId, linkPreviewId));
+            .ExecuteUpdateAsync(x => x.SetProperty(message => message.LinkPreviewId, linkPreviewId), cancellationToken: cancellationToken);
     }
 }

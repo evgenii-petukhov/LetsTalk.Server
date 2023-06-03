@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.Persistence.Abstractions;
+using System.Threading;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
@@ -35,10 +36,10 @@ public class CreateMessageCommandValidator: AbstractValidator<CreateMessageComma
         _accountRepository = accountRepository;
     }
 
-    private Task<bool> IsAccountIdValidAsync(int? id, CancellationToken token)
+    private Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            ? _accountRepository.IsAccountIdValidAsync(id.Value)
+            ? _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken)
             : Task.FromResult(false);
     }
 }

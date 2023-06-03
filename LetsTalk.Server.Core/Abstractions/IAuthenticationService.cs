@@ -5,5 +5,5 @@ namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IAuthenticationService
 {
-    Task<LoginResponseDto> Login(LoginServiceInput model);
+    Task<LoginResponseDto> Login(LoginServiceInput model, CancellationToken cancellationToken);
 }

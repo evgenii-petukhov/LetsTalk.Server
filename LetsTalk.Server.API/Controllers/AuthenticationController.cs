@@ -23,9 +23,9 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest model)
+    public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest model, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(_mapper.Map<LoginCommand>(model));
+        var result = await _mediator.Send(_mapper.Map<LoginCommand>(model), cancellationToken);
 
         return Ok(result);
     }

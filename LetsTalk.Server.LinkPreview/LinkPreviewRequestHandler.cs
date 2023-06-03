@@ -8,6 +8,7 @@ using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Abstractions;
+using System.Threading;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -38,7 +39,6 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         var linkPreview = await _linkPreviewGenerator.GetLinkPreviewAsync(request.Url);
 
         if (linkPreview == null) return;
-
         await Task.WhenAll(
             _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id),
             SendNotification(request.RecipientId, request.SenderId, request.MessageId, linkPreview),

@@ -52,7 +52,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(false));
 
         // Act
@@ -82,7 +82,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -113,7 +113,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -142,7 +142,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -167,7 +167,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -199,7 +199,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -228,7 +228,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -255,7 +255,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -289,7 +289,7 @@ public class UpdateProfileCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0))
+            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act

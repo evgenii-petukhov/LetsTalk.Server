@@ -21,12 +21,12 @@ public class AuthenticationService : IAuthenticationService
         _vkService = vkService;
     }
 
-    public Task<LoginResponseDto> Login(LoginServiceInput model)
+    public Task<LoginResponseDto> Login(LoginServiceInput model, CancellationToken cancellationToken)
     {
         return model.Provider switch
         {
-            FACEBOOK => _facebookService.LoginAsync(model),
-            VK => _vkService.LoginAsync(model),
+            FACEBOOK => _facebookService.LoginAsync(model, cancellationToken),
+            VK => _vkService.LoginAsync(model, cancellationToken),
             _ => throw new BadRequestException("Authorization provider is not suppoted")
         };
     }

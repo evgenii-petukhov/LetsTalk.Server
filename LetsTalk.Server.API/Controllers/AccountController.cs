@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.API.Attributes;
-using LetsTalk.Server.Core.Features.Account.Queries.GetAccounts;
+﻿using LetsTalk.Server.Core.Features.Account.Queries.GetAccounts;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace LetsTalk.Server.API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize]
 public class AccountController : ApiController
 {
     private readonly IMediator _mediator;

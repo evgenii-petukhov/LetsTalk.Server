@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using KafkaFlow;
 using KafkaFlow.Producers;
-using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.API.Models;
 using LetsTalk.Server.API.Models.CreateMessage;
 using LetsTalk.Server.Configuration.Models;
@@ -18,7 +17,6 @@ using Microsoft.Extensions.Options;
 namespace LetsTalk.Server.API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize]
 public class MessageController : ApiController
 {
     private readonly IMediator _mediator;

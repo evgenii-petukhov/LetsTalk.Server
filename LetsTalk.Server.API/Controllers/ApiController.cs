@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LetsTalk.Server.API.Attributes;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LetsTalk.Server.API.Controllers;
 
 [ApiController]
+[Authorize]
 public class ApiController : ControllerBase
 {
     protected int GetAccountId()

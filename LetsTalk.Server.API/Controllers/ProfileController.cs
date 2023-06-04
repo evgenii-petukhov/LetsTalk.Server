@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Attributes;
 using LetsTalk.Server.API.Models.UpdateProfile;
 using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 using LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace LetsTalk.Server.API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize]
 public class ProfileController : ApiController
 {
     private readonly IMediator _mediator;

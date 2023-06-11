@@ -23,7 +23,7 @@ namespace LetsTalk.Server.Persistence.Repositories
         {
             var sentMessageDates = _context.Messages
                 .AsNoTracking()
-                .Where(x => x.SenderId == id)
+                .Where(x => x.SenderId == id || x.RecipientId == id)
                 .GroupBy(x => x.RecipientId)
                 .Select(g => new
                 {

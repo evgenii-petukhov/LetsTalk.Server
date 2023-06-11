@@ -12,6 +12,7 @@ public static class FileStorageServicesRegistration
         services.AddTransient<IFileStorageManager, FileStorageManager>();
         services.AddTransient<IImageTypeService, ImageTypeService>();
         services.AddTransient<IImageFileNameGenerator, ImageFileNameGenerator>();
+        services.AddTransient<IImageService, ImageService>();
 
         return services;
     }

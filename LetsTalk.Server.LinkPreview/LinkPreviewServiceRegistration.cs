@@ -17,7 +17,7 @@ public static class LinkPreviewServiceRegistration
         IConfiguration configuration)
     {
         var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
-
+        services.AddHttpClient(nameof(DownloadService));
         services.AddTransient<IDownloadService, DownloadService>();
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<ILinkPreviewGenerator, LinkPreviewGenerator>();

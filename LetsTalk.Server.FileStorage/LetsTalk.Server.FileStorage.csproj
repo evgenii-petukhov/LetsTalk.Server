@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Abstractions\LetsTalk.Server.FileStorage.Abstractions.csproj" />
   </ItemGroup>
 

@@ -12,12 +12,9 @@ var app = builder.Build();
 
 app.UseCors("all");
 
-app.UseGrpcWeb();
-
 app.MapGrpcReflectionService();
 
 app.MapGrpcService<JwtTokenGrpcService>()
-    .EnableGrpcWeb()
     .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.Run();

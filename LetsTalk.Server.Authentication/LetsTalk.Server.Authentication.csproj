@@ -19,7 +19,6 @@
     </PackageReference>
     <PackageReference Include="Grpc.AspNetCore" Version="2.52.0" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.52.0" />
-    <PackageReference Include="Grpc.AspNetCore.Web" Version="2.52.0" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

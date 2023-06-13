@@ -1,5 +1,4 @@
-﻿using Grpc.Net.Client.Web;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using LetsTalk.Server.Authentication;
 using static LetsTalk.Server.Authentication.JwtTokenGrpcService;
 using LetsTalk.Server.Authentication.Abstractions;
@@ -39,7 +38,7 @@ public class AuthenticationClient: IAuthenticationClient
 
         var channel = GrpcChannel.ForAddress(url, new GrpcChannelOptions
         {
-            HttpHandler = new GrpcWebHandler(httpHandler)
+            HttpHandler = httpHandler
         });
 
         return new JwtTokenGrpcServiceClient(channel);

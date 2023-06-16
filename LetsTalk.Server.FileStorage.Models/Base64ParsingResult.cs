@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.Models;
 
-namespace LetsTalk.Server.Core.Models;
+namespace LetsTalk.Server.FileStorage.Models;
 
 public class Base64ParsingResult
 {

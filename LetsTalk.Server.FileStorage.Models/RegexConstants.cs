@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Constants;
+﻿namespace LetsTalk.Server.FileStorage.Models;
 
 public static class RegexConstants
 {

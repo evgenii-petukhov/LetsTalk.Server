@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Core.Constants;
+﻿using LetsTalk.Server.FileStorage.Models;
 using System.Text.RegularExpressions;
 
 namespace LetsTalk.Server.Core.Helpers;

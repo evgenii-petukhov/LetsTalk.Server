@@ -9,9 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\file_upload.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.54.0" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.54.0" />
     <PackageReference Include="Grpc.AspNetCore.Web" Version="2.54.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\file_upload.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,9 @@
-﻿using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Constants;
-using LetsTalk.Server.Core.Models;
+﻿using LetsTalk.Server.FileStorage.Abstractions;
+using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.Persistence.Models;
 using System.Text.RegularExpressions;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.FileStorage.Services;
 
 public class Base64ParsingService: IBase64ParsingService
 {

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.FileStorage.Abstractions;

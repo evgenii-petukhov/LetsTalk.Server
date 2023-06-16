@@ -1,7 +1,12 @@
+using LetsTalk.Server.FileStorageService;
+using LetsTalk.Server.FileStorageService.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
+
+builder.Services.AddFileStorageServices();
 
 var app = builder.Build();
 
@@ -10,5 +15,9 @@ app.UseCors("all");
 app.UseGrpcWeb();
 
 app.MapGrpcReflectionService();
+
+app.MapGrpcService<FileUploadGrpcService>()
+    .EnableGrpcWeb()
+    .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.Run();

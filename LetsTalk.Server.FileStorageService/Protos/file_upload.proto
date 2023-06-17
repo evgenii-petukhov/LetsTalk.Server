@@ -2,12 +2,14 @@ syntax = "proto3";
 
 option csharp_namespace = "LetsTalk.Server.FileStorageService.Protos";
 
+package file_upload;
+
 service FileUploadGrpcService {
   rpc UploadAsync (FileUploadRequest) returns (FileUploadResponse);
 }
 
 message FileUploadRequest {
-  string content = 1;
+  bytes content = 1;
 }
 
 message FileUploadResponse {

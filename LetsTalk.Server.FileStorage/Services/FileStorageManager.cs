@@ -2,7 +2,6 @@
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.FileStorage.Models;
-using LetsTalk.Server.Persistence.Models;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorage.Services;
@@ -29,15 +28,15 @@ public class FileStorageManager : IFileStorageManager
         return File.ReadAllBytesAsync(imagePath, cancellationToken);
     }
 
-    public async Task<FilePathInfo> SaveImageAsync(byte[] data, ImageContentTypes contentType, CancellationToken cancellationToken)
+    public async Task<FilePathInfo> SaveImageAsync(byte[] data, CancellationToken cancellationToken)
     {
-        var imageInfo = _imageService.GetImageInfo(data);
-        if (imageInfo.Width > _fileStorageSettings.AvatarMaxWidth || imageInfo.Height > _fileStorageSettings.AvatarMaxWidth)
+        var size = _imageService.GetImageSize(data);
+        if (size.Width > _fileStorageSettings.AvatarMaxWidth || size.Height > _fileStorageSettings.AvatarMaxWidth)
         {
             throw new ImageSizeException("Image size exceeds max dimensions");
         }
 
-        var filePathInfo = _imageFileNameGenerator.Generate(contentType);
+        var filePathInfo = _imageFileNameGenerator.Generate();
         await File.WriteAllBytesAsync(filePathInfo.FullPath!, data, cancellationToken);
         return filePathInfo;
     }

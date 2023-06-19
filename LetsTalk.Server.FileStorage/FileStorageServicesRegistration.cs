@@ -10,7 +10,6 @@ public static class FileStorageServicesRegistration
         this IServiceCollection services)
     {
         services.AddTransient<IFileStorageManager, FileStorageManager>();
-        services.AddTransient<IImageTypeService, ImageTypeService>();
         services.AddTransient<IImageFileNameGenerator, ImageFileNameGenerator>();
         services.AddTransient<IImageService, ImageService>();
         services.AddTransient<IBase64ParsingService, Base64ParsingService>();

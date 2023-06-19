@@ -15,6 +15,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
     private readonly IBase64ParsingService _base64ParsingService;
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IFileStorageManager _fileStorageManager;
+    private readonly IImageService _imageService;
     private readonly IMapper _mapper;
 
     public UpdateProfileCommandHandler(
@@ -23,6 +24,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         IBase64ParsingService base64ParsingService,
         IAccountDataLayerService accountDataLayerService,
         IFileStorageManager fileStorageManager,
+        IImageService imageService,
         IMapper mapper)
     {
         _accountRepository = accountRepository;
@@ -30,6 +32,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         _base64ParsingService = base64ParsingService;
         _accountDataLayerService = accountDataLayerService;
         _fileStorageManager = fileStorageManager;
+        _imageService = imageService;
         _mapper = mapper;
     }
 
@@ -50,14 +53,14 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         }
         else
         {
-            var data = Convert.FromBase64String(base64ParsingResult.Base64string!);
+            var data = Convert.FromBase64String(base64ParsingResult);
             try
             {
-                var filePathInfo = await _fileStorageManager.SaveImageAsync(data, base64ParsingResult.ImageContentType, cancellationToken);
+                var filePathInfo = await _fileStorageManager.SaveImageAsync(data, cancellationToken);
                 var image = await _imageRepository.CreateAsync(new Domain.Image
                 {
                     FileName = filePathInfo.FileName,
-                    ImageContentTypeId = (int)base64ParsingResult.ImageContentType,
+                    ImageContentTypeId = (int)_imageService.GetImageContentType(data),
                     ImageTypeId = (int)ImageTypes.Avatar
                 }, cancellationToken);
                 await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, image.Id, cancellationToken);

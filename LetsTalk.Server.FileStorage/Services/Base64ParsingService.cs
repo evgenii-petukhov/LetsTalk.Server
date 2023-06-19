@@ -7,13 +7,6 @@ namespace LetsTalk.Server.FileStorage.Services;
 
 public class Base64ParsingService: IBase64ParsingService
 {
-    private readonly Dictionary<string, ImageContentTypes> _contentTypeByExtension = new(StringComparer.OrdinalIgnoreCase)
-    {
-        { "jpeg", ImageContentTypes.Jpeg },
-        { "png", ImageContentTypes.Png },
-        { "gif", ImageContentTypes.Gif }
-    };
-
     private readonly Dictionary<ImageContentTypes, string> _nameByContentType = new()
     {
         { ImageContentTypes.Jpeg, "jpeg" },
@@ -22,7 +15,7 @@ public class Base64ParsingService: IBase64ParsingService
     };
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
-    public Base64ParsingResult? ParseBase64String(string? input)
+    public string? ParseBase64String(string? input)
     {
         if (input == null) return null;
 
@@ -30,11 +23,7 @@ public class Base64ParsingService: IBase64ParsingService
 
         var match = regex.Match(input);
 
-        return new Base64ParsingResult
-        {
-            ImageContentType = _contentTypeByExtension.GetValueOrDefault(match.Groups[1].Value, ImageContentTypes.Unknown),
-            Base64string = match.Groups[2].Value
-        };
+        return match.Groups[2].Value;
     }
 
     public string CreateBase64String(byte[] content, ImageContentTypes contentType)

@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using LetsTalk.Server.FileStorageService.Abstractions;
+using LetsTalk.Server.FileStorageService.Models;
 using LetsTalk.Server.FileStorageService.Protos;
 using static LetsTalk.Server.FileStorageService.Protos.FileUploadGrpcService;
 
@@ -17,7 +18,7 @@ public class FileUploadGrpcService : FileUploadGrpcServiceBase
 
     public override Task<FileUploadResponse> UploadAsync(FileUploadRequest request, ServerCallContext context)
     {
-        _fileManagementService.SaveFileAsync(request.Content.ToArray(), FileStorage.Models.FileStorageItemType.Image);
+        _fileManagementService.SaveFileAsync(request.Content.ToArray(), FileStorageItemType.Image);
         return Task.FromResult(new FileUploadResponse());
     }
 }

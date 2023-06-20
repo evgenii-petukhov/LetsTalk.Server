@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorage.Models;
+using LetsTalk.Server.FileStorageService.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using Microsoft.Extensions.Options;
 

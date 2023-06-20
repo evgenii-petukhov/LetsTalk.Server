@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.FileStorage.Models;
+﻿using LetsTalk.Server.FileStorageService.Models;
 
 namespace LetsTalk.Server.FileStorageService.Abstractions;
 

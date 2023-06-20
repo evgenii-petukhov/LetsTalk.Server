@@ -57,13 +57,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.UnitTests", "LetsTalk.Server.UnitTests\LetsTalk.Server.UnitTests.csproj", "{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage", "LetsTalk.Server.FileStorage\LetsTalk.Server.FileStorage.csproj", "{08BEF568-727D-4FE8-A8EF-CCA68E10D654}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Abstractions", "LetsTalk.Server.FileStorage.Abstractions\LetsTalk.Server.FileStorage.Abstractions.csproj", "{A5906C15-8893-42A7-9D38-1A3A208EEFAA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Models", "LetsTalk.Server.FileStorage.Models\LetsTalk.Server.FileStorage.Models.csproj", "{9E0D75AD-9165-45CA-BD01-C75E619C7394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.FileStorageService", "LetsTalk.Server.FileStorageService\LetsTalk.Server.FileStorageService.csproj", "{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorageService", "LetsTalk.Server.FileStorageService\LetsTalk.Server.FileStorageService.csproj", "{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,14 +147,6 @@ Global
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08BEF568-727D-4FE8-A8EF-CCA68E10D654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08BEF568-727D-4FE8-A8EF-CCA68E10D654}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08BEF568-727D-4FE8-A8EF-CCA68E10D654}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08BEF568-727D-4FE8-A8EF-CCA68E10D654}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5906C15-8893-42A7-9D38-1A3A208EEFAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5906C15-8893-42A7-9D38-1A3A208EEFAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5906C15-8893-42A7-9D38-1A3A208EEFAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5906C15-8893-42A7-9D38-1A3A208EEFAA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9E0D75AD-9165-45CA-BD01-C75E619C7394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9E0D75AD-9165-45CA-BD01-C75E619C7394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E0D75AD-9165-45CA-BD01-C75E619C7394}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -197,8 +185,6 @@ Global
 		{490BF070-3BB8-4A67-A934-18246B8DEDE6} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{FE214023-E29D-4B81-9C97-820A02297689} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
-		{08BEF568-727D-4FE8-A8EF-CCA68E10D654} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
-		{A5906C15-8893-42A7-9D38-1A3A208EEFAA} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{9E0D75AD-9165-45CA-BD01-C75E619C7394} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 	EndGlobalSection

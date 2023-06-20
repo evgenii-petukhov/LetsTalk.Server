@@ -8,7 +8,7 @@ using System.Reflection;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Infrastructure;
-using LetsTalk.Server.FileStorage;
+using LetsTalk.Server.Configuration.Models;
 
 namespace LetsTalk.Server.API;
 
@@ -18,13 +18,13 @@ public static class ApiServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
+
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddCoreServices();
         services.AddPersistenceServices(configuration);
         services.AddLoggingServices();
         services.AddAuthenticationClientServices();
-        services.AddConfigurationServices(configuration);
-        services.AddFileStorageServices();
         services.AddControllers();
         services.AddCors(options =>
         {
@@ -58,9 +58,6 @@ public static class ApiServiceRegistration
                 {securityScheme, Array.Empty<string>()}
             });
         });
-
-        var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
-
         services.AddKafka(
             kafka => kafka
                 .UseConsoleLog()
@@ -90,6 +87,8 @@ public static class ApiServiceRegistration
                         )
                 )
         );
+        services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
+        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
 
         return services;
     }

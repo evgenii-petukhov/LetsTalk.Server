@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Services;
 using LetsTalk.Server.FileStorage.Abstractions;
+using LetsTalk.Server.FileStorage.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -19,6 +20,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
+        services.AddTransient<IBase64ParsingService, Base64ParsingService>();
 
         return services;
     }

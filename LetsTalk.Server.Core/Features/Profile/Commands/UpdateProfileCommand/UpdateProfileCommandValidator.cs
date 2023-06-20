@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.Core.Helpers;
 using LetsTalk.Server.Persistence.Abstractions;
-using System.Threading;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
@@ -38,13 +36,6 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
             .EmailAddress()
             .WithMessage("{PropertyName} is invalid");
 
-        When(model => model.PhotoUrl != null, () =>
-        {
-            RuleFor(model => model.PhotoUrl)
-                .Must(IsValidPhotoUrl)
-                .WithMessage("{PropertyName} is invalid base64 string or url");
-        });
-
         _accountRepository = accountRepository;
     }
 
@@ -53,18 +44,5 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
         return id.HasValue
             ? _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken)
             : Task.FromResult(false);
-    }
-
-    private static bool IsValidPhotoUrl(string? input)
-    {
-        return IsValidUrl(input) || Base64Helper.IsBase64Image(input);
-    }
-
-    private static bool IsValidUrl(string? input)
-    {
-        if (input == null) return false;
-
-        return Uri.TryCreate(input, UriKind.Absolute, out var uriResult)
-            && uriResult.Scheme == Uri.UriSchemeHttps;
     }
 }

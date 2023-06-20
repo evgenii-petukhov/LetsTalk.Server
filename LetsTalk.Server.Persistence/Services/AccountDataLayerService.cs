@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +9,13 @@ public class AccountDataLayerService : IAccountDataLayerService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IImageRepository _imageRepository;
-    private readonly IFileStorageManager _fileStorageManager;
 
     public AccountDataLayerService(
         IAccountRepository accountRepository,
-        IImageRepository imageRepository,
-        IFileStorageManager fileStorageManager)
+        IImageRepository imageRepository)
     {
         _accountRepository = accountRepository;
         _imageRepository = imageRepository;
-        _fileStorageManager = fileStorageManager;
     }
 
     public async Task<int> CreateOrUpdateAsync(
@@ -78,7 +74,6 @@ public class AccountDataLayerService : IAccountDataLayerService
             if (image != null)
             {
                 await _imageRepository.DeleteAsync(image.Id);
-                _fileStorageManager.DeleteImage(image.FileName!);
             }
         }
     }

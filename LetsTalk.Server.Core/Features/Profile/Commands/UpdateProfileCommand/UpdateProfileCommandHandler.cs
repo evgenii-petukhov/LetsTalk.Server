@@ -3,40 +3,20 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Persistence.Models;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, AccountDto>
+public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly IImageRepository _imageRepository;
-    private readonly IBase64ParsingService _base64ParsingService;
-    private readonly IAccountDataLayerService _accountDataLayerService;
-    private readonly IFileStorageManager _fileStorageManager;
-    private readonly IImageService _imageService;
-    private readonly IMapper _mapper;
 
-    public UpdateProfileCommandHandler(
-        IAccountRepository accountRepository,
-        IImageRepository imageRepository,
-        IBase64ParsingService base64ParsingService,
-        IAccountDataLayerService accountDataLayerService,
-        IFileStorageManager fileStorageManager,
-        IImageService imageService,
-        IMapper mapper)
+    public UpdateProfileCommandHandler(IAccountRepository accountRepository)
     {
         _accountRepository = accountRepository;
-        _imageRepository = imageRepository;
-        _base64ParsingService = base64ParsingService;
-        _accountDataLayerService = accountDataLayerService;
-        _fileStorageManager = fileStorageManager;
-        _imageService = imageService;
-        _mapper = mapper;
     }
 
-    public async Task<AccountDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateProfileCommandValidator(_accountRepository);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -46,33 +26,6 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var base64ParsingResult = _base64ParsingService.ParseBase64String(request.PhotoUrl);
-        if (base64ParsingResult == null)
-        {
-            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, cancellationToken);
-        }
-        else
-        {
-            var data = Convert.FromBase64String(base64ParsingResult);
-            try
-            {
-                var filePathInfo = await _fileStorageManager.SaveImageAsync(data, cancellationToken);
-                var image = await _imageRepository.CreateAsync(new Domain.Image
-                {
-                    FileName = filePathInfo.FileName,
-                    ImageContentTypeId = (int)_imageService.GetImageContentType(data),
-                    ImageTypeId = (int)ImageTypes.Avatar
-                }, cancellationToken);
-                await _accountDataLayerService.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, image.Id, cancellationToken);
-            }
-            catch (ImageSizeException e)
-            {
-                throw new BadRequestException(e.Message, e);
-            }
-        }
-
-        var account = await _accountRepository.GetByIdAsync(request.AccountId!.Value, cancellationToken);
-
-        return _mapper.Map<AccountDto>(account);
+        await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, cancellationToken);
     }
 }

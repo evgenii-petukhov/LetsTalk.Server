@@ -12,9 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
-builder.Services.AddNotificationsServices();
+builder.Services.AddNotificationsServices(builder.Configuration);
 builder.Services.AddAuthenticationClientServices();
-builder.Services.AddConfigurationServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 builder.Services.AddCors(options =>
@@ -28,7 +27,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var kafkaSettings = ConfigurationHelper.GetKafkaSettings(builder.Configuration);
+var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(builder.Configuration);
 
 builder.Services.AddKafka(
     kafka => kafka

@@ -1,11 +1,11 @@
-﻿using LetsTalk.Server.FileStorage.Abstractions;
-using LetsTalk.Server.FileStorage.Models;
+﻿using LetsTalk.Server.FileStorage.Models;
+using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.Persistence.Models;
 using SkiaSharp;
 
-namespace LetsTalk.Server.FileStorage.Services;
+namespace LetsTalk.Server.FileStorageService.Services;
 
-public class ImageService : IImageService
+public class ImageInfoService : IImageInfoService
 {
     private readonly Dictionary<SKEncodedImageFormat, ImageContentTypes> _contentTypeMapping = new()
     {

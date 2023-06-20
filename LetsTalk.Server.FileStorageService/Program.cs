@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
-builder.Services.AddFileStorageServices();
+builder.Services.AddFileStorageServices(builder.Configuration);
 
 var app = builder.Build();
 

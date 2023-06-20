@@ -2,6 +2,7 @@
 using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Services;
 using LetsTalk.Server.Persistence;
@@ -16,12 +17,11 @@ public static class LinkPreviewServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
+        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddHttpClient(nameof(DownloadService));
         services.AddTransient<IDownloadService, DownloadService>();
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<ILinkPreviewGenerator, LinkPreviewGenerator>();
-        services.AddConfigurationServices(configuration);
         services.AddPersistenceServices(configuration);
         services.AddKafka(
             kafka => kafka
@@ -54,6 +54,8 @@ public static class LinkPreviewServiceRegistration
                         )
                 )
         );
+        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+
         return services;
     }
 }

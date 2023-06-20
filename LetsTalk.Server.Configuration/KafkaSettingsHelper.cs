@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LetsTalk.Server.Configuration;
 
-public static class ConfigurationHelper
+public static class KafkaSettingsHelper
 {
     public static KafkaSettings GetKafkaSettings(IConfiguration configuration)
     {

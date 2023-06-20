@@ -1,9 +1,9 @@
 ﻿using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.Persistence.Models;
 
-namespace LetsTalk.Server.FileStorage.Abstractions;
+namespace LetsTalk.Server.FileStorageService.Abstractions;
 
-public interface IImageService
+public interface IImageInfoService
 {
     ImageSize GetImageSize(byte[] data);
 

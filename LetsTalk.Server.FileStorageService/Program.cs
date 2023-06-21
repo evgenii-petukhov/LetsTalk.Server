@@ -1,5 +1,6 @@
 using LetsTalk.Server.FileStorageService;
 using LetsTalk.Server.FileStorageService.Services;
+using LetsTalk.Server.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
 builder.Services.AddFileStorageServices(builder.Configuration);
+builder.Services.AddPersistenceServices(builder.Configuration);
 
 var app = builder.Build();
 

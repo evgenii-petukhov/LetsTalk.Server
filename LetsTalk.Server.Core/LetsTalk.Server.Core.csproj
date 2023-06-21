@@ -30,7 +30,6 @@
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Models\LetsTalk.Server.FileStorage.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Logging.Abstractions\LetsTalk.Server.Logging.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Abstractions\LetsTalk.Server.Persistence.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Models\LetsTalk.Server.Persistence.Models.csproj" />

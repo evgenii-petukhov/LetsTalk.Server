@@ -5,13 +5,19 @@ option csharp_namespace = "LetsTalk.Server.FileStorageService.Protos";
 package file_upload;
 
 service FileUploadGrpcService {
-  rpc UploadAsync (FileUploadRequest) returns (FileUploadResponse);
+	rpc UploadAsync (FileUploadRequest) returns (FileUploadResponse);
 }
 
 message FileUploadRequest {
-  bytes content = 1;
+	enum ImageType {
+		unknown = 0;
+		avatar = 1;
+		message = 2;  
+	}
+	bytes content = 1;
+	ImageType image_type = 2;
 }
 
 message FileUploadResponse {
-  bool status = 1;
+	int64 file_id = 1;
 }

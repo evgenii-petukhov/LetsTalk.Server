@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Persistence.Models;
+﻿using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Abstractions;
 

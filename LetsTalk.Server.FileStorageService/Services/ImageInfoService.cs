@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.FileStorageService.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
-using LetsTalk.Server.Persistence.Models;
+using LetsTalk.Server.Persistence.Enums;
 using SkiaSharp;
 
 namespace LetsTalk.Server.FileStorageService.Services;

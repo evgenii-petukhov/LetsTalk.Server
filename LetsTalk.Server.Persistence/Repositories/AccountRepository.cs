@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
-using LetsTalk.Server.Persistence.Models;
+using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.Repositories

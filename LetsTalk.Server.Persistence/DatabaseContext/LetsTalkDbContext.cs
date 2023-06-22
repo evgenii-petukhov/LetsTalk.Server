@@ -18,6 +18,8 @@ public class LetsTalkDbContext : DbContext
 
     public DbSet<LinkPreview> LinkPreviews { get; set; }
 
+    public DbSet<Domain.File> Files { get; set; }
+
     public DbSet<Image> Images { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

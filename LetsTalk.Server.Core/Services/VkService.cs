@@ -7,7 +7,7 @@ using LetsTalk.Server.Logging.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Models;
-using LetsTalk.Server.Persistence.Models;
+using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Models.Login;

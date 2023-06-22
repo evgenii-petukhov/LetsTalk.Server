@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Persistence.Models;
+﻿namespace LetsTalk.Server.Persistence.Enums;
 
 public enum AccountTypes
 {

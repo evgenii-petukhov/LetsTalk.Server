@@ -2,7 +2,7 @@
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Persistence.Models;
+using LetsTalk.Server.Persistence.Enums;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Image.GetImage;

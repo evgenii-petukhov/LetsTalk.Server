@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.FileStorageService.Models;
-using LetsTalk.Server.Persistence.Models;
+using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorageService.Abstractions;
 

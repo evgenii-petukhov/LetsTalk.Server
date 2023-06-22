@@ -12,15 +12,18 @@ public class FileUploadGrpcService : FileUploadGrpcServiceBase
 {
     private readonly IFileManagementService _fileManagementService;
     private readonly IImageRepository _imageRepository;
+    private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
 
     public FileUploadGrpcService(
         IFileManagementService fileManagementService,
         IImageRepository imageRepository,
+        IFileRepository fileRepository,
         IImageInfoService imageInfoService)
     {
         _fileManagementService = fileManagementService;
         _imageRepository = imageRepository;
+        _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
     }
 
@@ -29,16 +32,22 @@ public class FileUploadGrpcService : FileUploadGrpcServiceBase
         var data = request.Content.ToArray();
         var fileInfo = await _fileManagementService.SaveFileAsync(data, FileTypes.Image, context.CancellationToken);
 
-        var file = await _imageRepository.CreateAsync(new Image
+        var file = await _fileRepository.CreateAsync(new Domain.File
         {
             FileName = fileInfo.FileName,
+            FileTypeId = (int)FileTypes.Image,
+        }, context.CancellationToken);
+
+        var image = await _imageRepository.CreateAsync(new Image
+        {
             ImageContentTypeId = (int)_imageInfoService.GetImageContentType(data),
-            ImageTypeId = (int)request.ImageType
+            ImageTypeId = (int)request.ImageType,
+            FileId = file.Id
         }, context.CancellationToken);
 
         return new FileUploadResponse
         {
-            FileId = file.Id
+            FileId = image.Id
         };
     }
 }

@@ -4,18 +4,18 @@ using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.Protos;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using static LetsTalk.Server.FileStorageService.Protos.FileUploadGrpcService;
+using static LetsTalk.Server.FileStorageService.Protos.FileUploadGrpcEndpoint;
 
-namespace LetsTalk.Server.FileStorageService.Services;
+namespace LetsTalk.Server.FileStorageService.GrpcEndpoints;
 
-public class FileUploadGrpcService : FileUploadGrpcServiceBase
+public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {
     private readonly IFileManagementService _fileManagementService;
     private readonly IImageRepository _imageRepository;
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
 
-    public FileUploadGrpcService(
+    public FileUploadGrpcEndpoint(
         IFileManagementService fileManagementService,
         IImageRepository imageRepository,
         IFileRepository fileRepository,
@@ -27,7 +27,7 @@ public class FileUploadGrpcService : FileUploadGrpcServiceBase
         _imageInfoService = imageInfoService;
     }
 
-    public override async Task<FileUploadResponse> UploadAsync(FileUploadRequest request, ServerCallContext context)
+    public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
     {
         var data = request.Content.ToArray();
         var fileInfo = await _fileManagementService.SaveFileAsync(data, FileTypes.Image, context.CancellationToken);
@@ -45,9 +45,9 @@ public class FileUploadGrpcService : FileUploadGrpcServiceBase
             FileId = file.Id
         }, context.CancellationToken);
 
-        return new FileUploadResponse
+        return new UploadImageResponse
         {
-            FileId = image.Id
+            ImageId = image.Id
         };
     }
 }

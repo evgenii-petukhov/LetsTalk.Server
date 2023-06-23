@@ -241,8 +241,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    [TestCase("test")]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsInvalid(string photoUrl)
+    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsValid()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -251,41 +250,7 @@ public class UpdateProfileCommandValidatorTests
             FirstName = "test",
             LastName = "test",
             Email = "test@localhost.com",
-            PhotoUrl = photoUrl
-        };
-        var cancellationToken = new CancellationToken();
-        _mockAccountRepository
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
-            .Returns(Task.FromResult(true));
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(1);
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "Photo Url is invalid base64 string or url"
-        });
-    }
-
-    [Test]
-    [TestCase("data:image/jpeg;base64,/9j/2wBDAAMCAg")]
-    [TestCase("data:image/png;base64,/9j/2wBDAAMCAg")]
-    [TestCase("data:image/gif;base64,/9j/2wBDAAMCAg")]
-    [TestCase("https://localhost/")]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsValid(string photoUrl)
-    {
-        // Arrange
-        var request = new UpdateProfileCommand
-        {
-            AccountId = 0,
-            FirstName = "test",
-            LastName = "test",
-            Email = "test@localhost.com",
-            PhotoUrl = photoUrl
+            ImageId = 1
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository

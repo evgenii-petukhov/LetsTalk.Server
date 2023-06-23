@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.FileStorage.Abstractions;
+﻿using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Abstractions;
 using MediatR;
 
@@ -26,6 +23,13 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand>
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, cancellationToken);
+        if (request.ImageId.HasValue)
+        {
+            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, null, request.ImageId, cancellationToken);
+        }
+        else
+        {
+            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email,  cancellationToken);
+        }
     }
 }

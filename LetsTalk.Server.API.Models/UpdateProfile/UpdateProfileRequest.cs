@@ -4,7 +4,7 @@ public class UpdateProfileRequest
 {
     public string? Email { get; set; }
 
-    public string? PhotoUrl { get; set; }
+    public int? ImageId { get; set; }
 
     public string? FirstName { get; set; }
 

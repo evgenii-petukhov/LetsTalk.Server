@@ -1,5 +1,5 @@
 using LetsTalk.Server.FileStorageService;
-using LetsTalk.Server.FileStorageService.Services;
+using LetsTalk.Server.FileStorageService.GrpcEndpoints;
 using LetsTalk.Server.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +18,7 @@ app.UseGrpcWeb();
 
 app.MapGrpcReflectionService();
 
-app.MapGrpcService<FileUploadGrpcService>()
+app.MapGrpcService<FileUploadGrpcEndpoint>()
     .EnableGrpcWeb()
     .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 

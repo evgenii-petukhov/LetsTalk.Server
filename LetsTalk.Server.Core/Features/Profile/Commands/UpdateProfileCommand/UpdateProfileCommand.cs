@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Dto.Models;
-using MediatR;
+﻿using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
@@ -9,7 +8,7 @@ public class UpdateProfileCommand: IRequest
 
     public string? Email { get; set; }
 
-    public string? PhotoUrl { get; set; }
+    public int? ImageId { get; set; }
 
     public string? FirstName { get; set; }
 

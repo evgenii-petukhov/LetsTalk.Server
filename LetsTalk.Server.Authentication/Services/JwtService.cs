@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Exceptions;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,16 +10,21 @@ using System.Text;
 
 namespace LetsTalk.Server.Authentication.Services;
 
-public class JwtService : IJwtService
+public class JwtService : IJwtService, IDisposable
 {
     private const string CLAIM_ID = "id";
 
     private readonly JwtSettings _jwtSettings;
     private readonly SigningCredentials _signingCredentials;
     private readonly SymmetricSecurityKey _symmetricSecurityKey;
+    private readonly IMemoryCache _memoryCache;
+    private bool _disposedValue;
 
-    public JwtService(IOptions<JwtSettings> jwtSettings)
+    public JwtService(
+        IMemoryCache memoryCache,
+        IOptions<JwtSettings> jwtSettings)
     {
+        _memoryCache = memoryCache;
         _jwtSettings = jwtSettings.Value;
         var key = Encoding.ASCII.GetBytes(_jwtSettings.Key!);
         _symmetricSecurityKey = new SymmetricSecurityKey(key);
@@ -30,7 +36,6 @@ public class JwtService : IJwtService
 
     public string GenerateJwtToken(int accountId)
     {
-        // generate token that is valid for 15 minutes
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -39,6 +44,8 @@ public class JwtService : IJwtService
             SigningCredentials = _signingCredentials
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
+        var jwtToken = (JwtSecurityToken)token;
+        _memoryCache.Set(jwtToken.RawData, accountId, jwtToken.ValidTo);
         return tokenHandler.WriteToken(token);
     }
 
@@ -46,6 +53,11 @@ public class JwtService : IJwtService
     {
         if (token == null)
             return null;
+
+        if (_memoryCache.TryGetValue(token, out int accountId) && accountId > 0)
+        {
+            return accountId;
+        }
 
         var tokenHandler = new JwtSecurityTokenHandler();
         try
@@ -61,14 +73,31 @@ public class JwtService : IJwtService
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-
-            // return account id from JWT token if validation successful
-            return int.Parse(jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value);
+            accountId = int.Parse(jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value);
+            _memoryCache.Set(jwtToken.RawData, accountId, jwtToken.ValidTo);
+            return accountId;
         }
         catch
         {
-            // return null if validation fails
             return null;
         }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                _memoryCache.Dispose();
+            }
+            _disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

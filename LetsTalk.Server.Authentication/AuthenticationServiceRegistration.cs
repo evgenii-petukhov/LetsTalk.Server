@@ -24,6 +24,7 @@ namespace LetsTalk.Server.Authentication
             services.AddGrpcReflection();
             services.AddSingleton<IJwtService, JwtService>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.AddMemoryCache();
             return services;
         }
     }

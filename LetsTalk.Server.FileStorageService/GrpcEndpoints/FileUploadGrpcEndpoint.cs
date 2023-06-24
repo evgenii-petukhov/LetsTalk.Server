@@ -50,9 +50,6 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
         await _accountRepository.UpdateAsync((int)context.UserState["AccountId"], null, image.Id);
 
-        return new UploadImageResponse
-        {
-            ImageId = image.Id
-        };
+        return new UploadImageResponse();
     }
 }

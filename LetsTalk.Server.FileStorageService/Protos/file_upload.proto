@@ -19,5 +19,5 @@ message UploadImageRequest {
 }
 
 message UploadImageResponse {
-	int64 image_id = 1;
+
 }

@@ -15,7 +15,6 @@ namespace LetsTalk.Server.Persistence.Repositories
         public Task<Account?> GetByExternalIdAsync(string externalId, AccountTypes accountTypes, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
-                .AsNoTracking()
                 .SingleOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes, cancellationToken: cancellationToken);
         }
 
@@ -24,14 +23,12 @@ namespace LetsTalk.Server.Persistence.Repositories
             return _context.Accounts
                 .Include(x => x.Image)
                 .Include(x => x!.Image!.File)
-                .AsNoTracking()
                 .SingleOrDefaultAsync(q => q.Id == id, cancellationToken: cancellationToken);
         }
 
         public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id, CancellationToken cancellationToken = default)
         {
             var sentMessageDates = _context.Messages
-                .AsNoTracking()
                 .Where(x => x.SenderId == id)
                 .GroupBy(x => x.RecipientId)
                 .Select(g => new
@@ -41,7 +38,6 @@ namespace LetsTalk.Server.Persistence.Repositories
                 });
 
             var receivedMessageDates = _context.Messages
-                .AsNoTracking()
                 .Where(x => x.RecipientId == id)
                 .GroupBy(x => x.SenderId)
                 .Select(g => new
@@ -63,7 +59,6 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .Where(account => account.Id != id)
                 .Join(
                     _context.Messages
-                        .AsNoTracking()
                         .Where(message => message.RecipientId == id && !message.IsRead),
                     account => account.Id,
                     message => message.SenderId,
@@ -80,7 +75,6 @@ namespace LetsTalk.Server.Persistence.Repositories
                 });
 
             return await _context.Accounts
-                .AsNoTracking()
                 .Where(account => account.Id != id)
                 .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
                 {
@@ -128,7 +122,6 @@ namespace LetsTalk.Server.Persistence.Repositories
         public Task<Account?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
-                .AsNoTracking()
                 .SingleOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken);
         }
 
@@ -165,7 +158,6 @@ namespace LetsTalk.Server.Persistence.Repositories
         public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
-                .AsNoTracking()
                 .AnyAsync(account => account.Id == id, cancellationToken: cancellationToken);
         }
     }

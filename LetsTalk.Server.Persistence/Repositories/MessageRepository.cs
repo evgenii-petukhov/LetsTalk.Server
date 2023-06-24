@@ -16,7 +16,6 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         return await _context.Messages
             .Include(message => message.LinkPreview)
-            .AsNoTracking()
             .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
             .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync(cancellationToken: cancellationToken);
@@ -32,7 +31,6 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     public Task MarkAllAsReadAsync(int senderId, int recipientId, CancellationToken cancellationToken = default)
     {
         return _context.Messages
-            .AsNoTracking()
             .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
             .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
     }

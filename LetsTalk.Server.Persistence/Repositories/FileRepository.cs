@@ -13,7 +13,6 @@ public class FileRepository : GenericRepository<Domain.File>, IFileRepository
     public Task<Domain.File?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Files
-            .AsNoTracking()
             .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
     }
 

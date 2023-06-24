@@ -17,7 +17,9 @@ public static class PersistenceServiceRegistration
         services.AddDbContext<LetsTalkDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("DbConnectionString");
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            options
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
         services.AddTransient<IAccountRepository, AccountRepository>();
         services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();

@@ -25,6 +25,7 @@ This project is a showcase of my technical skills and talent for potential IT re
 ![scheme](scheme-compressed.svg)
 
 The front-end is an Angular single-page application which uses NgRx for reactive state management.
+
 The back-end implements microservice architecture. The table below describes each ot them.
 
 | Microservice name | Protocol | Description |

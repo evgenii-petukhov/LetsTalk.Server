@@ -19,6 +19,15 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes, cancellationToken: cancellationToken);
         }
 
+        public Task<Account?> GetByIdIncludingFilesAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return _context.Accounts
+                .Include(x => x.Image)
+                .Include(x => x!.Image!.File)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(q => q.Id == id, cancellationToken: cancellationToken);
+        }
+
         public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id, CancellationToken cancellationToken = default)
         {
             var sentMessageDates = _context.Messages
@@ -123,6 +132,15 @@ namespace LetsTalk.Server.Persistence.Repositories
                 .SingleOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken);
         }
 
+        public Task SetImageIdAsync(int accountId, int imageId, CancellationToken cancellationToken = default)
+        {
+            return _context.Accounts
+                .Where(account => account.Id == accountId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(account => account.PhotoUrl, (string?)null)
+                    .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
+        }
+
         public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
         {
             return _context.Accounts
@@ -142,27 +160,6 @@ namespace LetsTalk.Server.Persistence.Repositories
                     .SetProperty(account => account.LastName, lastName)
                     .SetProperty(account => account.Email, email)
                     .SetProperty(account => account.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
-        }
-
-        public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, int? imageId, CancellationToken cancellationToken = default)
-        {
-            return _context.Accounts
-                .Where(account => account.Id == accountId)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(account => account.FirstName, firstName)
-                    .SetProperty(account => account.LastName, lastName)
-                    .SetProperty(account => account.Email, email)
-                    .SetProperty(account => account.PhotoUrl, photoUrl)
-                    .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
-        }
-
-        public Task UpdateAsync(int accountId, string? photoUrl, int? imageId, CancellationToken cancellationToken = default)
-        {
-            return _context.Accounts
-                .Where(account => account.Id == accountId)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(account => account.PhotoUrl, photoUrl)
-                    .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
         }
 
         public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)

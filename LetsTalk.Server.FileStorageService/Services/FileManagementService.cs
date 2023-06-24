@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.FileStorageService.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Persistence.Enums;
@@ -29,20 +28,20 @@ public class FileManagementService : IFileManagementService
         return File.ReadAllBytesAsync(imagePath, cancellationToken);
     }
 
-    public async Task<FilePathInfo> SaveFileAsync(byte[] data, FileTypes fileType, CancellationToken cancellationToken = default)
+    public async Task<string?> SaveDataAsync(byte[] data, FileTypes fileType, CancellationToken cancellationToken = default)
     {
         if (fileType == FileTypes.Image)
         {
-            var size = _imageInfoService.GetImageSize(data);
-            if (size.Width > _fileStorageSettings.AvatarMaxWidth || size.Height > _fileStorageSettings.AvatarMaxWidth)
+            var (width, height) = _imageInfoService.GetImageSize(data);
+            if (width > _fileStorageSettings.AvatarMaxWidth || height > _fileStorageSettings.AvatarMaxWidth)
             {
                 throw new ImageSizeException("Image size exceeds max dimensions");
             }
         }
 
-        var filePathInfo = _fileNameGenerator.Generate(fileType);
-        await File.WriteAllBytesAsync(filePathInfo.FullPath!, data, cancellationToken);
-        return filePathInfo;
+        var (filename, filepath) = _fileNameGenerator.Generate(fileType);
+        await File.WriteAllBytesAsync(filepath, data, cancellationToken);
+        return filename;
     }
 
     public void DeleteFile(string filename, FileTypes fileType)

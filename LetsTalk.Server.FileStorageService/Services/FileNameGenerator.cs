@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorageService.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Persistence.Enums;
@@ -16,14 +15,10 @@ public class FileNameGenerator : IFileNameGenerator
         _fileStorageSettings = fileStorageSettings.Value;
     }
 
-    public FilePathInfo Generate(FileTypes fileType)
+    public (string, string) Generate(FileTypes fileType)
     {
         var filename = Guid.NewGuid().ToString();
-        return new FilePathInfo
-        {
-            FileName = filename,
-            FullPath = GetFilePath(filename, fileType)
-        };
+        return (filename, GetFilePath(filename, fileType));
     }
 
     public string GetFilePath(string filename, FileTypes fileType)

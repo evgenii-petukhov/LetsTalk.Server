@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.FileStorageService.Models;
-using LetsTalk.Server.FileStorageService.Abstractions;
+﻿using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using SkiaSharp;
 
@@ -15,16 +14,12 @@ public class ImageInfoService : IImageInfoService
         { SKEncodedImageFormat.Webp, ImageContentTypes.Webp },
     };
 
-    public ImageSize GetImageSize(byte[] data)
+    public (int, int) GetImageSize(byte[] data)
     {
         using var stream = new MemoryStream(data);
         using var skiaStream = new SKManagedStream(stream);
         var bitmap = SKBitmap.DecodeBounds(skiaStream);
-        return new ImageSize
-        {
-            Width = bitmap.Width,
-            Height = bitmap.Height
-        };
+        return (bitmap.Width, bitmap.Height);
     }
 
     public ImageContentTypes GetImageContentType(byte[] data)

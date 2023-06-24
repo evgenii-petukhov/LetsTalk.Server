@@ -18,8 +18,11 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
             .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
     }
 
-    public Task DeleteAsync(int id)
+    public Task<Image?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default)
     {
-        return _context.Images.Where(image => image.Id == id).ExecuteDeleteAsync();
+        return _context.Images
+            .Include(x => x.File)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
     }
 }

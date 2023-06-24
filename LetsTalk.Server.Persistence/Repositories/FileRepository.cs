@@ -17,8 +17,8 @@ public class FileRepository : GenericRepository<Domain.File>, IFileRepository
             .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
     }
 
-    public Task DeleteAsync(int id)
+    public Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        return _context.Images.Where(image => image.Id == id).ExecuteDeleteAsync();
+        return _context.Files.Where(image => image.Id == id).ExecuteDeleteAsync(cancellationToken);
     }
 }

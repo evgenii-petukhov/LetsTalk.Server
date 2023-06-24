@@ -33,12 +33,18 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
     {
+        var accountId = (int)context.UserState["AccountId"];
+        if (request.ImageType == UploadImageRequest.Types.ImageType.Avatar)
+        {
+            await RemoveAvatarAsync(accountId, context.CancellationToken);
+        }
+
         var data = request.Content.ToArray();
-        var fileInfo = await _fileManagementService.SaveFileAsync(data, FileTypes.Image, context.CancellationToken);
+        var filename = await _fileManagementService.SaveDataAsync(data, FileTypes.Image, context.CancellationToken);
 
         var file = await _fileRepository.CreateAsync(new Domain.File
         {
-            FileName = fileInfo.FileName,
+            FileName = filename,
             FileTypeId = (int)FileTypes.Image,
         }, context.CancellationToken);
 
@@ -49,22 +55,30 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
             FileId = file.Id
         }, context.CancellationToken);
 
-        await _accountRepository.UpdateAsync((int)context.UserState["AccountId"], null, image.Id);
+        await _accountRepository.SetImageIdAsync(accountId, image.Id, context.CancellationToken);
 
         return new UploadImageResponse();
     }
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var image = await _imageRepository.GetByIdAsync(request.ImageId, context.CancellationToken);
-
-        var file = await _fileRepository.GetByIdAsync(image!.FileId, context.CancellationToken);
-
-        var content = await _fileManagementService.GetFileContentAsync(file!.FileName!, FileTypes.Image, context.CancellationToken);
+        var image = await _imageRepository.GetByIdWithFileAsync(request.ImageId, context.CancellationToken);
+        var content = await _fileManagementService.GetFileContentAsync(image!.File!.FileName!, FileTypes.Image, context.CancellationToken);
 
         return new DownloadImageResponse
         {
             Content = ByteString.CopyFrom(content)
         };
+    }
+
+    private async Task RemoveAvatarAsync(int accountId, CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.GetByIdIncludingFilesAsync(accountId, cancellationToken);
+        var file = account!.Image?.File;
+        if (file != null)
+        {
+            _fileManagementService.DeleteFile(file!.FileName!, FileTypes.Image);
+            await _fileRepository.DeleteAsync(file.Id, cancellationToken);
+        }
     }
 }

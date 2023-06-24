@@ -8,14 +8,10 @@ namespace LetsTalk.Server.Persistence.Services;
 public class AccountDataLayerService : IAccountDataLayerService
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly IImageRepository _imageRepository;
 
-    public AccountDataLayerService(
-        IAccountRepository accountRepository,
-        IImageRepository imageRepository)
+    public AccountDataLayerService(IAccountRepository accountRepository)
     {
         _accountRepository = accountRepository;
-        _imageRepository = imageRepository;
     }
 
     public async Task<int> CreateOrUpdateAsync(
@@ -60,21 +56,5 @@ public class AccountDataLayerService : IAccountDataLayerService
         }
 
         return account.Id;
-    }
-
-    public async Task UpdateAsync(int id, string? firstName, string? lastName, string? email, int? imageId, CancellationToken cancellationToken)
-    {
-        var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
-        if (account == null) return;
-
-        await _accountRepository.UpdateAsync(id, firstName, lastName, email, null, imageId, cancellationToken);
-        if (account.ImageId.HasValue)
-        {
-            var image = await _imageRepository.GetByIdAsync(account.ImageId.Value, cancellationToken);
-            if (image != null)
-            {
-                await _imageRepository.DeleteAsync(image.Id);
-            }
-        }
     }
 }

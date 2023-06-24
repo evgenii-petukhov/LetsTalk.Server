@@ -29,5 +29,4 @@ message DownloadImageRequest {
 
 message DownloadImageResponse {
 	bytes content = 1;
-	string image_type = 2;
 }

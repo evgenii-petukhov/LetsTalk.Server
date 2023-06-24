@@ -16,22 +16,19 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
     private readonly IAccountRepository _accountRepository;
-    private readonly IBase64ParsingService _base64ParsingService;
 
     public FileUploadGrpcEndpoint(
         IFileManagementService fileManagementService,
         IImageRepository imageRepository,
         IFileRepository fileRepository,
         IImageInfoService imageInfoService,
-        IAccountRepository accountRepository,
-        IBase64ParsingService base64ParsingService)
+        IAccountRepository accountRepository)
     {
         _fileManagementService = fileManagementService;
         _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
         _accountRepository = accountRepository;
-        _base64ParsingService = base64ParsingService;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -67,8 +64,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
         return new DownloadImageResponse
         {
-            Content = ByteString.CopyFrom(content),
-            ImageType = _base64ParsingService.GetContentTypeName((ImageContentTypes)image.ImageContentTypeId)
+            Content = ByteString.CopyFrom(content)
         };
     }
 }

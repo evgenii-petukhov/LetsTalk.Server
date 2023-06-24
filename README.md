@@ -13,12 +13,14 @@
 
 🔴 [Live demo](https://chat.epetukhov.cyou/)
 ## Description
+This is an instant messaging service with authentication via social media, such as Facebook. The service allows users to send text messages and share links. 
+
 This project is a showcase of my technical skills and talent for potential IT recruiters, employers, customers, etc. It demonstrates that I am able to
 * create a single-page web application with Angular
 * implement reactive state management with NgRx store in Angular applications
 * understand the basic principles of the OpenAPI Specification
 * understand microservice communication patterns and protocols, such as GRPC
-* use event streaming platforms and brokers, such as Apache Kafka
+* understand the main principles of microservice architecture, event-driven development, and experienced in using Apache Kafka
 ## Architecture
 ![scheme](scheme-compressed.svg)
 

@@ -25,15 +25,13 @@ This project is a showcase of my technical skills and talent for potential IT re
 ![scheme](scheme-compressed.svg)
 
 The back-end implements microservice architecture. There are a few microservices, such as
-* **Authentication microservice** generates and validates JWT tokens
-* **Notification microservice** sends notifications to the Angular application via SignalR
-* **Link preview microservice** processes links inside messages and generates a preview
-* **File storage microservice** saves and retrieves files on / from the file system
 
-The API and the Notification microservice communicate with the Authentication microservice via GRPC.
-
-The API, the LinkPreview, and the Notification microservice communicate with each other via Apache Kafka.
-
+| Microservice name | Protocol | Description |
+| ----------- | ----------- | ----------- |
+| Authentication | GRPC | generates and validates JWT tokens |
+| Notification | Apache Kafka | sends notifications to the Angular application via SignalR |
+| Link preview | Apache Kafka | processes links inside messages and generates a preview |
+| File storage | GRPC Web | saves images the file system, retrieves images from the file system by reques |
 ## Deployment
 This is an instant messaging service with authentication via social media, such as Facebook. The service allows users to send text messages and share links. 
 

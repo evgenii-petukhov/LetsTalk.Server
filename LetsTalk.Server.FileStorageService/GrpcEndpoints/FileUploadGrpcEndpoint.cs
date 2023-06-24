@@ -14,17 +14,20 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IImageRepository _imageRepository;
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
+    private readonly IAccountRepository _accountRepository;
 
     public FileUploadGrpcEndpoint(
         IFileManagementService fileManagementService,
         IImageRepository imageRepository,
         IFileRepository fileRepository,
-        IImageInfoService imageInfoService)
+        IImageInfoService imageInfoService,
+        IAccountRepository accountRepository)
     {
         _fileManagementService = fileManagementService;
         _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
+        _accountRepository = accountRepository;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -44,6 +47,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
             ImageTypeId = (int)request.ImageType,
             FileId = file.Id
         }, context.CancellationToken);
+
+        await _accountRepository.UpdateAsync((int)context.UserState["AccountId"], null, image.Id);
 
         return new UploadImageResponse
         {

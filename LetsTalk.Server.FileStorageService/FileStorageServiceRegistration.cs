@@ -1,6 +1,8 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
+using LetsTalk.Server.FileStorageService.GrpcInterceptors;
 using LetsTalk.Server.FileStorageService.Services;
+using LetsTalk.Server.AuthenticationClient;
 
 namespace LetsTalk.Server.FileStorageService;
 
@@ -20,12 +22,14 @@ public static class FileStorageServiceRegistration
                     .AllowAnyMethod();
             });
         });
-        services.AddGrpc();
+        services.AddGrpc(options => options.Interceptors.Add<JwtInterceptor>());
         services.AddGrpcReflection();
         services.AddTransient<IFileManagementService, FileManagementService>();
         services.AddTransient<IFileNameGenerator, FileNameGenerator>();
         services.AddTransient<IImageInfoService, ImageInfoService>();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
+        services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
+        services.AddAuthenticationClientServices();
         return services;
     }
 }

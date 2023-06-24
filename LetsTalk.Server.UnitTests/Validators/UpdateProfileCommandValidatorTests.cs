@@ -249,8 +249,7 @@ public class UpdateProfileCommandValidatorTests
             AccountId = 0,
             FirstName = "test",
             LastName = "test",
-            Email = "test@localhost.com",
-            ImageId = 1
+            Email = "test@localhost.com"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountRepository

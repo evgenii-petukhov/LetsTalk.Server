@@ -1,7 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace LetsTalk.Server.Notifications;
 

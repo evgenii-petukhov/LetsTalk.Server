@@ -22,12 +22,18 @@ public class JwtMiddleware
             .FirstOrDefault()?
             .Split(" ")
             .Last();
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new UnauthorizedAccessException();
+        }
 
         var accountId = await authenticationClient.ValidateJwtTokenAsync(options.Value.Url!, token);
-        if (accountId != null)
+        if (!accountId.HasValue)
         {
-            context.Items["AccountId"] = accountId;
+            throw new UnauthorizedAccessException();
         }
+
+        context.Items["AccountId"] = accountId;
 
         await _next(context);
     }

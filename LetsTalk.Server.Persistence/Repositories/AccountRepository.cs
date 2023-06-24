@@ -156,6 +156,15 @@ namespace LetsTalk.Server.Persistence.Repositories
                     .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
         }
 
+        public Task UpdateAsync(int accountId, string? photoUrl, int? imageId, CancellationToken cancellationToken = default)
+        {
+            return _context.Accounts
+                .Where(account => account.Id == accountId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(account => account.PhotoUrl, photoUrl)
+                    .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
+        }
+
         public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
         {
             return _context.Accounts

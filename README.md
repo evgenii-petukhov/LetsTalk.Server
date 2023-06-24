@@ -13,11 +13,12 @@
 
 🔴 [Live demo](https://chat.epetukhov.cyou/)
 ## Description
-The idea behind this project is to demonstrate that 
-* I'm be able to create modern ASP.NET Core applications
-* I understand the main principles of microservice architecture and event-driven development
-* I know basic approaches of work with Apache Kafka
-* I can deploy .NET applications on Linux
+This project is a showcase of my technical skills and talent for potential IT recruiters, employers, customers, etc. It demonstrates that I am able to
+* create a single-page web application with Angular
+* implement reactive state management with NgRx store in Angular applications
+* understand the basic principles of the OpenAPI Specification
+* understand microservice communication patterns and protocols, such as GRPC
+* use event streaming platforms and brokers, such as Apache Kafka
 ## Architecture
 ![scheme](scheme-compressed.svg)
 
@@ -25,6 +26,7 @@ The back-end implements microservice architecture. There are a few microservices
 * **Authentication microservice** generates and validates JWT tokens
 * **Notification microservice** sends notifications to the Angular application via SignalR
 * **Link preview microservice** processes links inside messages and generates a preview
+* **File storage microservice** saves and retrieves files on / from the file system
 
 The API and the Notification microservice communicate with the Authentication microservice via GRPC.
 

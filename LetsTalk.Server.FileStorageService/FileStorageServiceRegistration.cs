@@ -27,6 +27,7 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IFileManagementService, FileManagementService>();
         services.AddTransient<IFileNameGenerator, FileNameGenerator>();
         services.AddTransient<IImageInfoService, ImageInfoService>();
+        services.AddTransient<IBase64ParsingService, Base64ParsingService>();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddAuthenticationClientServices();

@@ -1,8 +1,0 @@
-﻿using LetsTalk.Server.Persistence.Enums;
-
-namespace LetsTalk.Server.FileStorage.Abstractions;
-
-public interface IBase64ParsingService
-{
-    string CreateBase64String(byte[] content, ImageContentTypes contentType);
-}

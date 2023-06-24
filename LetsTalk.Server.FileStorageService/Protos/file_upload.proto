@@ -6,6 +6,7 @@ package file_upload;
 
 service FileUploadGrpcEndpoint {
 	rpc UploadImageAsync (UploadImageRequest) returns (UploadImageResponse);
+	rpc DownloadImageAsync (DownloadImageRequest) returns (DownloadImageResponse);
 }
 
 message UploadImageRequest {
@@ -20,4 +21,13 @@ message UploadImageRequest {
 
 message UploadImageResponse {
 
+}
+
+message DownloadImageRequest {
+	int32 image_id = 1;
+}
+
+message DownloadImageResponse {
+	bytes content = 1;
+	string image_type = 2;
 }

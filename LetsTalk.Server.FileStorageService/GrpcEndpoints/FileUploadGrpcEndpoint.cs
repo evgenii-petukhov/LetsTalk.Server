@@ -89,6 +89,13 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private async Task RemoveAvatarAsync(int accountId, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdIncludingFilesAsync(accountId, cancellationToken);
+        var imageId = account?.ImageId;
+        if (!imageId.HasValue)
+        {
+            return;
+        }
+
+        _memoryCache.Remove(imageId);
         var file = account!.Image?.File;
         if (file != null)
         {

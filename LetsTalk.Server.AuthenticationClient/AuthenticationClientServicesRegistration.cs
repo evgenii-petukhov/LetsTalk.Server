@@ -8,7 +8,7 @@ public static class AuthenticationClientServicesRegistration
     public static IServiceCollection AddAuthenticationClientServices(
         this IServiceCollection services)
     {
-        services.AddTransient<IAuthenticationClient, AuthenticationClient>();
+        services.AddSingleton<IAuthenticationClient, AuthenticationClient>();
 
         return services;
     }

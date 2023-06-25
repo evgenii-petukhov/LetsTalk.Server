@@ -34,7 +34,7 @@ public class FacebookService : IFacebookService
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
     {
         // verify access token with facebook API to authenticate
-        var client = new RestClient(FACEBOOK_URL);
+        using var client = new RestClient(FACEBOOK_URL);
         var request = new RestRequest($"{model.Id}?fields=id,email,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
         try
         {

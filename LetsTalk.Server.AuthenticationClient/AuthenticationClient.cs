@@ -31,12 +31,12 @@ public class AuthenticationClient: IAuthenticationClient
 
     private static JwtTokenGrpcServiceClient GetGrpcClient(string url)
     {
-        var httpHandler = new HttpClientHandler
+        using var httpHandler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         };
 
-        var channel = GrpcChannel.ForAddress(url, new GrpcChannelOptions
+        using var channel = GrpcChannel.ForAddress(url, new GrpcChannelOptions
         {
             HttpHandler = httpHandler
         });

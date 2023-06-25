@@ -38,7 +38,7 @@ public class VkService : IVkService
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
     {
         // verify access token with facebook API to authenticate
-        var client = new RestClient(VK_URL);
+        using var client = new RestClient(VK_URL);
         var request = new RestRequest($"method/users.get?user_ids={model.Id}&fields=id,first_name,last_name,photo_max&access_token={model.AuthToken}&v=5.131");
         try
         {

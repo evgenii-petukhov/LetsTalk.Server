@@ -54,14 +54,9 @@ public class JwtService : IJwtService, IDisposable
         if (token == null)
             return null;
 
-        if (_memoryCache.TryGetValue(token, out int accountId) && accountId > 0)
+        return _memoryCache.GetOrCreate(token, cacheEntry =>
         {
-            return accountId;
-        }
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        try
-        {
+            var tokenHandler = new JwtSecurityTokenHandler();
             tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -73,14 +68,9 @@ public class JwtService : IJwtService, IDisposable
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            accountId = int.Parse(jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value);
-            _memoryCache.Set(jwtToken.RawData, accountId, jwtToken.ValidTo);
-            return accountId;
-        }
-        catch
-        {
-            return null;
-        }
+            cacheEntry.AbsoluteExpiration = jwtToken.ValidTo;
+            return int.Parse(jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value);
+        });
     }
 
     protected virtual void Dispose(bool disposing)

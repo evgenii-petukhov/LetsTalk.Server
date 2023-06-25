@@ -5,6 +5,7 @@ using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.Protos;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
+using Microsoft.Extensions.Caching.Memory;
 using static LetsTalk.Server.FileStorageService.Protos.FileUploadGrpcEndpoint;
 
 namespace LetsTalk.Server.FileStorageService.GrpcEndpoints;
@@ -16,19 +17,22 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
     private readonly IAccountRepository _accountRepository;
+    private readonly IMemoryCache _memoryCache;
 
     public FileUploadGrpcEndpoint(
         IFileManagementService fileManagementService,
         IImageRepository imageRepository,
         IFileRepository fileRepository,
         IImageInfoService imageInfoService,
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository,
+        IMemoryCache memoryCache)
     {
         _fileManagementService = fileManagementService;
         _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
         _accountRepository = accountRepository;
+        _memoryCache = memoryCache;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -55,15 +59,26 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
             FileId = file.Id
         }, context.CancellationToken);
 
-        await _accountRepository.SetImageIdAsync(accountId, image.Id, context.CancellationToken);
+        _memoryCache.Set(image.Id, file.FileName);
+
+        if (request.ImageType == UploadImageRequest.Types.ImageType.Avatar)
+        {
+            await _accountRepository.SetImageIdAsync(accountId, image.Id, context.CancellationToken);
+        }
 
         return new UploadImageResponse();
     }
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var image = await _imageRepository.GetByIdWithFileAsync(request.ImageId, context.CancellationToken);
-        var content = await _fileManagementService.GetFileContentAsync(image!.File!.FileName!, FileTypes.Image, context.CancellationToken);
+        var filename = await _memoryCache.GetOrCreateAsync(request.ImageId, async cacheEntry =>
+        {
+            cacheEntry.Priority = CacheItemPriority.NeverRemove;
+            var image = await _imageRepository.GetByIdWithFileAsync(request.ImageId, context.CancellationToken);
+            return image!.File!.FileName;
+        });
+
+        var content = await _fileManagementService.GetFileContentAsync(filename!, FileTypes.Image, context.CancellationToken);
 
         return new DownloadImageResponse
         {

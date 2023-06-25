@@ -32,6 +32,7 @@ public static class FileStorageServiceRegistration
         services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddAuthenticationClientServices();
         services.AddLoggingServices();
+        services.AddMemoryCache();
         return services;
     }
 }

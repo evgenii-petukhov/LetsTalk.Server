@@ -5,7 +5,6 @@ using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.Protos;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using System.Diagnostics;
 using static LetsTalk.Server.FileStorageService.Protos.FileUploadGrpcEndpoint;
 
 namespace LetsTalk.Server.FileStorageService.GrpcEndpoints;
@@ -17,22 +16,19 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
     private readonly IAccountRepository _accountRepository;
-    private readonly ILogger<FileUploadGrpcEndpoint> _logger;
 
     public FileUploadGrpcEndpoint(
         IFileManagementService fileManagementService,
         IImageRepository imageRepository,
         IFileRepository fileRepository,
         IImageInfoService imageInfoService,
-        IAccountRepository accountRepository,
-        ILogger<FileUploadGrpcEndpoint> logger)
+        IAccountRepository accountRepository)
     {
         _fileManagementService = fileManagementService;
         _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
         _accountRepository = accountRepository;
-        _logger = logger;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -66,22 +62,12 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var sw = new Stopwatch();
-        sw.Start();
         var image = await _imageRepository.GetByIdWithFileAsync(request.ImageId, context.CancellationToken);
-        sw.Stop();
-        _logger.LogInformation("File Id resolved: {imageId} => {fileId}: {time} ms", request.ImageId, image!.FileId, sw.ElapsedMilliseconds);
-        sw.Restart();
         var content = await _fileManagementService.GetFileContentAsync(image!.File!.FileName!, FileTypes.Image, context.CancellationToken);
-        sw.Stop();
-        _logger.LogInformation("File read: {imageId} => {fileId}: {time} ms", request.ImageId, image!.FileId, sw.ElapsedMilliseconds);
-        sw.Restart();
-        var bytes = ByteString.CopyFrom(content);
-        sw.Stop();
-        _logger.LogInformation("Content converted: {imageId} => {fileId}: {time} ms", request.ImageId, image!.FileId, sw.ElapsedMilliseconds);
+
         return new DownloadImageResponse
         {
-            Content = bytes
+            Content = ByteString.CopyFrom(content)
         };
     }
 

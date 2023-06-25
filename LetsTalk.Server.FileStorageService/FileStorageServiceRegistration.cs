@@ -25,9 +25,10 @@ public static class FileStorageServiceRegistration
         });
         services.AddGrpc(options => options.Interceptors.Add<JwtInterceptor>());
         services.AddGrpcReflection();
-        services.AddTransient<IFileManagementService, FileManagementService>();
+        services.AddTransient<IFileService, FileService>();
         services.AddTransient<IFileNameGenerator, FileNameGenerator>();
         services.AddTransient<IImageInfoService, ImageInfoService>();
+        services.AddTransient<IImageService, ImageService>();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddAuthenticationClientServices();

@@ -6,13 +6,13 @@ using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorageService.Services;
 
-public class FileManagementService : IFileManagementService
+public class FileService : IFileService
 {
     private readonly IFileNameGenerator _fileNameGenerator;
     private readonly IImageInfoService _imageInfoService;
     private readonly FileStorageSettings _fileStorageSettings;
 
-    public FileManagementService(
+    public FileService(
         IFileNameGenerator fileNameGenerator,
         IImageInfoService imageInfoService,
         IOptions<FileStorageSettings> options)
@@ -22,7 +22,7 @@ public class FileManagementService : IFileManagementService
         _fileStorageSettings = options.Value;
     }
 
-    public Task<byte[]> GetFileContentAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default)
+    public Task<byte[]> ReadFileAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default)
     {
         var imagePath = _fileNameGenerator.GetFilePath(filename, fileType);
         return File.ReadAllBytesAsync(imagePath, cancellationToken);

@@ -2,9 +2,9 @@
 
 namespace LetsTalk.Server.FileStorageService.Abstractions;
 
-public interface IFileManagementService
+public interface IFileService
 {
-    Task<byte[]> GetFileContentAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default);
+    Task<byte[]> ReadFileAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default);
 
     Task<string?> SaveDataAsync(byte[] data, FileTypes fileType, CancellationToken cancellationToken = default);
 

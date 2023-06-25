@@ -9,7 +9,17 @@ public class AuthenticationClient: IAuthenticationClient
 {
     public async Task<string> GenerateJwtTokenAsync(string url, int accountId)
     {
-        var response = await GetGrpcClient(url)
+        using var httpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+        using var channel = GrpcChannel.ForAddress(url, new GrpcChannelOptions
+        {
+            HttpHandler = httpHandler
+        });
+
+        var response = await new JwtTokenGrpcServiceClient(channel)
             .GenerateJwtTokenAsync(new GenerateJwtTokenRequest
             {
                 AccountId = accountId
@@ -19,17 +29,6 @@ public class AuthenticationClient: IAuthenticationClient
     }
 
     public async Task<int?> ValidateJwtTokenAsync(string url, string? token)
-    {
-        var response = await GetGrpcClient(url)
-            .ValidateJwtTokenAsync(new ValidateJwtTokenRequest
-            {
-                Token = token
-            });
-
-        return response.AccountId;
-    }
-
-    private static JwtTokenGrpcServiceClient GetGrpcClient(string url)
     {
         using var httpHandler = new HttpClientHandler
         {
@@ -41,6 +40,12 @@ public class AuthenticationClient: IAuthenticationClient
             HttpHandler = httpHandler
         });
 
-        return new JwtTokenGrpcServiceClient(channel);
+        var response = await new JwtTokenGrpcServiceClient(channel)
+            .ValidateJwtTokenAsync(new ValidateJwtTokenRequest
+            {
+                Token = token
+            });
+
+        return response.AccountId;
     }
 }

@@ -3,6 +3,7 @@ using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.GrpcInterceptors;
 using LetsTalk.Server.FileStorageService.Services;
 using LetsTalk.Server.AuthenticationClient;
+using LetsTalk.Server.Infrastructure;
 
 namespace LetsTalk.Server.FileStorageService;
 
@@ -30,6 +31,7 @@ public static class FileStorageServiceRegistration
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddAuthenticationClientServices();
+        services.AddLoggingServices();
         return services;
     }
 }

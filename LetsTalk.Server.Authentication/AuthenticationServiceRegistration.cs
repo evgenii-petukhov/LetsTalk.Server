@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Authentication.Services;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Infrastructure;
 
 namespace LetsTalk.Server.Authentication
 {
@@ -25,6 +26,7 @@ namespace LetsTalk.Server.Authentication
             services.AddSingleton<IJwtService, JwtService>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddMemoryCache();
+            services.AddLoggingServices();
             return services;
         }
     }

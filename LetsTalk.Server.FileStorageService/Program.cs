@@ -1,6 +1,7 @@
 using LetsTalk.Server.FileStorageService;
 using LetsTalk.Server.FileStorageService.GrpcEndpoints;
 using LetsTalk.Server.Persistence;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,18 @@ builder.Configuration
 builder.Services.AddFileStorageServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
 
+builder.Host.UseSerilog((context, loggerConfig) =>
+{
+    loggerConfig
+    .WriteTo.Console()
+    .ReadFrom.Configuration(context.Configuration);
+});
+
 var app = builder.Build();
 
 app.UseCors("all");
+
+app.UseSerilogRequestLogging();
 
 app.UseGrpcWeb();
 

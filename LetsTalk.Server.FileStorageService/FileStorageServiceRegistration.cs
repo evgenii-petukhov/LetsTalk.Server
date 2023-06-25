@@ -29,11 +29,11 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IFileNameGenerator, FileNameGenerator>();
         services.AddTransient<IImageInfoService, ImageInfoService>();
         services.AddTransient<IImageService, ImageService>();
+        services.AddSingleton<IImageCacheService, ImageCacheService>();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddAuthenticationClientServices();
         services.AddLoggingServices();
-        services.AddMemoryCache();
         return services;
     }
 }

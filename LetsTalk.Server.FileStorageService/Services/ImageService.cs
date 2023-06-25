@@ -2,7 +2,6 @@
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace LetsTalk.Server.FileStorageService.Services;
 
@@ -13,7 +12,7 @@ public class ImageService : IImageService
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
     private readonly IAccountRepository _accountRepository;
-    private readonly IMemoryCache _memoryCache;
+    private readonly IImageCacheService _imageCacheService;
 
     public ImageService(
         IFileService fileService,
@@ -21,14 +20,14 @@ public class ImageService : IImageService
         IFileRepository fileRepository,
         IImageInfoService imageInfoService,
         IAccountRepository accountRepository,
-        IMemoryCache memoryCache)
+        IImageCacheService imageCacheService)
     {
         _fileService = fileService;
         _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
         _accountRepository = accountRepository;
-        _memoryCache = memoryCache;
+        _imageCacheService = imageCacheService;
     }
 
     public async Task SaveImageAsync(byte[] content, ImageTypes imageType, int accountId, CancellationToken cancellationToken = default)
@@ -54,7 +53,7 @@ public class ImageService : IImageService
             FileId = file.Id
         }, cancellationToken);
 
-        _memoryCache.Set(image.Id, file.FileName);
+        _imageCacheService.Add(image.Id, file.FileName!);
 
         if (imageType == ImageTypes.Avatar)
         {
@@ -64,11 +63,10 @@ public class ImageService : IImageService
 
     public async Task<byte[]> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
     {
-        var filename = await _memoryCache.GetOrCreateAsync(imageId, async cacheEntry =>
+        var filename = await _imageCacheService.GetOrAddAsync(imageId, async key =>
         {
-            cacheEntry.Priority = CacheItemPriority.NeverRemove;
-            var image = await _imageRepository.GetByIdWithFileAsync(imageId, cancellationToken);
-            return image!.File!.FileName;
+            var image = await _imageRepository.GetByIdWithFileAsync(key, cancellationToken);
+            return image!.File!.FileName!;
         });
 
         return await _fileService.ReadFileAsync(filename!, FileTypes.Image, cancellationToken);
@@ -83,7 +81,7 @@ public class ImageService : IImageService
             return;
         }
 
-        _memoryCache.Remove(imageId);
+        _imageCacheService.Remove(imageId.Value);
         var file = account!.Image?.File;
         if (file != null)
         {

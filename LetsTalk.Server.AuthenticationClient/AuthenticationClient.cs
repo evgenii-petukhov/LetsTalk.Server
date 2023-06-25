@@ -2,43 +2,67 @@
 using LetsTalk.Server.Authentication;
 using static LetsTalk.Server.Authentication.JwtTokenGrpcService;
 using LetsTalk.Server.Authentication.Abstractions;
+using LetsTalk.Server.Configuration.Models;
+using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.AuthenticationClient;
 
-public class AuthenticationClient: IAuthenticationClient
+public class AuthenticationClient: IAuthenticationClient, IDisposable
 {
+    private readonly HttpClientHandler _httpClientHandler;
+    private readonly GrpcChannel _grpcChannel;
+    private bool _disposedValue;
+
+    public AuthenticationClient(IOptions<AuthenticationSettings> options)
+    {
+        _httpClientHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+        _grpcChannel = GrpcChannel.ForAddress(options.Value.Url!, new GrpcChannelOptions
+        {
+            HttpHandler = _httpClientHandler
+        });
+    }
+
     public async Task<string> GenerateJwtTokenAsync(string url, int accountId)
     {
-        var response = await InvokeAsync(url, async x => await x.GenerateJwtTokenAsync(new GenerateJwtTokenRequest
+        var response = await new JwtTokenGrpcServiceClient(_grpcChannel).GenerateJwtTokenAsync(new GenerateJwtTokenRequest
         {
             AccountId = accountId
-        }));
+        });
 
         return response.Token;
     }
 
     public async Task<int?> ValidateJwtTokenAsync(string url, string? token)
     {
-        var response = await InvokeAsync(url, async x => await x.ValidateJwtTokenAsync(new ValidateJwtTokenRequest
+        var response = await new JwtTokenGrpcServiceClient(_grpcChannel).ValidateJwtTokenAsync(new ValidateJwtTokenRequest
         {
             Token = token
-        }));
+        });
 
         return response.AccountId;
     }
 
-    private static async Task<T> InvokeAsync<T>(string url, Func<JwtTokenGrpcServiceClient, Task<T>> predicate)
+    protected virtual void Dispose(bool disposing)
     {
-        using var httpHandler = new HttpClientHandler
+        if (!_disposedValue)
         {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
+            if (disposing)
+            {
+                _grpcChannel.Dispose();
+                _httpClientHandler.Dispose();
+            }
 
-        using var channel = GrpcChannel.ForAddress(url, new GrpcChannelOptions
-        {
-            HttpHandler = httpHandler
-        });
+            _disposedValue = true;
+        }
+    }
 
-        return await predicate.Invoke(new JwtTokenGrpcServiceClient(channel));
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

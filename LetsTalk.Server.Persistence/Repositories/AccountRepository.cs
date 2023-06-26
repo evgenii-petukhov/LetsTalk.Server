@@ -28,31 +28,13 @@ namespace LetsTalk.Server.Persistence.Repositories
 
         public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id, CancellationToken cancellationToken = default)
         {
-            var sentMessageDates = _context.Messages
-                .Where(x => x.SenderId == id)
-                .GroupBy(x => x.RecipientId)
+            var lastMessageDates = _context.Messages
+                .Where(x => x.SenderId == id || x.RecipientId == id)
+                .GroupBy(x => x.RecipientId == id ? x.SenderId : x.RecipientId)
                 .Select(g => new
                 {
                     AccountId = g.Key,
                     LastMessageDate = g.Max(x => x.DateCreatedUnix)
-                });
-
-            var receivedMessageDates = _context.Messages
-                .Where(x => x.RecipientId == id)
-                .GroupBy(x => x.SenderId)
-                .Select(g => new
-                {
-                    AccountId = g.Key,
-                    LastMessageDate = g.Max(x => x.DateCreatedUnix)
-                });
-
-            var lastMessageDates = sentMessageDates
-                .Concat(receivedMessageDates)
-                .GroupBy(x => x.AccountId)
-                .Select(x => new
-                {
-                    AccountId = x.Key,
-                    LastMessageDate = x.Max(a => a.LastMessageDate)
                 });
 
             var unreadMessageCounts = _context.Set<Account>()

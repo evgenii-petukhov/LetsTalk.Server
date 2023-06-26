@@ -7,8 +7,8 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Core;
-using LetsTalk.Server.Infrastructure;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Logging;
 
 namespace LetsTalk.Server.API;
 

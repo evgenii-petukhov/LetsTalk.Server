@@ -59,7 +59,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                     ImageUrl = openGraphModel.ImageUrl
                 });
             }
-            catch(DbUpdateException)
+            catch (DbUpdateException)
             {
                 linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
             }

@@ -6,7 +6,7 @@ namespace LetsTalk.Server.Domain;
 
 [Table("linkpreviews")]
 [Index(nameof(Url), IsUnique = true)]
-public class LinkPreview: BaseEntity
+public class LinkPreview : BaseEntity
 {
     [Required]
     [Column(TypeName = "longtext")]

@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.Options;
+﻿using LetsTalk.Server.API.Models.Login;
+using LetsTalk.Server.Authentication.Abstractions;
+using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Enums;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
-using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.Core.Models;
-using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.API.Models.Login;
 
 namespace LetsTalk.Server.Core.Services;
 
@@ -41,7 +41,9 @@ public class FacebookService : IFacebookService
             var response = await client.GetAsync(request, cancellationToken: cancellationToken);
 
             if (!response.IsSuccessful)
+            {
                 throw new BadRequestException(response.ErrorMessage!);
+            }
 
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;

@@ -1,14 +1,13 @@
-﻿using KafkaFlow.TypedHandler;
-using KafkaFlow;
-using LetsTalk.Server.LinkPreview.Abstractions;
-using LetsTalk.Server.Configuration.Models;
+﻿using KafkaFlow;
 using KafkaFlow.Producers;
-using Microsoft.Extensions.Options;
-using LetsTalk.Server.Notifications.Models;
-using LetsTalk.Server.LinkPreview.Models;
+using KafkaFlow.TypedHandler;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.LinkPreview.Abstractions;
+using LetsTalk.Server.LinkPreview.Models;
+using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.Abstractions;
-using System.Threading;
+using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -34,11 +33,18 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
     {
-        if (request.Url == null) return;
+        if (request.Url == null)
+        {
+            return;
+        }
 
         var linkPreview = await _linkPreviewGenerator.GetLinkPreviewAsync(request.Url);
 
-        if (linkPreview == null) return;
+        if (linkPreview == null)
+        {
+            return;
+        }
+
         await Task.WhenAll(
             _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id),
             SendNotificationAsync(request.RecipientId, request.SenderId, request.MessageId, linkPreview),

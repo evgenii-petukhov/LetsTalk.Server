@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
-using Microsoft.Extensions.Options;
 using LetsTalk.Server.Persistence.Enums;
+using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorageService.Services;
 

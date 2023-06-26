@@ -51,10 +51,9 @@ public class JwtService : IJwtService, IDisposable
 
     public int? ValidateJwtToken(string? token)
     {
-        if (token == null)
-            return null;
-
-        return _memoryCache.GetOrCreate(token, cacheEntry =>
+        return token == null
+            ? null
+            : _memoryCache.GetOrCreate(token, cacheEntry =>
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             tokenHandler.ValidateToken(token, new TokenValidationParameters

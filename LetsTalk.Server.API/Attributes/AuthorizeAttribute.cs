@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace LetsTalk.Server.API.Attributes;
 
@@ -12,7 +12,9 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         // skip authorization if action is decorated with [AllowAnonymous] attribute
         var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
         if (allowAnonymous)
+        {
             return;
+        }
 
         // authorization
         var accountId = (int?)context.HttpContext.Items["AccountId"];

@@ -3,7 +3,7 @@
 namespace LetsTalk.Server.Domain;
 
 [Table("messages")]
-public class Message: BaseEntity
+public class Message : BaseEntity
 {
     public string? Text { get; set; }
 

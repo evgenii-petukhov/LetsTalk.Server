@@ -3,7 +3,7 @@
 namespace LetsTalk.Server.Domain;
 
 [Table("files")]
-public class File: BaseEntity
+public class File : BaseEntity
 {
     public string? FileName { get; set; }
 

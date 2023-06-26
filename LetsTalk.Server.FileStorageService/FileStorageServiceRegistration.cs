@@ -1,9 +1,9 @@
-﻿using LetsTalk.Server.Configuration.Models;
+﻿using LetsTalk.Server.AuthenticationClient;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.GrpcInterceptors;
 using LetsTalk.Server.FileStorageService.Services;
-using LetsTalk.Server.AuthenticationClient;
-using LetsTalk.Server.Infrastructure;
+using LetsTalk.Server.Logging;
 
 namespace LetsTalk.Server.FileStorageService;
 

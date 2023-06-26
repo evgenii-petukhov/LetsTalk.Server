@@ -3,7 +3,7 @@
 namespace LetsTalk.Server.Domain;
 
 [Table("imagetypes")]
-public class ImageType: BaseEntity
+public class ImageType : BaseEntity
 {
     public string? Name { get; set; }
 }

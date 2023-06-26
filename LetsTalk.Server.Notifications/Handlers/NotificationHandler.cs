@@ -1,11 +1,11 @@
-﻿using KafkaFlow.TypedHandler;
-using KafkaFlow;
+﻿using KafkaFlow;
+using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Models;
 
 namespace LetsTalk.Server.Notifications.Handlers;
 
-public abstract class NotificationHandler<T> : IMessageHandler<Notification<T>> where T:class
+public abstract class NotificationHandler<T> : IMessageHandler<Notification<T>> where T : class
 {
     protected readonly INotificationService _notificationService;
 

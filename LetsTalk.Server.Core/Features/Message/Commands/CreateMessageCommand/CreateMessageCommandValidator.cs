@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.Persistence.Abstractions;
-using System.Threading;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
-public class CreateMessageCommandValidator: AbstractValidator<CreateMessageCommand>
+public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
     private readonly IAccountRepository _accountRepository;
 

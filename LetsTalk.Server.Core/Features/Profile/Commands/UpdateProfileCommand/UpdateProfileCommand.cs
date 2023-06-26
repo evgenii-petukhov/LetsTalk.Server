@@ -3,7 +3,7 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommand: IRequest<AccountDto>
+public class UpdateProfileCommand : IRequest<AccountDto>
 {
     public int? AccountId { get; set; }
 

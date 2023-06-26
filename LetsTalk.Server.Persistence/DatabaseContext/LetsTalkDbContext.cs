@@ -6,9 +6,9 @@ namespace LetsTalk.Server.Persistence.DatabaseContext;
 
 public class LetsTalkDbContext : DbContext
 {
-	public LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : base(options)
+    public LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : base(options)
     {
-	}
+    }
 
     public DbSet<AccountType> AccountTypes { get; set; }
 

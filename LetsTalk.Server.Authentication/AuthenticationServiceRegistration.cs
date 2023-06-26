@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Authentication.Services;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Infrastructure;
+using LetsTalk.Server.Logging;
 
 namespace LetsTalk.Server.Authentication
 {

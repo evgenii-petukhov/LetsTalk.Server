@@ -6,7 +6,7 @@ using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 
-public class ProfileProfile: Profile
+public class ProfileProfile : Profile
 {
     public ProfileProfile()
     {

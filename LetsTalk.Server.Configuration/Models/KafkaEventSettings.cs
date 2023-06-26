@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace LetsTalk.Server.Configuration.Models;
+﻿namespace LetsTalk.Server.Configuration.Models;
 
 public class KafkaEventSettings
 {

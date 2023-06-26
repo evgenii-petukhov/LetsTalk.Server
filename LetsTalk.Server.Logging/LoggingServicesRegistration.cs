@@ -1,8 +1,7 @@
-﻿using LetsTalk.Server.Logging;
-using LetsTalk.Server.Logging.Abstractions;
+﻿using LetsTalk.Server.Logging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LetsTalk.Server.Infrastructure;
+namespace LetsTalk.Server.Logging;
 
 public static class LoggingServicesRegistration
 {

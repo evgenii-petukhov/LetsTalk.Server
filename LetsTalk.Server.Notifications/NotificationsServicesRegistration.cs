@@ -1,13 +1,13 @@
-﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Notifications.Abstractions;
-using LetsTalk.Server.Notifications.Services;
-using LetsTalk.Server.AuthenticationClient;
-using LetsTalk.Server.Infrastructure;
-using LetsTalk.Server.Configuration;
-using KafkaFlow;
+﻿using KafkaFlow;
 using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
+using LetsTalk.Server.AuthenticationClient;
+using LetsTalk.Server.Configuration;
+using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Logging;
+using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;
+using LetsTalk.Server.Notifications.Services;
 
 namespace LetsTalk.Server.Notifications;
 

@@ -4,7 +4,7 @@ using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 
-public class AccountProfile: Profile
+public class AccountProfile : Profile
 {
     public AccountProfile()
     {

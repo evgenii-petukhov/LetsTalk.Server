@@ -1,5 +1,5 @@
-﻿using Grpc.Core.Interceptors;
-using Grpc.Core;
+﻿using Grpc.Core;
+using Grpc.Core.Interceptors;
 using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Configuration.Models;
 using Microsoft.Extensions.Options;

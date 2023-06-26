@@ -30,30 +30,23 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
         var lastMessageDates = _context.Messages
             .Where(x => x.SenderId == id || x.RecipientId == id)
-            .GroupBy(x => x.RecipientId == id ? x.SenderId : x.RecipientId)
+            .GroupBy(x => new
+            {
+                x.RecipientId,
+                x.SenderId
+            })
+            .Select(g => new
+            {
+                AccountId = g.Key.RecipientId == id ? g.Key.SenderId : g.Key.RecipientId,
+                LastMessageDate = g.Max(x => x.DateCreatedUnix),
+                UnreadCount = g.Count(x => g.Key.RecipientId == id && !x.IsRead)
+            })
+            .GroupBy(g => g.AccountId)
             .Select(g => new
             {
                 AccountId = g.Key,
-                LastMessageDate = g.Max(x => x.DateCreatedUnix)
-            });
-
-        var unreadMessageCounts = _context.Set<Account>()
-            .Where(account => account.Id != id)
-            .Join(
-                _context.Messages
-                    .Where(message => message.RecipientId == id && !message.IsRead),
-                account => account.Id,
-                message => message.SenderId,
-                (account, message) => new
-                {
-                    Account = account,
-                    Message = message
-                })
-            .GroupBy(g => g.Account)
-            .Select(g => new
-            {
-                AccountId = g.Key.Id,
-                UnreadCount = g.Count()
+                LastMessageDate = g.Max(x => x.LastMessageDate),
+                UnreadCount = g.Sum(x => x.UnreadCount)
             });
 
         return await _context.Accounts
@@ -61,42 +54,25 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
             {
                 Account = x,
-                LastMessageDates = y
+                Metrics = y
             })
             .SelectMany(
-                x => x.LastMessageDates.DefaultIfEmpty(),
+                x => x.Metrics.DefaultIfEmpty(),
                 (x, y) => new
                 {
                     x.Account,
-                    LastMessageDates = y
-                })
-            .Select(x => new
-            {
-                x.Account,
-                x.LastMessageDates!.LastMessageDate
-            })
-            .GroupJoin(unreadMessageCounts, x => x.Account.Id, x => x.AccountId, (x, y) => new
-            {
-                Account = x,
-                UnreadMessageCounts = y
-            })
-            .SelectMany(
-                x => x.UnreadMessageCounts.DefaultIfEmpty(),
-                (x, y) => new
-                {
-                    AccountInfo = x.Account,
-                    UnreadMessageCounts = y
+                    Metrics = y
                 })
             .Select(x => new AccountWithUnreadCount
             {
-                Id = x.AccountInfo.Account.Id,
-                FirstName = x.AccountInfo.Account.FirstName,
-                LastName = x.AccountInfo.Account.LastName,
-                PhotoUrl = x.AccountInfo.Account.PhotoUrl,
-                AccountTypeId = x.AccountInfo.Account.AccountTypeId,
-                LastMessageDate = x.AccountInfo.LastMessageDate,
-                UnreadCount = x.UnreadMessageCounts!.UnreadCount,
-                ImageId = x.AccountInfo.Account.ImageId
+                Id = x.Account.Id,
+                FirstName = x.Account.FirstName,
+                LastName = x.Account.LastName,
+                PhotoUrl = x.Account.PhotoUrl,
+                AccountTypeId = x.Account.AccountTypeId,
+                LastMessageDate = x.Metrics!.LastMessageDate,
+                UnreadCount = x.Metrics.UnreadCount,
+                ImageId = x.Account.ImageId
             })
             .ToListAsync(cancellationToken: cancellationToken);
     }

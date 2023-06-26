@@ -32,14 +32,14 @@ public class FileService : IFileService
     {
         if (fileType == FileTypes.Image)
         {
-            var (width, height) = _imageInfoService.GetImageSize(data);
+            (int width, int height) = _imageInfoService.GetImageSize(data);
             if (width > _fileStorageSettings.AvatarMaxWidth || height > _fileStorageSettings.AvatarMaxWidth)
             {
                 throw new ImageSizeException("Image size exceeds max dimensions");
             }
         }
 
-        var (filename, filepath) = _fileNameGenerator.Generate(fileType);
+        (string filename, string filepath) = _fileNameGenerator.Generate(fileType);
         await File.WriteAllBytesAsync(filepath, data, cancellationToken);
         return filename;
     }

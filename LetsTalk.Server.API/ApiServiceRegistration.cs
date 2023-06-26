@@ -1,14 +1,14 @@
 ﻿using KafkaFlow;
 using KafkaFlow.Serializer;
+using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
+using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Core;
+using LetsTalk.Server.Logging;
 using LetsTalk.Server.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using LetsTalk.Server.AuthenticationClient;
-using LetsTalk.Server.Core;
-using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Logging;
 
 namespace LetsTalk.Server.API;
 

@@ -31,7 +31,9 @@ public class JwtService : IJwtService, IDisposable
         _signingCredentials = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
         if (string.IsNullOrEmpty(_jwtSettings.Key))
+        {
             throw new AppException("JWT secret not configured");
+        }
     }
 
     public string GenerateJwtToken(int accountId)

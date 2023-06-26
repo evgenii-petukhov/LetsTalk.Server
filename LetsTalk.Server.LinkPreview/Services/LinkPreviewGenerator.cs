@@ -52,12 +52,13 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
             try
             {
-                linkPreview = await _linkPreviewRepository.CreateAsync(new Domain.LinkPreview
+                linkPreview = new Domain.LinkPreview
                 {
                     Url = url,
                     Title = openGraphModel.Title,
                     ImageUrl = openGraphModel.ImageUrl
-                });
+                };
+                await _linkPreviewRepository.CreateAsync(linkPreview);
             }
             catch (DbUpdateException)
             {

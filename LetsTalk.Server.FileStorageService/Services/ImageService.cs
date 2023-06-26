@@ -46,18 +46,20 @@ public class ImageService : IImageService
         var data = content.ToArray();
         var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, cancellationToken);
 
-        var file = await _fileRepository.CreateAsync(new Domain.File
+        var file = new Domain.File
         {
             FileName = filename,
             FileTypeId = (int)FileTypes.Image,
-        }, cancellationToken);
+        };
+        await _fileRepository.CreateAsync(file, cancellationToken);
 
-        var image = await _imageRepository.CreateAsync(new Image
+        var image = new Image
         {
             ImageContentTypeId = (int)_imageInfoService.GetImageContentType(data),
             ImageTypeId = (int)imageType,
             FileId = file.Id
-        }, cancellationToken);
+        };
+        await _imageRepository.CreateAsync(image, cancellationToken);
 
         _memoryCache.Set(image.Id, file.FileName, _fileStorageSettings.FilenameByImageIdCacheLifetime);
 

@@ -6,4 +6,5 @@ public class FileStorageSettings
     public string? ImageFolder { get; set; }
     public int AvatarMaxWidth { get; set; }
     public int AvatarMaxHeight { get; set; }
+    public TimeSpan FilenameByImageIdCacheLifetime { get; set; }
 }

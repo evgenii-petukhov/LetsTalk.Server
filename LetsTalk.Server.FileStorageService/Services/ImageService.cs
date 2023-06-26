@@ -1,8 +1,10 @@
-﻿using LetsTalk.Server.Domain;
+﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Domain;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorageService.Services;
 
@@ -14,6 +16,7 @@ public class ImageService : IImageService
     private readonly IImageInfoService _imageInfoService;
     private readonly IAccountRepository _accountRepository;
     private readonly IMemoryCache _memoryCache;
+    private readonly FileStorageSettings _fileStorageSettings;
 
     public ImageService(
         IFileService fileService,
@@ -21,7 +24,8 @@ public class ImageService : IImageService
         IFileRepository fileRepository,
         IImageInfoService imageInfoService,
         IAccountRepository accountRepository,
-        IMemoryCache memoryCache)
+        IMemoryCache memoryCache,
+        IOptions<FileStorageSettings> options)
     {
         _fileService = fileService;
         _imageRepository = imageRepository;
@@ -29,6 +33,7 @@ public class ImageService : IImageService
         _imageInfoService = imageInfoService;
         _accountRepository = accountRepository;
         _memoryCache = memoryCache;
+        _fileStorageSettings = options.Value;
     }
 
     public async Task SaveImageAsync(byte[] content, ImageTypes imageType, int accountId, CancellationToken cancellationToken = default)
@@ -54,7 +59,7 @@ public class ImageService : IImageService
             FileId = file.Id
         }, cancellationToken);
 
-        _memoryCache.Set(image.Id, file.FileName);
+        _memoryCache.Set(image.Id, file.FileName, _fileStorageSettings.FilenameByImageIdCacheLifetime);
 
         if (imageType == ImageTypes.Avatar)
         {
@@ -66,7 +71,7 @@ public class ImageService : IImageService
     {
         var filename = await _memoryCache.GetOrCreateAsync(imageId, async cacheEntry =>
         {
-            cacheEntry.Priority = CacheItemPriority.NeverRemove;
+            cacheEntry.AbsoluteExpirationRelativeToNow = _fileStorageSettings.FilenameByImageIdCacheLifetime;
             var image = await _imageRepository.GetByIdWithFileAsync(imageId, cancellationToken);
             return image!.File!.FileName;
         });

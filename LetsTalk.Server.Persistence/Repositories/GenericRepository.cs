@@ -18,7 +18,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         try
         {
             _context.Set<T>().Add(entity);
-            await _context.SaveChangesAsync(true, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return;
         }
         catch

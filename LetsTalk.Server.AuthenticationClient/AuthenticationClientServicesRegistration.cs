@@ -14,7 +14,9 @@ public static class AuthenticationClientServicesRegistration
         services.AddSingleton<IAuthenticationClient, AuthenticationClient>();
         services.AddGrpcClient<JwtTokenGrpcServiceClient>(options => options.Address = new Uri(configuration.GetValue<string>("AuthenticationSettings:Url")!)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
+#if DEBUG
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+#endif
         });
 
         return services;

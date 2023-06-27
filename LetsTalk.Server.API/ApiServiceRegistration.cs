@@ -24,7 +24,7 @@ public static class ApiServiceRegistration
         services.AddCoreServices();
         services.AddPersistenceServices(configuration);
         services.AddLoggingServices();
-        services.AddAuthenticationClientServices();
+        services.AddAuthenticationClientServices(configuration);
         services.AddControllers();
         services.AddCors(options =>
         {

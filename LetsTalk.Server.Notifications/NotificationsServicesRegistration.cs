@@ -21,7 +21,7 @@ public static class NotificationsServicesRegistration
         services.AddSingleton<IConnectionManager, ConnectionManager>();
         services.AddTransient<INotificationService, NotificationService>();
         services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
-        services.AddAuthenticationClientServices();
+        services.AddAuthenticationClientServices(configuration);
         services.AddControllers();
         services.AddSignalR(o => o.EnableDetailedErrors = true);
         services.AddCors(options =>

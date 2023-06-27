@@ -12,10 +12,10 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
     }
 
-    public Task<Account?> GetByExternalIdAsync(string externalId, AccountTypes accountTypes, CancellationToken cancellationToken = default)
+    public IQueryable<Account> GetByExternalId(string externalId, AccountTypes accountTypes)
     {
         return _context.Accounts
-            .SingleOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes, cancellationToken: cancellationToken);
+            .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
     }
 
     public Task<Account?> GetByIdIncludingFilesAsync(int id, CancellationToken cancellationToken = default)

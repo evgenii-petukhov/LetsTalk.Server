@@ -28,50 +28,51 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
 
     public async Task<Domain.LinkPreview?> GetLinkPreviewAsync(string url)
     {
-        var linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
-
-        if (linkPreview != null)
-        {
-            _logger.LogInformation("Fetched from DB: {url}", url);
-            return linkPreview;
-        }
-
+        Domain.LinkPreview linkPreview;
         try
         {
-            var pageString = await _downloadService.DownloadAsStringAsync(url);
-
-            var openGraphModel = _regexService.GetOpenGraphModel(pageString);
-            _logger.LogInformation("{@opModel}", openGraphModel);
-
-            if (string.IsNullOrWhiteSpace(openGraphModel.Title))
-            {
-                _logger.LogInformation("og:title not found: {url}", url);
-                return null;
-            }
-
-            openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
-            try
-            {
-                linkPreview = new Domain.LinkPreview
-                {
-                    Url = url,
-                    Title = openGraphModel.Title,
-                    ImageUrl = openGraphModel.ImageUrl
-                };
-                await _linkPreviewRepository.CreateAsync(linkPreview);
-            }
-            catch (DbUpdateException)
-            {
-                linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
-            }
-
-            _logger.LogInformation("{@linkPreview}", linkPreview);
+            linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
+            _logger.LogInformation("Fetched from DB: {@linkPreview}", linkPreview);
             return linkPreview;
         }
-        catch (Exception e)
+        catch (InvalidOperationException)
         {
-            _logger.LogError(e, "Unable to download: {url}", url);
-            return null;
+            try
+            {
+                var pageString = await _downloadService.DownloadAsStringAsync(url);
+
+                var openGraphModel = _regexService.GetOpenGraphModel(pageString);
+
+                if (string.IsNullOrWhiteSpace(openGraphModel.Title))
+                {
+                    _logger.LogInformation("Title is empty: {url}", url);
+                    return null;
+                }
+
+                openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
+                try
+                {
+                    linkPreview = new Domain.LinkPreview
+                    {
+                        Url = url,
+                        Title = openGraphModel.Title,
+                        ImageUrl = openGraphModel.ImageUrl
+                    };
+                    await _linkPreviewRepository.CreateAsync(linkPreview);
+                    _logger.LogInformation("New LinkPreview added: {@linkPreview}", linkPreview);
+                }
+                catch (DbUpdateException)
+                {
+                    linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
+                    _logger.LogInformation("Fetched from DB: {@linkPreview}", linkPreview);
+                }
+                return linkPreview;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to download: {url}", url);
+                return null;
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
 
 namespace LetsTalk.Server.Persistence.Services;
 
@@ -23,12 +24,22 @@ public class AccountDataLayerService : IAccountDataLayerService
         string? photoUrl,
         CancellationToken cancellationToken)
     {
-        var account = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
-        if (account == null)
+        try
+        {
+            var account = await _accountRepository.GetByExternalId(externalId, accountType)
+                .FirstAsync(cancellationToken);
+
+            await (account.ImageId.HasValue
+                ? _accountRepository.UpdateAsync(account.Id, firstName, lastName, email, cancellationToken)
+                : _accountRepository.UpdateAsync(account.Id, firstName, lastName, email, photoUrl, cancellationToken));
+
+            return account.Id;
+        }
+        catch (InvalidOperationException)
         {
             try
             {
-                account = new Account
+                var account = new Account
                 {
                     ExternalId = externalId,
                     AccountTypeId = (int)accountType,
@@ -42,19 +53,10 @@ public class AccountDataLayerService : IAccountDataLayerService
             }
             catch (DbUpdateException)
             {
-                account = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
+                return await _accountRepository.GetByExternalId(externalId, accountType)
+                    .Select(x => x.Id)
+                    .FirstAsync(cancellationToken);
             }
         }
-
-        if (account!.ImageId.HasValue)
-        {
-            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, cancellationToken);
-        }
-        else
-        {
-            await _accountRepository.UpdateAsync(account!.Id, firstName, lastName, email, photoUrl, cancellationToken);
-        }
-
-        return account.Id;
     }
 }

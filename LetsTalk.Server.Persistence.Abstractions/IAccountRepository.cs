@@ -5,7 +5,7 @@ namespace LetsTalk.Server.Persistence.Abstractions;
 
 public interface IAccountRepository : IGenericRepository<Account>
 {
-    Task<Account?> GetByExternalIdAsync(string externalId, AccountTypes accountTypes, CancellationToken cancellationToken = default);
+    IQueryable<Account> GetByExternalId(string externalId, AccountTypes accountTypes);
 
     Task<Account?> GetByIdIncludingFilesAsync(int id, CancellationToken cancellationToken = default);
 

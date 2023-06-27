@@ -13,9 +13,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _context = context;
     }
 
-    public Task CreateAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        _context.Set<T>().Add(entity);
-        return _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            _context.Set<T>().Add(entity);
+            await _context.SaveChangesAsync(true, cancellationToken);
+            return;
+        }
+        catch
+        {
+            _context.ChangeTracker.Clear();
+            throw;
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Dto.Models;
@@ -8,7 +7,6 @@ using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Logging.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -21,18 +19,15 @@ public class VkService : IVkService
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IAppLogger<VkService> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
-    private readonly AuthenticationSettings _authenticationSettings;
 
     public VkService(
         IAccountDataLayerService accountDataLayerService,
         IAppLogger<VkService> appLogger,
-        IAuthenticationClient authenticationClient,
-        IOptions<AuthenticationSettings> options)
+        IAuthenticationClient authenticationClient)
     {
         _accountDataLayerService = accountDataLayerService;
         _appLogger = appLogger;
         _authenticationClient = authenticationClient;
-        _authenticationSettings = options.Value;
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
@@ -67,7 +62,7 @@ public class VkService : IVkService
                 cancellationToken);
 
             // generate jwt token to access secure routes on this API
-            var token = await _authenticationClient.GenerateJwtTokenAsync(_authenticationSettings.Url!, accountId);
+            var token = await _authenticationClient.GenerateJwtTokenAsync(accountId);
 
             return new LoginResponseDto
             {

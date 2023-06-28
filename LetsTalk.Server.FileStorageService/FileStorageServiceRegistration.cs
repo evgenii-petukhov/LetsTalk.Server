@@ -30,7 +30,6 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IImageInfoService, ImageInfoService>();
         services.AddTransient<IImageService, ImageService>();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
-        services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddMemoryCache();

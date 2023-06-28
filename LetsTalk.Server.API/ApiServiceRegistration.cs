@@ -87,7 +87,6 @@ public static class ApiServiceRegistration
                         )
                 )
         );
-        services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
 
         return services;

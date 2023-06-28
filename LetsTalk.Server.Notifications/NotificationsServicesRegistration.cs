@@ -3,7 +3,6 @@ using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
-using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;
@@ -20,7 +19,6 @@ public static class NotificationsServicesRegistration
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddSingleton<IConnectionManager, ConnectionManager>();
         services.AddTransient<INotificationService, NotificationService>();
-        services.Configure<AuthenticationSettings>(configuration.GetSection("AuthenticationSettings"));
         services.AddAuthenticationClientServices(configuration);
         services.AddControllers();
         services.AddSignalR(o => o.EnableDetailedErrors = true);

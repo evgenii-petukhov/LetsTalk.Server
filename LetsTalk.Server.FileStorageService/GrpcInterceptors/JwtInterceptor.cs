@@ -1,22 +1,17 @@
 ﻿using Grpc.Core;
 using Grpc.Core.Interceptors;
 using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Configuration.Models;
-using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorageService.GrpcInterceptors;
 
 public class JwtInterceptor : Interceptor
 {
     private readonly IAuthenticationClient _authenticationClient;
-    private readonly AuthenticationSettings _authenticationSettings;
 
     public JwtInterceptor(
-        IAuthenticationClient authenticationClient,
-        IOptions<AuthenticationSettings> options)
+        IAuthenticationClient authenticationClient)
     {
         _authenticationClient = authenticationClient;
-        _authenticationSettings = options.Value;
     }
 
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
@@ -30,7 +25,7 @@ public class JwtInterceptor : Interceptor
             throw new UnauthorizedAccessException();
         }
 
-        var accountId = await _authenticationClient.ValidateJwtTokenAsync(_authenticationSettings.Url!, token.Value);
+        var accountId = await _authenticationClient.ValidateJwtTokenAsync(token.Value);
         if (!accountId.HasValue)
         {
             throw new UnauthorizedAccessException();

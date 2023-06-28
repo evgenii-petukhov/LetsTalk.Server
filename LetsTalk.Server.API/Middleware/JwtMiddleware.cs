@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Configuration.Models;
-using Microsoft.Extensions.Options;
+using System.Globalization;
 
 namespace LetsTalk.Server.API.Middleware;
 
@@ -15,20 +14,21 @@ public class JwtMiddleware
 
     public async Task InvokeAsync(
         HttpContext context,
-        IAuthenticationClient authenticationClient,
-        IOptions<AuthenticationSettings> options)
+        IAuthenticationClient authenticationClient)
     {
         var token = context.Request.Headers["Authorization"]
             .FirstOrDefault()?
             .Split(" ")
             .Last();
 
-        var accountId = await authenticationClient.ValidateJwtTokenAsync(options.Value.Url!, token);
-        if (accountId != null)
+        if (!string.IsNullOrEmpty(token))
         {
-            context.Items["AccountId"] = accountId;
+            var accountId = await authenticationClient.ValidateJwtTokenAsync(token);
+            if (accountId != null)
+            {
+                context.Items["AccountId"] = accountId;
+            }
         }
-
         await _next(context);
     }
 }

@@ -14,7 +14,6 @@ public class LinkPreviewRepository : GenericRepository<LinkPreview>, ILinkPrevie
     public Task<LinkPreview?> GetByUrlOrDefaultAsync(string url, CancellationToken cancellationToken = default)
     {
         return _context.LinkPreviews
-            .Where(q => q.Url == url)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(q => q.Url == url, cancellationToken);
     }
 }

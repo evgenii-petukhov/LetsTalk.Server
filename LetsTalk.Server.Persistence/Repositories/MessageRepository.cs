@@ -25,27 +25,33 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         return _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(message => message.IsRead, true)
+                .SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
     }
 
     public Task MarkAllAsReadAsync(int senderId, int recipientId, CancellationToken cancellationToken = default)
     {
         return _context.Messages
             .Where(message => message.SenderId == recipientId && message.RecipientId == senderId && !message.IsRead)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.IsRead, true).SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(message => message.IsRead, true)
+                .SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
     }
 
     public Task SetTextHtmlAsync(int messageId, string html, CancellationToken cancellationToken = default)
     {
         return _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.TextHtml, html), cancellationToken: cancellationToken);
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(message => message.TextHtml, html), cancellationToken: cancellationToken);
     }
 
     public Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default)
     {
         return _context.Messages
             .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x.SetProperty(message => message.LinkPreviewId, linkPreviewId), cancellationToken: cancellationToken);
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(message => message.LinkPreviewId, linkPreviewId), cancellationToken: cancellationToken);
     }
 }

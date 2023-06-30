@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

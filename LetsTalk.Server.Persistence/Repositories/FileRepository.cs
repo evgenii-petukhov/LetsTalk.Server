@@ -10,16 +10,10 @@ public class FileRepository : GenericRepository<Domain.File>, IFileRepository
     {
     }
 
-    public Task<Domain.File?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return _context.Files
-            .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
-    }
-
     public Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Files
-            .Where(image => image.Id == id)
+            .Where(file => file.Id == id)
             .ExecuteDeleteAsync(cancellationToken);
     }
 }

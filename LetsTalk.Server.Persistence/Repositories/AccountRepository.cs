@@ -18,15 +18,15 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
     }
 
-    public Task<Account?> GetByIdIncludingFilesAsync(int id, CancellationToken cancellationToken = default)
+    public IQueryable<Account> GetById(int id, bool includeImage = false, bool includeFile = false)
     {
         return _context.Accounts
-            .Include(x => x.Image)
-            .Include(x => x!.Image!.File)
-            .SingleOrDefaultAsync(q => q.Id == id, cancellationToken: cancellationToken);
+            .Include(x => includeImage ? x.Image : null as object)
+            .Include(x => includeImage && includeFile ? x!.Image!.File : null as object)
+            .Where(q => q.Id == id);
     }
 
-    public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOtherAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
     {
         var lastMessageDates = _context.Messages
             .Where(x => x.SenderId == id || x.RecipientId == id)
@@ -77,12 +77,6 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public Task<Account?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .SingleOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken);
-    }
-
     public Task SetImageIdAsync(int accountId, int imageId, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
@@ -111,11 +105,5 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 .SetProperty(account => account.LastName, lastName)
                 .SetProperty(account => account.Email, email)
                 .SetProperty(account => account.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
-    }
-
-    public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .AnyAsync(account => account.Id == id, cancellationToken: cancellationToken);
     }
 }

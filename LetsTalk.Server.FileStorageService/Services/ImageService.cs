@@ -15,6 +15,7 @@ public class ImageService : IImageService
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
     private readonly IAccountRepository _accountRepository;
+    private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IMemoryCache _memoryCache;
     private readonly FileStorageSettings _fileStorageSettings;
 
@@ -24,6 +25,7 @@ public class ImageService : IImageService
         IFileRepository fileRepository,
         IImageInfoService imageInfoService,
         IAccountRepository accountRepository,
+        IAccountDataLayerService accountDataLayerService,
         IMemoryCache memoryCache,
         IOptions<FileStorageSettings> options)
     {
@@ -32,6 +34,7 @@ public class ImageService : IImageService
         _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
         _accountRepository = accountRepository;
+        _accountDataLayerService = accountDataLayerService;
         _memoryCache = memoryCache;
         _fileStorageSettings = options.Value;
     }
@@ -83,7 +86,7 @@ public class ImageService : IImageService
 
     private async Task RemoveAvatarAsync(int accountId, CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.GetByIdIncludingFilesAsync(accountId, cancellationToken);
+        var account = await _accountDataLayerService.GetByIdAsync(accountId, true, true, cancellationToken);
         var imageId = account?.ImageId;
         if (!imageId.HasValue)
         {

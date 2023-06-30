@@ -9,13 +9,13 @@ namespace LetsTalk.Server.UnitTests.Validators;
 public class UpdateProfileCommandValidatorTests
 {
     private UpdateProfileCommandValidator _validator;
-    private Mock<IAccountRepository> _mockAccountRepository;
+    private Mock<IAccountDataLayerService> _mockAccountDataLayerService;
 
     [SetUp]
     public void SetUp()
     {
-        _mockAccountRepository = new Mock<IAccountRepository>();
-        _validator = new(_mockAccountRepository.Object);
+        _mockAccountDataLayerService = new Mock<IAccountDataLayerService>();
+        _validator = new(_mockAccountDataLayerService.Object);
     }
 
     [Test]
@@ -51,7 +51,7 @@ public class UpdateProfileCommandValidatorTests
             AccountId = 0
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(false));
 
@@ -81,7 +81,7 @@ public class UpdateProfileCommandValidatorTests
             AccountId = 0
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -112,7 +112,7 @@ public class UpdateProfileCommandValidatorTests
             LastName = string.Empty
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -141,7 +141,7 @@ public class UpdateProfileCommandValidatorTests
             LastName = "test"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -166,7 +166,7 @@ public class UpdateProfileCommandValidatorTests
             Email = string.Empty
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -198,7 +198,7 @@ public class UpdateProfileCommandValidatorTests
             Email = email
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -227,7 +227,7 @@ public class UpdateProfileCommandValidatorTests
             Email = "test@localhost.com"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -252,7 +252,7 @@ public class UpdateProfileCommandValidatorTests
             Email = "test@localhost.com"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountDataLayerService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(true));
 

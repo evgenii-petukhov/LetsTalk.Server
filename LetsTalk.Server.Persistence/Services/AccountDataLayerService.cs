@@ -1,12 +1,12 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Principal;
 
 namespace LetsTalk.Server.Persistence.Services;
 
-public class AccountDataLayerService : IAccountDataLayerService
+public class AccountDataLayerService : GenericDataLayerService, IAccountDataLayerService
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -22,20 +22,20 @@ public class AccountDataLayerService : IAccountDataLayerService
         string? lastName,
         string? email,
         string? photoUrl,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var account = await _accountRepository.GetByExternalId(externalId, accountType)
-                .FirstAsync(cancellationToken);
+        var response = await GetByExternalIdAsync(externalId, accountType, x => x, cancellationToken);
 
+        if (response.HasValue)
+        {
+            var account = response.Value!;
             await (account.ImageId.HasValue
                 ? _accountRepository.UpdateAsync(account.Id, firstName, lastName, email, cancellationToken)
                 : _accountRepository.UpdateAsync(account.Id, firstName, lastName, email, photoUrl, cancellationToken));
 
             return account.Id;
         }
-        catch (InvalidOperationException)
+        else
         {
             try
             {
@@ -53,10 +53,34 @@ public class AccountDataLayerService : IAccountDataLayerService
             }
             catch (DbUpdateException)
             {
-                return await _accountRepository.GetByExternalId(externalId, accountType)
-                    .Select(x => x.Id)
-                    .FirstAsync(cancellationToken);
+                return (await GetByExternalIdAsync(externalId, accountType, x => x.Id, cancellationToken)).Value;
             }
         }
+    }
+
+    public async Task<Account?> GetByIdAsync(int id, bool includeImage = false, bool includeFile = false, CancellationToken cancellationToken = default)
+    {
+        var query = _accountRepository.GetById(id, includeImage, includeFile);
+        var response = await GetSingleValueAsync(query, cancellationToken);
+        return response.HasValue ? response.Value : null;
+    }
+
+    public async Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var query = _accountRepository.GetById(id)
+            .Select(x => x.Id);
+        var response = await GetSingleValueAsync(query, cancellationToken);
+        return response.HasValue;
+    }
+
+    private Task<QuerySingleResponse<T>> GetByExternalIdAsync<T>(
+        string externalId,
+        AccountTypes accountType,
+        Func<Account, T> selector,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _accountRepository.GetByExternalId(externalId, accountType)
+            .Select(x => selector(x));
+        return GetSingleValueAsync(query, cancellationToken);
     }
 }

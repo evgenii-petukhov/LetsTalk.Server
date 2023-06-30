@@ -61,6 +61,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Enums", "LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj", "{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.Models", "LetsTalk.Server.Persistence.Models\LetsTalk.Server.Persistence.Models.csproj", "{A7E4739E-DE53-4E85-B507-602593DC0D2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7E4739E-DE53-4E85-B507-602593DC0D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7E4739E-DE53-4E85-B507-602593DC0D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7E4739E-DE53-4E85-B507-602593DC0D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7E4739E-DE53-4E85-B507-602593DC0D2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +189,7 @@ Global
 		{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{EA773367-D1CB-470C-9DB7-8E87CA9D637E} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
+		{A7E4739E-DE53-4E85-B507-602593DC0D2C} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

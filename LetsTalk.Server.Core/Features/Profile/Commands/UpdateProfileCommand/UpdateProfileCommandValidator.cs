@@ -5,9 +5,9 @@ namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
 public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IAccountDataLayerService _accountDataLayerService;
 
-    public UpdateProfileCommandValidator(IAccountRepository accountRepository)
+    public UpdateProfileCommandValidator(IAccountDataLayerService accountDataLayerService)
     {
         RuleFor(model => model.AccountId)
             .NotNull()
@@ -36,13 +36,12 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
             .EmailAddress()
             .WithMessage("{PropertyName} is invalid");
 
-        _accountRepository = accountRepository;
+        _accountDataLayerService = accountDataLayerService;
     }
 
-    private Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
+    private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            ? _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken)
-            : Task.FromResult(false);
+            && await _accountDataLayerService.IsAccountIdValidAsync(id.Value, cancellationToken);
     }
 }

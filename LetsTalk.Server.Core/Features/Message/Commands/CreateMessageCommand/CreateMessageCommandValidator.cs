@@ -5,9 +5,9 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IAccountDataLayerService _accountDataLayerService;
 
-    public CreateMessageCommandValidator(IAccountRepository accountRepository)
+    public CreateMessageCommandValidator(IAccountDataLayerService accountDataLayerService)
     {
         RuleFor(model => model.Text)
             .NotNull()
@@ -32,13 +32,12 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
         });
 
-        _accountRepository = accountRepository;
+        _accountDataLayerService = accountDataLayerService;
     }
 
-    private Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
+    private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            ? _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken)
-            : Task.FromResult(false);
+            && await _accountDataLayerService.IsAccountIdValidAsync(id.Value, cancellationToken: cancellationToken);
     }
 }

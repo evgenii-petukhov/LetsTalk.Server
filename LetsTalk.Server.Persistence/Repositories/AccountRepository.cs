@@ -20,10 +20,17 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
 
     public IQueryable<Account> GetById(int id, bool includeImage = false, bool includeFile = false)
     {
-        return _context.Accounts
-            .Include(x => includeImage ? x.Image : null as object)
-            .Include(x => includeImage && includeFile ? x!.Image!.File : null as object)
-            .Where(q => q.Id == id);
+        var query = _context.Accounts;
+        if (includeImage)
+        {
+            query.Include(x => x.Image);
+        }
+        if (includeFile)
+        {
+            query.Include(x => x.Image!.File);
+        }
+
+        return query.Where(q => q.Id == id);
     }
 
     public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default)

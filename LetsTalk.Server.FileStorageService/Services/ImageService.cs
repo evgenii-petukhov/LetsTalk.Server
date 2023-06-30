@@ -86,19 +86,21 @@ public class ImageService : IImageService
 
     private async Task RemoveAvatarAsync(int accountId, CancellationToken cancellationToken = default)
     {
-        var account = await _accountDataLayerService.GetByIdAsync(accountId, true, true, cancellationToken);
-        var imageId = account?.ImageId;
-        if (!imageId.HasValue)
+        var response = await _accountDataLayerService.GetByIdAsync(accountId, x => new
+        {
+            x.ImageId,
+            x.Image!.File
+        }, true, cancellationToken);
+        if (!response?.ImageId.HasValue ?? true)
         {
             return;
         }
 
-        _memoryCache.Remove(imageId);
-        var file = account!.Image?.File;
-        if (file != null)
+        _memoryCache.Remove(response!.ImageId!);
+        if (response!.File != null)
         {
-            _fileService.DeleteFile(file!.FileName!, FileTypes.Image);
-            await _fileRepository.DeleteAsync(file.Id, cancellationToken);
+            _fileService.DeleteFile(response!.File.FileName!, FileTypes.Image);
+            await _fileRepository.DeleteAsync(response.File.Id, cancellationToken);
         }
     }
 }

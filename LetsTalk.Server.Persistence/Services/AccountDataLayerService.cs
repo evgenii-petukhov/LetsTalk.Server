@@ -3,6 +3,7 @@ using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Services;
 
@@ -24,7 +25,11 @@ public class AccountDataLayerService : GenericDataLayerService, IAccountDataLaye
         string? photoUrl,
         CancellationToken cancellationToken = default)
     {
-        var response = await GetByExternalIdAsync(externalId, accountType, x => x, cancellationToken);
+        var response = await GetByExternalIdAsync(externalId, accountType, x => new
+        {
+            x.Id,
+            x.ImageId
+        }, cancellationToken);
 
         if (response.HasValue)
         {
@@ -58,11 +63,12 @@ public class AccountDataLayerService : GenericDataLayerService, IAccountDataLaye
         }
     }
 
-    public async Task<Account?> GetByIdAsync(int id, bool includeImage = false, bool includeFile = false, CancellationToken cancellationToken = default)
+    public async Task<T?> GetByIdAsync<T>(int id, Expression<Func<Account, T>> selector, bool includeFile = false, CancellationToken cancellationToken = default)
     {
-        var query = _accountRepository.GetById(id, includeImage, includeFile);
+        var query = _accountRepository.GetById(id, includeFile)
+            .Select(selector);
         var response = await GetSingleValueAsync(query, cancellationToken);
-        return response.HasValue ? response.Value : null;
+        return response.HasValue ? response.Value : default;
     }
 
     public async Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
@@ -73,14 +79,10 @@ public class AccountDataLayerService : GenericDataLayerService, IAccountDataLaye
         return response.HasValue;
     }
 
-    private Task<QuerySingleResponse<T>> GetByExternalIdAsync<T>(
-        string externalId,
-        AccountTypes accountType,
-        Func<Account, T> selector,
-        CancellationToken cancellationToken = default)
+    private Task<QuerySingleResponse<T>> GetByExternalIdAsync<T>(string externalId, AccountTypes accountType, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
     {
         var query = _accountRepository.GetByExternalId(externalId, accountType)
-            .Select(x => selector(x));
+            .Select(selector);
         return GetSingleValueAsync(query, cancellationToken);
     }
 }

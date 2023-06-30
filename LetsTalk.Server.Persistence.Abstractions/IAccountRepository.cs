@@ -7,7 +7,7 @@ public interface IAccountRepository : IGenericRepository<Account>
 {
     IQueryable<Account> GetByExternalId(string externalId, AccountTypes accountTypes);
 
-    IQueryable<Account> GetById(int id, bool includeImage = false, bool includeFile = false);
+    IQueryable<Account> GetById(int id, bool includeFile = false);
 
     Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default);
 

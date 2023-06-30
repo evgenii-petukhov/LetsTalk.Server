@@ -18,19 +18,14 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
     }
 
-    public IQueryable<Account> GetById(int id, bool includeImage = false, bool includeFile = false)
+    public IQueryable<Account> GetById(int id, bool includeFile = false)
     {
-        var query = _context.Accounts;
-        if (includeImage)
-        {
-            query.Include(x => x.Image);
-        }
-        if (includeFile)
-        {
-            query.Include(x => x.Image!.File);
-        }
-
-        return query.Where(q => q.Id == id);
+        return includeFile
+            ? _context.Accounts
+                .Include(x => x.Image)
+                .Include(x => x.Image!.File)
+                .Where(q => q.Id == id)
+            : _context.Accounts.Where(q => q.Id == id);
     }
 
     public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default)

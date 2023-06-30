@@ -28,14 +28,8 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
 
     public async Task<Domain.LinkPreview?> GetLinkPreviewAsync(string url)
     {
-        Domain.LinkPreview linkPreview;
-        try
-        {
-            linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
-            _logger.LogInformation("Fetched from DB: {@linkPreview}", linkPreview);
-            return linkPreview;
-        }
-        catch (InvalidOperationException)
+        var linkPreview = await _linkPreviewRepository.GetByUrlOrDefaultAsync(url);
+        if (linkPreview == null)
         {
             try
             {
@@ -63,7 +57,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 }
                 catch (DbUpdateException)
                 {
-                    linkPreview = await _linkPreviewRepository.GetByUrlAsync(url);
+                    linkPreview = await _linkPreviewRepository.GetByUrlOrDefaultAsync(url);
                     _logger.LogInformation("Fetched from DB: {@linkPreview}", linkPreview);
                 }
                 return linkPreview;
@@ -73,6 +67,11 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 _logger.LogError(e, "Unable to download: {url}", url);
                 return null;
             }
+        }
+        else
+        {
+            _logger.LogInformation("Fetched from DB: {@linkPreview}", linkPreview);
+            return linkPreview;
         }
     }
 }

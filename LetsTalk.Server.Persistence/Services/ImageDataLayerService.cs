@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Services;
 
-public class ImageDataLayerService : GenericDataLayerService, IImageDataLayerService
+public class ImageDataLayerService : IImageDataLayerService
 {
     private readonly IImageRepository _imageRepository;
 

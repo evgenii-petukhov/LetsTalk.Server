@@ -1,13 +1,12 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Services;
 
-public class AccountDataLayerService : GenericDataLayerService, IAccountDataLayerService
+public class AccountDataLayerService : IAccountDataLayerService
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -25,22 +24,13 @@ public class AccountDataLayerService : GenericDataLayerService, IAccountDataLaye
         string? photoUrl,
         CancellationToken cancellationToken = default)
     {
-        var response = await GetByExternalIdAsync(externalId, accountType, x => new
+        var response = await GetByExternalIdOrDefaultAsync(externalId, accountType, x => new
         {
             x.Id,
             x.ImageId
         }, cancellationToken);
 
-        if (response.HasValue)
-        {
-            var account = response.Value!;
-            await (account.ImageId.HasValue
-                ? _accountRepository.UpdateAsync(account.Id, firstName, lastName, email, cancellationToken)
-                : _accountRepository.UpdateAsync(account.Id, firstName, lastName, email, photoUrl, cancellationToken));
-
-            return account.Id;
-        }
-        else
+        if (response == null)
         {
             try
             {
@@ -58,8 +48,16 @@ public class AccountDataLayerService : GenericDataLayerService, IAccountDataLaye
             }
             catch (DbUpdateException)
             {
-                return (await GetByExternalIdAsync(externalId, accountType, x => x.Id, cancellationToken)).Value;
+                return await GetByExternalIdOrDefaultAsync(externalId, accountType, x => x.Id, cancellationToken);
             }
+        }
+        else
+        {
+            await (response.ImageId.HasValue
+                ? _accountRepository.UpdateAsync(response.Id, firstName, lastName, email, cancellationToken)
+                : _accountRepository.UpdateAsync(response.Id, firstName, lastName, email, photoUrl, cancellationToken));
+
+            return response.Id;
         }
     }
 
@@ -77,10 +75,10 @@ public class AccountDataLayerService : GenericDataLayerService, IAccountDataLaye
             .AnyAsync(cancellationToken: cancellationToken);
     }
 
-    private Task<QuerySingleResponse<T>> GetByExternalIdAsync<T>(string externalId, AccountTypes accountType, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
+    private Task<T?> GetByExternalIdOrDefaultAsync<T>(string externalId, AccountTypes accountType, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
     {
-        var query = _accountRepository.GetByExternalId(externalId, accountType)
-            .Select(selector);
-        return GetSingleValueAsync(query, cancellationToken);
+        return _accountRepository.GetByExternalId(externalId, accountType)
+            .Select(selector)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 }

@@ -16,6 +16,7 @@ public class ImageService : IImageService
     private readonly IImageInfoService _imageInfoService;
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IImageDataLayerService _imageDataLayerService;
     private readonly IMemoryCache _memoryCache;
     private readonly FileStorageSettings _fileStorageSettings;
 
@@ -26,6 +27,7 @@ public class ImageService : IImageService
         IImageInfoService imageInfoService,
         IAccountRepository accountRepository,
         IAccountDataLayerService accountDataLayerService,
+        IImageDataLayerService imageDataLayerService,
         IMemoryCache memoryCache,
         IOptions<FileStorageSettings> options)
     {
@@ -35,6 +37,7 @@ public class ImageService : IImageService
         _imageInfoService = imageInfoService;
         _accountRepository = accountRepository;
         _accountDataLayerService = accountDataLayerService;
+        _imageDataLayerService = imageDataLayerService;
         _memoryCache = memoryCache;
         _fileStorageSettings = options.Value;
     }
@@ -77,8 +80,7 @@ public class ImageService : IImageService
         var filename = await _memoryCache.GetOrCreateAsync(imageId, async cacheEntry =>
         {
             cacheEntry.AbsoluteExpirationRelativeToNow = _fileStorageSettings.FilenameByImageIdCacheLifetime;
-            var image = await _imageRepository.GetByIdWithFileAsync(imageId, cancellationToken);
-            return image!.File!.FileName;
+            return await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => x.File!.FileName, cancellationToken);
         });
 
         return await _fileService.ReadFileAsync(filename!, FileTypes.Image, cancellationToken);
@@ -86,7 +88,7 @@ public class ImageService : IImageService
 
     private async Task RemoveAvatarAsync(int accountId, CancellationToken cancellationToken = default)
     {
-        var response = await _accountDataLayerService.GetByIdAsync(accountId, x => new
+        var response = await _accountDataLayerService.GetByIdOrDefaultAsync(accountId, x => new
         {
             x.ImageId,
             x.Image!.File

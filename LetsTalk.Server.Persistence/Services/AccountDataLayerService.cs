@@ -63,20 +63,18 @@ public class AccountDataLayerService : GenericDataLayerService, IAccountDataLaye
         }
     }
 
-    public async Task<T?> GetByIdAsync<T>(int id, Expression<Func<Account, T>> selector, bool includeFile = false, CancellationToken cancellationToken = default)
+    public Task<T?> GetByIdOrDefaultAsync<T>(int id, Expression<Func<Account, T>> selector, bool includeFile = false, CancellationToken cancellationToken = default)
     {
-        var query = _accountRepository.GetById(id, includeFile)
-            .Select(selector);
-        var response = await GetSingleValueAsync(query, cancellationToken);
-        return response.HasValue ? response.Value : default;
+        return _accountRepository.GetById(id, includeFile)
+            .Select(selector)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
+    public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
     {
-        var query = _accountRepository.GetById(id)
-            .Select(x => x.Id);
-        var response = await GetSingleValueAsync(query, cancellationToken);
-        return response.HasValue;
+        return _accountRepository.GetById(id)
+            .Select(x => x.Id)
+            .AnyAsync(cancellationToken: cancellationToken);
     }
 
     private Task<QuerySingleResponse<T>> GetByExternalIdAsync<T>(string externalId, AccountTypes accountType, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)

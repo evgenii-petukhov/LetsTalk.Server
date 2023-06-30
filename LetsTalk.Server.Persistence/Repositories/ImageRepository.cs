@@ -11,16 +11,10 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
     {
     }
 
-    public Task<Image?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return _context.Images
-            .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
-    }
-
-    public Task<Image?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default)
+    public IQueryable<Image> GetById(int id)
     {
         return _context.Images
             .Include(x => x.File)
-            .SingleOrDefaultAsync(image => image.Id == id, cancellationToken: cancellationToken);
+            .Where(image => image.Id == id);
     }
 }

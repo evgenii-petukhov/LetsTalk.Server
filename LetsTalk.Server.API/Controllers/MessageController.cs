@@ -2,7 +2,7 @@
 using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.API.Models;
-using LetsTalk.Server.API.Models.CreateMessage;
+using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
@@ -42,7 +42,7 @@ public class MessageController : ApiController
     }
 
     [HttpGet("{recipientId}")]
-    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId, int pageIndex, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
     {
         var senderId = GetAccountId();
         var query = new GetMessagesQuery(senderId, recipientId, pageIndex, _messagingSettings.MessagesPerPage);

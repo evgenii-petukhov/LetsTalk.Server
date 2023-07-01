@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models.CreateMessage;
+using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;

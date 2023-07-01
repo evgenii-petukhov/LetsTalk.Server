@@ -26,7 +26,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
     {
         await _messageRepository.MarkAllAsReadAsync(request.SenderId, request.RecipientId, cancellationToken);
 
-        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId, request.pageIndex, request.messagesPerPage, cancellationToken);
+        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
 
         var messagesToProcess = messages
             .Where(message => message.TextHtml == null)

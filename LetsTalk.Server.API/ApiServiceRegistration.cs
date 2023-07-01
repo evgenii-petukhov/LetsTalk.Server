@@ -88,6 +88,7 @@ public static class ApiServiceRegistration
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.Configure<MessagingSettings>(configuration.GetSection("Messaging"));
 
         return services;
     }

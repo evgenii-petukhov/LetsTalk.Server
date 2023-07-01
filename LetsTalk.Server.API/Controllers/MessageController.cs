@@ -21,6 +21,7 @@ public class MessageController : ApiController
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly MessagingSettings _messagingSettings;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -29,20 +30,22 @@ public class MessageController : ApiController
         IMediator mediator,
         IMapper mapper,
         IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings)
+        IOptions<KafkaSettings> kafkaSettings,
+        IOptions<MessagingSettings> messagingSettings)
     {
         _mediator = mediator;
         _mapper = mapper;
+        _messagingSettings = messagingSettings.Value;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
     }
 
     [HttpGet("{recipientId}")]
-    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId, int pageIndex, CancellationToken cancellationToken)
     {
         var senderId = GetAccountId();
-        var query = new GetMessagesQuery(senderId, recipientId);
+        var query = new GetMessagesQuery(senderId, recipientId, pageIndex, _messagingSettings.MessagesPerPage);
         var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }

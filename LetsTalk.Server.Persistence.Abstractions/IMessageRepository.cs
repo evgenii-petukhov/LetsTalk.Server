@@ -4,7 +4,7 @@ namespace LetsTalk.Server.Persistence.Abstractions;
 
 public interface IMessageRepository : IGenericRepository<Message>
 {
-    Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default);
 
     Task MarkAsReadAsync(int messageId, CancellationToken cancellationToken = default);
 

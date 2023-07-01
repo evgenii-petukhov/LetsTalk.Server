@@ -12,11 +12,14 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
     }
 
-    public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Message>> GetAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
     {
         return await _context.Messages
             .Include(message => message.LinkPreview)
             .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
+            .OrderByDescending(mesage => mesage.DateCreatedUnix)
+            .Skip(messagesPerPage * pageIndex)
+            .Take(messagesPerPage)
             .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync(cancellationToken: cancellationToken);
     }

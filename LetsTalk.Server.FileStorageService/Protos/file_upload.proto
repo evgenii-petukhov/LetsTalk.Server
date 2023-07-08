@@ -20,7 +20,7 @@ message UploadImageRequest {
 }
 
 message UploadImageResponse {
-
+	int32 image_id = 1;
 }
 
 message DownloadImageRequest {

@@ -20,9 +20,12 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     {
         var accountId = (int)context.UserState["AccountId"];
         var imageType = (ImageTypes)request.ImageType;
-        await _imageService.SaveImageAsync(request.Content.ToArray(), imageType, accountId, context.CancellationToken);
+        var imageId = await _imageService.SaveImageAsync(request.Content.ToArray(), imageType, accountId, context.CancellationToken);
 
-        return new UploadImageResponse();
+        return new UploadImageResponse
+        {
+            ImageId = imageId
+        };
     }
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)

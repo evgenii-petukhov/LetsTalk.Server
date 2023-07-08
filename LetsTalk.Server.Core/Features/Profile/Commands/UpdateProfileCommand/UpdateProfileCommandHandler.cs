@@ -32,7 +32,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, cancellationToken);
+        await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, request.ImageId, cancellationToken);
         var account = await _accountDataLayerService.GetByIdOrDefaultAsync(request.AccountId!.Value, x => x, cancellationToken: cancellationToken);
 
         return _mapper.Map<AccountDto>(account);

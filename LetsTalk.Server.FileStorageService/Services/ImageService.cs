@@ -14,7 +14,6 @@ public class ImageService : IImageService
     private readonly IImageRepository _imageRepository;
     private readonly IFileRepository _fileRepository;
     private readonly IImageInfoService _imageInfoService;
-    private readonly IAccountRepository _accountRepository;
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IImageDataLayerService _imageDataLayerService;
     private readonly IMemoryCache _memoryCache;
@@ -25,7 +24,6 @@ public class ImageService : IImageService
         IImageRepository imageRepository,
         IFileRepository fileRepository,
         IImageInfoService imageInfoService,
-        IAccountRepository accountRepository,
         IAccountDataLayerService accountDataLayerService,
         IImageDataLayerService imageDataLayerService,
         IMemoryCache memoryCache,
@@ -35,14 +33,13 @@ public class ImageService : IImageService
         _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _imageInfoService = imageInfoService;
-        _accountRepository = accountRepository;
         _accountDataLayerService = accountDataLayerService;
         _imageDataLayerService = imageDataLayerService;
         _memoryCache = memoryCache;
         _fileStorageSettings = options.Value;
     }
 
-    public async Task SaveImageAsync(byte[] content, ImageTypes imageType, int accountId, CancellationToken cancellationToken = default)
+    public async Task<int> SaveImageAsync(byte[] content, ImageTypes imageType, int accountId, CancellationToken cancellationToken = default)
     {
         if (imageType == ImageTypes.Avatar)
         {
@@ -69,10 +66,7 @@ public class ImageService : IImageService
 
         _memoryCache.Set(image.Id, file.FileName, _fileStorageSettings.FilenameByImageIdCacheLifetime);
 
-        if (imageType == ImageTypes.Avatar)
-        {
-            await _accountRepository.SetImageIdAsync(accountId, image.Id, cancellationToken);
-        }
+        return image.Id;
     }
 
     public async Task<byte[]> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)

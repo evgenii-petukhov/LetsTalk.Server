@@ -9,12 +9,13 @@ service FileUploadGrpcEndpoint {
 	rpc DownloadImageAsync (DownloadImageRequest) returns (DownloadImageResponse);
 }
 
+enum ImageType {
+	unknown = 0;
+	avatar = 1;
+	message = 2;  
+}
+
 message UploadImageRequest {
-	enum ImageType {
-		unknown = 0;
-		avatar = 1;
-		message = 2;  
-	}
 	bytes content = 1;
 	ImageType image_type = 2;
 }

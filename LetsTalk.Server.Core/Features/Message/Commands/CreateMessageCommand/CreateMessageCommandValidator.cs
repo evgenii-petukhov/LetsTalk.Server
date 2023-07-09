@@ -11,9 +11,7 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
     {
         RuleFor(model => model)
             .Must(IsContentValid)
-            .WithMessage("{PropertyName} is required")
-            .NotEmpty()
-            .WithMessage("{PropertyName} cannot be empty");
+            .WithMessage("Text and ImageId both cannot be empty");
 
         RuleFor(model => model.SenderId)
             .NotNull()

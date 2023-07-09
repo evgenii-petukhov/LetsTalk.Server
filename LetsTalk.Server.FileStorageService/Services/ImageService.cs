@@ -39,15 +39,15 @@ public class ImageService : IImageService
         _fileStorageSettings = options.Value;
     }
 
-    public async Task<int> SaveImageAsync(byte[] content, ImageTypes imageType, int accountId, CancellationToken cancellationToken = default)
+    public async Task<int> SaveImageAsync(byte[] content, ImageTypes contentType, int accountId, CancellationToken cancellationToken = default)
     {
-        if (imageType == ImageTypes.Avatar)
+        if (contentType == ImageTypes.Avatar)
         {
             await RemoveAvatarAsync(accountId, cancellationToken);
         }
 
         var data = content.ToArray();
-        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, cancellationToken);
+        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, contentType, cancellationToken);
 
         var file = new Domain.File
         {
@@ -59,7 +59,7 @@ public class ImageService : IImageService
         var image = new Image
         {
             ImageContentTypeId = (int)_imageInfoService.GetImageContentType(data),
-            ImageTypeId = (int)imageType,
+            ImageTypeId = (int)contentType,
             FileId = file.Id
         };
         await _imageRepository.CreateAsync(image, cancellationToken);

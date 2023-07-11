@@ -2,8 +2,8 @@
 using Grpc.Core;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.Protos;
-using LetsTalk.Server.Persistence.Enums;
 using static LetsTalk.Server.FileStorageService.Protos.FileUploadGrpcEndpoint;
+using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 
 namespace LetsTalk.Server.FileStorageService.GrpcEndpoints;
 
@@ -19,8 +19,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
     {
         var accountId = (int)context.UserState["AccountId"];
-        var imageType = (ImageTypes)request.ImageType;
-        var imageId = await _imageService.SaveImageAsync(request.Content.ToArray(), imageType, accountId, context.CancellationToken);
+        var imageRole = (ImageRoles)request.ImageRole;
+        var imageId = await _imageService.SaveImageAsync(request.Content.ToArray(), imageRole, accountId, context.CancellationToken);
 
         return new UploadImageResponse
         {

@@ -2,8 +2,8 @@
 
 namespace LetsTalk.Server.Domain;
 
-[Table("imagetypes")]
-public class ImageType : BaseEntity
+[Table("imageroles")]
+public class ImageRole : BaseEntity
 {
     public string? Name { get; set; }
 }

@@ -9,9 +9,9 @@ public class Image : BaseEntity
 
     public int ImageContentTypeId { get; set; }
 
-    public ImageType? ImageType { get; set; }
+    public ImageRole? ImageRole { get; set; }
 
-    public int ImageTypeId { get; set; }
+    public int ImageRoleId { get; set; }
 
     public File? File { get; set; }
 

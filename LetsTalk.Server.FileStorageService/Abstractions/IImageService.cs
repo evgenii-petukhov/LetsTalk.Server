@@ -4,7 +4,7 @@ namespace LetsTalk.Server.FileStorageService.Abstractions;
 
 public interface IImageService
 {
-    Task<int> SaveImageAsync(byte[] content, ImageTypes contentType, int accountId, CancellationToken cancellationToken = default);
+    Task<int> SaveImageAsync(byte[] content, ImageRoles imageRole, int accountId, CancellationToken cancellationToken = default);
 
     Task<byte[]> FetchImageAsync(int imageId, CancellationToken cancellationToken = default);
 }

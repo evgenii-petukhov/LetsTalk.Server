@@ -5,9 +5,9 @@ namespace LetsTalk.Server.Domain;
 [Table("images")]
 public class Image : BaseEntity
 {
-    public ImageContentType? ImageContentType { get; set; }
+    public ImageFormat? ImageFormat { get; set; }
 
-    public int ImageContentTypeId { get; set; }
+    public int ImageFormatId { get; set; }
 
     public ImageRole? ImageRole { get; set; }
 

@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LetsTalk.Server.Persistence.Configuration;
 
-public class ImageContentTypeConfiguration : IEntityTypeConfiguration<ImageContentType>
+public class ImageFormatConfiguration : IEntityTypeConfiguration<ImageFormat>
 {
-    public void Configure(EntityTypeBuilder<ImageContentType> builder)
+    public void Configure(EntityTypeBuilder<ImageFormat> builder)
     {
         builder.HasData(
-            Enum.GetValues<ImageContentTypes>().Select(x => new ImageContentType
+            Enum.GetValues<ImageFormats>().Select(x => new ImageFormat
             {
                 Id = (int)x,
                 Name = Enum.GetName(x)

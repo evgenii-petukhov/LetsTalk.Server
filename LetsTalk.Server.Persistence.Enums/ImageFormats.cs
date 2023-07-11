@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Persistence.Enums;
 
-public enum ImageContentTypes
+public enum ImageFormats
 {
     Unknown = -1,
     Jpeg = 1,

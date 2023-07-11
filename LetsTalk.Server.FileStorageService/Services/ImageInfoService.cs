@@ -6,12 +6,12 @@ namespace LetsTalk.Server.FileStorageService.Services;
 
 public class ImageInfoService : IImageInfoService
 {
-    private readonly Dictionary<SKEncodedImageFormat, ImageContentTypes> _contentTypeMapping = new()
+    private readonly Dictionary<SKEncodedImageFormat, ImageFormats> _formatMapping = new()
     {
-        { SKEncodedImageFormat.Jpeg, ImageContentTypes.Jpeg },
-        { SKEncodedImageFormat.Png, ImageContentTypes.Png },
-        { SKEncodedImageFormat.Gif, ImageContentTypes.Gif },
-        { SKEncodedImageFormat.Webp, ImageContentTypes.Webp },
+        { SKEncodedImageFormat.Jpeg, ImageFormats.Jpeg },
+        { SKEncodedImageFormat.Png, ImageFormats.Png },
+        { SKEncodedImageFormat.Gif, ImageFormats.Gif },
+        { SKEncodedImageFormat.Webp, ImageFormats.Webp },
     };
 
     public (int, int) GetImageSize(byte[] data)
@@ -22,11 +22,11 @@ public class ImageInfoService : IImageInfoService
         return (bitmap.Width, bitmap.Height);
     }
 
-    public ImageContentTypes GetImageContentType(byte[] data)
+    public ImageFormats GetImageFormat(byte[] data)
     {
         using var stream = new MemoryStream(data);
         using var skiaStream = new SKManagedStream(stream);
         using var codec = SKCodec.Create(skiaStream);
-        return _contentTypeMapping.GetValueOrDefault(codec.EncodedFormat, ImageContentTypes.Unknown);
+        return _formatMapping.GetValueOrDefault(codec.EncodedFormat, ImageFormats.Unknown);
     }
 }

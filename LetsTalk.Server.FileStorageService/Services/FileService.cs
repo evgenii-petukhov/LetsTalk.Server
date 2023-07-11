@@ -28,13 +28,13 @@ public class FileService : IFileService
         return File.ReadAllBytesAsync(imagePath, cancellationToken);
     }
 
-    public async Task<string?> SaveDataAsync(byte[] data, FileTypes fileType, ImageRoles contentType, CancellationToken cancellationToken = default)
+    public async Task<string?> SaveDataAsync(byte[] data, FileTypes fileType, ImageRoles imageRole, CancellationToken cancellationToken = default)
     {
         if (fileType == FileTypes.Image)
         {
             (int width, int height) = _imageInfoService.GetImageSize(data);
-            if ((contentType == ImageRoles.Avatar && (width > _fileStorageSettings.AvatarMaxWidth || height > _fileStorageSettings.AvatarMaxHeight))
-                || (contentType == ImageRoles.Message && (width > _fileStorageSettings.PictureMaxWidth || height > _fileStorageSettings.PictureMaxHeight)))
+            if ((imageRole == ImageRoles.Avatar && (width > _fileStorageSettings.AvatarMaxWidth || height > _fileStorageSettings.AvatarMaxHeight))
+                || (imageRole == ImageRoles.Message && (width > _fileStorageSettings.PictureMaxWidth || height > _fileStorageSettings.PictureMaxHeight)))
             {
                 throw new ImageSizeException("Image size exceeds max dimensions");
             }

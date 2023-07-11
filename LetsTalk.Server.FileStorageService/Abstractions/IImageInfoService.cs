@@ -6,5 +6,5 @@ public interface IImageInfoService
 {
     (int, int) GetImageSize(byte[] data);
 
-    ImageContentTypes GetImageContentType(byte[] data);
+    ImageFormats GetImageFormat(byte[] data);
 }

@@ -58,7 +58,7 @@ public class ImageService : IImageService
 
         var image = new Image
         {
-            ImageContentTypeId = (int)_imageInfoService.GetImageContentType(data),
+            ImageFormatId = (int)_imageInfoService.GetImageFormat(data),
             ImageRoleId = (int)imageRole,
             FileId = file.Id
         };

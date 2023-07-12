@@ -12,7 +12,8 @@ public static class KafkaSettingsHelper
             Url = configuration.GetValue<string>("Kafka:Url"),
             MessageNotification = GetKafkaEventSettings(configuration, "Kafka:MessageNotification"),
             LinkPreviewRequest = GetKafkaEventSettings(configuration, "Kafka:LinkPreviewRequest"),
-            LinkPreviewNotification = GetKafkaEventSettings(configuration, "Kafka:LinkPreviewNotification")
+            LinkPreviewNotification = GetKafkaEventSettings(configuration, "Kafka:LinkPreviewNotification"),
+            ImageResizeRequest = GetKafkaEventSettings(configuration, "Kafka:ImageResizeRequest"),
         };
     }
 

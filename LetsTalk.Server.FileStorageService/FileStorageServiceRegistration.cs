@@ -1,4 +1,7 @@
-﻿using LetsTalk.Server.AuthenticationClient;
+﻿using KafkaFlow;
+using KafkaFlow.Serializer;
+using LetsTalk.Server.AuthenticationClient;
+using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.GrpcInterceptors;
@@ -13,6 +16,8 @@ public static class FileStorageServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
+
         services.AddCors(options =>
         {
             options.AddPolicy("all", builder =>
@@ -33,6 +38,23 @@ public static class FileStorageServiceRegistration
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddMemoryCache();
+
+        services.AddKafka(kafka => kafka
+            .UseConsoleLog()
+            .AddCluster(cluster => cluster
+                .WithBrokers(new[]
+                {
+                    kafkaSettings.Url
+                })
+                .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
+                .AddProducer(
+                    kafkaSettings.ImageResizeRequest.Producer,
+                    producer => producer
+                        .DefaultTopic(kafkaSettings.ImageResizeRequest.Topic)
+                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
+        ));
+        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+
         return services;
     }
 }

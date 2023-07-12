@@ -31,11 +31,10 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(4);
+        validationResult.Errors.Should().HaveCount(3);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
+            "Text and ImageId both cannot be empty",
             "Recipient Id is required",
             "Sender Id is required"
         });
@@ -57,11 +56,10 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
+        validationResult.Errors.Should().HaveCount(2);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
+            "Text and ImageId both cannot be empty",
             "Recipient Id is required"
         });
     }
@@ -85,11 +83,10 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(4);
+        validationResult.Errors.Should().HaveCount(3);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
+            "Text and ImageId both cannot be empty",
             "Sender Id is required",
             "Account with Recipient Id = 0 does not exist"
         });
@@ -115,11 +112,10 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(4);
+        validationResult.Errors.Should().HaveCount(3);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
+            "Text and ImageId both cannot be empty",
             "Recipient Id can't be equal to Sender Id",
             "Account with Recipient Id = 0 does not exist"
         });
@@ -145,11 +141,10 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
+        validationResult.Errors.Should().HaveCount(2);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty",
+            "Text and ImageId both cannot be empty",
             "Account with Recipient Id = 1 does not exist"
         });
     }
@@ -174,11 +169,10 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(2);
+        validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text is required",
-            "Text cannot be empty"
+            "Text and ImageId both cannot be empty"
         });
     }
 
@@ -206,7 +200,7 @@ public class CreateMessageCommandValidatorTests
         validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text cannot be empty"
+            "Text and ImageId both cannot be empty"
         });
     }
 

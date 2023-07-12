@@ -40,7 +40,13 @@ public class FileService : IFileService
             }
         }
 
-        (string filename, string filepath) = _fileNameGenerator.Generate(fileType);
+        string filename;
+        string filepath;
+        (filename, filepath) = _fileNameGenerator.Generate(fileType);
+        if (File.Exists(filepath))
+        {
+            (filename, filepath) = _fileNameGenerator.Generate(fileType);
+        }
         await File.WriteAllBytesAsync(filepath, data, cancellationToken);
         return filename;
     }

@@ -13,7 +13,6 @@ public class ImageService : IImageService
     private readonly IFileService _fileService;
     private readonly IImageRepository _imageRepository;
     private readonly IFileRepository _fileRepository;
-    private readonly IImageInfoService _imageInfoService;
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IImageDataLayerService _imageDataLayerService;
     private readonly IMemoryCache _memoryCache;
@@ -23,7 +22,6 @@ public class ImageService : IImageService
         IFileService fileService,
         IImageRepository imageRepository,
         IFileRepository fileRepository,
-        IImageInfoService imageInfoService,
         IAccountDataLayerService accountDataLayerService,
         IImageDataLayerService imageDataLayerService,
         IMemoryCache memoryCache,
@@ -32,14 +30,13 @@ public class ImageService : IImageService
         _fileService = fileService;
         _imageRepository = imageRepository;
         _fileRepository = fileRepository;
-        _imageInfoService = imageInfoService;
         _accountDataLayerService = accountDataLayerService;
         _imageDataLayerService = imageDataLayerService;
         _memoryCache = memoryCache;
         _fileStorageSettings = options.Value;
     }
 
-    public async Task<int> SaveImageAsync(byte[] content, ImageRoles imageRole, int accountId, CancellationToken cancellationToken = default)
+    public async Task<int> SaveImageAsync(byte[] content, ImageRoles imageRole, ImageFormats imageFormat, int accountId, CancellationToken cancellationToken = default)
     {
         if (imageRole == ImageRoles.Avatar)
         {
@@ -58,7 +55,7 @@ public class ImageService : IImageService
 
         var image = new Image
         {
-            ImageFormatId = (int)_imageInfoService.GetImageFormat(data),
+            ImageFormatId = (int)imageFormat,
             ImageRoleId = (int)imageRole,
             FileId = file.Id
         };

@@ -48,15 +48,18 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         var imageRole = (ImageRoles)request.ImageRole;
         var imageId = await _imageService.SaveImageAsync(data, imageRole, imageFormat, accountId, context.CancellationToken);
 
-        await _messageProducer.ProduceAsync(
-            _kafkaSettings.ImageResizeRequest!.Topic,
-            Guid.NewGuid().ToString(),
-            new ImageResizeRequest
-            {
-                ImageId = imageId,
-                MaxWidth = imageRole == ImageRoles.Avatar ? _fileStorageSettings.AvatarMaxWidth : _fileStorageSettings.PictureMaxWidth,
-                MaxHeight = imageRole == ImageRoles.Avatar ? _fileStorageSettings.AvatarMaxHeight : _fileStorageSettings.PictureMaxHeight
-            });
+        if (request.ImageRole == Protos.ImageRoles.Message)
+        {
+            await _messageProducer.ProduceAsync(
+                _kafkaSettings.ImageResizeRequest!.Topic,
+                Guid.NewGuid().ToString(),
+                new ImageResizeRequest
+                {
+                    ImageId = imageId,
+                    MaxWidth = _fileStorageSettings.PictureMaxWidth,
+                    MaxHeight = _fileStorageSettings.PictureMaxHeight
+                });
+        }
 
         return new UploadImageResponse
         {

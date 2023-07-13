@@ -63,7 +63,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Models", "LetsTalk.Server.Persistence.Models\LetsTalk.Server.Persistence.Models.csproj", "{A7E4739E-DE53-4E85-B507-602593DC0D2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessor.Models", "LetsTalk.Server.ImageProcessor.Models\LetsTalk.Server.ImageProcessor.Models.csproj", "{37AB788B-11AB-42C0-833A-BA100EF764DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessor.Models", "LetsTalk.Server.ImageProcessor.Models\LetsTalk.Server.ImageProcessor.Models.csproj", "{37AB788B-11AB-42C0-833A-BA100EF764DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessor", "LetsTalk.Server.ImageProcessor\LetsTalk.Server.ImageProcessor.csproj", "{99350BB1-EC10-456F-9B05-47440A0CBE21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +165,10 @@ Global
 		{37AB788B-11AB-42C0-833A-BA100EF764DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37AB788B-11AB-42C0-833A-BA100EF764DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37AB788B-11AB-42C0-833A-BA100EF764DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99350BB1-EC10-456F-9B05-47440A0CBE21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99350BB1-EC10-456F-9B05-47440A0CBE21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99350BB1-EC10-456F-9B05-47440A0CBE21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99350BB1-EC10-456F-9B05-47440A0CBE21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +203,7 @@ Global
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{A7E4739E-DE53-4E85-B507-602593DC0D2C} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{37AB788B-11AB-42C0-833A-BA100EF764DD} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
+		{99350BB1-EC10-456F-9B05-47440A0CBE21} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Domain;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
@@ -11,7 +10,6 @@ namespace LetsTalk.Server.FileStorageService.Services;
 public class ImageService : IImageService
 {
     private readonly IFileService _fileService;
-    private readonly IImageRepository _imageRepository;
     private readonly IFileRepository _fileRepository;
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IImageDataLayerService _imageDataLayerService;
@@ -20,7 +18,6 @@ public class ImageService : IImageService
 
     public ImageService(
         IFileService fileService,
-        IImageRepository imageRepository,
         IFileRepository fileRepository,
         IAccountDataLayerService accountDataLayerService,
         IImageDataLayerService imageDataLayerService,
@@ -28,7 +25,6 @@ public class ImageService : IImageService
         IOptions<FileStorageSettings> options)
     {
         _fileService = fileService;
-        _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _accountDataLayerService = accountDataLayerService;
         _imageDataLayerService = imageDataLayerService;
@@ -45,25 +41,11 @@ public class ImageService : IImageService
 
         var data = content.ToArray();
         var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, cancellationToken);
+        var imageId = await _imageDataLayerService.CreateWithFileAsync(filename, imageFormat, imageRole, cancellationToken);
 
-        var file = new Domain.File
-        {
-            FileName = filename,
-            FileTypeId = (int)FileTypes.Image,
-        };
-        await _fileRepository.CreateAsync(file, cancellationToken);
+        _memoryCache.Set(imageId, filename, _fileStorageSettings.FilenameByImageIdCacheLifetime);
 
-        var image = new Image
-        {
-            ImageFormatId = (int)imageFormat,
-            ImageRoleId = (int)imageRole,
-            FileId = file.Id
-        };
-        await _imageRepository.CreateAsync(image, cancellationToken);
-
-        _memoryCache.Set(image.Id, file.FileName, _fileStorageSettings.FilenameByImageIdCacheLifetime);
-
-        return image.Id;
+        return imageId;
     }
 
     public async Task<byte[]> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)

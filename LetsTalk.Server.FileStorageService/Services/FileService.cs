@@ -21,7 +21,7 @@ public class FileService : IFileService
 
     public Task<string> SaveDataAsync(byte[] data, FileTypes fileType, ImageRoles imageRole, CancellationToken cancellationToken = default)
     {
-        return SaveDataWithUniqueNameAsyncRepeatableIfExistsAsync(data, () => _fileNameGenerator.Generate(fileType), cancellationToken);
+        return SaveDataWithRetryAsync(data, () => _fileNameGenerator.Generate(fileType), cancellationToken);
     }
 
     public void DeleteFile(string filename, FileTypes fileType)
@@ -30,7 +30,7 @@ public class FileService : IFileService
         File.Delete(path);
     }
 
-    private static async Task<string> SaveDataWithUniqueNameAsyncRepeatableIfExistsAsync(
+    private static async Task<string> SaveDataWithRetryAsync(
         byte[] data,
         Func<(string, string)> generateUniqueFilename,
         CancellationToken cancellationToken = default)

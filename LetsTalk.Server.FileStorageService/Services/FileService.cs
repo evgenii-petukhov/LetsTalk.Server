@@ -1,25 +1,16 @@
-﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.FileStorageService.Abstractions;
+﻿using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorageService.Services;
 
 public class FileService : IFileService
 {
     private readonly IFileNameGenerator _fileNameGenerator;
-    private readonly IImageInfoService _imageInfoService;
-    private readonly FileStorageSettings _fileStorageSettings;
 
     public FileService(
-        IFileNameGenerator fileNameGenerator,
-        IImageInfoService imageInfoService,
-        IOptions<FileStorageSettings> options)
+        IFileNameGenerator fileNameGenerator)
     {
         _fileNameGenerator = fileNameGenerator;
-        _imageInfoService = imageInfoService;
-        _fileStorageSettings = options.Value;
     }
 
     public Task<byte[]> ReadFileAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default)
@@ -30,16 +21,6 @@ public class FileService : IFileService
 
     public async Task<string?> SaveDataAsync(byte[] data, FileTypes fileType, ImageRoles imageRole, CancellationToken cancellationToken = default)
     {
-        if (fileType == FileTypes.Image)
-        {
-            (int width, int height) = _imageInfoService.GetImageSize(data);
-            if ((imageRole == ImageRoles.Avatar && (width > _fileStorageSettings.AvatarMaxWidth || height > _fileStorageSettings.AvatarMaxHeight))
-                || (imageRole == ImageRoles.Message && (width > _fileStorageSettings.PictureMaxWidth || height > _fileStorageSettings.PictureMaxHeight)))
-            {
-                throw new ImageSizeException("Image size exceeds max dimensions");
-            }
-        }
-
         string filename;
         string filepath;
         (filename, filepath) = _fileNameGenerator.Generate(fileType);

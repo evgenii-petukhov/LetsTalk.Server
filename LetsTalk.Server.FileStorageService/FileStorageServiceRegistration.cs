@@ -34,6 +34,7 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IFileNameGenerator, FileNameGenerator>();
         services.AddTransient<IImageInfoService, ImageInfoService>();
         services.AddTransient<IImageService, ImageService>();
+        services.AddTransient<IImageValidationService, ImageValidationService>();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();

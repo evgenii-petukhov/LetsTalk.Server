@@ -3,7 +3,6 @@ using Grpc.Core;
 using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.Protos;
 using LetsTalk.Server.ImageProcessor.Models;
@@ -16,20 +15,20 @@ namespace LetsTalk.Server.FileStorageService.GrpcEndpoints;
 public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {
     private readonly IImageService _imageService;
-    private readonly IImageInfoService _imageInfoService;
     private readonly KafkaSettings _kafkaSettings;
+    private readonly IImageValidationService _imageValidationService;
     private readonly FileStorageSettings _fileStorageSettings;
     private readonly IMessageProducer _messageProducer;
 
     public FileUploadGrpcEndpoint(
         IImageService imageService,
-        IImageInfoService imageInfoService,
         IProducerAccessor producerAccessor,
+        IImageValidationService imageValidationService,
         IOptions<KafkaSettings> kafkaSettings,
         IOptions<FileStorageSettings> fileStorageSettings)
     {
         _imageService = imageService;
-        _imageInfoService = imageInfoService;
+        _imageValidationService = imageValidationService;
         _kafkaSettings = kafkaSettings.Value;
         _fileStorageSettings = fileStorageSettings.Value;
         _messageProducer = producerAccessor.GetProducer(_kafkaSettings.ImageResizeRequest!.Producer);
@@ -38,15 +37,11 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
     {
         var data = request.Content.ToArray();
-        var imageFormat = _imageInfoService.GetImageFormat(data);
-        if (imageFormat != Persistence.Enums.ImageFormats.Webp)
-        {
-            throw new BadRequestException("Image format is not supported");
-        }
+        var imageRole = (ImageRoles)request.ImageRole;
+        var validationResult =  _imageValidationService.ValidateImage(data, imageRole);
 
         var accountId = (int)context.UserState["AccountId"];
-        var imageRole = (ImageRoles)request.ImageRole;
-        var imageId = await _imageService.SaveImageAsync(data, imageRole, imageFormat, accountId, context.CancellationToken);
+        var imageId = await _imageService.SaveImageAsync(data, imageRole, validationResult.ImageFormat, accountId, context.CancellationToken);
 
         if (request.ImageRole == Protos.ImageRoles.Message)
         {

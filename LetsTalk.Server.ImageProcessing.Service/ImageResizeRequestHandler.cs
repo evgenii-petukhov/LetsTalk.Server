@@ -7,7 +7,7 @@ using LetsTalk.Server.ImageProcessor.Models;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.ImageProcessor;
+namespace LetsTalk.Server.ImageProcessing.Service;
 
 public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
 {

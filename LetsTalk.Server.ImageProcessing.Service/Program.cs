@@ -1,5 +1,5 @@
 ﻿using KafkaFlow;
-using LetsTalk.Server.ImageProcessor;
+using LetsTalk.Server.ImageProcessing.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

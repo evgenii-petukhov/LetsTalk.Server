@@ -7,9 +7,8 @@ using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility;
-using LetsTalk.Server.ImageProcessing;
 
-namespace LetsTalk.Server.ImageProcessor;
+namespace LetsTalk.Server.ImageProcessing.Service;
 
 public static class ImageProcessorServiceRegistration
 {

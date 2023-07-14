@@ -4,16 +4,16 @@ using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.FileStorageService.Abstractions;
-using LetsTalk.Server.FileStorageService.Protos;
+using LetsTalk.Server.FileStorage.Service.Abstractions;
+using LetsTalk.Server.FileStorage.Service.Protos;
 using LetsTalk.Server.ImageProcessor.Models;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
-using static LetsTalk.Server.FileStorageService.Protos.FileUploadGrpcEndpoint;
+using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 
-namespace LetsTalk.Server.FileStorageService.GrpcEndpoints;
+namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
 public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {

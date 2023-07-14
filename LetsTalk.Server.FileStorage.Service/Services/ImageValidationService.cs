@@ -1,12 +1,12 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.FileStorageService.Abstractions;
-using LetsTalk.Server.FileStorageService.Models;
+using LetsTalk.Server.FileStorage.Service.Abstractions;
+using LetsTalk.Server.FileStorage.Service.Models;
 using LetsTalk.Server.ImageProcessing.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.FileStorageService.Services;
+namespace LetsTalk.Server.FileStorage.Service.Services;
 
 public class ImageValidationService : IImageValidationService
 {

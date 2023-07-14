@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorageService.Models;
+namespace LetsTalk.Server.FileStorage.Service.Models;
 
 public class ImageValidationResult
 {

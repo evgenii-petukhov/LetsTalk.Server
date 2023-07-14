@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "LetsTalk.Server.FileStorageService.Protos";
+option csharp_namespace = "LetsTalk.Server.FileStorage.Service.Protos";
 
 package file_upload;
 

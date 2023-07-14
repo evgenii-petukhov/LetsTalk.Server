@@ -1,6 +1,6 @@
 using KafkaFlow;
-using LetsTalk.Server.FileStorageService;
-using LetsTalk.Server.FileStorageService.GrpcEndpoints;
+using LetsTalk.Server.FileStorage.Service;
+using LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 using LetsTalk.Server.Persistence;
 using Serilog;
 

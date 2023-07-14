@@ -1,7 +1,7 @@
-﻿using LetsTalk.Server.FileStorageService.Models;
+﻿using LetsTalk.Server.FileStorage.Service.Models;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorageService.Abstractions;
+namespace LetsTalk.Server.FileStorage.Service.Abstractions;
 
 public interface IImageValidationService
 {

@@ -55,8 +55,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.UnitTests", "LetsTalk.Server.UnitTests\LetsTalk.Server.UnitTests.csproj", "{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorageService", "LetsTalk.Server.FileStorageService\LetsTalk.Server.FileStorageService.csproj", "{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{EA773367-D1CB-470C-9DB7-8E87CA9D637E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Enums", "LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj", "{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}"
@@ -71,9 +69,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Utility.Abstractions", "LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj", "{77D78CB7-8A2A-43F4-BE24-4565B52885C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessing", "LetsTalk.Server.ImageProcessing\LetsTalk.Server.ImageProcessing.csproj", "{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing", "LetsTalk.Server.ImageProcessing\LetsTalk.Server.ImageProcessing.csproj", "{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessing.Abstractions", "LetsTalk.Server.ImageProcessing.Abstractions\LetsTalk.Server.ImageProcessing.Abstractions.csproj", "{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing.Abstractions", "LetsTalk.Server.ImageProcessing.Abstractions\LetsTalk.Server.ImageProcessing.Abstractions.csproj", "{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Service", "LetsTalk.Server.FileStorage.Service\LetsTalk.Server.FileStorage.Service.csproj", "{625E0A0B-6380-4410-9C64-E10B8DAA3FDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,10 +157,6 @@ Global
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -193,6 +189,10 @@ Global
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -222,7 +222,6 @@ Global
 		{490BF070-3BB8-4A67-A934-18246B8DEDE6} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{FE214023-E29D-4B81-9C97-820A02297689} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
-		{69C5EC9F-CDDA-48AD-8074-ADF076AAF3FE} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{EA773367-D1CB-470C-9DB7-8E87CA9D637E} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{A7E4739E-DE53-4E85-B507-602593DC0D2C} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
@@ -232,6 +231,7 @@ Global
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

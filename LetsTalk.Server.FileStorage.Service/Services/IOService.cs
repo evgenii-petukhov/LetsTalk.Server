@@ -1,8 +1,8 @@
 ﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.FileStorageService.Abstractions;
+using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorageService.Services;
+namespace LetsTalk.Server.FileStorage.Service.Services;
 
 public class IOService : IIOService
 {

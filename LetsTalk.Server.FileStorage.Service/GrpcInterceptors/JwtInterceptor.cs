@@ -2,7 +2,7 @@
 using Grpc.Core.Interceptors;
 using LetsTalk.Server.Authentication.Abstractions;
 
-namespace LetsTalk.Server.FileStorageService.GrpcInterceptors;
+namespace LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
 
 public class JwtInterceptor : Interceptor
 {

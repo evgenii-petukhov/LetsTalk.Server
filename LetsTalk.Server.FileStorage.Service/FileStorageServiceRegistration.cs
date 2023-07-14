@@ -3,14 +3,14 @@ using KafkaFlow.Serializer;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorageService.Abstractions;
-using LetsTalk.Server.FileStorageService.GrpcInterceptors;
-using LetsTalk.Server.FileStorageService.Services;
+using LetsTalk.Server.FileStorage.Service.Abstractions;
+using LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
+using LetsTalk.Server.FileStorage.Service.Services;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing;
 
-namespace LetsTalk.Server.FileStorageService;
+namespace LetsTalk.Server.FileStorage.Service;
 
 public static class FileStorageServiceRegistration
 {

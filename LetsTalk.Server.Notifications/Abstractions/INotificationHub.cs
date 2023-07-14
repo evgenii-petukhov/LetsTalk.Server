@@ -7,4 +7,6 @@ public interface INotificationHub
     Task SendMessageNotificationAsync(MessageDto notification);
 
     Task SendLinkPreviewNotificationAsync(LinkPreviewDto notification);
+
+    Task SendImagePreviewNotificationAsync(ImagePreviewDto notification);
 }

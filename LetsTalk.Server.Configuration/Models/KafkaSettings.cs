@@ -7,4 +7,5 @@ public class KafkaSettings
     public KafkaEventSettings? LinkPreviewRequest { get; set; }
     public KafkaEventSettings? LinkPreviewNotification { get; set; }
     public KafkaEventSettings? ImageResizeRequest { get; set; }
+    public KafkaEventSettings? ImagePreviewNotification { get; set; }
 }

@@ -11,9 +11,9 @@ using LetsTalk.Server.ImageProcessing.Utility;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
-public static class ImageProcessorServiceRegistration
+public static class ImageProcessingServiceRegistration
 {
-    public static IServiceCollection AddImageProcessorServices(
+    public static IServiceCollection AddImageProcessingServiceServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -31,6 +31,7 @@ public static class ImageProcessorServiceRegistration
                                 kafkaSettings.Url
                         })
                         .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
+                        .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
                         .AddConsumer(consumer => consumer
                             .Topic(kafkaSettings.ImageResizeRequest.Topic)
                             .WithGroupId(kafkaSettings.ImageResizeRequest.GroupId)
@@ -40,6 +41,14 @@ public static class ImageProcessorServiceRegistration
                                 .AddSerializer<JsonCoreSerializer>()
                                 .AddTypedHandlers(h => h.AddHandler<ImageResizeRequestHandler>())
                             )
+                        )
+                        .AddProducer(
+                            kafkaSettings.ImagePreviewNotification.Producer,
+                            producer => producer
+                                .DefaultTopic(kafkaSettings.ImagePreviewNotification.Topic)
+                                .AddMiddlewares(m =>
+                                    m.AddSerializer<JsonCoreSerializer>()
+                                )
                         )
                 )
         );

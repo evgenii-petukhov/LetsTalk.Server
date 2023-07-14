@@ -65,7 +65,7 @@ public class MessageController : ApiController
             {
                 IsMine = false
             }),
-            SendMessageNotificationAsync(senderId, response.Dto! with
+            SendMessageNotificationAsync(senderId, response.Dto with
             {
                 IsMine = true
             }),
@@ -76,7 +76,7 @@ public class MessageController : ApiController
                 {
                     SenderId = senderId,
                     RecipientId = request.RecipientId,
-                    MessageId = response.Dto!.Id,
+                    MessageId = response.Dto.Id,
                     Url = response.Url
                 }),
             request.ImageId.HasValue ? _imageResizeRequestProducer.ProduceAsync(
@@ -84,8 +84,10 @@ public class MessageController : ApiController
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
-                    ImageId = request.ImageId.Value,
-                    MessageId = response.Dto.Id
+                    SenderId = senderId,
+                    RecipientId = request.RecipientId,
+                    MessageId = response.Dto.Id,
+                    ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
         return Ok(response.Dto);
     }

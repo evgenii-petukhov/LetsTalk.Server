@@ -33,39 +33,40 @@ public static class NotificationsServicesRegistration
             });
         });
         services.AddLoggingServices();
-        services.AddKafka(
-            kafka => kafka
-                .UseConsoleLog()
-                .AddCluster(
-                    cluster => cluster
-                        .WithBrokers(new[]
-                        {
+        services.AddKafka(kafka => kafka
+            .UseConsoleLog()
+            .AddCluster(cluster => cluster
+                .WithBrokers(new[]
+                {
                     kafkaSettings.Url
-                        })
-                        .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
-                        .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
-                        .AddConsumer(consumer => consumer
-                            .Topic(kafkaSettings.MessageNotification.Topic)
-                            .WithGroupId(kafkaSettings.MessageNotification.GroupId)
-                            .WithBufferSize(100)
-                            .WithWorkersCount(10)
-                            .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
-                                .AddTypedHandlers(h => h.AddHandler<MessageNotificationHandler>())
-                            )
-                        )
-                        .AddConsumer(consumer => consumer
-                            .Topic(kafkaSettings.LinkPreviewNotification.Topic)
-                            .WithGroupId(kafkaSettings.LinkPreviewNotification.GroupId)
-                            .WithBufferSize(100)
-                            .WithWorkersCount(10)
-                            .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
-                                .AddTypedHandlers(h => h.AddHandler<LinkPreviewNotificationHandler>())
-                            )
-                        )
-                )
-        );
+                })
+                .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
+                .AddConsumer(consumer => consumer
+                    .Topic(kafkaSettings.MessageNotification.Topic)
+                    .WithGroupId(kafkaSettings.MessageNotification.GroupId)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(10)
+                    .AddMiddlewares(middlewares => middlewares
+                        .AddSerializer<JsonCoreSerializer>()
+                        .AddTypedHandlers(h => h.AddHandler<MessageNotificationHandler>())))
+                .AddConsumer(consumer => consumer
+                    .Topic(kafkaSettings.LinkPreviewNotification.Topic)
+                    .WithGroupId(kafkaSettings.LinkPreviewNotification.GroupId)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(10)
+                    .AddMiddlewares(middlewares => middlewares
+                        .AddSerializer<JsonCoreSerializer>()
+                        .AddTypedHandlers(h => h.AddHandler<LinkPreviewNotificationHandler>())))
+                .AddConsumer(consumer => consumer
+                    .Topic(kafkaSettings.ImagePreviewNotification.Topic)
+                    .WithGroupId(kafkaSettings.ImagePreviewNotification.GroupId)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(10)
+                    .AddMiddlewares(middlewares => middlewares
+                        .AddSerializer<JsonCoreSerializer>()
+                        .AddTypedHandlers(h => h.AddHandler<ImagePreviewNotificationHandler>())))));
 
         return services;
     }

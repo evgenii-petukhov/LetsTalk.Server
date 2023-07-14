@@ -67,9 +67,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessor", "LetsTalk.Server.ImageProcessor\LetsTalk.Server.ImageProcessor.csproj", "{99350BB1-EC10-456F-9B05-47440A0CBE21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.FileStorage.Utility", "LetsTalk.Server.FileStorage.Utility\LetsTalk.Server.FileStorage.Utility.csproj", "{9F4AC47C-4291-48DA-9B4C-7323807F939E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Utility", "LetsTalk.Server.FileStorage.Utility\LetsTalk.Server.FileStorage.Utility.csproj", "{9F4AC47C-4291-48DA-9B4C-7323807F939E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.FileStorage.Utility.Abstractions", "LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj", "{77D78CB7-8A2A-43F4-BE24-4565B52885C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Utility.Abstractions", "LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj", "{77D78CB7-8A2A-43F4-BE24-4565B52885C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessing", "LetsTalk.Server.ImageProcessing\LetsTalk.Server.ImageProcessing.csproj", "{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessing.Abstractions", "LetsTalk.Server.ImageProcessing.Abstractions\LetsTalk.Server.ImageProcessing.Abstractions.csproj", "{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +185,14 @@ Global
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -218,6 +230,8 @@ Global
 		{99350BB1-EC10-456F-9B05-47440A0CBE21} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{9F4AC47C-4291-48DA-9B4C-7323807F939E} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
+		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

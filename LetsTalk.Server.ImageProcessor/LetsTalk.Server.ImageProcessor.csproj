@@ -21,14 +21,14 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SkiaSharp" Version="2.88.3" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility\LetsTalk.Server.FileStorage.Utility.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Abstractions\LetsTalk.Server.ImageProcessing.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.ImageProcessing\LetsTalk.Server.ImageProcessing.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessor.Models\LetsTalk.Server.ImageProcessor.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
   </ItemGroup>

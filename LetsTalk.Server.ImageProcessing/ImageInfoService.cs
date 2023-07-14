@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.FileStorageService.Abstractions;
+﻿using LetsTalk.Server.ImageProcessing.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using SkiaSharp;
 
-namespace LetsTalk.Server.FileStorageService.Services;
+namespace LetsTalk.Server.ImageProcessing;
 
 public class ImageInfoService : IImageInfoService
 {

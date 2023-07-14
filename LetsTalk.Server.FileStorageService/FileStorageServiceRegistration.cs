@@ -8,6 +8,7 @@ using LetsTalk.Server.FileStorageService.GrpcInterceptors;
 using LetsTalk.Server.FileStorageService.Services;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.Utility;
+using LetsTalk.Server.ImageProcessing;
 
 namespace LetsTalk.Server.FileStorageService;
 
@@ -31,12 +32,12 @@ public static class FileStorageServiceRegistration
         });
         services.AddGrpc(options => options.Interceptors.Add<JwtInterceptor>());
         services.AddGrpcReflection();
-        services.AddTransient<IImageInfoService, ImageInfoService>();
         services.AddTransient<IImageValidationService, ImageValidationService>();
         services.AddTransient<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddFileStorageUtilityServices();
+        services.AddImageProcessingServices();
 
         services.AddKafka(kafka => kafka
             .UseConsoleLog()

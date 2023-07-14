@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorageService.Abstractions;
+namespace LetsTalk.Server.ImageProcessing.Abstractions;
 
 public interface IImageInfoService
 {

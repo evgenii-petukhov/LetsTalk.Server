@@ -2,6 +2,7 @@
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.Models;
+using LetsTalk.Server.ImageProcessing.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 

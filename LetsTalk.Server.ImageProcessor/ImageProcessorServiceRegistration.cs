@@ -40,6 +40,7 @@ public static class ImageProcessorServiceRegistration
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
 
         return services;
     }

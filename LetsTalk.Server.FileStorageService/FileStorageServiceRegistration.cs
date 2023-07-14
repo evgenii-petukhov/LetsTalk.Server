@@ -35,7 +35,6 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IImageInfoService, ImageInfoService>();
         services.AddTransient<IImageService, ImageService>();
         services.AddTransient<IImageValidationService, ImageValidationService>();
-        services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddMemoryCache();
@@ -55,6 +54,7 @@ public static class FileStorageServiceRegistration
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
 
         return services;
     }

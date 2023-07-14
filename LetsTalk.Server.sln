@@ -67,13 +67,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Utility.Abstractions", "LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj", "{77D78CB7-8A2A-43F4-BE24-4565B52885C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing", "LetsTalk.Server.ImageProcessing\LetsTalk.Server.ImageProcessing.csproj", "{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing.Abstractions", "LetsTalk.Server.ImageProcessing.Abstractions\LetsTalk.Server.ImageProcessing.Abstractions.csproj", "{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.FileStorage.Service", "LetsTalk.Server.FileStorage.Service\LetsTalk.Server.FileStorage.Service.csproj", "{625E0A0B-6380-4410-9C64-E10B8DAA3FDE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing.Service", "LetsTalk.Server.ImageProcessing.Service\LetsTalk.Server.ImageProcessing.Service.csproj", "{8195D81B-E5FE-4026-B6FE-28B7616330EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing.Utility", "LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj", "{C226B714-D118-4E3D-81ED-1A52B4653BC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,10 +177,6 @@ Global
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -193,6 +189,10 @@ Global
 		{8195D81B-E5FE-4026-B6FE-28B7616330EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8195D81B-E5FE-4026-B6FE-28B7616330EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8195D81B-E5FE-4026-B6FE-28B7616330EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -228,10 +228,10 @@ Global
 		{37AB788B-11AB-42C0-833A-BA100EF764DD} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{9F4AC47C-4291-48DA-9B4C-7323807F939E} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{77D78CB7-8A2A-43F4-BE24-4565B52885C9} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
-		{F24C33EF-0E4C-4E85-9F11-5F7DF88D80EE} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{8D8E51E4-FA6A-4E34-955A-6C50F46C1245} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{8195D81B-E5FE-4026-B6FE-28B7616330EA} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
+		{C226B714-D118-4E3D-81ED-1A52B4653BC5} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

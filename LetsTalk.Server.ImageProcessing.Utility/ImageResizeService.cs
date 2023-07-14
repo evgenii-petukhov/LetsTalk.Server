@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.ImageProcessing.Abstractions;
 using SkiaSharp;
 
-namespace LetsTalk.Server.ImageProcessing;
+namespace LetsTalk.Server.ImageProcessing.Utility;
 
 public class ImageResizeService : IImageResizeService
 {

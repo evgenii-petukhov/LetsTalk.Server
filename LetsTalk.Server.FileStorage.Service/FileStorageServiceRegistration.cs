@@ -8,7 +8,7 @@ using LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
 using LetsTalk.Server.FileStorage.Service.Services;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.Utility;
-using LetsTalk.Server.ImageProcessing;
+using LetsTalk.Server.ImageProcessing.Utility;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -37,7 +37,7 @@ public static class FileStorageServiceRegistration
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddFileStorageUtilityServices();
-        services.AddImageProcessingServices();
+        services.AddImageProcessingUtilityServices();
 
         services.AddKafka(kafka => kafka
             .UseConsoleLog()

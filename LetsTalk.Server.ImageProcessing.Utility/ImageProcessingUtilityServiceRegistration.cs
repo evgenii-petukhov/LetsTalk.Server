@@ -1,11 +1,11 @@
 ﻿using LetsTalk.Server.ImageProcessing.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LetsTalk.Server.ImageProcessing;
+namespace LetsTalk.Server.ImageProcessing.Utility;
 
-public static class ImageProcessingServiceRegistration
+public static class ImageProcessingUtilityServiceRegistration
 {
-    public static IServiceCollection AddImageProcessingServices(
+    public static IServiceCollection AddImageProcessingUtilityServices(
         this IServiceCollection services)
     {
         services.AddTransient<IImageInfoService, ImageInfoService>();

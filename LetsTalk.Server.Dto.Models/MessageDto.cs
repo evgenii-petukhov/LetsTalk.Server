@@ -19,4 +19,6 @@ public record MessageDto
     public LinkPreviewDto? LinkPreview { get; set; }
 
     public int? ImageId { get; set; }
+
+    public int? ImagePreviewId { get; set; }
 }

@@ -30,4 +30,8 @@ public class Message : BaseEntity
     public Image? Image { get; set; }
 
     public int? ImageId { get; set; }
+
+    public Image? ImagePreview { get; set; }
+
+    public int? ImagePreviewId { get; set; }
 }

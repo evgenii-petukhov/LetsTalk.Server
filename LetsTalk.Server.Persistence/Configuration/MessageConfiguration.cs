@@ -10,7 +10,14 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
     {
         builder
             .HasOne(e => e.Image)
-            .WithOne(e => e.Message)
+            .WithOne()
+            .HasForeignKey<Message>(x => x.ImageId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasOne(e => e.ImagePreview)
+            .WithOne()
+            .HasForeignKey<Message>(x => x.ImagePreviewId)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

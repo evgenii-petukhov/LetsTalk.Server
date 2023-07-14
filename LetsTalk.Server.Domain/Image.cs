@@ -18,6 +18,4 @@ public class Image : BaseEntity
     public int FileId { get; set; }
 
     public Account? Account { get; set; }
-
-    public Message? Message { get; set; }
 }

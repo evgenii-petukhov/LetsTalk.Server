@@ -57,4 +57,12 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ExecuteUpdateAsync(x => x
                 .SetProperty(message => message.LinkPreviewId, linkPreviewId), cancellationToken: cancellationToken);
     }
+
+    public Task SetImagePreviewAsync(int messageId, int imageId, CancellationToken cancellationToken = default)
+    {
+        return _context.Messages
+            .Where(message => message.Id == messageId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(message => message.ImagePreviewId, imageId), cancellationToken: cancellationToken);
+    }
 }

@@ -1,33 +1,20 @@
-﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
+﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
 public class FileNameGenerator : IFileNameGenerator
 {
-    private readonly FileStorageSettings _fileStorageSettings;
+    private readonly IFileStoragePathProvider _fileStoragePathProvider;
 
-    public FileNameGenerator(
-        IOptions<FileStorageSettings> fileStorageSettings)
+    public FileNameGenerator(IFileStoragePathProvider fileStoragePathProvider)
     {
-        _fileStorageSettings = fileStorageSettings.Value;
+        _fileStoragePathProvider = fileStoragePathProvider;
     }
 
     public (string, string) Generate(FileTypes fileType)
     {
         var filename = Guid.NewGuid().ToString();
-        return (filename, GetFilePath(filename, fileType));
-    }
-
-    public string GetFilePath(string filename, FileTypes fileType)
-    {
-        var path = fileType switch
-        {
-            FileTypes.Image => Path.Combine(_fileStorageSettings.BasePath!, _fileStorageSettings.ImageFolder!, filename),
-            _ => throw new NotImplementedException()
-        };
-        return Environment.ExpandEnvironmentVariables(path);
+        return (filename, _fileStoragePathProvider.GetFilePath(filename, fileType));
     }
 }

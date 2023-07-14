@@ -6,28 +6,25 @@ namespace LetsTalk.Server.FileStorage.Utility;
 public class FileService : IFileService
 {
     private readonly IFileNameGenerator _fileNameGenerator;
+    private readonly IFileStoragePathProvider _fileStoragePathProvider;
 
     public FileService(
-        IFileNameGenerator fileNameGenerator)
+        IFileNameGenerator fileNameGenerator,
+        IFileStoragePathProvider fileStoragePathProvider)
     {
         _fileNameGenerator = fileNameGenerator;
+        _fileStoragePathProvider = fileStoragePathProvider;
     }
 
     public Task<byte[]> ReadFileAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default)
     {
-        var imagePath = _fileNameGenerator.GetFilePath(filename, fileType);
+        var imagePath = _fileStoragePathProvider.GetFilePath(filename, fileType);
         return File.ReadAllBytesAsync(imagePath, cancellationToken);
     }
 
     public Task<string> SaveDataAsync(byte[] data, FileTypes fileType, ImageRoles imageRole, CancellationToken cancellationToken = default)
     {
         return SaveDataWithRetryAsync(data, () => _fileNameGenerator.Generate(fileType), cancellationToken);
-    }
-
-    public void DeleteFile(string filename, FileTypes fileType)
-    {
-        var path = _fileNameGenerator.GetFilePath(filename, fileType);
-        File.Delete(path);
     }
 
     private static async Task<string> SaveDataWithRetryAsync(

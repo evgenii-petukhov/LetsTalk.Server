@@ -8,5 +8,6 @@ public class FileStorageSettings
     public int AvatarMaxHeight { get; set; }
     public int PictureMaxWidth { get; set; }
     public int PictureMaxHeight { get; set; }
-    public TimeSpan FilenameByImageIdCacheLifetime { get; set; }
+    public int ImagePreviewMaxWidth { get; set; }
+    public int ImagePreviewMaxHeight { get; set; }
 }

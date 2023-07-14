@@ -9,10 +9,9 @@ public static class FileStorageUtilityServiceRegistration
         this IServiceCollection services)
     {
         services.AddTransient<IFileService, FileService>();
-        services.AddTransient<IFileService, FileService>();
         services.AddTransient<IFileNameGenerator, FileNameGenerator>();
+        services.AddTransient<IFileStoragePathProvider, FileStoragePathProvider>();
         services.AddTransient<IImageService, ImageService>();
-        services.AddMemoryCache();
 
         return services;
     }

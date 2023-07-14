@@ -33,6 +33,7 @@ public static class FileStorageServiceRegistration
         services.AddGrpcReflection();
         services.AddTransient<IImageInfoService, ImageInfoService>();
         services.AddTransient<IImageValidationService, ImageValidationService>();
+        services.AddTransient<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddFileStorageUtilityServices();

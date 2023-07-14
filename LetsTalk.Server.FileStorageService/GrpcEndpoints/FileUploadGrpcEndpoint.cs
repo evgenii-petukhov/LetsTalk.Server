@@ -3,6 +3,7 @@ using Grpc.Core;
 using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorageService.Abstractions;
 using LetsTalk.Server.FileStorageService.Protos;
 using LetsTalk.Server.ImageProcessor.Models;

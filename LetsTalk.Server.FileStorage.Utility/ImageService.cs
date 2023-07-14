@@ -1,11 +1,11 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorageService.Abstractions;
+using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.FileStorageService.Services;
+namespace LetsTalk.Server.FileStorage.Utility;
 
 public class ImageService : IImageService
 {

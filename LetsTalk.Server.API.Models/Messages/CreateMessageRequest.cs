@@ -6,5 +6,5 @@ public class CreateMessageRequest
 
     public int RecipientId { get; set; }
 
-    public int ImageId { get; set; }
+    public int? ImageId { get; set; }
 }

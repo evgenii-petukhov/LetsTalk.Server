@@ -8,6 +8,7 @@ using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.ImageProcessor.Models;
 using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Notifications.Models;
 using MediatR;
@@ -25,6 +26,7 @@ public class MessageController : ApiController
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
+    private readonly IMessageProducer _imageResizeRequestProducer;
 
     public MessageController(
         IMediator mediator,
@@ -39,6 +41,7 @@ public class MessageController : ApiController
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
+        _imageResizeRequestProducer = producerAccessor.GetProducer(_kafkaSettings.ImageResizeRequest!.Producer);
     }
 
     [HttpGet("{recipientId}")]
@@ -75,7 +78,15 @@ public class MessageController : ApiController
                     RecipientId = request.RecipientId,
                     MessageId = response.Dto!.Id,
                     Url = response.Url
-                }));
+                }),
+            request.ImageId.HasValue ? _imageResizeRequestProducer.ProduceAsync(
+                _kafkaSettings.ImageResizeRequest!.Topic,
+                Guid.NewGuid().ToString(),
+                new ImageResizeRequest
+                {
+                    ImageId = request.ImageId.Value,
+                    MessageId = response.Dto.Id
+                }) : Task.CompletedTask);
         return Ok(response.Dto);
     }
 

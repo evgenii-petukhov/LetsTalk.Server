@@ -67,6 +67,7 @@ public static class ApiServiceRegistration
                 })
                 .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
                 .AddProducer(
                     kafkaSettings.MessageNotification.Producer,
                     producer => producer
@@ -76,6 +77,11 @@ public static class ApiServiceRegistration
                     kafkaSettings.LinkPreviewRequest.Producer,
                     producer => producer
                         .DefaultTopic(kafkaSettings.LinkPreviewRequest.Topic)
+                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
+                .AddProducer(
+                    kafkaSettings.ImageResizeRequest.Producer,
+                    producer => producer
+                        .DefaultTopic(kafkaSettings.ImageResizeRequest.Topic)
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));

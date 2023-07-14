@@ -1,6 +1,4 @@
-﻿using KafkaFlow;
-using KafkaFlow.Serializer;
-using LetsTalk.Server.AuthenticationClient;
+﻿using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
@@ -38,22 +36,6 @@ public static class FileStorageServiceRegistration
         services.AddLoggingServices();
         services.AddFileStorageUtilityServices();
         services.AddImageProcessingUtilityServices();
-
-        services.AddKafka(kafka => kafka
-            .UseConsoleLog()
-            .AddCluster(cluster => cluster
-                .WithBrokers(new[]
-                {
-                    kafkaSettings.Url
-                })
-                .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
-                .AddProducer(
-                    kafkaSettings.ImageResizeRequest.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.ImageResizeRequest.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-        ));
-        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
 
         return services;

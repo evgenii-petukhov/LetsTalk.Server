@@ -17,4 +17,8 @@ public record MessageDto
     public long Created { get; set; }
 
     public LinkPreviewDto? LinkPreview { get; set; }
+
+    public int? ImageId { get; set; }
+
+    public int? ImagePreviewId { get; set; }
 }

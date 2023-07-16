@@ -139,24 +139,24 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Property<int>("FileId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ImageContentTypeId")
+                    b.Property<int>("ImageFormatId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ImageTypeId")
+                    b.Property<int>("ImageRoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FileId");
 
-                    b.HasIndex("ImageContentTypeId");
+                    b.HasIndex("ImageFormatId");
 
-                    b.HasIndex("ImageTypeId");
+                    b.HasIndex("ImageRoleId");
 
                     b.ToTable("images");
                 });
 
-            modelBuilder.Entity("LetsTalk.Server.Domain.ImageContentType", b =>
+            modelBuilder.Entity("LetsTalk.Server.Domain.ImageFormat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,7 +167,7 @@ namespace LetsTalk.Server.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("imagecontenttypes");
+                    b.ToTable("imageformats");
 
                     b.HasData(
                         new
@@ -197,7 +197,7 @@ namespace LetsTalk.Server.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("LetsTalk.Server.Domain.ImageType", b =>
+            modelBuilder.Entity("LetsTalk.Server.Domain.ImageRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -208,7 +208,7 @@ namespace LetsTalk.Server.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("imagetypes");
+                    b.ToTable("imageroles");
 
                     b.HasData(
                         new
@@ -259,6 +259,12 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Property<long?>("DateReadUnix")
                         .HasColumnType("bigint");
 
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ImagePreviewId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("tinyint(1)");
 
@@ -278,6 +284,12 @@ namespace LetsTalk.Server.Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ImageId")
+                        .IsUnique();
+
+                    b.HasIndex("ImagePreviewId")
+                        .IsUnique();
 
                     b.HasIndex("LinkPreviewId");
 
@@ -325,27 +337,37 @@ namespace LetsTalk.Server.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LetsTalk.Server.Domain.ImageContentType", "ImageContentType")
+                    b.HasOne("LetsTalk.Server.Domain.ImageFormat", "ImageFormat")
                         .WithMany()
-                        .HasForeignKey("ImageContentTypeId")
+                        .HasForeignKey("ImageFormatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LetsTalk.Server.Domain.ImageType", "ImageType")
+                    b.HasOne("LetsTalk.Server.Domain.ImageRole", "ImageRole")
                         .WithMany()
-                        .HasForeignKey("ImageTypeId")
+                        .HasForeignKey("ImageRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("File");
 
-                    b.Navigation("ImageContentType");
+                    b.Navigation("ImageFormat");
 
-                    b.Navigation("ImageType");
+                    b.Navigation("ImageRole");
                 });
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Message", b =>
                 {
+                    b.HasOne("LetsTalk.Server.Domain.Image", "Image")
+                        .WithOne()
+                        .HasForeignKey("LetsTalk.Server.Domain.Message", "ImageId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("LetsTalk.Server.Domain.Image", "ImagePreview")
+                        .WithOne()
+                        .HasForeignKey("LetsTalk.Server.Domain.Message", "ImagePreviewId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("LetsTalk.Server.Domain.LinkPreview", "LinkPreview")
                         .WithMany()
                         .HasForeignKey("LinkPreviewId");
@@ -361,6 +383,10 @@ namespace LetsTalk.Server.Persistence.Migrations
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Image");
+
+                    b.Navigation("ImagePreview");
 
                     b.Navigation("LinkPreview");
 

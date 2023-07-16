@@ -9,11 +9,9 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
 
     public CreateMessageCommandValidator(IAccountDataLayerService accountDataLayerService)
     {
-        RuleFor(model => model.Text)
-            .NotNull()
-            .WithMessage("{PropertyName} is required")
-            .NotEmpty()
-            .WithMessage("{PropertyName} cannot be empty");
+        RuleFor(model => model)
+            .Must(IsContentValid)
+            .WithMessage("Text and ImageId both cannot be empty");
 
         RuleFor(model => model.SenderId)
             .NotNull()
@@ -39,5 +37,10 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
     {
         return id.HasValue
             && await _accountDataLayerService.IsAccountIdValidAsync(id.Value, cancellationToken: cancellationToken);
+    }
+
+    private bool IsContentValid(CreateMessageCommand model)
+    {
+        return !string.IsNullOrEmpty(model.Text) || model.ImageId.HasValue;
     }
 }

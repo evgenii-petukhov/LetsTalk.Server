@@ -9,12 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KafkaFlow" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.Serializer" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.3.0" />
+    <Compile Remove="MappingProfiles\**" />
+    <Content Remove="MappingProfiles\**" />
+    <EmbeddedResource Remove="MappingProfiles\**" />
+    <None Remove="MappingProfiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KafkaFlow" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.Serializer" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.8" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageReference Include="Serilog" Version="3.0.1" />
@@ -31,10 +38,6 @@
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="MappingProfiles\" />
   </ItemGroup>
 
 </Project>

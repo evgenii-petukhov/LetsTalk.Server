@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KafkaFlow" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.Serializer" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.3.0" />
-    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.3.0" />
+    <PackageReference Include="KafkaFlow" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.Serializer" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.4.0" />
+    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.4.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.8" />
@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Core\LetsTalk.Server.Core.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.ImageProcessor.Models\LetsTalk.Server.ImageProcessor.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.LinkPreview.Models\LetsTalk.Server.LinkPreview.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />

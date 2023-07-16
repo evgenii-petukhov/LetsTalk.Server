@@ -12,4 +12,6 @@ public class UpdateProfileCommand : IRequest<AccountDto>
     public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
+
+    public int? ImageId { get; set; }
 }

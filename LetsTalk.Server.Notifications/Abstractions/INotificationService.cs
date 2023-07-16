@@ -7,4 +7,6 @@ public interface INotificationService
     Task SendMessageNotificationAsync(int accountId, MessageDto notification);
 
     Task SendLinkPreviewNotificationAsync(int accountId, LinkPreviewDto notification);
+
+    Task SendImagePreviewNotificationAsync(int accountId, ImagePreviewDto notification);
 }

@@ -31,4 +31,11 @@ public class NotificationService : INotificationService
             .Select(connectionId => _messageHub.Clients.Client(connectionId).SendMessageNotificationAsync(notification));
         return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
     }
+
+    public Task SendImagePreviewNotificationAsync(int accountId, ImagePreviewDto notification)
+    {
+        var notifications = _connectionManager.GetConnectionIds(accountId)?
+            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendImagePreviewNotificationAsync(notification));
+        return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
+    }
 }

@@ -79,15 +79,6 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public Task SetImageIdAsync(int accountId, int imageId, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .Where(account => account.Id == accountId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(account => account.PhotoUrl, (string?)null)
-                .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
-    }
-
     public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
@@ -107,5 +98,16 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 .SetProperty(account => account.LastName, lastName)
                 .SetProperty(account => account.Email, email)
                 .SetProperty(account => account.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
+    }
+
+    public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, int? imageId, CancellationToken cancellationToken = default)
+    {
+        return _context.Accounts
+            .Where(account => account.Id == accountId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(account => account.FirstName, firstName)
+                .SetProperty(account => account.LastName, lastName)
+                .SetProperty(account => account.Email, email)
+                .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
     }
 }

@@ -20,6 +20,11 @@ public class HtmlGenerator : IHtmlGenerator
 
     public HtmlGeneratorResult GetHtml(string text)
     {
+        if (string.IsNullOrEmpty(text))
+        {
+            return new HtmlGeneratorResult();
+        }
+
         var lines = text
             .Split(_separators, StringSplitOptions.TrimEntries)
             .Where(s => !string.IsNullOrWhiteSpace(s))

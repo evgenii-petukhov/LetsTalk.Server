@@ -11,9 +11,9 @@ public interface IAccountRepository : IGenericRepository<Account>
 
     Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default);
 
-    Task SetImageIdAsync(int accountId, int imageId, CancellationToken cancellationToken = default);
-
     Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, CancellationToken cancellationToken = default);
+
+    Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, int? imageId, CancellationToken cancellationToken = default);
 }

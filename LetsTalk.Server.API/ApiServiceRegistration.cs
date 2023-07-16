@@ -58,35 +58,32 @@ public static class ApiServiceRegistration
                 {securityScheme, Array.Empty<string>()}
             });
         });
-        services.AddKafka(
-            kafka => kafka
-                .UseConsoleLog()
-                .AddCluster(
-                    cluster => cluster
-                        .WithBrokers(new[]
-                        {
+        services.AddKafka(kafka => kafka
+            .UseConsoleLog()
+            .AddCluster(cluster => cluster
+                .WithBrokers(new[]
+                {
                     kafkaSettings.Url
-                        })
-                        .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
-                        .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
-                        .AddProducer(
-                            kafkaSettings.MessageNotification.Producer,
-                            producer => producer
-                                .DefaultTopic(kafkaSettings.MessageNotification.Topic)
-                                .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
-                                )
-                        )
-                        .AddProducer(
-                            kafkaSettings.LinkPreviewRequest.Producer,
-                            producer => producer
-                                .DefaultTopic(kafkaSettings.LinkPreviewRequest.Topic)
-                                .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
-                                )
-                        )
-                )
-        );
+                })
+                .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
+                .AddProducer(
+                    kafkaSettings.MessageNotification.Producer,
+                    producer => producer
+                        .DefaultTopic(kafkaSettings.MessageNotification.Topic)
+                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
+                .AddProducer(
+                    kafkaSettings.LinkPreviewRequest.Producer,
+                    producer => producer
+                        .DefaultTopic(kafkaSettings.LinkPreviewRequest.Topic)
+                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
+                .AddProducer(
+                    kafkaSettings.ImageResizeRequest.Producer,
+                    producer => producer
+                        .DefaultTopic(kafkaSettings.ImageResizeRequest.Topic)
+                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
+        ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<MessagingSettings>(configuration.GetSection("Messaging"));
 

@@ -26,4 +26,12 @@ public class Message : BaseEntity
     public int? LinkPreviewId { get; set; }
 
     public LinkPreview? LinkPreview { get; set; }
+
+    public Image? Image { get; set; }
+
+    public int? ImageId { get; set; }
+
+    public Image? ImagePreview { get; set; }
+
+    public int? ImagePreviewId { get; set; }
 }

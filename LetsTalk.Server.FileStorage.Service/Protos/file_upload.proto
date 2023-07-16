@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "LetsTalk.Server.FileStorage.Service.Protos";
+
+package file_upload;
+
+service FileUploadGrpcEndpoint {
+	rpc UploadImageAsync (UploadImageRequest) returns (UploadImageResponse);
+	rpc DownloadImageAsync (DownloadImageRequest) returns (DownloadImageResponse);
+}
+
+enum ImageRoles {
+	unknown = 0;
+	avatar = 1;
+	message = 2;  
+}
+
+message UploadImageRequest {
+	bytes content = 1;
+	ImageRoles image_role = 2;
+}
+
+message UploadImageResponse {
+	int32 image_id = 1;
+}
+
+message DownloadImageRequest {
+	int32 image_id = 1;
+}
+
+message DownloadImageResponse {
+	bytes content = 1;
+}

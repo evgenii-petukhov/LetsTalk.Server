@@ -68,7 +68,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
                 Message = new ImagePreviewDto
                 {
                     MessageId = messageId,
-                    ImagePreviewId = imageId,
+                    Id = imageId,
                     AccountId = senderId
                 }
             });

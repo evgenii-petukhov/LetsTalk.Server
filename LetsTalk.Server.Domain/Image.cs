@@ -18,4 +18,8 @@ public class Image : BaseEntity
     public int FileId { get; set; }
 
     public Account? Account { get; set; }
+
+    public int? Width { get; set; }
+
+    public int? Height { get; set; }
 }

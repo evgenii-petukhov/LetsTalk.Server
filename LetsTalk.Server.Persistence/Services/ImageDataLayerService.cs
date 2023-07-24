@@ -19,14 +19,23 @@ public class ImageDataLayerService : IImageDataLayerService
         _fileRepository = fileRepository;
     }
 
-    public Task<T?> GetByIdOrDefaultAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default)
+    public Task<T?> GetByIdOrDefaultAsync<T>(
+        int id,
+        Expression<Func<Image, T>> selector,
+        CancellationToken cancellationToken = default)
     {
         return _imageRepository.GetById(id)
             .Select(selector)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<int> CreateWithFileAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole, CancellationToken cancellationToken = default)
+    public async Task<int> CreateWithFileAsync(
+        string filename,
+        ImageFormats imageFormat,
+        ImageRoles imageRole,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
     {
         var file = new Domain.File
         {
@@ -39,7 +48,9 @@ public class ImageDataLayerService : IImageDataLayerService
         {
             ImageFormatId = (int)imageFormat,
             ImageRoleId = (int)imageRole,
-            FileId = file.Id
+            FileId = file.Id,
+            Width = width,
+            Height = height
         };
         await _imageRepository.CreateAsync(image, cancellationToken);
 

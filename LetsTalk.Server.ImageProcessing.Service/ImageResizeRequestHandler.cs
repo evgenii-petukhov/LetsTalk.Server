@@ -41,8 +41,16 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     public async Task Handle(IMessageContext context, ImageResizeRequest message)
     {
         var data = await _imageService.FetchImageAsync(message.ImageId);
-        var scaledData = _imageResizeService.Resize(data, _fileStorageSettings.ImagePreviewMaxWidth, _fileStorageSettings.ImagePreviewMaxHeight);
-        var scaledImageId = await _imageService.SaveImageAsync(scaledData, ImageRoles.Message, ImageFormats.Webp);
+        var resizeResult = _imageResizeService.Resize(
+            data,
+            _fileStorageSettings.ImagePreviewMaxWidth,
+            _fileStorageSettings.ImagePreviewMaxHeight);
+        var scaledImageId = await _imageService.SaveImageAsync(
+            resizeResult.Data!,
+            ImageRoles.Message,
+            ImageFormats.Webp,
+            resizeResult.Width,
+            resizeResult.Height);
         await _messageRepository.SetImagePreviewAsync(message.MessageId, scaledImageId);
         await Task.WhenAll(
             SendNotificationAsync(message.SenderId, message.RecipientId, message.MessageId, scaledImageId),

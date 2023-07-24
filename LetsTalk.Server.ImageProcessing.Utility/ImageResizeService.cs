@@ -1,11 +1,12 @@
 ﻿using LetsTalk.Server.ImageProcessing.Abstractions;
+using LetsTalk.Server.ImageProcessor.Models;
 using SkiaSharp;
 
 namespace LetsTalk.Server.ImageProcessing.Utility;
 
 public class ImageResizeService : IImageResizeService
 {
-    public byte[] Resize(byte[] data, int maxWidth, int maxHeight)
+    public ImageResizeResult Resize(byte[] data, int maxWidth, int maxHeight)
     {
         using var ms = new MemoryStream(data);
         using var sourceBitmap = SKBitmap.Decode(ms);
@@ -14,10 +15,18 @@ public class ImageResizeService : IImageResizeService
         var scaleY = sourceBitmap.Height > maxHeight ? (double)maxHeight / sourceBitmap.Height : 1d;
         var scale = Math.Min(scaleX, scaleY);
 
-        using var scaledBitmap = sourceBitmap.Resize(new SKImageInfo((int)(scale * sourceBitmap.Width), (int)(scale * sourceBitmap.Height)), SKFilterQuality.High);
+        var targetWidth = (int)(scale * sourceBitmap.Width);
+        var targetHeight = (int)(scale * sourceBitmap.Height);
+
+        using var scaledBitmap = sourceBitmap.Resize(new SKImageInfo(targetWidth, targetHeight), SKFilterQuality.High);
         using var scaledImage = SKImage.FromBitmap(scaledBitmap);
         using var scaledData = scaledImage.Encode(SKEncodedImageFormat.Webp, 92);
 
-        return scaledData.ToArray();
+        return new ImageResizeResult
+        {
+            Data = scaledData.ToArray(),
+            Width = targetWidth,
+            Height = targetHeight
+        };
     }
 }

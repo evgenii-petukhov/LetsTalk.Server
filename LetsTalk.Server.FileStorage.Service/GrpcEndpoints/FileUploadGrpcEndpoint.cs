@@ -36,13 +36,19 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     {
         var data = request.Content.ToArray();
         var imageRole = (ImageRoles)request.ImageRole;
-        var validationResult =  _imageValidationService.ValidateImage(data, imageRole);
+        var validationResult = _imageValidationService.ValidateImage(data, imageRole);
 
         var accountId = (int)context.UserState["AccountId"];
 
         var previousAvatarFile = imageRole == ImageRoles.Avatar ? await GetAvatarAsync(accountId) : null;
 
-        var imageId = await _imageService.SaveImageAsync(data, imageRole, validationResult.ImageFormat, context.CancellationToken);
+        var imageId = await _imageService.SaveImageAsync(
+            data,
+            imageRole,
+            validationResult.ImageFormat,
+            validationResult.Width,
+            validationResult.Height,
+            context.CancellationToken);
 
         if (imageRole == ImageRoles.Avatar && previousAvatarFile != null)
         {

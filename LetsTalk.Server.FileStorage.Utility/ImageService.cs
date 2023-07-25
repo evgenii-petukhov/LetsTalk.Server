@@ -30,27 +30,10 @@ public class ImageService : IImageService
         return await _imageDataLayerService.CreateWithFileAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
     }
 
-    public async Task<byte[]?> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
+    public async Task<byte[]> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
     {
-        var response = await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => new
-        {
-            x.File!.FileName,
-            x.Width,
-            x.Height
-        }, cancellationToken);
+        var filename = await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => x.File!.FileName, cancellationToken);
 
-        if (response == null)
-        {
-            return null;
-        }
-
-        var data = await _fileService.ReadFileAsync(response.FileName!, FileTypes.Image, cancellationToken);
-
-        /*if (!response.Width.HasValue || !response.Height.HasValue)
-        {
-            var (width, height) = _imageInfoService.GetImageSize(data);
-            await _imageRepository.SetDimensionsAsync(imageId, width, height, cancellationToken);
-        }*/
-        return data;
+        return await _fileService.ReadFileAsync(filename!, FileTypes.Image, cancellationToken);
     }
 }

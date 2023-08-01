@@ -10,8 +10,6 @@ namespace LetsTalk.Server.ImageProcessing.Service;
 
 public class SetImageDimensionsRequestHandler : IMessageHandler<SetImageDimensionsRequest>
 {
-    private static readonly SemaphoreSlim SemaphoreSlim = new(1, 1);
-
     private readonly IImageDataLayerService _imageDataLayerService;
     private readonly IFileService _fileService;
     private readonly IImageInfoService _imageInfoService;
@@ -31,18 +29,9 @@ public class SetImageDimensionsRequestHandler : IMessageHandler<SetImageDimensio
 
     public async Task Handle(IMessageContext context, SetImageDimensionsRequest message)
     {
-        await SemaphoreSlim.WaitAsync();
-        try
-        {
-            var filename = await _imageDataLayerService.GetByIdOrDefaultAsync(message.ImageId, x => x.File!.FileName);
-            var data = await _fileService.ReadFileAsync(filename!, FileTypes.Image);
-            var (width, height) = _imageInfoService.GetImageSize(data);
-            await _imageRepository.SetDimensionsAsync(message.ImageId, width, height);
-        }
-        finally
-        {
-            SemaphoreSlim.Release();
-        }
-
+        var filename = await _imageDataLayerService.GetByIdOrDefaultAsync(message.ImageId, x => x.File!.FileName);
+        var data = await _fileService.ReadFileAsync(filename!, FileTypes.Image);
+        var (width, height) = _imageInfoService.GetImageSize(data);
+        await _imageRepository.SetDimensionsAsync(message.ImageId, width, height);
     }
 }

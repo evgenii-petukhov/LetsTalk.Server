@@ -8,7 +8,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     where T : BaseEntity
 {
     protected readonly LetsTalkDbContext _context;
-    private bool disposedValue;
+    private bool _disposedValue;
 
     public GenericRepository(LetsTalkDbContext context)
     {
@@ -32,14 +32,14 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!disposedValue)
+        if (!_disposedValue)
         {
             if (disposing)
             {
                 _context.Dispose();
             }
 
-            disposedValue = true;
+            _disposedValue = true;
         }
     }
 

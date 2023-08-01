@@ -40,7 +40,7 @@ public static class ImageProcessingServiceRegistration
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
                                 .AddSerializer<JsonCoreSerializer>()
-                                .AddTypedHandlers(h => h.AddHandler<ImageResizeRequestHandler>())
+                                .AddTypedHandlers(h => h.AddHandler<ImageResizeRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
                         .AddConsumer(consumer => consumer
@@ -50,7 +50,7 @@ public static class ImageProcessingServiceRegistration
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
                                 .AddSerializer<JsonCoreSerializer>()
-                                .AddTypedHandlers(h => h.AddHandler<SetImageDimensionsRequestHandler>())
+                                .AddTypedHandlers(h => h.AddHandler<SetImageDimensionsRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
                         .AddProducer(

@@ -42,7 +42,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     {
         var data = await _imageService.FetchImageAsync(message.ImageId);
         var resizeResult = _imageResizeService.Resize(
-            data,
+            data.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
         var scaledImageId = await _imageService.SaveImageAsync(

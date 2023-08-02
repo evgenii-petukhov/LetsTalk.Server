@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Dto.Models;
+﻿using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
@@ -31,23 +31,23 @@ public class ImageService : IImageService
         return await _imageDataLayerService.CreateWithFileAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
     }
 
-    public async Task<byte[]> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
     {
-        var filename = await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => x.File!.FileName, cancellationToken);
+        dynamic? image = useDimensions
+            ? await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => new
+            {
+                x.File!.FileName,
+                x.Width,
+                x.Height
+            }, cancellationToken)
+            : await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => new
+            {
+                x.File!.FileName,
+                Width = 0,
+                Height = 0
+            }, cancellationToken);
 
-        return await _fileService.ReadFileAsync(filename!, FileTypes.Image, cancellationToken);
-    }
-
-    public async Task<ImageDto> FetchImageWithDimensionsAsync(int imageId, CancellationToken cancellationToken = default)
-    {
-        var image = await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => new
-        {
-            x.File!.FileName,
-            x.Width,
-            x.Height
-        }, cancellationToken);
-
-        return new ImageDto
+        return new FetchImageResponse
         {
             Content = await _fileService.ReadFileAsync(image!.FileName!, FileTypes.Image, cancellationToken),
             Width = image.Width ?? 0,

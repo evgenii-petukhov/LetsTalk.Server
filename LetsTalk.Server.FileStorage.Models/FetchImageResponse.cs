@@ -1,6 +1,6 @@
-﻿namespace LetsTalk.Server.Dto.Models;
+﻿namespace LetsTalk.Server.FileStorage.Models;
 
-public class ImageDto
+public class FetchImageResponse
 {
     public byte[]? Content { get; set; }
 

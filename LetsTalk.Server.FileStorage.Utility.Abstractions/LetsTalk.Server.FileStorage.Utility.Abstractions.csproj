@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Models\LetsTalk.Server.FileStorage.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj" />
   </ItemGroup>
 

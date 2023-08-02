@@ -2,5 +2,9 @@
 
 public class ImageDto
 {
-    public string? Content { get; set; }
+    public byte[]? Content { get; set; }
+
+    public int? Width { get; set; }
+
+    public int? Height { get; set; }
 }

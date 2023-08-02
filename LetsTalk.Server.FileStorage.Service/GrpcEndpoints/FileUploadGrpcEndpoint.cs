@@ -1,5 +1,4 @@
-﻿using Google.Protobuf;
-using Grpc.Core;
+﻿using Grpc.Core;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Protos;
@@ -7,6 +6,7 @@ using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
+using AutoMapper;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
@@ -17,19 +17,22 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IFileRepository _fileRepository;
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IIOService _ioService;
+    private readonly IMapper _mapper;
 
     public FileUploadGrpcEndpoint(
         IImageService imageService,
         IImageValidationService imageValidationService,
         IFileRepository fileRepository,
         IAccountDataLayerService accountDataLayerService,
-        IIOService ioService)
+        IIOService ioService,
+        IMapper mapper)
     {
         _imageService = imageService;
         _imageValidationService = imageValidationService;
         _fileRepository = fileRepository;
         _accountDataLayerService = accountDataLayerService;
         _ioService = ioService;
+        _mapper = mapper;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -64,12 +67,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var content = await _imageService.FetchImageAsync(request.ImageId, context.CancellationToken);
-
-        return new DownloadImageResponse
-        {
-            Content = ByteString.CopyFrom(content)
-        };
+        var image = await _imageService.FetchImageWithDimensionsAsync(request.ImageId, context.CancellationToken);
+        return _mapper.Map<DownloadImageResponse>(image);
     }
 
     private async Task<Domain.File?> GetAvatarAsync(int accountId)

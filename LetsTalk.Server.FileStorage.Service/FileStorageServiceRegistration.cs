@@ -7,6 +7,7 @@ using LetsTalk.Server.FileStorage.Service.Services;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
+using System.Reflection;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -37,6 +38,7 @@ public static class FileStorageServiceRegistration
         services.AddFileStorageUtilityServices();
         services.AddImageProcessingUtilityServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
     }

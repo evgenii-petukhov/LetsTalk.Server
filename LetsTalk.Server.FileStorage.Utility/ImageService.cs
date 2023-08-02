@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
+﻿using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 
@@ -35,5 +36,22 @@ public class ImageService : IImageService
         var filename = await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => x.File!.FileName, cancellationToken);
 
         return await _fileService.ReadFileAsync(filename!, FileTypes.Image, cancellationToken);
+    }
+
+    public async Task<ImageDto> FetchImageWithDimensionsAsync(int imageId, CancellationToken cancellationToken = default)
+    {
+        var image = await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => new
+        {
+            x.File!.FileName,
+            x.Width,
+            x.Height
+        }, cancellationToken);
+
+        return new ImageDto
+        {
+            Content = await _fileService.ReadFileAsync(image!.FileName!, FileTypes.Image, cancellationToken),
+            Width = image.Width,
+            Height = image.Height
+        };
     }
 }

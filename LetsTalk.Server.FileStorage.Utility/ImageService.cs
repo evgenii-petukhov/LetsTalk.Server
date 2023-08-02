@@ -50,8 +50,8 @@ public class ImageService : IImageService
         return new ImageDto
         {
             Content = await _fileService.ReadFileAsync(image!.FileName!, FileTypes.Image, cancellationToken),
-            Width = image.Width,
-            Height = image.Height
+            Width = image.Width ?? 0,
+            Height = image.Height ?? 0
         };
     }
 }

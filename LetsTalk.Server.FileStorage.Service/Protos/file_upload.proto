@@ -2,8 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "LetsTalk.Server.FileStorage.Service.Protos";
 
-import "google/protobuf/wrappers.proto";
-
 package file_upload;
 
 service FileUploadGrpcEndpoint {
@@ -32,6 +30,6 @@ message DownloadImageRequest {
 
 message DownloadImageResponse {
 	bytes content = 1;
-	google.protobuf.Int32Value width = 2;
-	google.protobuf.Int32Value height = 3;
+	int32 width = 2;
+	int32 height = 3;
 }

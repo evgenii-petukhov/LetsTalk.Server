@@ -20,5 +20,5 @@ public record MessageDto
 
     public int? ImageId { get; set; }
 
-    public int? ImagePreviewId { get; set; }
+    public ImagePreviewDto? ImagePreview { get; set; }
 }

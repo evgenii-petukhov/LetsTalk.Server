@@ -41,7 +41,7 @@ public static class LinkPreviewServiceRegistration
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
                                 .AddSerializer<JsonCoreSerializer>()
-                                .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>())
+                                .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
                         .AddProducer(

@@ -4,9 +4,11 @@ using LetsTalk.Server.Persistence.DatabaseContext;
 
 namespace LetsTalk.Server.Persistence.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+public class GenericRepository<T> : IGenericRepository<T>, IDisposable
+    where T : BaseEntity
 {
     protected readonly LetsTalkDbContext _context;
+    private bool _disposedValue;
 
     public GenericRepository(LetsTalkDbContext context)
     {
@@ -26,5 +28,24 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             _context.ChangeTracker.Clear();
             throw;
         }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+
+            _disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

@@ -12,13 +12,13 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
     private readonly ILinkPreviewRepository _linkPreviewRepository;
     private readonly IDownloadService _downloadService;
     private readonly IRegexService _regexService;
-    private readonly ILogger<LinkPreviewRequest> _logger;
+    private readonly ILogger<LinkPreviewGenerator> _logger;
 
     public LinkPreviewGenerator(
         ILinkPreviewRepository linkPreviewRepository,
         IDownloadService downloadService,
         IRegexService regexService,
-        ILogger<LinkPreviewRequest> logger)
+        ILogger<LinkPreviewGenerator> logger)
     {
         _linkPreviewRepository = linkPreviewRepository;
         _downloadService = downloadService;

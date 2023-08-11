@@ -1,12 +1,6 @@
-﻿using LetsTalk.Server.Dto.Models;
-
-namespace LetsTalk.Server.Notifications.Abstractions;
+﻿namespace LetsTalk.Server.Notifications.Abstractions;
 
 public interface INotificationService
 {
-    Task SendMessageNotificationAsync(int accountId, MessageDto notification);
-
-    Task SendLinkPreviewNotificationAsync(int accountId, LinkPreviewDto notification);
-
-    Task SendImagePreviewNotificationAsync(int accountId, ImagePreviewDto notification);
+    Task SendNotificationAsync<T>(int accountId, T notification, string typeName);
 }

@@ -5,14 +5,18 @@ using LetsTalk.Server.Notifications.Models;
 
 namespace LetsTalk.Server.Notifications.Handlers;
 
-public abstract class NotificationHandler<T> : IMessageHandler<Notification<T>> where T : class
+public class NotificationHandler<T> : IMessageHandler<Notification<T>[]>
+    where T : class
 {
-    protected readonly INotificationService _notificationService;
+    private readonly INotificationService _notificationService;
 
-    protected NotificationHandler(INotificationService notificationService)
+    public NotificationHandler(INotificationService notificationService)
     {
         _notificationService = notificationService;
     }
 
-    public abstract Task Handle(IMessageContext context, Notification<T> notification);
+    public Task Handle(IMessageContext context, Notification<T>[] notifications)
+    {
+        return Task.WhenAll(notifications.Select(notification => _notificationService.SendNotificationAsync(notification.RecipientId, notification.Message!, typeof(T).Name)));
+    }
 }

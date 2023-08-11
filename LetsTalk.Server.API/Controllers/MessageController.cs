@@ -7,7 +7,6 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
-using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.ImageProcessor.Models;
 using LetsTalk.Server.LinkPreview.Models;
@@ -73,14 +72,26 @@ public class MessageController : ApiController
         cmd.SenderId = senderId;
         var response = await _mediator.Send(cmd, cancellationToken);
         await Task.WhenAll(
-            SendMessageNotificationAsync(request.RecipientId, response.Dto! with
-            {
-                IsMine = false
-            }),
-            SendMessageNotificationAsync(senderId, response.Dto with
-            {
-                IsMine = true
-            }),
+            _messageNotificationProducer.ProduceAsync(
+                _kafkaSettings.MessageNotification!.Topic,
+                Guid.NewGuid().ToString(),
+                new Notification<MessageDto>[]
+                {
+                    new Notification<MessageDto> {
+                        RecipientId = request.RecipientId,
+                        Message = response.Dto! with
+                        {
+                            IsMine = false
+                        }
+                    },
+                    new Notification<MessageDto> {
+                        RecipientId = senderId,
+                        Message = response.Dto with
+                        {
+                            IsMine = true
+                        }
+                    }
+                }),
             string.IsNullOrWhiteSpace(response.Url) ? Task.CompletedTask : _linkPreviewRequestProducer.ProduceAsync(
                 _kafkaSettings.LinkPreviewRequest!.Topic,
                 Guid.NewGuid().ToString(),
@@ -111,17 +122,5 @@ public class MessageController : ApiController
         cmd.RecipientId = GetAccountId();
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
-    }
-
-    private Task SendMessageNotificationAsync(int accountId, MessageDto messageDto)
-    {
-        return _messageNotificationProducer.ProduceAsync(
-            _kafkaSettings.MessageNotification!.Topic,
-            Guid.NewGuid().ToString(),
-            new Notification<MessageDto>
-            {
-                RecipientId = accountId,
-                Message = messageDto
-            });
     }
 }

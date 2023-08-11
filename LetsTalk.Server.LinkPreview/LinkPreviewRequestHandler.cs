@@ -45,28 +45,37 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             return;
         }
 
+        var linkPreviewDto = new LinkPreviewDto
+        {
+            MessageId = request.MessageId,
+            Title = linkPreview.Title,
+            ImageUrl = linkPreview.ImageUrl,
+            Url = linkPreview.Url
+        };
+
         await Task.WhenAll(
             _messageRepository.SetLinkPreviewAsync(request.MessageId, linkPreview.Id),
-            SendNotificationAsync(request.RecipientId, request.SenderId, request.MessageId, linkPreview),
-            SendNotificationAsync(request.SenderId, request.RecipientId, request.MessageId, linkPreview));
-    }
-
-    private Task SendNotificationAsync(int recipientId, int senderId, int messageId, Domain.LinkPreview linkPreview)
-    {
-        return _producer.ProduceAsync(
-            _kafkaSettings.LinkPreviewNotification!.Topic,
-            Guid.NewGuid().ToString(),
-            new Notification<LinkPreviewDto>
-            {
-                RecipientId = recipientId,
-                Message = new LinkPreviewDto
+            _producer.ProduceAsync(
+                _kafkaSettings.LinkPreviewNotification!.Topic,
+                Guid.NewGuid().ToString(),
+                new Notification<LinkPreviewDto>[]
                 {
-                    AccountId = senderId,
-                    MessageId = messageId,
-                    Title = linkPreview.Title,
-                    ImageUrl = linkPreview.ImageUrl,
-                    Url = linkPreview.Url
-                }
-            });
+                    new Notification<LinkPreviewDto>
+                    {
+                        RecipientId = request.RecipientId,
+                        Message = linkPreviewDto with
+                        {
+                            AccountId = request.SenderId
+                        }
+                    },
+                    new Notification<LinkPreviewDto>
+                    {
+                        RecipientId = request.SenderId,
+                        Message = linkPreviewDto with
+                        {
+                            AccountId = request.RecipientId
+                        }
+                    }
+                }));
     }
 }

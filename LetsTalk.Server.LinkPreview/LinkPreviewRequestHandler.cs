@@ -7,6 +7,7 @@ using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.Abstractions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.LinkPreview;
@@ -15,6 +16,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 {
     private readonly IMessageRepository _messageRepository;
     private readonly ILinkPreviewGenerator _linkPreviewGenerator;
+    private readonly ILogger<LinkPreviewRequestHandler> _logger;
     private readonly KafkaSettings _kafkaSettings;
 
     private readonly IMessageProducer _producer;
@@ -23,16 +25,20 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
         IMessageRepository messageRepository,
-        ILinkPreviewGenerator linkPreviewGenerator)
+        ILinkPreviewGenerator linkPreviewGenerator,
+        ILogger<LinkPreviewRequestHandler> logger)
     {
         _kafkaSettings = kafkaSettings.Value;
         _messageRepository = messageRepository;
         _linkPreviewGenerator = linkPreviewGenerator;
+        _logger = logger;
         _producer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
     }
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
     {
+        _logger.LogInformation("{@request}", request);
+
         if (request.Url == null)
         {
             return;

@@ -3,6 +3,7 @@ using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
+using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;
@@ -50,7 +51,7 @@ public static class NotificationsServicesRegistration
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
                         .AddSerializer<JsonCoreSerializer>()
-                        .AddTypedHandlers(h => h.AddHandler<MessageNotificationHandler>().WithHandlerLifetime(InstanceLifetime.Transient))))
+                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<MessageDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
                 .AddConsumer(consumer => consumer
                     .Topic(kafkaSettings.LinkPreviewNotification.Topic)
                     .WithGroupId(kafkaSettings.LinkPreviewNotification.GroupId)
@@ -58,7 +59,7 @@ public static class NotificationsServicesRegistration
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
                         .AddSerializer<JsonCoreSerializer>()
-                        .AddTypedHandlers(h => h.AddHandler<LinkPreviewNotificationHandler>().WithHandlerLifetime(InstanceLifetime.Transient))))
+                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<LinkPreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
                 .AddConsumer(consumer => consumer
                     .Topic(kafkaSettings.ImagePreviewNotification.Topic)
                     .WithGroupId(kafkaSettings.ImagePreviewNotification.GroupId)
@@ -66,7 +67,7 @@ public static class NotificationsServicesRegistration
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
                         .AddSerializer<JsonCoreSerializer>()
-                        .AddTypedHandlers(h => h.AddHandler<ImagePreviewNotificationHandler>().WithHandlerLifetime(InstanceLifetime.Transient))))));
+                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<ImagePreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))));
 
         return services;
     }

@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Notifications.Abstractions;
+﻿using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
@@ -18,24 +17,10 @@ public class NotificationService : INotificationService
         _messageHub = messageHub;
     }
 
-    public Task SendLinkPreviewNotificationAsync(int accountId, LinkPreviewDto notification)
+    public Task SendNotificationAsync<T>(int accountId, T notification, string typeName)
     {
         var notifications = _connectionManager.GetConnectionIds(accountId)?
-            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendLinkPreviewNotificationAsync(notification));
-        return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
-    }
-
-    public Task SendMessageNotificationAsync(int accountId, MessageDto notification)
-    {
-        var notifications = _connectionManager.GetConnectionIds(accountId)?
-            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendMessageNotificationAsync(notification));
-        return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
-    }
-
-    public Task SendImagePreviewNotificationAsync(int accountId, ImagePreviewDto notification)
-    {
-        var notifications = _connectionManager.GetConnectionIds(accountId)?
-            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendImagePreviewNotificationAsync(notification));
+            .Select(connectionId => _messageHub.Clients.Client(connectionId).SendNotificationAsync(notification, typeName));
         return notifications == null ? Task.CompletedTask : Task.WhenAll(notifications);
     }
 }

@@ -45,31 +45,38 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
             data.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
-        var scaledImageId = await _imageService.SaveImageAsync(
+        var imageId = await _imageService.SaveImageAsync(
             resizeResult.Data!,
             ImageRoles.Message,
             ImageFormats.Webp,
             resizeResult.Width,
             resizeResult.Height);
-        await _messageRepository.SetImagePreviewAsync(message.MessageId, scaledImageId);
-        await Task.WhenAll(
-            SendNotificationAsync(message.SenderId, message.RecipientId, message.MessageId, scaledImageId),
-            SendNotificationAsync(message.RecipientId, message.SenderId, message.MessageId, scaledImageId));
-    }
-
-    private Task SendNotificationAsync(int senderId, int recipientId, int messageId, int imageId)
-    {
-        return _producer.ProduceAsync(
+        await _messageRepository.SetImagePreviewAsync(message.MessageId, imageId);
+        var imagePreviewDto = new ImagePreviewDto
+        {
+            MessageId = message.MessageId,
+            Id = imageId,
+        };
+        await _producer.ProduceAsync(
             _kafkaSettings.ImagePreviewNotification!.Topic,
             Guid.NewGuid().ToString(),
-            new Notification<ImagePreviewDto>
+            new Notification<ImagePreviewDto>[]
             {
-                RecipientId = recipientId,
-                Message = new ImagePreviewDto
+                new Notification<ImagePreviewDto>
                 {
-                    MessageId = messageId,
-                    Id = imageId,
-                    AccountId = senderId
+                    RecipientId = message.RecipientId,
+                    Message = imagePreviewDto with
+                    {
+                        AccountId = message.SenderId
+                    }
+                },
+                new Notification<ImagePreviewDto>
+                {
+                    RecipientId = message.SenderId,
+                    Message = imagePreviewDto with
+                    {
+                        AccountId = message.RecipientId
+                    }
                 }
             });
     }

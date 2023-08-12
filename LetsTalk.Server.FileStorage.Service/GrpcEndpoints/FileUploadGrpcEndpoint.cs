@@ -7,6 +7,7 @@ using LetsTalk.Server.Persistence.Enums;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
+using LetsTalk.Server.Persistence.DatabaseContext;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
@@ -18,6 +19,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IIOService _ioService;
     private readonly IMapper _mapper;
+    private readonly LetsTalkDbContext _context;
 
     public FileUploadGrpcEndpoint(
         IImageService imageService,
@@ -25,7 +27,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         IFileRepository fileRepository,
         IAccountDataLayerService accountDataLayerService,
         IIOService ioService,
-        IMapper mapper)
+        IMapper mapper,
+        LetsTalkDbContext context)
     {
         _imageService = imageService;
         _imageValidationService = imageValidationService;
@@ -33,6 +36,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         _accountDataLayerService = accountDataLayerService;
         _ioService = ioService;
         _mapper = mapper;
+        _context = context;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -43,7 +47,9 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
         var accountId = (int)context.UserState["AccountId"];
 
-        var previousAvatarFile = imageRole == ImageRoles.Avatar ? await GetAvatarAsync(accountId) : null;
+        await using var transaction = await _context.Database.BeginTransactionAsync(context.CancellationToken);
+
+        var prevFile = imageRole == ImageRoles.Avatar ? await GetAvatarAsync(accountId, context.CancellationToken) : null;
 
         var imageId = await _imageService.SaveImageAsync(
             data,
@@ -53,10 +59,16 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
             validationResult.Height,
             context.CancellationToken);
 
-        if (imageRole == ImageRoles.Avatar && previousAvatarFile != null)
+        if (prevFile != null)
         {
-            _ioService.DeleteFile(previousAvatarFile.FileName!, FileTypes.Image);
-            await _fileRepository.DeleteAsync(previousAvatarFile.Id);
+            await _fileRepository.DeleteAsync(prevFile.Id, context.CancellationToken);
+        }
+
+        await transaction.CommitAsync(context.CancellationToken);
+
+        if (prevFile != null)
+        {
+            _ioService.DeleteFile(prevFile.FileName!, FileTypes.Image);
         }
 
         return new UploadImageResponse
@@ -71,12 +83,12 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         return _mapper.Map<DownloadImageResponse>(image);
     }
 
-    private async Task<Domain.File?> GetAvatarAsync(int accountId)
+    private async Task<Domain.File?> GetAvatarAsync(int accountId, CancellationToken cancellationToken)
     {
         var response = await _accountDataLayerService.GetByIdOrDefaultAsync(accountId, x => new
         {
             x.Image!.File
-        }, true);
+        }, true, cancellationToken);
 
         return response?.File;
     }

@@ -1,6 +1,8 @@
 ﻿using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Core.Attributes;
+using LetsTalk.Server.Core.Constants;
 using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
@@ -12,17 +14,18 @@ using RestSharp;
 
 namespace LetsTalk.Server.Core.Services;
 
-public class VkService : IVkService
+[OpenAuthProviderId(OpenAuthProviderIdentifiers.VK)]
+public class VkOpenAuthProvider : IOpenAuthProvider
 {
     private const string VK_URL = "https://api.vk.com/";
 
     private readonly IAccountDataLayerService _accountDataLayerService;
-    private readonly IAppLogger<VkService> _appLogger;
+    private readonly IAppLogger<VkOpenAuthProvider> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
 
-    public VkService(
+    public VkOpenAuthProvider(
         IAccountDataLayerService accountDataLayerService,
-        IAppLogger<VkService> appLogger,
+        IAppLogger<VkOpenAuthProvider> appLogger,
         IAuthenticationClient authenticationClient)
     {
         _accountDataLayerService = accountDataLayerService;
@@ -72,7 +75,7 @@ public class VkService : IVkService
         }
         catch (HttpRequestException e)
         {
-            throw new BadRequestException($"Facebook response: {e.Message}");
+            throw new BadRequestException($"VK response: {e.Message}");
         }
         catch (Exception e)
         {

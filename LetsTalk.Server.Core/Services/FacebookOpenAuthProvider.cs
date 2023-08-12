@@ -1,6 +1,8 @@
 ﻿using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Core.Attributes;
+using LetsTalk.Server.Core.Constants;
 using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
@@ -11,14 +13,15 @@ using RestSharp;
 
 namespace LetsTalk.Server.Core.Services;
 
-public class FacebookService : IFacebookService
+[OpenAuthProviderId(OpenAuthProviderIdentifiers.FACEBOOK)]
+public class FacebookOpenAuthProvider : IOpenAuthProvider
 {
     private const string FACEBOOK_URL = "https://graph.facebook.com/";
 
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IAuthenticationClient _authenticationClient;
 
-    public FacebookService(
+    public FacebookOpenAuthProvider(
         IAccountDataLayerService accountDataLayerService,
         IAuthenticationClient authenticationClient)
     {

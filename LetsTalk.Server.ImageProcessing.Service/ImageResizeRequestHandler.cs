@@ -8,6 +8,7 @@ using LetsTalk.Server.ImageProcessing.Abstractions;
 using LetsTalk.Server.ImageProcessor.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 
@@ -18,6 +19,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     private readonly IImageService _imageService;
     private readonly IImageResizeService _imageResizeService;
     private readonly IMessageRepository _messageRepository;
+    private readonly LetsTalkDbContext _context;
     private readonly FileStorageSettings _fileStorageSettings;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _producer;
@@ -28,11 +30,13 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         IMessageRepository messageRepository,
         IProducerAccessor producerAccessor,
         IOptions<FileStorageSettings> fileStorageSettings,
-        IOptions<KafkaSettings> kafkaSettings)
+        IOptions<KafkaSettings> kafkaSettings,
+        LetsTalkDbContext context)
     {
         _imageService = imageService;
         _imageResizeService = imageResizeService;
         _messageRepository = messageRepository;
+        _context = context;
         _fileStorageSettings = fileStorageSettings.Value;
         _kafkaSettings = kafkaSettings.Value;
         _producer = producerAccessor.GetProducer(_kafkaSettings.ImagePreviewNotification!.Producer);
@@ -45,18 +49,26 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
             data.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
         var imageId = await _imageService.SaveImageAsync(
             resizeResult.Data!,
             ImageRoles.Message,
             ImageFormats.Webp,
             resizeResult.Width,
             resizeResult.Height);
+
         await _messageRepository.SetImagePreviewAsync(message.MessageId, imageId);
+
+        await transaction.CommitAsync();
+
         var imagePreviewDto = new ImagePreviewDto
         {
             MessageId = message.MessageId,
             Id = imageId,
         };
+
         await _producer.ProduceAsync(
             _kafkaSettings.ImagePreviewNotification!.Topic,
             Guid.NewGuid().ToString(),

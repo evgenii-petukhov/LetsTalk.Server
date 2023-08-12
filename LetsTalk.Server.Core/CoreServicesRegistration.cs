@@ -18,7 +18,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
-        services.AddTransient<IOpenAuthProviderResolver, OpenAuthProviderResolver<OpenAuthProviderIdAttribute>>();
+        services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
 
         return services;
     }

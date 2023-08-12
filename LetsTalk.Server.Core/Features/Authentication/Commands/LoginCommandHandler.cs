@@ -8,11 +8,11 @@ namespace LetsTalk.Server.Core.Features.Authentication.Commands;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDto>
 {
-    private readonly IOpenAuthProviderResolver _openAuthProviderResolver;
+    private readonly IOpenAuthProviderResolver<string> _openAuthProviderResolver;
     private readonly IMapper _mapper;
 
     public LoginCommandHandler(
-        IOpenAuthProviderResolver openAuthProviderResolver,
+        IOpenAuthProviderResolver<string> openAuthProviderResolver,
         IMapper mapper)
     {
         _openAuthProviderResolver = openAuthProviderResolver;

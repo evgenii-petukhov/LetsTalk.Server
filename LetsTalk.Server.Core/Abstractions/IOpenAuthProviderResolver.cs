@@ -1,8 +1,6 @@
-﻿using LetsTalk.Server.Core.Attributes;
+﻿namespace LetsTalk.Server.Core.Abstractions;
 
-namespace LetsTalk.Server.Core.Abstractions;
-
-public interface IOpenAuthProviderResolver
+public interface IOpenAuthProviderResolver<T>
 {
-    IOpenAuthProvider Resolve(string openAuthProviderId);
+    IOpenAuthProvider Resolve(T openAuthProviderId);
 }

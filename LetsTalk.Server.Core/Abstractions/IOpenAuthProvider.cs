@@ -3,7 +3,7 @@ using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 
-public interface IAuthenticationService
+public interface IOpenAuthProvider
 {
     Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken);
 }

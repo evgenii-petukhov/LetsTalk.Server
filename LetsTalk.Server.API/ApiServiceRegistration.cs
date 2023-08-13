@@ -5,7 +5,6 @@ using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core;
 using LetsTalk.Server.Logging;
-using LetsTalk.Server.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -21,8 +20,7 @@ public static class ApiServiceRegistration
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddCoreServices();
-        services.AddPersistenceServices(configuration);
+        services.AddCoreServices(configuration);
         services.AddLoggingServices();
         services.AddAuthenticationClientServices(configuration);
         services.AddControllers();

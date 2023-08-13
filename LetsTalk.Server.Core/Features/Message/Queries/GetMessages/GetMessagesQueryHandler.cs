@@ -35,7 +35,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
         var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
 
         var messagesToProcess = messages
-            .Where(message => message.TextHtml == null)
+            .Where(message => message.TextHtml == null && !message.ImageId.HasValue)
             .ToList();
 
         Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));

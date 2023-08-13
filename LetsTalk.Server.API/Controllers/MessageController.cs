@@ -53,6 +53,18 @@ public class MessageController : ApiController
         var query = new GetMessagesQuery(senderId, recipientId, pageIndex, _messagingSettings.MessagesPerPage);
         var messageDtos = await _mediator.Send(query, cancellationToken);
         await Task.WhenAll(messageDtos
+            .Where(messageDto => messageDto.ImageId.HasValue && messageDto.ImagePreview == null)
+            .Select(messageDto => _imageResizeRequestProducer.ProduceAsync(
+                _kafkaSettings.ImageResizeRequest!.Topic,
+                Guid.NewGuid().ToString(),
+                new ImageResizeRequest
+                {
+                    SenderId = senderId,
+                    RecipientId = recipientId,
+                    MessageId = messageDto.Id,
+                    ImageId = messageDto.ImageId!.Value
+                })));
+        await Task.WhenAll(messageDtos
             .Where(messageDto => messageDto.ImagePreview != null && (!messageDto.ImagePreview.Width.HasValue || !messageDto.ImagePreview.Height.HasValue))
             .Select(messageDto => _setImageDimensionsRequestProducer.ProduceAsync(
                 _kafkaSettings.SetImageDimensionsRequest!.Topic,

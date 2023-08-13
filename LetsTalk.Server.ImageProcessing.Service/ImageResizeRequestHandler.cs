@@ -19,10 +19,12 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     private readonly IImageService _imageService;
     private readonly IImageResizeService _imageResizeService;
     private readonly IMessageRepository _messageRepository;
-    private readonly LetsTalkDbContext _context;
     private readonly FileStorageSettings _fileStorageSettings;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _producer;
+    private readonly IFileService _fileService;
+    private readonly IImageDataLayerService _imageDataLayerService;
+    private readonly LetsTalkDbContext _context;
 
     public ImageResizeRequestHandler(
         IImageService imageService,
@@ -31,37 +33,39 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         IProducerAccessor producerAccessor,
         IOptions<FileStorageSettings> fileStorageSettings,
         IOptions<KafkaSettings> kafkaSettings,
+        IFileService fileService,
+        IImageDataLayerService imageDataLayerService,
         LetsTalkDbContext context)
     {
         _imageService = imageService;
         _imageResizeService = imageResizeService;
         _messageRepository = messageRepository;
-        _context = context;
+        _fileService = fileService;
+        _imageDataLayerService = imageDataLayerService;
         _fileStorageSettings = fileStorageSettings.Value;
         _kafkaSettings = kafkaSettings.Value;
         _producer = producerAccessor.GetProducer(_kafkaSettings.ImagePreviewNotification!.Producer);
+        _context = context;
     }
 
     public async Task Handle(IMessageContext context, ImageResizeRequest message)
     {
-        var data = await _imageService.FetchImageAsync(message.ImageId);
+        var fetchImageResponse = await _imageService.FetchImageAsync(message.ImageId);
         var resizeResult = _imageResizeService.Resize(
-            data.Content!,
+            fetchImageResponse.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
 
-        await using var transaction = await _context.Database.BeginTransactionAsync();
+        var data = fetchImageResponse.Content!.ToArray();
+        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, ImageRoles.Message);
 
-        var imageId = await _imageService.SaveImageAsync(
-            resizeResult.Data!,
-            ImageRoles.Message,
-            ImageFormats.Webp,
-            resizeResult.Width,
-            resizeResult.Height);
-
-        await _messageRepository.SetImagePreviewAsync(message.MessageId, imageId);
-
-        await transaction.CommitAsync();
+        int imageId;
+        await using (var transaction = await _context.Database.BeginTransactionAsync())
+        {
+            imageId = await _imageDataLayerService.CreateWithFileAsync(filename, ImageFormats.Webp, ImageRoles.Message, resizeResult.Width, resizeResult.Height);
+            await _messageRepository.SetImagePreviewAsync(message.MessageId, imageId);
+            await transaction.CommitAsync();
+        }
 
         var imagePreviewDto = new ImagePreviewDto
         {

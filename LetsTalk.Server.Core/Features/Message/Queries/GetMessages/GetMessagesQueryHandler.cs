@@ -28,24 +28,27 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-
-        await _messageRepository.MarkAllAsReadAsync(request.SenderId, request.RecipientId, cancellationToken);
-
         var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
+
+        if (messages.Any(message => !message.IsRead))
+        {
+            await _messageRepository.MarkAllAsReadAsync(request.SenderId, request.RecipientId, cancellationToken);
+        }
 
         var messagesToProcess = messages
             .Where(message => message.TextHtml == null && !message.ImageId.HasValue)
             .ToList();
 
-        Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));
-
-        foreach (var message in messagesToProcess)
+        if (messagesToProcess.Any())
         {
-            await _messageRepository.SetTextHtmlAsync(message.Id, message.TextHtml!, cancellationToken: cancellationToken);
+            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));
+            foreach (var message in messagesToProcess)
+            {
+                await _messageRepository.SetTextHtmlAsync(message.Id, message.TextHtml!, cancellationToken: cancellationToken);
+            }
+            await transaction.CommitAsync(cancellationToken);
         }
-
-        await transaction.CommitAsync(cancellationToken);
 
         return _mapper.Map<List<MessageDto>>(messages)
             .ConvertAll(messageDto =>

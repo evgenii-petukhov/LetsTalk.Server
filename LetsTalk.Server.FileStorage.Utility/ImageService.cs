@@ -18,19 +18,6 @@ public class ImageService : IImageService
         _imageDataLayerService = imageDataLayerService;
     }
 
-    public async Task<int> SaveImageAsync(
-        byte[] content,
-        ImageRoles imageRole,
-        ImageFormats imageFormat,
-        int width,
-        int height,
-        CancellationToken cancellationToken = default)
-    {
-        var data = content.ToArray();
-        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, cancellationToken);
-        return await _imageDataLayerService.CreateWithFileAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
-    }
-
     public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
     {
         dynamic? image = useDimensions

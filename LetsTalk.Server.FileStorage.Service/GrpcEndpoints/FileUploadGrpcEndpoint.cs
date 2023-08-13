@@ -19,6 +19,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IIOService _ioService;
     private readonly IMapper _mapper;
+    private readonly IFileService _fileService;
+    private readonly IImageDataLayerService _imageDataLayerService;
     private readonly LetsTalkDbContext _context;
 
     public FileUploadGrpcEndpoint(
@@ -28,6 +30,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         IAccountDataLayerService accountDataLayerService,
         IIOService ioService,
         IMapper mapper,
+        IFileService fileService,
+        IImageDataLayerService imageDataLayerService,
         LetsTalkDbContext context)
     {
         _imageService = imageService;
@@ -36,6 +40,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         _accountDataLayerService = accountDataLayerService;
         _ioService = ioService;
         _mapper = mapper;
+        _fileService = fileService;
+        _imageDataLayerService = imageDataLayerService;
         _context = context;
     }
 
@@ -46,25 +52,21 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         var validationResult = _imageValidationService.ValidateImage(data, imageRole);
 
         var accountId = (int)context.UserState["AccountId"];
-
-        await using var transaction = await _context.Database.BeginTransactionAsync(context.CancellationToken);
-
         var prevFile = imageRole == ImageRoles.Avatar ? await GetAvatarAsync(accountId, context.CancellationToken) : null;
+        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, context.CancellationToken);
 
-        var imageId = await _imageService.SaveImageAsync(
-            data,
-            imageRole,
-            validationResult.ImageFormat,
-            validationResult.Width,
-            validationResult.Height,
-            context.CancellationToken);
-
-        if (prevFile != null)
+        int imageId;
+        await using (var transaction = await _context.Database.BeginTransactionAsync(context.CancellationToken))
         {
-            await _fileRepository.DeleteAsync(prevFile.Id, context.CancellationToken);
-        }
+            imageId = await _imageDataLayerService.CreateWithFileAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, context.CancellationToken);
 
-        await transaction.CommitAsync(context.CancellationToken);
+            if (prevFile != null)
+            {
+                await _fileRepository.DeleteAsync(prevFile.Id, context.CancellationToken);
+            }
+
+            await transaction.CommitAsync(context.CancellationToken);
+        }
 
         if (prevFile != null)
         {

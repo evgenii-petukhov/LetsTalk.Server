@@ -52,7 +52,7 @@ public class MessageController : ApiController
         var senderId = GetAccountId();
         var query = new GetMessagesQuery(senderId, recipientId, pageIndex, _messagingSettings.MessagesPerPage);
         var messageDtos = await _mediator.Send(query, cancellationToken);
-        await Task.WhenAll(messageDtos
+        var imageResizeTasks = messageDtos
             .Where(messageDto => messageDto.ImageId.HasValue && messageDto.ImagePreview == null)
             .Select(messageDto => _imageResizeRequestProducer.ProduceAsync(
                 _kafkaSettings.ImageResizeRequest!.Topic,
@@ -63,16 +63,18 @@ public class MessageController : ApiController
                     RecipientId = recipientId,
                     MessageId = messageDto.Id,
                     ImageId = messageDto.ImageId!.Value
-                })));
-        await Task.WhenAll(messageDtos
-            .Where(messageDto => messageDto.ImagePreview != null && (!messageDto.ImagePreview.Width.HasValue || !messageDto.ImagePreview.Height.HasValue))
+                }));
+        var setImageDimensionsTasks = messageDtos
+            .Where(messageDto => messageDto.ImageId.HasValue && messageDto.ImagePreview != null && (!messageDto.ImagePreview.Width.HasValue || !messageDto.ImagePreview.Height.HasValue))
             .Select(messageDto => _setImageDimensionsRequestProducer.ProduceAsync(
                 _kafkaSettings.SetImageDimensionsRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new SetImageDimensionsRequest
                 {
                     ImageId = messageDto.ImagePreview!.Id
-                })));
+                }));
+
+        await Task.WhenAll(imageResizeTasks.Concat(setImageDimensionsTasks));
         return Ok(messageDtos);
     }
 

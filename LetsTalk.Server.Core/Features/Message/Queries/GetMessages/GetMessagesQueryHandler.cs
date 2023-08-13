@@ -2,7 +2,6 @@
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Persistence.DatabaseContext;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
@@ -12,18 +11,15 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
     private readonly IMessageRepository _messageRepository;
     private readonly IMessageProcessor _messageProcessor;
     private readonly IMapper _mapper;
-    private readonly LetsTalkDbContext _context;
 
     public GetMessagesQueryHandler(
         IMessageRepository messageRepository,
         IMessageProcessor messageProcessor,
-        IMapper mapper,
-        LetsTalkDbContext context)
+        IMapper mapper)
     {
         _messageRepository = messageRepository;
         _messageProcessor = messageProcessor;
         _mapper = mapper;
-        _context = context;
     }
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
@@ -41,13 +37,8 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
         if (messagesToProcess.Any())
         {
-            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
             Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));
-            foreach (var message in messagesToProcess)
-            {
-                await _messageRepository.SetTextHtmlAsync(message.Id, message.TextHtml!, cancellationToken: cancellationToken);
-            }
-            await transaction.CommitAsync(cancellationToken);
+            await _messageRepository.SetTextHtmlAsync(messagesToProcess, cancellationToken);
         }
 
         return _mapper.Map<List<MessageDto>>(messages)

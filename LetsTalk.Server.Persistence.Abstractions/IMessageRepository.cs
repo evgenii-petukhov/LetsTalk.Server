@@ -10,7 +10,7 @@ public interface IMessageRepository : IGenericRepository<Message>
 
     Task MarkAllAsReadAsync(int senderId, int recipientId, CancellationToken cancellationToken = default);
 
-    Task SetTextHtmlAsync(int messageId, string html, CancellationToken cancellationToken = default);
+    Task SetTextHtmlAsync(IEnumerable<Message> messages, CancellationToken cancellationToken = default);
 
     Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
 

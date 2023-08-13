@@ -8,7 +8,6 @@ using LetsTalk.Server.ImageProcessing.Abstractions;
 using LetsTalk.Server.ImageProcessor.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 
@@ -17,35 +16,29 @@ namespace LetsTalk.Server.ImageProcessing.Service;
 public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
 {
     private readonly IImageService _imageService;
+    private readonly IFileService _fileService;
     private readonly IImageResizeService _imageResizeService;
-    private readonly IMessageRepository _messageRepository;
+    private readonly IImageDataLayerService _imageDataLayerService;
     private readonly FileStorageSettings _fileStorageSettings;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _producer;
-    private readonly IFileService _fileService;
-    private readonly IImageDataLayerService _imageDataLayerService;
-    private readonly LetsTalkDbContext _context;
 
     public ImageResizeRequestHandler(
         IImageService imageService,
+        IFileService fileService,
         IImageResizeService imageResizeService,
-        IMessageRepository messageRepository,
-        IProducerAccessor producerAccessor,
+        IImageDataLayerService imageDataLayerService,
         IOptions<FileStorageSettings> fileStorageSettings,
         IOptions<KafkaSettings> kafkaSettings,
-        IFileService fileService,
-        IImageDataLayerService imageDataLayerService,
-        LetsTalkDbContext context)
+        IProducerAccessor producerAccessor)
     {
         _imageService = imageService;
-        _imageResizeService = imageResizeService;
-        _messageRepository = messageRepository;
         _fileService = fileService;
+        _imageResizeService = imageResizeService;
         _imageDataLayerService = imageDataLayerService;
         _fileStorageSettings = fileStorageSettings.Value;
         _kafkaSettings = kafkaSettings.Value;
         _producer = producerAccessor.GetProducer(_kafkaSettings.ImagePreviewNotification!.Producer);
-        _context = context;
     }
 
     public async Task Handle(IMessageContext context, ImageResizeRequest message)
@@ -55,22 +48,14 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
             fetchImageResponse.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
+        var filename = await _fileService.SaveDataAsync(fetchImageResponse.Content!.ToArray(), FileTypes.Image, ImageRoles.Message);
 
-        var data = fetchImageResponse.Content!.ToArray();
-        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, ImageRoles.Message);
-
-        int imageId;
-        await using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            imageId = await _imageDataLayerService.CreateWithFileAsync(filename, ImageFormats.Webp, ImageRoles.Message, resizeResult.Width, resizeResult.Height);
-            await _messageRepository.SetImagePreviewAsync(message.MessageId, imageId);
-            await transaction.CommitAsync();
-        }
+        var image = await _imageDataLayerService.CreateImagePreviewAsync(filename, ImageFormats.Webp, resizeResult.Width, resizeResult.Height, message.MessageId);
 
         var imagePreviewDto = new ImagePreviewDto
         {
             MessageId = message.MessageId,
-            Id = imageId,
+            Id = image.Id,
         };
 
         await _producer.ProduceAsync(

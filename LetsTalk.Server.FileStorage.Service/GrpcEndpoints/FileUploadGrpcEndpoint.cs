@@ -7,7 +7,6 @@ using LetsTalk.Server.Persistence.Enums;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
-using LetsTalk.Server.Persistence.DatabaseContext;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
@@ -15,34 +14,28 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {
     private readonly IImageService _imageService;
     private readonly IImageValidationService _imageValidationService;
-    private readonly IFileRepository _fileRepository;
     private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IIOService _ioService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
     private readonly IImageDataLayerService _imageDataLayerService;
-    private readonly LetsTalkDbContext _context;
 
     public FileUploadGrpcEndpoint(
         IImageService imageService,
         IImageValidationService imageValidationService,
-        IFileRepository fileRepository,
         IAccountDataLayerService accountDataLayerService,
         IIOService ioService,
         IMapper mapper,
         IFileService fileService,
-        IImageDataLayerService imageDataLayerService,
-        LetsTalkDbContext context)
+        IImageDataLayerService imageDataLayerService)
     {
         _imageService = imageService;
         _imageValidationService = imageValidationService;
-        _fileRepository = fileRepository;
         _accountDataLayerService = accountDataLayerService;
         _ioService = ioService;
         _mapper = mapper;
         _fileService = fileService;
         _imageDataLayerService = imageDataLayerService;
-        _context = context;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -55,18 +48,9 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         var prevFile = imageRole == ImageRoles.Avatar ? await GetAvatarAsync(accountId, context.CancellationToken) : null;
         var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, context.CancellationToken);
 
-        int imageId;
-        await using (var transaction = await _context.Database.BeginTransactionAsync(context.CancellationToken))
-        {
-            imageId = await _imageDataLayerService.CreateWithFileAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, context.CancellationToken);
-
-            if (prevFile != null)
-            {
-                await _fileRepository.DeleteAsync(prevFile.Id, context.CancellationToken);
-            }
-
-            await transaction.CommitAsync(context.CancellationToken);
-        }
+        var image = prevFile == null
+            ? await _imageDataLayerService.CreateImageAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, context.CancellationToken)
+            : await _imageDataLayerService.ReplaceImageAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, prevFile.Id, context.CancellationToken);
 
         if (prevFile != null)
         {
@@ -75,7 +59,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
         return new UploadImageResponse
         {
-            ImageId = imageId
+            ImageId = image.Id
         };
     }
 

@@ -43,12 +43,14 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
                 .SetProperty(message => message.DateReadUnix, DateHelper.GetUnixTimestamp()), cancellationToken: cancellationToken);
     }
 
-    public Task SetTextHtmlAsync(int messageId, string html, CancellationToken cancellationToken = default)
+    public async Task SetTextHtmlAsync(IEnumerable<Message> messages, CancellationToken cancellationToken = default)
     {
-        return _context.Messages
-            .Where(message => message.Id == messageId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(message => message.TextHtml, html), cancellationToken: cancellationToken);
+        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        foreach (var message in messages)
+        {
+            await SetTextHtmlAsync(message.Id, message.TextHtml!, cancellationToken: cancellationToken);
+        }
+        await transaction.CommitAsync(cancellationToken);
     }
 
     public Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default)
@@ -65,5 +67,13 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .Where(message => message.Id == messageId)
             .ExecuteUpdateAsync(x => x
                 .SetProperty(message => message.ImagePreviewId, imageId), cancellationToken: cancellationToken);
+    }
+
+    private Task SetTextHtmlAsync(int messageId, string html, CancellationToken cancellationToken = default)
+    {
+        return _context.Messages
+            .Where(message => message.Id == messageId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(message => message.TextHtml, html), cancellationToken: cancellationToken);
     }
 }

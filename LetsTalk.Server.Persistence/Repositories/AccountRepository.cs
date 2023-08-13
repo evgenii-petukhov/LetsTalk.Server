@@ -22,10 +22,10 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
         return includeFile
             ? _context.Accounts
-                .Include(x => x.Image)
-                .Include(x => x.Image!.File)
-                .Where(q => q.Id == id)
-            : _context.Accounts.Where(q => q.Id == id);
+                .Include(account => account.Image)
+                .ThenInclude(image => image!.File)
+                .Where(account => account.Id == id)
+            : _context.Accounts.Where(account => account.Id == id);
     }
 
     public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default)

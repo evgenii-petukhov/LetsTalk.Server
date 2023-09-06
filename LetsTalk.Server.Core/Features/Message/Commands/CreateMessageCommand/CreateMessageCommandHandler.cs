@@ -3,7 +3,7 @@ using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;

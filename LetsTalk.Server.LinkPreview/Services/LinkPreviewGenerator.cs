@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.LinkPreview.Abstractions;
-using LetsTalk.Server.LinkPreview.Models;
-using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Web;

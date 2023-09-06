@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 

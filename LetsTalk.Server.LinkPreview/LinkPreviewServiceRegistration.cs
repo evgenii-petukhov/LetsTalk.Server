@@ -5,9 +5,9 @@ using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Services;
-using LetsTalk.Server.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LetsTalk.Server.Persistence.Repository;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -22,7 +22,6 @@ public static class LinkPreviewServiceRegistration
         services.AddTransient<IDownloadService, DownloadService>();
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<ILinkPreviewGenerator, LinkPreviewGenerator>();
-        services.AddPersistenceServices(configuration);
         services.AddKafka(
             kafka => kafka
                 .UseConsoleLog()
@@ -55,6 +54,7 @@ public static class LinkPreviewServiceRegistration
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.AddPersistenceRepositoryServices(configuration);
 
         return services;
     }

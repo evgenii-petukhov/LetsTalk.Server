@@ -6,8 +6,8 @@ using LetsTalk.Server.Core.Constants;
 using LetsTalk.Server.Core.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Newtonsoft.Json;
 using RestSharp;
 

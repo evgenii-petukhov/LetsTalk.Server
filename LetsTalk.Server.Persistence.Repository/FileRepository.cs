@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Persistence.DatabaseContext;
+﻿using LetsTalk.Server.Persistence.DatabaseContext;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTalk.Server.Persistence.Repositories;
+namespace LetsTalk.Server.Persistence.Repository;
 
 public class FileRepository : GenericRepository<Domain.File>, IFileRepository
 {

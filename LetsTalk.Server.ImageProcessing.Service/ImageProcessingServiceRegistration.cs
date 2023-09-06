@@ -2,7 +2,6 @@
 using LetsTalk.Server.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LetsTalk.Server.Persistence;
 using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration.Models;
@@ -18,8 +17,7 @@ public static class ImageProcessingServiceRegistration
         IConfiguration configuration)
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-        services.AddPersistenceServices(configuration);
-        services.AddFileStorageUtilityServices();
+        services.AddFileStorageUtilityServices(configuration);
         services.AddImageProcessingUtilityServices();
         services.AddKafka(
             kafka => kafka

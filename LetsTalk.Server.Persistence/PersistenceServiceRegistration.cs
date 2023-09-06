@@ -1,7 +1,4 @@
-﻿using LetsTalk.Server.Persistence.Abstractions;
-using LetsTalk.Server.Persistence.DatabaseContext;
-using LetsTalk.Server.Persistence.Repositories;
-using LetsTalk.Server.Persistence.Services;
+﻿using LetsTalk.Server.Persistence.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,12 +18,6 @@ public static class PersistenceServiceRegistration
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
-        services.AddTransient<IAccountRepository, AccountRepository>();
-        services.AddTransient<IImageDataLayerService, ImageDataLayerService>();
-        services.AddTransient<IMessageRepository, MessageRepository>();
-        services.AddTransient<IImageRepository, ImageRepository>();
-        services.AddTransient<IFileRepository, FileRepository>();
-        services.AddTransient<ILinkPreviewRepository, LinkPreviewRepository>();
         return services;
     }
 }

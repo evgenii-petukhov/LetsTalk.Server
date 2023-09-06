@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Attributes;
 using LetsTalk.Server.Core.Services;
-using LetsTalk.Server.Persistence;
+using LetsTalk.Server.Persistence.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -22,7 +22,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
         services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
-        services.AddPersistenceServices(configuration);
+        services.AddPersistenceRepositoryServices(configuration);
 
         return services;
     }

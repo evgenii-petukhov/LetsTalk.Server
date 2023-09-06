@@ -2,11 +2,11 @@
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Protos;
-using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 

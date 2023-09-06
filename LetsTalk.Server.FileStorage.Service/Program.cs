@@ -1,6 +1,5 @@
 using LetsTalk.Server.FileStorage.Service;
 using LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
-using LetsTalk.Server.Persistence;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +8,6 @@ builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
 builder.Services.AddFileStorageServices(builder.Configuration);
-builder.Services.AddPersistenceServices(builder.Configuration);
 
 builder.Host.UseSerilog((context, loggerConfig) =>
 {

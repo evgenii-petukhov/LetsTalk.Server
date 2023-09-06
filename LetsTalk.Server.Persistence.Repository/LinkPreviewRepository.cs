@@ -1,9 +1,9 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTalk.Server.Persistence.Repositories;
+namespace LetsTalk.Server.Persistence.Repository;
 
 public class LinkPreviewRepository : GenericRepository<LinkPreview>, ILinkPreviewRepository
 {

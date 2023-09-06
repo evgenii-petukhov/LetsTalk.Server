@@ -7,8 +7,8 @@ using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.ImageProcessing.Abstractions;
 using LetsTalk.Server.ImageProcessor.Models;
 using LetsTalk.Server.Notifications.Models;
-using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.ImageProcessing.Service;

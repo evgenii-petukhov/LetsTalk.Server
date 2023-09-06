@@ -6,7 +6,7 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Models;
 using LetsTalk.Server.Notifications.Models;
-using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.LinkPreview;

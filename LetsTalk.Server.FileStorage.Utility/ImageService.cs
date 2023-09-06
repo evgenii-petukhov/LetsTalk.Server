@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 

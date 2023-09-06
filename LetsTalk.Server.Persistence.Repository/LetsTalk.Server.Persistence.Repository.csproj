@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository.Abstractions\LetsTalk.Server.Persistence.Repository.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

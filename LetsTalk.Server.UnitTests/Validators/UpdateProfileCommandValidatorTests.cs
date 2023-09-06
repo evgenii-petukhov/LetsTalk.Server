@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
-using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Moq;
 
 namespace LetsTalk.Server.UnitTests.Validators;

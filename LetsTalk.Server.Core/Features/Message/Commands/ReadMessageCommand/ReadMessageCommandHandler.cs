@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Persistence.Abstractions;
+﻿using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;

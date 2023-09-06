@@ -1,11 +1,11 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace LetsTalk.Server.Persistence.Repositories;
+namespace LetsTalk.Server.Persistence.Repository;
 
 public class AccountRepository : GenericRepository<Account>, IAccountRepository
 {

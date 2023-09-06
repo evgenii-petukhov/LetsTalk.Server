@@ -2,8 +2,6 @@
 using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Services;
 
@@ -24,16 +22,6 @@ public class ImageDataLayerService : IImageDataLayerService
         _fileRepository = fileRepository;
         _messageRepository = messageRepository;
         _context = context;
-    }
-
-    public Task<T?> GetByIdOrDefaultAsync<T>(
-        int id,
-        Expression<Func<Image, T>> selector,
-        CancellationToken cancellationToken = default)
-    {
-        return _imageRepository.GetById(id)
-            .Select(selector)
-            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<Image> CreateImagePreviewAsync(
@@ -69,7 +57,8 @@ public class ImageDataLayerService : IImageDataLayerService
         return image;
     }
 
-    public async Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole, int width, int height, CancellationToken cancellationToken = default)
+    public async Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole, 
+        int width, int height, CancellationToken cancellationToken = default)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         var image = await CreateImageInternalAsync(filename, imageFormat, ImageRoles.Avatar, width, height, cancellationToken);

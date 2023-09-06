@@ -138,12 +138,6 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
     }
 
-    private IQueryable<Account> GetByExternalId(string externalId, AccountTypes accountTypes)
-    {
-        return _context.Accounts
-            .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
-    }
-
     private IQueryable<Account> GetById(int id, bool includeFile = false)
     {
         return includeFile
@@ -156,7 +150,8 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
 
     private Task<T?> GetByExternalIdOrDefaultAsync<T>(string externalId, AccountTypes accountType, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
     {
-        return GetByExternalId(externalId, accountType)
+        return _context.Accounts
+            .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType)
             .Select(selector)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }

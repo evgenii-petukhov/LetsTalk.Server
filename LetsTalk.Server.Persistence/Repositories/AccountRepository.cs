@@ -3,6 +3,7 @@ using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Repositories;
 
@@ -12,20 +13,51 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
     }
 
-    public IQueryable<Account> GetByExternalId(string externalId, AccountTypes accountTypes)
+    public async Task<int> CreateOrUpdateAsync(string externalId, AccountTypes accountType, string? firstName, string? lastName,
+        string? email, string? photoUrl, CancellationToken cancellationToken = default)
     {
-        return _context.Accounts
-            .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
+        var response = await GetByExternalIdOrDefaultAsync(externalId, accountType, x => new
+        {
+            x.Id,
+            x.ImageId
+        }, cancellationToken);
+
+        if (response == null)
+        {
+            try
+            {
+                var account = new Account
+                {
+                    ExternalId = externalId,
+                    AccountTypeId = (int)accountType,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    PhotoUrl = photoUrl,
+                    Email = email
+                };
+                await CreateAsync(account, cancellationToken);
+                return account.Id;
+            }
+            catch (DbUpdateException)
+            {
+                return await GetByExternalIdOrDefaultAsync(externalId, accountType, x => x.Id, cancellationToken);
+            }
+        }
+        else
+        {
+            await (response.ImageId.HasValue
+                ? UpdateAsync(response.Id, firstName, lastName, email, cancellationToken)
+                : UpdateAsync(response.Id, firstName, lastName, email, photoUrl, cancellationToken));
+
+            return response.Id;
+        }
     }
 
-    public IQueryable<Account> GetById(int id, bool includeFile = false)
+    public Task<T?> GetByIdOrDefaultAsync<T>(int id, Expression<Func<Account, T>> selector, bool includeFile = false, CancellationToken cancellationToken = default)
     {
-        return includeFile
-            ? _context.Accounts
-                .Include(account => account.Image)
-                .ThenInclude(image => image!.File)
-                .Where(account => account.Id == id)
-            : _context.Accounts.Where(account => account.Id == id);
+        return GetById(id, includeFile)
+            .Select(selector)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
     public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
@@ -79,6 +111,12 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
+    public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return GetById(id)
+            .AnyAsync(cancellationToken: cancellationToken);
+    }
+
     public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
@@ -87,17 +125,6 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 .SetProperty(account => account.FirstName, firstName)
                 .SetProperty(account => account.LastName, lastName)
                 .SetProperty(account => account.Email, email), cancellationToken: cancellationToken);
-    }
-
-    public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .Where(account => account.Id == accountId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(account => account.FirstName, firstName)
-                .SetProperty(account => account.LastName, lastName)
-                .SetProperty(account => account.Email, email)
-                .SetProperty(account => account.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
     }
 
     public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, int? imageId, CancellationToken cancellationToken = default)
@@ -109,5 +136,39 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 .SetProperty(account => account.LastName, lastName)
                 .SetProperty(account => account.Email, email)
                 .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
+    }
+
+    private IQueryable<Account> GetByExternalId(string externalId, AccountTypes accountTypes)
+    {
+        return _context.Accounts
+            .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountTypes);
+    }
+
+    private IQueryable<Account> GetById(int id, bool includeFile = false)
+    {
+        return includeFile
+            ? _context.Accounts
+                .Include(account => account.Image)
+                .ThenInclude(image => image!.File)
+                .Where(account => account.Id == id)
+            : _context.Accounts.Where(account => account.Id == id);
+    }
+
+    private Task<T?> GetByExternalIdOrDefaultAsync<T>(string externalId, AccountTypes accountType, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
+    {
+        return GetByExternalId(externalId, accountType)
+            .Select(selector)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+    }
+
+    private Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, CancellationToken cancellationToken = default)
+    {
+        return _context.Accounts
+            .Where(account => account.Id == accountId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(account => account.FirstName, firstName)
+                .SetProperty(account => account.LastName, lastName)
+                .SetProperty(account => account.Email, email)
+                .SetProperty(account => account.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
     }
 }

@@ -14,7 +14,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {
     private readonly IImageService _imageService;
     private readonly IImageValidationService _imageValidationService;
-    private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IAccountRepository _accountRepository;
     private readonly IIOService _ioService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
@@ -23,7 +23,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     public FileUploadGrpcEndpoint(
         IImageService imageService,
         IImageValidationService imageValidationService,
-        IAccountDataLayerService accountDataLayerService,
+        IAccountRepository accountRepository,
         IIOService ioService,
         IMapper mapper,
         IFileService fileService,
@@ -31,7 +31,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     {
         _imageService = imageService;
         _imageValidationService = imageValidationService;
-        _accountDataLayerService = accountDataLayerService;
+        _accountRepository = accountRepository;
         _ioService = ioService;
         _mapper = mapper;
         _fileService = fileService;
@@ -71,7 +71,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     private async Task<Domain.File?> GetAvatarAsync(int accountId, CancellationToken cancellationToken)
     {
-        var response = await _accountDataLayerService.GetByIdOrDefaultAsync(accountId, x => new
+        var response = await _accountRepository.GetByIdOrDefaultAsync(accountId, x => new
         {
             x.Image!.File
         }, true, cancellationToken);

@@ -9,13 +9,13 @@ namespace LetsTalk.Server.UnitTests.Validators;
 public class CreateMessageCommandValidatorTests
 {
     private CreateMessageCommandValidator _validator;
-    private Mock<IAccountDataLayerService> _mockAccountDataLayerService;
+    private Mock<IAccountRepository> _mockAccountRepository;
 
     [SetUp]
     public void SetUp()
     {
-        _mockAccountDataLayerService = new Mock<IAccountDataLayerService>();
-        _validator = new(_mockAccountDataLayerService.Object);
+        _mockAccountRepository = new Mock<IAccountRepository>();
+        _validator = new(_mockAccountRepository.Object);
     }
 
     [Test]
@@ -73,7 +73,7 @@ public class CreateMessageCommandValidatorTests
             RecipientId = 0
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(false));
 
@@ -102,7 +102,7 @@ public class CreateMessageCommandValidatorTests
             SenderId = 0
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(false));
 
@@ -131,7 +131,7 @@ public class CreateMessageCommandValidatorTests
             SenderId = 2
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(false));
 
@@ -159,7 +159,7 @@ public class CreateMessageCommandValidatorTests
             SenderId = 2
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -187,7 +187,7 @@ public class CreateMessageCommandValidatorTests
             Text = string.Empty
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -215,7 +215,7 @@ public class CreateMessageCommandValidatorTests
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -239,7 +239,7 @@ public class CreateMessageCommandValidatorTests
             ImageId = 1
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -264,7 +264,7 @@ public class CreateMessageCommandValidatorTests
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -286,7 +286,7 @@ public class CreateMessageCommandValidatorTests
             ImageId = 1
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -314,7 +314,7 @@ public class CreateMessageCommandValidatorTests
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountDataLayerService
+        _mockAccountRepository
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 

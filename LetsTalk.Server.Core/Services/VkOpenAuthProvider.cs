@@ -19,16 +19,16 @@ public class VkOpenAuthProvider : IOpenAuthProvider
 {
     private const string VK_URL = "https://api.vk.com/";
 
-    private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IAccountRepository _accountRepository;
     private readonly IAppLogger<VkOpenAuthProvider> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
 
     public VkOpenAuthProvider(
-        IAccountDataLayerService accountDataLayerService,
+        IAccountRepository accountRepository,
         IAppLogger<VkOpenAuthProvider> appLogger,
         IAuthenticationClient authenticationClient)
     {
-        _accountDataLayerService = accountDataLayerService;
+        _accountRepository = accountRepository;
         _appLogger = appLogger;
         _authenticationClient = authenticationClient;
     }
@@ -55,7 +55,7 @@ public class VkOpenAuthProvider : IOpenAuthProvider
                 throw new BadRequestException(data.Error.Message!);
             }
 
-            var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
+            var accountId = await _accountRepository.CreateOrUpdateAsync(
                 data.Response![0].Id!,
                 AccountTypes.VK,
                 data.Response[0].FirstName,

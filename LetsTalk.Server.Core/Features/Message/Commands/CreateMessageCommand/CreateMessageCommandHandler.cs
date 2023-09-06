@@ -10,18 +10,18 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
-    private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IAccountRepository _accountRepository;
     private readonly IMessageRepository _messageRepository;
     private readonly IMessageProcessor _messageProcessor;
     private readonly IMapper _mapper;
 
     public CreateMessageCommandHandler(
-        IAccountDataLayerService accountDataLayerService,
+        IAccountRepository accountRepository,
         IMessageRepository messageRepository,
         IMessageProcessor messageProcessor,
         IMapper mapper)
     {
-        _accountDataLayerService = accountDataLayerService;
+        _accountRepository = accountRepository;
         _messageRepository = messageRepository;
         _messageProcessor = messageProcessor;
         _mapper = mapper;
@@ -29,7 +29,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateMessageCommandValidator(_accountDataLayerService);
+        var validator = new CreateMessageCommandValidator(_accountRepository);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)

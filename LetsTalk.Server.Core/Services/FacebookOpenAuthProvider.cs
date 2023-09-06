@@ -18,14 +18,14 @@ public class FacebookOpenAuthProvider : IOpenAuthProvider
 {
     private const string FACEBOOK_URL = "https://graph.facebook.com/";
 
-    private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IAccountRepository _accountRepository;
     private readonly IAuthenticationClient _authenticationClient;
 
     public FacebookOpenAuthProvider(
-        IAccountDataLayerService accountDataLayerService,
+        IAccountRepository accountRepository,
         IAuthenticationClient authenticationClient)
     {
-        _accountDataLayerService = accountDataLayerService;
+        _accountRepository = accountRepository;
         _authenticationClient = authenticationClient;
     }
 
@@ -46,7 +46,7 @@ public class FacebookOpenAuthProvider : IOpenAuthProvider
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
 
-            var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
+            var accountId = await _accountRepository.CreateOrUpdateAsync(
                 data.Id!,
                 AccountTypes.Facebook,
                 data.FirstName,

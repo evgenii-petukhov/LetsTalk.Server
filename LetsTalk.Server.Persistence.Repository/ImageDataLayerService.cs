@@ -74,22 +74,10 @@ public class ImageDataLayerService : IImageDataLayerService
         int height,
         CancellationToken cancellationToken = default)
     {
-        var file = new Domain.File
-        {
-            FileName = filename,
-            FileTypeId = (int)FileTypes.Image,
-        };
+        var file = new Domain.File(filename, (int)FileTypes.Image);
+        var image = new Image((int)imageFormat, (int)imageRole, width, height);
+        file.AddImage(image);
         await _fileRepository.CreateAsync(file, cancellationToken);
-
-        var image = new Image
-        {
-            ImageFormatId = (int)imageFormat,
-            ImageRoleId = (int)imageRole,
-            FileId = file.Id,
-            Width = width,
-            Height = height
-        };
-        await _imageRepository.CreateAsync(image, cancellationToken);
 
         return image;
     }

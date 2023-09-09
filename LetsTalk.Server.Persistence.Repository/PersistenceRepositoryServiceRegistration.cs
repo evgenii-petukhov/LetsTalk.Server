@@ -11,6 +11,7 @@ public static class PersistenceRepositoryServiceRegistration
         IConfiguration configuration)
     {
         services.AddPersistenceServices(configuration);
+        services.AddDomainServices();
         services.AddTransient<IAccountRepository, AccountRepository>();
         services.AddTransient<IImageDataLayerService, ImageDataLayerService>();
         services.AddTransient<IMessageRepository, MessageRepository>();

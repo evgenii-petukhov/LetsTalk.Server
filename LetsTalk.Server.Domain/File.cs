@@ -10,7 +10,7 @@ public class File : BaseEntity
     public FileType? FileType { get; protected set; }
     public int FileTypeId { get; protected set; }
 
-    public ICollection<Image> Images { get; } = new List<Image>();
+    public Image? Image { get; protected set; }
 
     protected File()
     {
@@ -23,8 +23,8 @@ public class File : BaseEntity
         FileTypeId = fileTypeId;
     }
 
-    public void AddImage(Image image)
+    public void AttachImage(Image image)
     {
-        Images.Add(image);
+        Image = image;
     }
 }

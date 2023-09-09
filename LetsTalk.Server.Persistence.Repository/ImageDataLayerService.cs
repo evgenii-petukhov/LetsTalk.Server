@@ -76,7 +76,7 @@ public class ImageDataLayerService : IImageDataLayerService
     {
         var file = new Domain.File(filename, (int)FileTypes.Image);
         var image = new Image((int)imageFormat, (int)imageRole, width, height);
-        file.AddImage(image);
+        file.AttachImage(image);
         await _fileRepository.CreateAsync(file, cancellationToken);
 
         return image;

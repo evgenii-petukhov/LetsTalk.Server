@@ -33,7 +33,6 @@
     <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository.Abstractions\LetsTalk.Server.Persistence.Repository.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository\LetsTalk.Server.Persistence.Repository.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -71,7 +71,7 @@ public class ImageDataLayerService : IImageDataLayerService
     {
         var file = _entityFactory.CreateFile(filename, FileTypes.Image);
         var image = _entityFactory.CreateImage(imageFormat, imageRole, width, height);
-        file.AttachImage(image);
+        file.SetImage(image);
         await _fileRepository.CreateAsync(file, cancellationToken);
 
         return image;

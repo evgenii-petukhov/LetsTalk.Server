@@ -28,7 +28,7 @@ public class File : BaseEntity
         FileTypeId = fileTypeId;
     }
 
-    public void AttachImage(Image image)
+    public void SetImage(Image image)
     {
         Image = image;
     }

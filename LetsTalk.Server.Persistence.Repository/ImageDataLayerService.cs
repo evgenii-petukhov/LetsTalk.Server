@@ -9,15 +9,18 @@ public class ImageDataLayerService : IImageDataLayerService
     private readonly IFileRepository _fileRepository;
     private readonly IMessageRepository _messageRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IEntityFactory _entityFactory;
 
     public ImageDataLayerService(
         IFileRepository fileRepository,
         IMessageRepository messageRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IEntityFactory entityFactory)
     {
         _fileRepository = fileRepository;
         _messageRepository = messageRepository;
         _unitOfWork = unitOfWork;
+        _entityFactory = entityFactory;
     }
 
     public async Task<Image> CreateImagePreviewAsync(
@@ -29,7 +32,7 @@ public class ImageDataLayerService : IImageDataLayerService
         CancellationToken cancellationToken = default)
     {
         var image = await CreateImageInternalAsync(filename, imageFormat, ImageRoles.Message, width, height, cancellationToken);
-        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
+        var message = _entityFactory.CreateMessage(messageId);
         message.SetImagePreview(image);
         await _unitOfWork.SaveAsync(cancellationToken);
 
@@ -68,8 +71,8 @@ public class ImageDataLayerService : IImageDataLayerService
         int height,
         CancellationToken cancellationToken)
     {
-        var file = new Domain.File(filename, (int)FileTypes.Image);
-        var image = new Image((int)imageFormat, (int)imageRole, width, height);
+        var file = _entityFactory.CreateFile(filename, FileTypes.Image);
+        var image = _entityFactory.CreateImage(imageFormat, imageRole, width, height);
         file.AttachImage(image);
         await _fileRepository.CreateAsync(file, cancellationToken);
 

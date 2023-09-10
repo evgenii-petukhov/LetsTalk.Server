@@ -11,7 +11,6 @@ public static class PersistenceRepositoryServiceRegistration
         IConfiguration configuration)
     {
         services.AddPersistenceServices(configuration);
-        services.AddDomainServices();
         services.AddTransient<IAccountRepository, AccountRepository>();
         services.AddTransient<IImageDataLayerService, ImageDataLayerService>();
         services.AddTransient<IMessageRepository, MessageRepository>();
@@ -19,6 +18,7 @@ public static class PersistenceRepositoryServiceRegistration
         services.AddTransient<IFileRepository, FileRepository>();
         services.AddTransient<ILinkPreviewRepository, LinkPreviewRepository>();
         services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<IEntityFactory, EntityFactory>();
         return services;
     }
 }

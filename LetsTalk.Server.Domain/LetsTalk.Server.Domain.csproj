@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.Domain.Utility\LetsTalk.Server.Domain.Utility.csproj" />
+  </ItemGroup>
+
 </Project>

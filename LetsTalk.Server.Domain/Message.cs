@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using LetsTalk.Server.Domain.Utility;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
 
@@ -40,9 +41,18 @@ public class Message : BaseEntity
 
     }
 
+    public Message(int id) : base(id)
+    {
+    }
+
     public void SetImagePreview(Image image)
     {
         ImagePreview = image;
+    }
+
+    public void SetLinkPreview(LinkPreview linkPreview)
+    {
+        LinkPreview = linkPreview;
     }
 
     public void SetTextHtml(string? html)
@@ -53,5 +63,11 @@ public class Message : BaseEntity
     public void SetDateCreatedUnix(long? dateCreatedUnix)
     {
         DateCreatedUnix = dateCreatedUnix;
+    }
+
+    public void MarkAsRead()
+    {
+        IsRead = true;
+        DateReadUnix = DateHelper.GetUnixTimestamp();
     }
 }

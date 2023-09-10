@@ -29,10 +29,10 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
     {
         var messages = await _messageRepository.GetPagedAsTrackingAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
 
-        if (messages.Any(message => !message.IsRead))
-        {
-            await _messageRepository.MarkAllAsReadAsync(request.SenderId, request.RecipientId, cancellationToken);
-        }
+        messages
+            .Where(message => !message.IsRead)
+            .ToList()
+            .ForEach(message => message.MarkAsRead());
 
         var messagesToProcess = messages
             .Where(message => message.TextHtml == null && !message.ImageId.HasValue)

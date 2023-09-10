@@ -10,9 +10,21 @@ public class LinkPreview : BaseEntity
 {
     [Required]
     [Column(TypeName = "longtext")]
-    public string? Url { get; set; }
+    public string? Url { get; protected set; }
 
-    public string? Title { get; set; }
+    public string? Title { get; protected set; }
 
-    public string? ImageUrl { get; set; }
+    public string? ImageUrl { get; protected set; }
+
+    protected LinkPreview()
+    {
+
+    }
+
+    public LinkPreview(string url, string title, string imageUrl)
+    {
+        Url = url;
+        Title = title;
+        ImageUrl = imageUrl;
+    }
 }

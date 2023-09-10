@@ -12,17 +12,20 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
     private readonly IDownloadService _downloadService;
     private readonly IRegexService _regexService;
     private readonly ILogger<LinkPreviewGenerator> _logger;
+    private readonly IEntityFactory _entityFactory;
 
     public LinkPreviewGenerator(
         ILinkPreviewRepository linkPreviewRepository,
         IDownloadService downloadService,
         IRegexService regexService,
-        ILogger<LinkPreviewGenerator> logger)
+        ILogger<LinkPreviewGenerator> logger,
+        IEntityFactory entityFactory)
     {
         _linkPreviewRepository = linkPreviewRepository;
         _downloadService = downloadService;
         _regexService = regexService;
         _logger = logger;
+        _entityFactory = entityFactory;
     }
 
     public async Task<Domain.LinkPreview?> GetLinkPreviewAsync(string url)
@@ -45,12 +48,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
                 try
                 {
-                    linkPreview = new Domain.LinkPreview
-                    {
-                        Url = url,
-                        Title = openGraphModel.Title,
-                        ImageUrl = openGraphModel.ImageUrl
-                    };
+                    linkPreview = _entityFactory.CreateLinkPreview(url, openGraphModel.Title, openGraphModel.ImageUrl!);
                     await _linkPreviewRepository.CreateAsync(linkPreview);
                     _logger.LogInformation("New LinkPreview added: {@linkPreview}", linkPreview);
                 }

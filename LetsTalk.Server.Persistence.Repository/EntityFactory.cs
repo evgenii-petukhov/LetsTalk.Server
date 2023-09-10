@@ -36,4 +36,9 @@ public class EntityFactory : IEntityFactory
     {
         return new Account(externalId, accountTypeId, firstName, lastName, photoUrl, email);
     }
+
+    public LinkPreview CreateLinkPreview(string url, string title, string imageUrl)
+    {
+        return new LinkPreview(url, title, imageUrl);
+    }
 }

@@ -48,7 +48,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
             fetchImageResponse.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
-        var filename = await _fileService.SaveDataAsync(fetchImageResponse.Content!.ToArray(), FileTypes.Image, ImageRoles.Message);
+        var filename = await _fileService.SaveDataAsync(resizeResult.Data!, FileTypes.Image, ImageRoles.Message);
 
         var image = await _imageDataLayerService.CreateImagePreviewAsync(filename, ImageFormats.Webp, resizeResult.Width, resizeResult.Height, message.MessageId);
 

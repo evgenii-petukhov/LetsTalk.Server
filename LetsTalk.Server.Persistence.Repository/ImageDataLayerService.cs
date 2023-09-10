@@ -7,18 +7,15 @@ namespace LetsTalk.Server.Persistence.Repository;
 public class ImageDataLayerService : IImageDataLayerService
 {
     private readonly IFileRepository _fileRepository;
-    private readonly IMessageRepository _messageRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEntityFactory _entityFactory;
 
     public ImageDataLayerService(
         IFileRepository fileRepository,
-        IMessageRepository messageRepository,
         IUnitOfWork unitOfWork,
         IEntityFactory entityFactory)
     {
         _fileRepository = fileRepository;
-        _messageRepository = messageRepository;
         _unitOfWork = unitOfWork;
         _entityFactory = entityFactory;
     }

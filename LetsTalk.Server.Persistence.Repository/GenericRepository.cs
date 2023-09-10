@@ -30,7 +30,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
         }
     }
 
-    public Task<T> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
+    public virtual Task<T> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Set<T>()
             .AsTracking()

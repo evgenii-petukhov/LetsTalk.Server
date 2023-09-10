@@ -12,7 +12,7 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
     {
     }
 
-    public Task<T?> GetByIdOrDefaultAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default)
+    public Task<T?> GetByIdAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default)
     {
         return _context.Images
             .Include(x => x.File)
@@ -21,18 +21,17 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public override Task<Image> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Images
+            .AsTracking()
+            .Include(x => x.File)
+            .FirstOrDefaultAsync(image => image.Id == id, cancellationToken)!;
+    }
+
     public Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Images
             .AnyAsync(image => image.Id == id, cancellationToken: cancellationToken);
-    }
-
-    public Task SetDimensionsAsync(int imageId, int width, int height, CancellationToken cancellationToken = default)
-    {
-        return _context.Images
-            .Where(image => image.Id == imageId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(image => image.Width, width)
-                .SetProperty(image => image.Height, height), cancellationToken: cancellationToken);
     }
 }

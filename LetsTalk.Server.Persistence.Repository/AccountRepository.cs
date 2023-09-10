@@ -86,17 +86,15 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                     x.Account,
                     Metrics = y
                 })
-            .Select(x => new AccountWithUnreadCount
-            {
-                Id = x.Account.Id,
-                FirstName = x.Account.FirstName,
-                LastName = x.Account.LastName,
-                PhotoUrl = x.Account.PhotoUrl,
-                AccountTypeId = x.Account.AccountTypeId,
-                LastMessageDate = x.Metrics!.LastMessageDate,
-                UnreadCount = x.Metrics.UnreadCount,
-                ImageId = x.Account.ImageId
-            })
+            .Select(x => new AccountWithUnreadCount(
+                x.Account.Id,
+                x.Account.FirstName,
+                x.Account.LastName,
+                x.Account.PhotoUrl,
+                x.Account.AccountTypeId,
+                x.Metrics!.LastMessageDate,
+                x.Metrics.UnreadCount,
+                x.Account.ImageId))
             .ToListAsync(cancellationToken: cancellationToken);
     }
 

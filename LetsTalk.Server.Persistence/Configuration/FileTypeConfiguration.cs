@@ -10,10 +10,6 @@ public class FileTypeConfiguration : IEntityTypeConfiguration<FileType>
     public void Configure(EntityTypeBuilder<FileType> builder)
     {
         builder.HasData(
-            Enum.GetValues<FileTypes>().Select(x => new FileType
-            {
-                Id = (int)x,
-                Name = Enum.GetName(x)
-            }));
+            Enum.GetValues<FileTypes>().Select(x => new FileType((int)x, Enum.GetName(x)!)));
     }
 }

@@ -5,5 +5,10 @@ namespace LetsTalk.Server.Domain;
 [Table("filetypes")]
 public class FileType : BaseEntity
 {
-    public string? Name { get; set; }
+    public string? Name { get; protected set; }
+
+    public FileType(int id, string name): base(id)
+    {
+        Name = name;
+    }
 }

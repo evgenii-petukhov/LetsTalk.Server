@@ -10,10 +10,6 @@ public class ImageFormatConfiguration : IEntityTypeConfiguration<ImageFormat>
     public void Configure(EntityTypeBuilder<ImageFormat> builder)
     {
         builder.HasData(
-            Enum.GetValues<ImageFormats>().Select(x => new ImageFormat
-            {
-                Id = (int)x,
-                Name = Enum.GetName(x)
-            }));
+            Enum.GetValues<ImageFormats>().Select(x => new ImageFormat((int)x, Enum.GetName(x)!)));
     }
 }

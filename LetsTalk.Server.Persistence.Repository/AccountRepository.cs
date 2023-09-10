@@ -13,51 +13,33 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
     }
 
-    public async Task<int> CreateOrUpdateAsync(string externalId, AccountTypes accountType, string? firstName, string? lastName,
-        string? email, string? photoUrl, CancellationToken cancellationToken = default)
+    public Task<Account> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        var response = await GetByExternalIdOrDefaultAsync(externalId, accountType, x => new
-        {
-            x.Id,
-            x.ImageId
-        }, cancellationToken);
-
-        if (response == null)
-        {
-            try
-            {
-                var account = new Account
-                {
-                    ExternalId = externalId,
-                    AccountTypeId = (int)accountType,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    PhotoUrl = photoUrl,
-                    Email = email
-                };
-                await CreateAsync(account, cancellationToken);
-                return account.Id;
-            }
-            catch (DbUpdateException)
-            {
-                return await GetByExternalIdOrDefaultAsync(externalId, accountType, x => x.Id, cancellationToken);
-            }
-        }
-        else
-        {
-            await (response.ImageId.HasValue
-                ? UpdateAsync(response.Id, firstName, lastName, email, cancellationToken)
-                : UpdateAsync(response.Id, firstName, lastName, email, photoUrl, cancellationToken));
-
-            return response.Id;
-        }
+        return _context.Accounts
+            .FirstOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken)!;
     }
 
-    public Task<T?> GetByIdOrDefaultAsync<T>(int id, Expression<Func<Account, T>> selector, bool includeFile = false, CancellationToken cancellationToken = default)
+    public Task<T?> GetByIdAsync<T>(int id, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
     {
-        return GetById(id, includeFile)
+        return _context.Accounts
+            .Include(account => account.Image)
+            .ThenInclude(image => image!.File)
+            .Where(account => account.Id == id)
             .Select(selector)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+    }
+
+    public Task<Account> GetByExternalIdAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default)
+    {
+        return _context.Accounts
+            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
+    }
+
+    public Task<Account> GetByExternalIdAsTrackingAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default)
+    {
+        return _context.Accounts
+            .AsTracking()
+            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
     }
 
     public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
@@ -113,8 +95,8 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
 
     public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
     {
-        return GetById(id)
-            .AnyAsync(cancellationToken: cancellationToken);
+        return _context.Accounts
+            .AnyAsync(account => account.Id == id, cancellationToken: cancellationToken);
     }
 
     public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
@@ -136,34 +118,5 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 .SetProperty(account => account.LastName, lastName)
                 .SetProperty(account => account.Email, email)
                 .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
-    }
-
-    private IQueryable<Account> GetById(int id, bool includeFile = false)
-    {
-        return includeFile
-            ? _context.Accounts
-                .Include(account => account.Image)
-                .ThenInclude(image => image!.File)
-                .Where(account => account.Id == id)
-            : _context.Accounts.Where(account => account.Id == id);
-    }
-
-    private Task<T?> GetByExternalIdOrDefaultAsync<T>(string externalId, AccountTypes accountType, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .Where(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType)
-            .Select(selector)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-    }
-
-    private Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, string? photoUrl, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .Where(account => account.Id == accountId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(account => account.FirstName, firstName)
-                .SetProperty(account => account.LastName, lastName)
-                .SetProperty(account => account.Email, email)
-                .SetProperty(account => account.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
     }
 }

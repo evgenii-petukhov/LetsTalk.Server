@@ -37,7 +37,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         {
             await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, cancellationToken);
         }
-        var account = await _accountRepository.GetByIdOrDefaultAsync(request.AccountId!.Value, x => x, cancellationToken: cancellationToken);
+        var account = await _accountRepository.GetByIdAsync(request.AccountId!.Value, cancellationToken);
 
         return _mapper.Map<AccountDto>(account);
     }

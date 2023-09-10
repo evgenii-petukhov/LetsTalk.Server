@@ -20,7 +20,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, AccountDt
 
     public async Task<AccountDto> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {
-        var accounts = await _accountRepository.GetByIdOrDefaultAsync(request.Id, x => x, cancellationToken: cancellationToken);
+        var accounts = await _accountRepository.GetByIdAsync(request.Id, cancellationToken);
         return _mapper.Map<AccountDto>(accounts);
     }
 }

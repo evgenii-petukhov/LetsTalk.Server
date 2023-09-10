@@ -6,10 +6,13 @@ namespace LetsTalk.Server.Persistence.Repository.Abstractions;
 
 public interface IAccountRepository : IGenericRepository<Account>
 {
-    Task<int> CreateOrUpdateAsync(string externalId, AccountTypes accountType, string? firstName, string? lastName,
-        string? email, string? photoUrl, CancellationToken cancellationToken = default);
+    Task<Account> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
-    Task<T?> GetByIdOrDefaultAsync<T>(int id, Expression<Func<Account, T>> selector, bool includeFile = false, CancellationToken cancellationToken = default);
+    Task<T?> GetByIdAsync<T>(int id, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default);
+
+    Task<Account> GetByExternalIdAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default);
+
+    Task<Account> GetByExternalIdAsTrackingAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default);
 

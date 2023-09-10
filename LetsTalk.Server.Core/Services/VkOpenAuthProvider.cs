@@ -8,7 +8,6 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Logging.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -19,18 +18,18 @@ public class VkOpenAuthProvider : IOpenAuthProvider
 {
     private const string VK_URL = "https://api.vk.com/";
 
-    private readonly IAccountRepository _accountRepository;
     private readonly IAppLogger<VkOpenAuthProvider> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
+    private readonly IAccountDataLayerService _accountDataLayerService;
 
     public VkOpenAuthProvider(
-        IAccountRepository accountRepository,
         IAppLogger<VkOpenAuthProvider> appLogger,
-        IAuthenticationClient authenticationClient)
+        IAuthenticationClient authenticationClient,
+        IAccountDataLayerService accountDataLayerService)
     {
-        _accountRepository = accountRepository;
         _appLogger = appLogger;
         _authenticationClient = authenticationClient;
+        _accountDataLayerService = accountDataLayerService;
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
@@ -55,7 +54,7 @@ public class VkOpenAuthProvider : IOpenAuthProvider
                 throw new BadRequestException(data.Error.Message!);
             }
 
-            var accountId = await _accountRepository.CreateOrUpdateAsync(
+            var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
                 data.Response![0].Id!,
                 AccountTypes.VK,
                 data.Response[0].FirstName,

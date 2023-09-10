@@ -21,6 +21,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
+        services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
         services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddPersistenceRepositoryServices(configuration);
 

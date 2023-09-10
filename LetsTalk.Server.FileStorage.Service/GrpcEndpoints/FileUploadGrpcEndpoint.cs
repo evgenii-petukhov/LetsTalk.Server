@@ -71,10 +71,10 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     private async Task<Domain.File?> GetAvatarAsync(int accountId, CancellationToken cancellationToken)
     {
-        var response = await _accountRepository.GetByIdOrDefaultAsync(accountId, x => new
+        var response = await _accountRepository.GetByIdAsync(accountId, x => new
         {
             x.Image!.File
-        }, true, cancellationToken);
+        }, cancellationToken);
 
         return response?.File;
     }

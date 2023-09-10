@@ -19,6 +19,13 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .FirstOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken)!;
     }
 
+    public override Task<Account> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Accounts
+            .AsTracking()
+            .FirstOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken)!;
+    }
+
     public Task<T?> GetByIdAsync<T>(int id, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
@@ -97,26 +104,5 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
         return _context.Accounts
             .AnyAsync(account => account.Id == id, cancellationToken: cancellationToken);
-    }
-
-    public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .Where(account => account.Id == accountId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(account => account.FirstName, firstName)
-                .SetProperty(account => account.LastName, lastName)
-                .SetProperty(account => account.Email, email), cancellationToken: cancellationToken);
-    }
-
-    public Task UpdateAsync(int accountId, string? firstName, string? lastName, string? email, int? imageId, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .Where(account => account.Id == accountId)
-            .ExecuteUpdateAsync(x => x
-                .SetProperty(account => account.FirstName, firstName)
-                .SetProperty(account => account.LastName, lastName)
-                .SetProperty(account => account.Email, email)
-                .SetProperty(account => account.ImageId, imageId), cancellationToken: cancellationToken);
     }
 }

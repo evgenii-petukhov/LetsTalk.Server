@@ -10,13 +10,16 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
-        IMapper mapper)
+        IMapper mapper,
+        IUnitOfWork unitOfWork)
     {
         _accountRepository = accountRepository;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<AccountDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
@@ -29,15 +32,21 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             throw new BadRequestException("Invalid request", validationResult);
         }
 
+        var account = await _accountRepository.GetByIdAsTrackingAsync(request.AccountId!.Value, cancellationToken);
         if (request.ImageId.HasValue)
         {
-            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, request.ImageId, cancellationToken);
+            account.SetFirstName(request.FirstName!);
+            account.SetLastName(request.LastName!);
+            account.SetEmail(request.Email!);
+            account.SetImageId(request.ImageId.Value);
         }
         else
         {
-            await _accountRepository.UpdateAsync(request.AccountId!.Value, request.FirstName, request.LastName, request.Email, cancellationToken);
+            account.SetFirstName(request.FirstName!);
+            account.SetLastName(request.LastName!);
+            account.SetEmail(request.Email!);
         }
-        var account = await _accountRepository.GetByIdAsync(request.AccountId!.Value, cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
 
         return _mapper.Map<AccountDto>(account);
     }

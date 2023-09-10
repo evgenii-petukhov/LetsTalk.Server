@@ -46,7 +46,8 @@ public class ImageDataLayerService : IImageDataLayerService
         CancellationToken cancellationToken = default)
     {
         var image = await CreateImageInternalAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
-        await _fileRepository.DeleteAsync(prevImageId, cancellationToken);
+        var file = _entityFactory.CreateFile(prevImageId);
+        _fileRepository.Delete(file);
         await _unitOfWork.SaveAsync(cancellationToken);
 
         return image;

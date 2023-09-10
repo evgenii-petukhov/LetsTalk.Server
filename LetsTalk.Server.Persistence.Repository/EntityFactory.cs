@@ -22,6 +22,14 @@ public class EntityFactory : IEntityFactory
         return message;
     }
 
+    public Domain.File CreateFile(int id)
+    {
+        var file = new Domain.File(id);
+        _context.Files.Attach(file);
+
+        return file;
+    }
+
     public Domain.File CreateFile(string filename, FileTypes fileType)
     {
         return new Domain.File(filename, (int)fileType);

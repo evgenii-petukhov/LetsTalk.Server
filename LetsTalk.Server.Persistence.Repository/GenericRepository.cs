@@ -21,13 +21,9 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
         await _context.Set<T>().AddAsync(entity, cancellationToken);
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+    public void Delete(T entity)
     {
-        var entity = await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
-        if (entity != null)
-        {
-            _context.Set<T>().Remove(entity);
-        }
+        _context.Set<T>().Remove(entity);
     }
 
     public virtual Task<T> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)

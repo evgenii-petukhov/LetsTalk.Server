@@ -49,7 +49,6 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 try
                 {
                     linkPreview = _entityFactory.CreateLinkPreview(url, openGraphModel.Title, openGraphModel.ImageUrl!);
-                    await _linkPreviewRepository.CreateAsync(linkPreview);
                     _logger.LogInformation("New LinkPreview added: {@linkPreview}", linkPreview);
                 }
                 catch (DbUpdateException)

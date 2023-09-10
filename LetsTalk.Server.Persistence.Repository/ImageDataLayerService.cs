@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
@@ -7,21 +6,18 @@ namespace LetsTalk.Server.Persistence.Repository;
 
 public class ImageDataLayerService : IImageDataLayerService
 {
-    private readonly IImageRepository _imageRepository;
     private readonly IFileRepository _fileRepository;
     private readonly IMessageRepository _messageRepository;
-    private readonly LetsTalkDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
     public ImageDataLayerService(
-        IImageRepository imageRepository,
         IFileRepository fileRepository,
         IMessageRepository messageRepository,
-        LetsTalkDbContext context)
+        IUnitOfWork unitOfWork)
     {
-        _imageRepository = imageRepository;
         _fileRepository = fileRepository;
         _messageRepository = messageRepository;
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Image> CreateImagePreviewAsync(
@@ -32,10 +28,10 @@ public class ImageDataLayerService : IImageDataLayerService
         int messageId,
         CancellationToken cancellationToken = default)
     {
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         var image = await CreateImageInternalAsync(filename, imageFormat, ImageRoles.Message, width, height, cancellationToken);
-        await _messageRepository.SetImagePreviewAsync(messageId, image.Id, cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
+        message.SetImagePreview(image);
+        await _unitOfWork.SaveAsync(cancellationToken);
 
         return image;
     }
@@ -49,10 +45,9 @@ public class ImageDataLayerService : IImageDataLayerService
         int prevImageId,
         CancellationToken cancellationToken = default)
     {
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         var image = await CreateImageInternalAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
         await _fileRepository.DeleteAsync(prevImageId, cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
 
         return image;
     }
@@ -60,9 +55,8 @@ public class ImageDataLayerService : IImageDataLayerService
     public async Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole, 
         int width, int height, CancellationToken cancellationToken = default)
     {
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         var image = await CreateImageInternalAsync(filename, imageFormat, ImageRoles.Avatar, width, height, cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
         return image;
     }
 
@@ -72,7 +66,7 @@ public class ImageDataLayerService : IImageDataLayerService
         ImageRoles imageRole,
         int width,
         int height,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var file = new Domain.File(filename, (int)FileTypes.Image);
         var image = new Image((int)imageFormat, (int)imageRole, width, height);

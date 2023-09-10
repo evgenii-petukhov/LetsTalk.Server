@@ -18,6 +18,7 @@ public static class PersistenceRepositoryServiceRegistration
         services.AddTransient<IImageRepository, ImageRepository>();
         services.AddTransient<IFileRepository, FileRepository>();
         services.AddTransient<ILinkPreviewRepository, LinkPreviewRepository>();
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }

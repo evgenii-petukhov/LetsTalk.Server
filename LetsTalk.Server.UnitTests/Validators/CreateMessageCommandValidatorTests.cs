@@ -10,12 +10,14 @@ public class CreateMessageCommandValidatorTests
 {
     private CreateMessageCommandValidator _validator;
     private Mock<IAccountRepository> _mockAccountRepository;
+    private Mock<IImageRepository> _mockImageRepository;
 
     [SetUp]
     public void SetUp()
     {
         _mockAccountRepository = new Mock<IAccountRepository>();
-        _validator = new(_mockAccountRepository.Object);
+        _mockImageRepository = new Mock<IImageRepository>();
+        _validator = new(_mockAccountRepository.Object, _mockImageRepository.Object);
     }
 
     [Test]

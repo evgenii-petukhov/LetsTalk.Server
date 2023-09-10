@@ -32,7 +32,7 @@ public class LetsTalkDbContext : DbContext
     {
         foreach (var entry in base.ChangeTracker.Entries<Message>().Where(q => q.State == EntityState.Added))
         {
-            entry.Entity.DateCreatedUnix = DateHelper.GetUnixTimestamp();
+            entry.Entity.SetDateCreatedUnix(DateHelper.GetUnixTimestamp());
         }
         return base.SaveChangesAsync(cancellationToken);
     }

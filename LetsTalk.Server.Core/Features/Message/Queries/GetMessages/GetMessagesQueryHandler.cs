@@ -11,20 +11,23 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
     private readonly IMessageRepository _messageRepository;
     private readonly IMessageProcessor _messageProcessor;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
     public GetMessagesQueryHandler(
         IMessageRepository messageRepository,
         IMessageProcessor messageProcessor,
-        IMapper mapper)
+        IMapper mapper,
+        IUnitOfWork unitOfWork)
     {
         _messageRepository = messageRepository;
         _messageProcessor = messageProcessor;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messages = await _messageRepository.GetAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
+        var messages = await _messageRepository.GetPagedAsTrackingAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
 
         if (messages.Any(message => !message.IsRead))
         {
@@ -35,11 +38,9 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
             .Where(message => message.TextHtml == null && !message.ImageId.HasValue)
             .ToList();
 
-        if (messagesToProcess.Any())
-        {
-            Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));
-            await _messageRepository.SetTextHtmlAsync(messagesToProcess, cancellationToken);
-        }
+        Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));
+
+        await _unitOfWork.SaveAsync(cancellationToken);
 
         return _mapper.Map<List<MessageDto>>(messages)
             .ConvertAll(messageDto =>

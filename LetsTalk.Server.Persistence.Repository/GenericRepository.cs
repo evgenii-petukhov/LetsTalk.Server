@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.Repository;
 
@@ -17,17 +18,29 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
 
     public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        try
+        await _context.Set<T>().AddAsync(entity, cancellationToken);
+    }
+
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+        if (entity != null)
         {
-            _context.Set<T>().Add(entity);
-            await _context.SaveChangesAsync(cancellationToken);
-            return;
+            _context.Set<T>().Remove(entity);
         }
-        catch
-        {
-            _context.ChangeTracker.Clear();
-            throw;
-        }
+    }
+
+    public Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Set<T>()
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken)!;
+    }
+
+    public Task<T> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Set<T>()
+            .AsTracking()
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken)!;
     }
 
     protected virtual void Dispose(bool disposing)

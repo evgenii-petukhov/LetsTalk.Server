@@ -14,9 +14,17 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
 
     public Task<T?> GetByIdOrDefaultAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default)
     {
-        return GetById(id)
+        return _context.Images
+            .Include(x => x.File)
+            .Where(image => image.Id == id)
             .Select(selector)
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Images
+            .AnyAsync(image => image.Id == id, cancellationToken: cancellationToken);
     }
 
     public Task SetDimensionsAsync(int imageId, int width, int height, CancellationToken cancellationToken = default)
@@ -26,12 +34,5 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
             .ExecuteUpdateAsync(x => x
                 .SetProperty(image => image.Width, width)
                 .SetProperty(image => image.Height, height), cancellationToken: cancellationToken);
-    }
-
-    private IQueryable<Image> GetById(int id)
-    {
-        return _context.Images
-            .Include(x => x.File)
-            .Where(image => image.Id == id);
     }
 }

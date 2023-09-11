@@ -8,6 +8,7 @@ public class File : BaseEntity
     public string? FileName { get; protected set; }
 
     public FileType? FileType { get; protected set; }
+
     public int FileTypeId { get; protected set; }
 
     public Image? Image { get; protected set; }

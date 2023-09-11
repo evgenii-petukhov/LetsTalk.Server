@@ -24,8 +24,6 @@ public class Message : BaseEntity
 
     public long? DateReadUnix { get; protected set; }
 
-    public int? LinkPreviewId { get; protected set; }
-
     public LinkPreview? LinkPreview { get; protected set; }
 
     public Image? Image { get; protected set; }

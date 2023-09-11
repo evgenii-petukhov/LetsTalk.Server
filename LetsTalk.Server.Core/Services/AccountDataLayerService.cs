@@ -42,19 +42,8 @@ public class AccountDataLayerService: IAccountDataLayerService
         }
         else
         {
-            if (account.ImageId.HasValue)
-            {
-                account.SetFirstName(firstName!);
-                account.SetLastName(lastName!);
-                account.SetEmail(email!);
-            }
-            else
-            {
-                account.SetFirstName(firstName!);
-                account.SetLastName(lastName!);
-                account.SetEmail(email!);
-                account.SetPhotoUrl(photoUrl!);
-            }
+            account.SetupProfile(firstName!, lastName!, email!, photoUrl!, account.ImageId.HasValue);
+
             await _unitOfWork.SaveAsync(cancellationToken);
 
             return account.Id;

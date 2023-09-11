@@ -43,31 +43,30 @@ public class Account : BaseEntity
 
     protected Account()
     {
-    
+
     }
 
-    public void SetFirstName(string firstName)
+    public void SetupProfile(string firstName, string lastName, string email, string photoUrl, bool hasImageId)
     {
         FirstName = firstName;
-    }
-
-    public void SetLastName(string lastName)
-    {
         LastName = lastName;
-    }
-
-    public void SetPhotoUrl(string photoUrl)
-    {
-        PhotoUrl = photoUrl;
-    }
-
-    public void SetEmail(string email)
-    {
         Email = email;
+
+        if (!hasImageId)
+        {
+            PhotoUrl = photoUrl;
+        }
     }
 
-    public void SetImageId(int imageId)
+    public void UpdateProfile(string firstName, string lastName, string email, int? imageId)
     {
-        ImageId = imageId;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+
+        if (imageId.HasValue)
+        {
+            ImageId = imageId.Value;
+        }
     }
 }

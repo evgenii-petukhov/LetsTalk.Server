@@ -2,6 +2,7 @@
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -49,7 +50,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
     }
 
-    public async Task<IReadOnlyList<AccountWithUnreadCount>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<AccountListItem>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
     {
         var lastMessageDates = _context.Messages
             .Where(x => x.SenderId == id || x.RecipientId == id)
@@ -86,15 +87,17 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                     x.Account,
                     Metrics = y
                 })
-            .Select(x => new AccountWithUnreadCount(
-                x.Account.Id,
-                x.Account.FirstName,
-                x.Account.LastName,
-                x.Account.PhotoUrl,
-                x.Account.AccountTypeId,
-                x.Metrics!.LastMessageDate,
-                x.Metrics.UnreadCount,
-                x.Account.ImageId))
+            .Select(x => new AccountListItem
+            {
+                Id = x.Account.Id,
+                FirstName = x.Account.FirstName,
+                LastName = x.Account.LastName,
+                PhotoUrl = x.Account.PhotoUrl,
+                AccountTypeId = x.Account.AccountTypeId,
+                LastMessageDate = x.Metrics!.LastMessageDate,
+                UnreadCount = x.Metrics.UnreadCount,
+                ImageId = x.Account.ImageId
+            })
             .ToListAsync(cancellationToken: cancellationToken);
     }
 

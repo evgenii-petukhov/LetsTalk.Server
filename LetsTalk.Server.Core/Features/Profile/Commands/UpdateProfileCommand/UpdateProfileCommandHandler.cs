@@ -33,19 +33,9 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         }
 
         var account = await _accountRepository.GetByIdAsTrackingAsync(request.AccountId!.Value, cancellationToken);
-        if (request.ImageId.HasValue)
-        {
-            account.SetFirstName(request.FirstName!);
-            account.SetLastName(request.LastName!);
-            account.SetEmail(request.Email!);
-            account.SetImageId(request.ImageId.Value);
-        }
-        else
-        {
-            account.SetFirstName(request.FirstName!);
-            account.SetLastName(request.LastName!);
-            account.SetEmail(request.Email!);
-        }
+
+        account.UpdateProfile(request.FirstName!, request.LastName!, request.Email!, request.ImageId);
+
         await _unitOfWork.SaveAsync(cancellationToken);
 
         return _mapper.Map<AccountDto>(account);

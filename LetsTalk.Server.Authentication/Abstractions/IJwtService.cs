@@ -2,7 +2,7 @@
 
 public interface IJwtService
 {
-    public string GenerateJwtToken(int accountId);
+    string GenerateJwtToken(int accountId);
 
-    public int? ValidateJwtToken(string? token);
+    ValueTask<int?> ValidateJwtTokenAsync(string? token);
 }

@@ -23,13 +23,13 @@ public class JwtTokenGrpcService : JwtTokenGrpcServiceBase
         });
     }
 
-    public override Task<ValidateJwtTokenResponse> ValidateJwtToken(ValidateJwtTokenRequest request, ServerCallContext context)
+    public override async Task<ValidateJwtTokenResponse> ValidateJwtToken(ValidateJwtTokenRequest request, ServerCallContext context)
     {
-        var accountId = _jwtService.ValidateJwtToken(request.Token);
+        var accountId = await _jwtService.ValidateJwtTokenAsync(request.Token);
 
-        return Task.FromResult(new ValidateJwtTokenResponse
+        return new ValidateJwtTokenResponse
         {
             AccountId = accountId
-        });
+        };
     }
 }

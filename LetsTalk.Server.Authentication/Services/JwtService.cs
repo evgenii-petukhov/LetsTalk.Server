@@ -51,14 +51,14 @@ public class JwtService : IJwtService, IDisposable
         return tokenHandler.WriteToken(token);
     }
 
-    public int? ValidateJwtToken(string? token)
+    public async ValueTask<int?> ValidateJwtTokenAsync(string? token)
     {
         return token == null
             ? null
-            : _memoryCache.GetOrCreate(token, cacheEntry =>
+            : await _memoryCache.GetOrCreateAsync(token, async cacheEntry =>
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            var validationResult = await tokenHandler.ValidateTokenAsync(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = _symmetricSecurityKey,
@@ -66,9 +66,9 @@ public class JwtService : IJwtService, IDisposable
                 ValidateAudience = false,
                 // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                 ClockSkew = TimeSpan.Zero
-            }, out SecurityToken validatedToken);
+            });
 
-            var jwtToken = (JwtSecurityToken)validatedToken;
+            var jwtToken = (JwtSecurityToken)validationResult.SecurityToken;
             cacheEntry.AbsoluteExpiration = jwtToken.ValidTo;
             return int.Parse(jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value);
         });

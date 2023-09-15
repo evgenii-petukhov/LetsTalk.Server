@@ -36,24 +36,7 @@ public class ImageDataLayerService : IImageDataLayerService
         return image;
     }
 
-    public async Task<Image> ReplaceImageAsync(
-        string filename,
-        ImageFormats imageFormat,
-        ImageRoles imageRole,
-        int width,
-        int height,
-        int prevImageId,
-        CancellationToken cancellationToken = default)
-    {
-        var image = await CreateImageInternalAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
-        var file = _entityFactory.CreateFile(prevImageId);
-        _fileRepository.Delete(file);
-        await _unitOfWork.SaveAsync(cancellationToken);
-
-        return image;
-    }
-
-    public async Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole, 
+    public async Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole,
         int width, int height, CancellationToken cancellationToken = default)
     {
         var image = await CreateImageInternalAsync(filename, imageFormat, ImageRoles.Avatar, width, height, cancellationToken);

@@ -14,8 +14,6 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {
     private readonly IImageService _imageService;
     private readonly IImageValidationService _imageValidationService;
-    private readonly IAccountRepository _accountRepository;
-    private readonly IIOService _ioService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
     private readonly IImageDataLayerService _imageDataLayerService;
@@ -23,16 +21,12 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     public FileUploadGrpcEndpoint(
         IImageService imageService,
         IImageValidationService imageValidationService,
-        IAccountRepository accountRepository,
-        IIOService ioService,
         IMapper mapper,
         IFileService fileService,
         IImageDataLayerService imageDataLayerService)
     {
         _imageService = imageService;
         _imageValidationService = imageValidationService;
-        _accountRepository = accountRepository;
-        _ioService = ioService;
         _mapper = mapper;
         _fileService = fileService;
         _imageDataLayerService = imageDataLayerService;
@@ -44,18 +38,9 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         var imageRole = (ImageRoles)request.ImageRole;
         var validationResult = _imageValidationService.ValidateImage(data, imageRole);
 
-        var accountId = (int)context.UserState["AccountId"];
-        var prevFile = imageRole == ImageRoles.Avatar ? await GetAvatarAsync(accountId, context.CancellationToken) : null;
         var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, context.CancellationToken);
 
-        var image = prevFile == null
-            ? await _imageDataLayerService.CreateImageAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, context.CancellationToken)
-            : await _imageDataLayerService.ReplaceImageAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, prevFile.Id, context.CancellationToken);
-
-        if (prevFile != null)
-        {
-            _ioService.DeleteFile(prevFile.FileName!, FileTypes.Image);
-        }
+        var image = await _imageDataLayerService.CreateImageAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, context.CancellationToken);
 
         return new UploadImageResponse
         {
@@ -67,15 +52,5 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     {
         var image = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
         return _mapper.Map<DownloadImageResponse>(image);
-    }
-
-    private async Task<Domain.File?> GetAvatarAsync(int accountId, CancellationToken cancellationToken)
-    {
-        var response = await _accountRepository.GetByIdAsync(accountId, x => new
-        {
-            x.Image!.File
-        }, cancellationToken);
-
-        return response?.File;
     }
 }

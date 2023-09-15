@@ -1,3 +1,4 @@
+using KafkaFlow;
 using LetsTalk.Server.FileStorage.Service;
 using LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 using Serilog;
@@ -29,5 +30,8 @@ app.MapGrpcReflectionService();
 app.MapGrpcService<FileUploadGrpcEndpoint>()
     .EnableGrpcWeb()
     .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+var kafkaBus = app.Services.CreateKafkaBus();
+await kafkaBus.StartAsync();
 
 app.Run();

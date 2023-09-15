@@ -12,7 +12,7 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
     {
     }
 
-    public Task<T?> GetByIdAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default)
+    public Task<T?> GetByIdWithFileAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default)
     {
         return _context.Images
             .Include(x => x.File)

@@ -9,4 +9,5 @@ public class KafkaSettings
     public KafkaEventSettings? ImageResizeRequest { get; set; }
     public KafkaEventSettings? SetImageDimensionsRequest { get; set; }
     public KafkaEventSettings? ImagePreviewNotification { get; set; }
+    public KafkaEventSettings? RemoveImageRequest { get; set; }
 }

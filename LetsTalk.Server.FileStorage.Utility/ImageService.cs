@@ -21,13 +21,13 @@ public class ImageService : IImageService
     public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
     {
         dynamic? image = useDimensions
-            ? await _imageRepository.GetByIdAsync(imageId, x => new
+            ? await _imageRepository.GetByIdWithFileAsync(imageId, x => new
             {
                 x.File!.FileName,
                 x.Width,
                 x.Height
             }, cancellationToken)
-            : await _imageRepository.GetByIdAsync(imageId, x => new
+            : await _imageRepository.GetByIdWithFileAsync(imageId, x => new
             {
                 x.File!.FileName,
                 Width = 0,

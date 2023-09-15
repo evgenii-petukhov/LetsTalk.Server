@@ -7,8 +7,6 @@ public interface IEntityFactory
 {
     Message CreateMessage(int id);
 
-    Domain.File CreateFile(int id);
-
     Domain.File CreateFile(string filename, FileTypes fileType);
 
     Image CreateImage(ImageFormats imageFormat, ImageRoles imageRole, int width, int height);

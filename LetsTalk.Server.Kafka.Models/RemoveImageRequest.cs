@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.FileStorage.Models;
+﻿namespace LetsTalk.Server.Kafka.Models;
 
 public class RemoveImageRequest
 {

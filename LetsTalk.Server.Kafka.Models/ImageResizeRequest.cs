@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.ImageProcessor.Models;
+﻿namespace LetsTalk.Server.Kafka.Models;
 
 public class ImageResizeRequest
 {

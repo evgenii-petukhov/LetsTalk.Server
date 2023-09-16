@@ -2,7 +2,7 @@
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.ImageProcessing.Abstractions;
-using LetsTalk.Server.ImageProcessor.Models;
+using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 

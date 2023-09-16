@@ -4,7 +4,7 @@ using KafkaFlow.Producers;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.ImageProcessor.Models;
+using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;

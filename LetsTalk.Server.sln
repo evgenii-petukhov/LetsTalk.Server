@@ -49,8 +49,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Notifications.Models", "LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj", "{490BF070-3BB8-4A67-A934-18246B8DEDE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview.Models", "LetsTalk.Server.LinkPreview.Models\LetsTalk.Server.LinkPreview.Models.csproj", "{FE214023-E29D-4B81-9C97-820A02297689}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.UnitTests", "LetsTalk.Server.UnitTests\LetsTalk.Server.UnitTests.csproj", "{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{EA773367-D1CB-470C-9DB7-8E87CA9D637E}"
@@ -77,11 +75,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Repository.Abstractions", "LetsTalk.Server.Persistence.Repository.Abstractions\LetsTalk.Server.Persistence.Repository.Abstractions.csproj", "{3A7D40A0-D980-49EA-AA8D-CBE67DF3DD42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Domain.Abstractions", "LetsTalk.Server.Domain.Abstractions\LetsTalk.Server.Domain.Abstractions.csproj", "{2498C5DA-B55A-49F2-A72D-E85BC818EE58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Domain.Abstractions", "LetsTalk.Server.Domain.Abstractions\LetsTalk.Server.Domain.Abstractions.csproj", "{2498C5DA-B55A-49F2-A72D-E85BC818EE58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Domain.Utility", "LetsTalk.Server.Domain.Utility\LetsTalk.Server.Domain.Utility.csproj", "{965948CF-976F-4957-894D-B9078F3961DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Domain.Utility", "LetsTalk.Server.Domain.Utility\LetsTalk.Server.Domain.Utility.csproj", "{965948CF-976F-4957-894D-B9078F3961DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.Repository.Models", "LetsTalk.Server.Persistence.Repository.Models\LetsTalk.Server.Persistence.Repository.Models.csproj", "{BB277233-62A4-4C63-84FA-CF54FD46A3D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Repository.Models", "LetsTalk.Server.Persistence.Repository.Models\LetsTalk.Server.Persistence.Repository.Models.csproj", "{BB277233-62A4-4C63-84FA-CF54FD46A3D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Kafka.Models", "LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj", "{4E29B863-F73F-4529-AE55-568F97319F88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,10 +153,6 @@ Global
 		{490BF070-3BB8-4A67-A934-18246B8DEDE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{490BF070-3BB8-4A67-A934-18246B8DEDE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{490BF070-3BB8-4A67-A934-18246B8DEDE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE214023-E29D-4B81-9C97-820A02297689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE214023-E29D-4B81-9C97-820A02297689}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE214023-E29D-4B81-9C97-820A02297689}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE214023-E29D-4B81-9C97-820A02297689}.Release|Any CPU.Build.0 = Release|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -217,6 +213,10 @@ Global
 		{BB277233-62A4-4C63-84FA-CF54FD46A3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB277233-62A4-4C63-84FA-CF54FD46A3D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB277233-62A4-4C63-84FA-CF54FD46A3D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E29B863-F73F-4529-AE55-568F97319F88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E29B863-F73F-4529-AE55-568F97319F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E29B863-F73F-4529-AE55-568F97319F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E29B863-F73F-4529-AE55-568F97319F88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -243,7 +243,6 @@ Global
 		{19665F53-60F8-4B32-BADF-C5BC5070EF5A} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{11E752F7-CDB2-46D1-8AEB-FFDC845AA936} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{490BF070-3BB8-4A67-A934-18246B8DEDE6} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
-		{FE214023-E29D-4B81-9C97-820A02297689} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{EA773367-D1CB-470C-9DB7-8E87CA9D637E} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
@@ -260,6 +259,7 @@ Global
 		{2498C5DA-B55A-49F2-A72D-E85BC818EE58} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{965948CF-976F-4957-894D-B9078F3961DD} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{BB277233-62A4-4C63-84FA-CF54FD46A3D4} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
+		{4E29B863-F73F-4529-AE55-568F97319F88} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

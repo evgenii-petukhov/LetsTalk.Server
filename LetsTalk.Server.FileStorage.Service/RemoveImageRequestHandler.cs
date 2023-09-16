@@ -1,7 +1,7 @@
 ﻿using KafkaFlow;
 using KafkaFlow.TypedHandler;
-using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
+using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 

@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.LinkPreview.Models;
+﻿namespace LetsTalk.Server.Kafka.Models;
 
 public class LinkPreviewRequest
 {

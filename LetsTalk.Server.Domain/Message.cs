@@ -36,7 +36,6 @@ public class Message : BaseEntity
 
     protected Message()
     {
-
     }
 
     public Message(int id) : base(id)

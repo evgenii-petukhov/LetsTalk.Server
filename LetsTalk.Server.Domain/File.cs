@@ -15,12 +15,10 @@ public class File : BaseEntity
 
     protected File()
     {
-
     }
 
     public File(int id): base(id)
     {
-
     }
 
     public File(string fileName, int fileTypeId)

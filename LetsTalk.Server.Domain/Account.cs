@@ -38,12 +38,10 @@ public class Account : BaseEntity
 
     public Account(int id): base(id)
     {
-
     }
 
     protected Account()
     {
-
     }
 
     public void SetupProfile(string firstName, string lastName, string email, string photoUrl, bool hasImageId)

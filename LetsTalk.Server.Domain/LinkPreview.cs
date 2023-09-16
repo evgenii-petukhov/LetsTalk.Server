@@ -18,7 +18,6 @@ public class LinkPreview : BaseEntity
 
     protected LinkPreview()
     {
-
     }
 
     public LinkPreview(string url, string title, string imageUrl)

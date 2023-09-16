@@ -25,7 +25,6 @@ public class Image : BaseEntity
 
     protected Image()
     {
-
     }
 
     public Image(int imageFormatId, int imageRoleId, int width, int height)

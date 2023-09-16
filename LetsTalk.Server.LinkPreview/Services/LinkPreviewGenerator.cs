@@ -13,19 +13,22 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
     private readonly IRegexService _regexService;
     private readonly ILogger<LinkPreviewGenerator> _logger;
     private readonly IEntityFactory _entityFactory;
+    private readonly IUnitOfWork _unitOfWork;
 
     public LinkPreviewGenerator(
         ILinkPreviewRepository linkPreviewRepository,
         IDownloadService downloadService,
         IRegexService regexService,
         ILogger<LinkPreviewGenerator> logger,
-        IEntityFactory entityFactory)
+        IEntityFactory entityFactory,
+        IUnitOfWork unitOfWork)
     {
         _linkPreviewRepository = linkPreviewRepository;
         _downloadService = downloadService;
         _regexService = regexService;
         _logger = logger;
         _entityFactory = entityFactory;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Domain.LinkPreview?> GetLinkPreviewAsync(string url)
@@ -50,6 +53,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 {
                     linkPreview = _entityFactory.CreateLinkPreview(url, openGraphModel.Title, openGraphModel.ImageUrl!);
                     _logger.LogInformation("New LinkPreview added: {@linkPreview}", linkPreview);
+                    await _unitOfWork.SaveAsync();
                 }
                 catch (DbUpdateException)
                 {

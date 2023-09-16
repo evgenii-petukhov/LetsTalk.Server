@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Abstractions\LetsTalk.Server.ImageProcessing.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.ImageProcessor.Models\LetsTalk.Server.ImageProcessor.Models.csproj" />
   </ItemGroup>
 
 </Project>

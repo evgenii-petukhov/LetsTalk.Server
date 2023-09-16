@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.ImageProcessor.Models;
+﻿namespace LetsTalk.Server.ImageProcessing.Abstractions.Models;
 
 public class ImageResizeResult
 {

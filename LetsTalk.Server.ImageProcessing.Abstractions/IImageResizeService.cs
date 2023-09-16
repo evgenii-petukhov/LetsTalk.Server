@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.ImageProcessor.Models;
+﻿using LetsTalk.Server.ImageProcessing.Abstractions.Models;
 
 namespace LetsTalk.Server.ImageProcessing.Abstractions;
 

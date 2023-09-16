@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Models\LetsTalk.Server.FileStorage.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository.Abstractions\LetsTalk.Server.Persistence.Repository.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository\LetsTalk.Server.Persistence.Repository.csproj" />

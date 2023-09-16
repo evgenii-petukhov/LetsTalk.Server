@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Google.Protobuf;
-using LetsTalk.Server.FileStorage.Models;
 using LetsTalk.Server.FileStorage.Service.Protos;
+using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 
 namespace LetsTalk.Server.FileStorage.Service.MappingProfiles;
 

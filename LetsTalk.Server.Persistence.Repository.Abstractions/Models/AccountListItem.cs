@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Persistence.Repository.Models;
+﻿namespace LetsTalk.Server.Persistence.Repository.Abstractions.Models;
 
 public class AccountListItem
 {

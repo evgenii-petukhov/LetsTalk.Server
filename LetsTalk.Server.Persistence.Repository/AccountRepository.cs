@@ -2,7 +2,7 @@
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
-using LetsTalk.Server.Persistence.Repository.Models;
+using LetsTalk.Server.Persistence.Repository.Abstractions.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

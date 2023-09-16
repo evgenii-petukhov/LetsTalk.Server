@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.Persistence.Repository.Models;
+using LetsTalk.Server.Persistence.Repository.Abstractions.Models;
 using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Repository.Abstractions;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Persistence.Repository.Models;
+using LetsTalk.Server.Persistence.Repository.Abstractions.Models;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 

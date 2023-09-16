@@ -9,14 +9,14 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="FluentValidation" Version="11.5.2" />
-    <PackageReference Include="KafkaFlow" Version="2.4.0" />
-    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.4.0" />
-    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.4.0" />
-    <PackageReference Include="KafkaFlow.Serializer" Version="2.4.0" />
-    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.4.0" />
-    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.4.0" />
-    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.7.1" />
+    <PackageReference Include="KafkaFlow" Version="2.4.1" />
+    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.4.1" />
+    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.4.1" />
+    <PackageReference Include="KafkaFlow.Serializer" Version="2.4.1" />
+    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.4.1" />
+    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.4.1" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />

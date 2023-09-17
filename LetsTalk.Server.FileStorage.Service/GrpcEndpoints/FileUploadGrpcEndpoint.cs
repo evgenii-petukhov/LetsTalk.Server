@@ -36,11 +36,11 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     {
         var data = request.Content.ToArray();
         var imageRole = (ImageRoles)request.ImageRole;
-        var validationResult = _imageValidationService.ValidateImage(data, imageRole);
+        var (imageFormat, width, height) = _imageValidationService.ValidateImage(data, imageRole);
 
         var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, context.CancellationToken);
 
-        var image = await _imageDataLayerService.CreateImageAsync(filename, validationResult.ImageFormat, imageRole, validationResult.Width, validationResult.Height, context.CancellationToken);
+        var image = await _imageDataLayerService.CreateImageAsync(filename, imageFormat, imageRole, width, height, context.CancellationToken);
 
         return new UploadImageResponse
         {

@@ -1,10 +1,3 @@
 ﻿namespace LetsTalk.Server.ImageProcessing.Abstractions.Models;
 
-public class ImageResizeResult
-{
-    public byte[]? Data { get; set; }
-
-    public int Width { get; set; }
-
-    public int Height { get; set; }
-}
+public readonly record struct ImageResizeResult(byte[]? Data, int Width, int Height);

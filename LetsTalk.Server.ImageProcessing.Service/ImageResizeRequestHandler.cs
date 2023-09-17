@@ -44,13 +44,13 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     public async Task Handle(IMessageContext context, ImageResizeRequest message)
     {
         var fetchImageResponse = await _imageService.FetchImageAsync(message.ImageId);
-        var resizeResult = _imageResizeService.Resize(
+        var (data, width, height) = _imageResizeService.Resize(
             fetchImageResponse.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
-        var filename = await _fileService.SaveDataAsync(resizeResult.Data!, FileTypes.Image, ImageRoles.Message);
+        var filename = await _fileService.SaveDataAsync(data!, FileTypes.Image, ImageRoles.Message);
 
-        var image = await _imageDataLayerService.CreateImagePreviewAsync(filename, ImageFormats.Webp, resizeResult.Width, resizeResult.Height, message.MessageId);
+        var image = await _imageDataLayerService.CreateImagePreviewAsync(filename, ImageFormats.Webp, width, height, message.MessageId);
 
         var imagePreviewDto = new ImagePreviewDto
         {

@@ -40,18 +40,18 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             {
                 var pageString = await _downloadService.DownloadAsStringAsync(url);
 
-                var openGraphModel = _regexService.GetOpenGraphModel(pageString);
+                var (title, imageUrl) = _regexService.GetOpenGraphModel(pageString);
 
-                if (string.IsNullOrWhiteSpace(openGraphModel.Title))
+                if (string.IsNullOrWhiteSpace(title))
                 {
                     _logger.LogInformation("Title is empty: {url}", url);
                     return null;
                 }
 
-                openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
+                title = HttpUtility.HtmlDecode(title);
                 try
                 {
-                    linkPreview = _entityFactory.CreateLinkPreview(url, openGraphModel.Title, openGraphModel.ImageUrl!);
+                    linkPreview = _entityFactory.CreateLinkPreview(url, title, imageUrl!);
                     _logger.LogInformation("New LinkPreview added: {@linkPreview}", linkPreview);
                     await _unitOfWork.SaveAsync();
                 }

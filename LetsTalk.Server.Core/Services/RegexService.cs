@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.Core.Models.HtmlGenerator;
 using System.Text.RegularExpressions;
 
 namespace LetsTalk.Server.Core.Services;

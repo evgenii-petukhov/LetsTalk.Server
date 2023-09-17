@@ -3,7 +3,7 @@ using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Attributes;
 using LetsTalk.Server.Core.Constants;
-using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.Core.Models.Authentication;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Enums;

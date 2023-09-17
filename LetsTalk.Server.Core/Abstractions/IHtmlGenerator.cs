@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Core.Models;
+﻿using LetsTalk.Server.Core.Models.HtmlGenerator;
 
 namespace LetsTalk.Server.Core.Abstractions;
 

@@ -14,8 +14,7 @@ public class MessageProcessor : IMessageProcessor
 
     public void SetTextHtml(Message message, out string? url)
     {
-        var result = _htmlGenerator.GetHtml(message.Text!);
-        message.SetTextHtml(result.Html);
-        url = result.Url;
+        (var html, url) = _htmlGenerator.GetHtml(message.Text!);
+        message.SetTextHtml(html);
     }
 }

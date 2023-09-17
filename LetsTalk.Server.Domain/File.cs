@@ -17,10 +17,6 @@ public class File : BaseEntity
     {
     }
 
-    public File(int id): base(id)
-    {
-    }
-
     public File(string fileName, int fileTypeId)
     {
         FileName = fileName;

@@ -3,11 +3,10 @@ using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Attributes;
 using LetsTalk.Server.Core.Constants;
-using LetsTalk.Server.Core.Models;
+using LetsTalk.Server.Core.Models.Authentication;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Logging.Abstractions;
-using LetsTalk.Server.Persistence.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Newtonsoft.Json;
 using RestSharp;
@@ -19,18 +18,18 @@ public class VkOpenAuthProvider : IOpenAuthProvider
 {
     private const string VK_URL = "https://api.vk.com/";
 
-    private readonly IAccountDataLayerService _accountDataLayerService;
     private readonly IAppLogger<VkOpenAuthProvider> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
+    private readonly IAccountDataLayerService _accountDataLayerService;
 
     public VkOpenAuthProvider(
-        IAccountDataLayerService accountDataLayerService,
         IAppLogger<VkOpenAuthProvider> appLogger,
-        IAuthenticationClient authenticationClient)
+        IAuthenticationClient authenticationClient,
+        IAccountDataLayerService accountDataLayerService)
     {
-        _accountDataLayerService = accountDataLayerService;
         _appLogger = appLogger;
         _authenticationClient = authenticationClient;
+        _accountDataLayerService = accountDataLayerService;
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)

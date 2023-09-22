@@ -8,6 +8,9 @@ using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
 using System.Reflection;
+using KafkaFlow;
+using KafkaFlow.Serializer;
+using KafkaFlow.TypedHandler;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -35,10 +38,33 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
-        services.AddFileStorageUtilityServices();
+        services.AddFileStorageUtilityServices(configuration, Assembly.GetExecutingAssembly());
         services.AddImageProcessingUtilityServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddKafka(
+            kafka => kafka
+                .UseConsoleLog()
+                .AddCluster(
+                    cluster => cluster
+                        .WithBrokers(new[]
+                        {
+                                kafkaSettings.Url
+                        })
+                        .CreateTopicIfNotExists(kafkaSettings.RemoveImageRequest!.Topic, 1, 1)
+                        .AddConsumer(consumer => consumer
+                            .Topic(kafkaSettings.RemoveImageRequest.Topic)
+                            .WithGroupId(kafkaSettings.RemoveImageRequest.GroupId)
+                            .WithBufferSize(100)
+                            .WithWorkersCount(10)
+                            .AddMiddlewares(middlewares => middlewares
+                                .AddSerializer<JsonCoreSerializer>()
+                                .AddTypedHandlers(h => h.AddHandler<RemoveImageRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
+                            )
+                        )
+                )
+        );
+        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
 
         return services;
     }

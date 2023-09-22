@@ -10,10 +10,6 @@ public class AccountTypeConfiguration : IEntityTypeConfiguration<AccountType>
     public void Configure(EntityTypeBuilder<AccountType> builder)
     {
         builder.HasData(
-            Enum.GetValues<AccountTypes>().Select(x => new AccountType
-            {
-                Id = (int)x,
-                Name = Enum.GetName(x)
-            }));
+            Enum.GetValues<AccountTypes>().Select(x => new AccountType((int)x, Enum.GetName(x)!)));
     }
 }

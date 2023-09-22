@@ -1,37 +1,81 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using LetsTalk.Server.Domain.Events;
+using LetsTalk.Server.Domain.Utility;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
 
 [Table("messages")]
 public class Message : BaseEntity
 {
-    public string? Text { get; set; }
+    public string? Text { get; protected set; }
 
-    public string? TextHtml { get; set; }
+    public string? TextHtml { get; protected set; }
 
-    public Account? Sender { get; set; }
+    public Account? Sender { get; protected set; }
 
-    public int SenderId { get; set; }
+    public int SenderId { get; protected set; }
 
-    public Account? Recipient { get; set; }
+    public Account? Recipient { get; protected set; }
 
-    public int RecipientId { get; set; }
+    public int RecipientId { get; protected set; }
 
-    public bool IsRead { get; set; }
+    public bool IsRead { get; protected set; }
 
-    public long? DateCreatedUnix { get; set; }
+    public long? DateCreatedUnix { get; protected set; }
 
-    public long? DateReadUnix { get; set; }
+    public long? DateReadUnix { get; protected set; }
 
-    public int? LinkPreviewId { get; set; }
+    public LinkPreview? LinkPreview { get; protected set; }
 
-    public LinkPreview? LinkPreview { get; set; }
+    public Image? Image { get; protected set; }
 
-    public Image? Image { get; set; }
+    public int? ImageId { get; protected set; }
 
-    public int? ImageId { get; set; }
+    public Image? ImagePreview { get; protected set; }
 
-    public Image? ImagePreview { get; set; }
+    public int? ImagePreviewId { get; protected set; }
 
-    public int? ImagePreviewId { get; set; }
+    protected Message()
+    {
+    }
+
+    public Message(int id) : base(id)
+    {
+    }
+
+    public void SetImagePreview(Image image)
+    {
+        ImagePreview = image;
+        AddDomainEvent(new MessageDomainEvent<Image>
+        {
+            Message = this,
+            Payload = image
+        });
+    }
+
+    public void SetLinkPreview(LinkPreview linkPreview)
+    {
+        LinkPreview = linkPreview;
+        AddDomainEvent(new MessageDomainEvent<LinkPreview>
+        {
+            Message = this,
+            Payload = linkPreview
+        });
+    }
+
+    public void SetTextHtml(string? html)
+    {
+        TextHtml = html;
+    }
+
+    public void SetDateCreatedUnix(long? dateCreatedUnix)
+    {
+        DateCreatedUnix = dateCreatedUnix;
+    }
+
+    public void MarkAsRead()
+    {
+        IsRead = true;
+        DateReadUnix = DateHelper.GetUnixTimestamp();
+    }
 }

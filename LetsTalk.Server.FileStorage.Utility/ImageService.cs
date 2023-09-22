@@ -1,33 +1,33 @@
-﻿using LetsTalk.Server.FileStorage.Models;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.Persistence.Abstractions;
+﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
+using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
 public class ImageService : IImageService
 {
     private readonly IFileService _fileService;
-    private readonly IImageDataLayerService _imageDataLayerService;
+    private readonly IImageRepository _imageRepository;
 
     public ImageService(
         IFileService fileService,
-        IImageDataLayerService imageDataLayerService)
+        IImageRepository imageRepository)
     {
         _fileService = fileService;
-        _imageDataLayerService = imageDataLayerService;
+        _imageRepository = imageRepository;
     }
 
     public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
     {
         dynamic? image = useDimensions
-            ? await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => new
+            ? await _imageRepository.GetByIdWithFileAsync(imageId, x => new
             {
                 x.File!.FileName,
                 x.Width,
                 x.Height
             }, cancellationToken)
-            : await _imageDataLayerService.GetByIdOrDefaultAsync(imageId, x => new
+            : await _imageRepository.GetByIdWithFileAsync(imageId, x => new
             {
                 x.File!.FileName,
                 Width = 0,

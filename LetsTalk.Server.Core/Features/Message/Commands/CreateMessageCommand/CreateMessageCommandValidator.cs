@@ -1,13 +1,16 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
-    private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IImageRepository _imageRepository;
 
-    public CreateMessageCommandValidator(IAccountDataLayerService accountDataLayerService)
+    public CreateMessageCommandValidator(
+        IAccountRepository accountRepository,
+        IImageRepository imageRepository)
     {
         RuleFor(model => model)
             .Must(IsContentValid)
@@ -30,13 +33,29 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
         });
 
-        _accountDataLayerService = accountDataLayerService;
+        When(model => model.ImageId.HasValue, () =>
+        {
+            RuleFor(model => model.ImageId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} can't be zero")
+                .MustAsync(IsImageIdValidAsync)
+                .WithMessage("Image with {PropertyName} = {PropertyValue} does not exist");
+        });
+
+        _accountRepository = accountRepository;
+        _imageRepository = imageRepository;
     }
 
     private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            && await _accountDataLayerService.IsAccountIdValidAsync(id.Value, cancellationToken: cancellationToken);
+            && await _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken);
+    }
+
+    private async Task<bool> IsImageIdValidAsync(int? id, CancellationToken cancellationToken)
+    {
+        return id.HasValue
+            && await _imageRepository.IsImageIdValidAsync(id.Value, cancellationToken);
     }
 
     private bool IsContentValid(CreateMessageCommand model)

@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.LinkPreview.Abstractions;
-using LetsTalk.Server.LinkPreview.Models;
-using LetsTalk.Server.Persistence.Abstractions;
+using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Web;
@@ -13,17 +12,23 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
     private readonly IDownloadService _downloadService;
     private readonly IRegexService _regexService;
     private readonly ILogger<LinkPreviewGenerator> _logger;
+    private readonly IEntityFactory _entityFactory;
+    private readonly IUnitOfWork _unitOfWork;
 
     public LinkPreviewGenerator(
         ILinkPreviewRepository linkPreviewRepository,
         IDownloadService downloadService,
         IRegexService regexService,
-        ILogger<LinkPreviewGenerator> logger)
+        ILogger<LinkPreviewGenerator> logger,
+        IEntityFactory entityFactory,
+        IUnitOfWork unitOfWork)
     {
         _linkPreviewRepository = linkPreviewRepository;
         _downloadService = downloadService;
         _regexService = regexService;
         _logger = logger;
+        _entityFactory = entityFactory;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Domain.LinkPreview?> GetLinkPreviewAsync(string url)
@@ -35,25 +40,20 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             {
                 var pageString = await _downloadService.DownloadAsStringAsync(url);
 
-                var openGraphModel = _regexService.GetOpenGraphModel(pageString);
+                var (title, imageUrl) = _regexService.GetOpenGraphModel(pageString);
 
-                if (string.IsNullOrWhiteSpace(openGraphModel.Title))
+                if (string.IsNullOrWhiteSpace(title))
                 {
                     _logger.LogInformation("Title is empty: {url}", url);
                     return null;
                 }
 
-                openGraphModel.Title = HttpUtility.HtmlDecode(openGraphModel.Title);
+                title = HttpUtility.HtmlDecode(title);
                 try
                 {
-                    linkPreview = new Domain.LinkPreview
-                    {
-                        Url = url,
-                        Title = openGraphModel.Title,
-                        ImageUrl = openGraphModel.ImageUrl
-                    };
-                    await _linkPreviewRepository.CreateAsync(linkPreview);
+                    linkPreview = _entityFactory.CreateLinkPreview(url, title, imageUrl!);
                     _logger.LogInformation("New LinkPreview added: {@linkPreview}", linkPreview);
+                    await _unitOfWork.SaveAsync();
                 }
                 catch (DbUpdateException)
                 {

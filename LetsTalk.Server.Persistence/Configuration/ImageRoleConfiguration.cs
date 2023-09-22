@@ -10,10 +10,6 @@ public class ImageRoleConfiguration : IEntityTypeConfiguration<ImageRole>
     public void Configure(EntityTypeBuilder<ImageRole> builder)
     {
         builder.HasData(
-            Enum.GetValues<ImageRoles>().Select(x => new ImageRole
-            {
-                Id = (int)x,
-                Name = Enum.GetName(x)
-            }));
+            Enum.GetValues<ImageRoles>().Select(x => new ImageRole((int)x, Enum.GetName(x)!)));
     }
 }

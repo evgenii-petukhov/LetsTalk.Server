@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.Helpers;
+using LetsTalk.Server.Domain.Utility;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.DatabaseContext;
@@ -32,7 +32,7 @@ public class LetsTalkDbContext : DbContext
     {
         foreach (var entry in base.ChangeTracker.Entries<Message>().Where(q => q.State == EntityState.Added))
         {
-            entry.Entity.DateCreatedUnix = DateHelper.GetUnixTimestamp();
+            entry.Entity.SetDateCreatedUnix(DateHelper.GetUnixTimestamp());
         }
         return base.SaveChangesAsync(cancellationToken);
     }

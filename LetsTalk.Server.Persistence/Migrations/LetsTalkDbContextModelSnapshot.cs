@@ -153,7 +153,8 @@ namespace LetsTalk.Server.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("FileId")
+                        .IsUnique();
 
                     b.HasIndex("ImageFormatId");
 
@@ -338,8 +339,8 @@ namespace LetsTalk.Server.Persistence.Migrations
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>
                 {
                     b.HasOne("LetsTalk.Server.Domain.File", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId")
+                        .WithOne("Image")
+                        .HasForeignKey("LetsTalk.Server.Domain.Image", "FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -399,6 +400,11 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Navigation("Recipient");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("LetsTalk.Server.Domain.File", b =>
+                {
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>

@@ -59,23 +59,21 @@ public class Account : BaseEntity
 
     public void UpdateProfile(string firstName, string lastName, string email, int? imageId)
     {
-        var avatarChangedDomainEvent = ImageId.HasValue ? new AvatarChangedDomainEvent
-        {
-            PreviousImageId = ImageId.Value
-        } : null;
-
         FirstName = firstName;
         LastName = lastName;
         Email = email;
 
+        if (ImageId.HasValue)
+        {
+            AddDomainEvent(new AvatarChangedDomainEvent
+            {
+                PreviousImageId = ImageId.Value
+            });
+        }
+
         if (imageId.HasValue)
         {
             ImageId = imageId.Value;
-        }
-
-        if (avatarChangedDomainEvent != null)
-        {
-            AddDomainEvent(avatarChangedDomainEvent);
         }
     }
 }

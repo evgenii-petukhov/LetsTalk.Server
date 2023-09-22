@@ -27,7 +27,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IMessageProcessor, MessageProcessor>();
         services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
         services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
-        services.AddPersistenceRepositoryServices(configuration);
+        services.AddPersistenceRepositoryServices(configuration, Assembly.GetExecutingAssembly());
 
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
 

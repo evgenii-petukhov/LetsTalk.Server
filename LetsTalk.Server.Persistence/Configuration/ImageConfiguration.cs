@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LetsTalk.Server.Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LetsTalk.Server.Persistence.Configuration;
 
-public class ImageConfiguration : IEntityTypeConfiguration<Domain.Image>
+public class ImageConfiguration : IEntityTypeConfiguration<Image>
 {
-    public void Configure(EntityTypeBuilder<Domain.Image> builder)
+    public void Configure(EntityTypeBuilder<Image> builder)
     {
         builder
             .HasOne(e => e.File)

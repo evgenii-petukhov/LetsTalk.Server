@@ -16,7 +16,7 @@ public class MessageProfile : Profile
 		CreateMap<CreateMessageCommand, Message>();
 		CreateMap<Message, MessageDto>()
 			.ForMember(x => x.Created, x => x.MapFrom(source => source.DateCreatedUnix));
-		CreateMap<Domain.LinkPreview, LinkPreviewDto>();
+		CreateMap<LinkPreview, LinkPreviewDto>();
         CreateMap<Image, ImagePreviewDto>();
         CreateMap<MarkAsReadRequest, ReadMessageCommand>();
     }

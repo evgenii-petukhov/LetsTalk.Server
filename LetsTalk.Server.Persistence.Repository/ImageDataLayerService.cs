@@ -9,18 +9,21 @@ public class ImageDataLayerService : IImageDataLayerService
     private readonly IFileRepository _fileRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEntityFactory _entityFactory;
+    private readonly IMessageRepository _messageRepository;
 
     public ImageDataLayerService(
         IFileRepository fileRepository,
         IUnitOfWork unitOfWork,
-        IEntityFactory entityFactory)
+        IEntityFactory entityFactory,
+        IMessageRepository messageRepository)
     {
         _fileRepository = fileRepository;
         _unitOfWork = unitOfWork;
         _entityFactory = entityFactory;
+        _messageRepository = messageRepository;
     }
 
-    public async Task<Image> CreateImagePreviewAsync(
+    public async Task CreateImagePreviewAsync(
         string filename,
         ImageFormats imageFormat,
         int width,
@@ -29,11 +32,9 @@ public class ImageDataLayerService : IImageDataLayerService
         CancellationToken cancellationToken = default)
     {
         var image = await CreateImageInternalAsync(filename, imageFormat, ImageRoles.Message, width, height, cancellationToken);
-        var message = _entityFactory.CreateMessage(messageId);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
         message.SetImagePreview(image);
         await _unitOfWork.SaveAsync(cancellationToken);
-
-        return image;
     }
 
     public async Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole,

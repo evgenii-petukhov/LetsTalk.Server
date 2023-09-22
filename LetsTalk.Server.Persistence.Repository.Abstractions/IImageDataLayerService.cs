@@ -8,6 +8,6 @@ public interface IImageDataLayerService
     Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole,
         int width, int height, CancellationToken cancellationToken = default);
 
-    Task<Image> CreateImagePreviewAsync(string filename, ImageFormats imageFormat,
+    Task CreateImagePreviewAsync(string filename, ImageFormats imageFormat,
         int width, int height, int messageId, CancellationToken cancellationToken = default);
 }

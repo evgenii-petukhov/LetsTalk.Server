@@ -38,7 +38,7 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
-        services.AddFileStorageUtilityServices(configuration);
+        services.AddFileStorageUtilityServices(configuration, Assembly.GetExecutingAssembly());
         services.AddImageProcessingUtilityServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

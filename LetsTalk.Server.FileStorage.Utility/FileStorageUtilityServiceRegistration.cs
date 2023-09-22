@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.Persistence.Repository;
+using System.Reflection;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
@@ -9,13 +10,14 @@ public static class FileStorageUtilityServiceRegistration
 {
     public static IServiceCollection AddFileStorageUtilityServices(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        Assembly assembly)
     {
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IFileNameGenerator, FileNameGenerator>();
         services.AddTransient<IFileStoragePathProvider, FileStoragePathProvider>();
         services.AddTransient<IImageService, ImageService>();
-        services.AddPersistenceRepositoryServices(configuration);
+        services.AddPersistenceRepositoryServices(configuration, assembly);
 
         return services;
     }

@@ -69,8 +69,6 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
-                    SenderId = request.SenderId,
-                    RecipientId = request.RecipientId,
                     MessageId = messageDto.Id,
                     ImageId = messageDto.ImageId!.Value
                 }));

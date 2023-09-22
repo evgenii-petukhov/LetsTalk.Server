@@ -92,8 +92,6 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new LinkPreviewRequest
                 {
-                    SenderId = request.SenderId.Value,
-                    RecipientId = request.RecipientId.Value,
                     MessageId = messageDto.Id,
                     Url = url
                 }),
@@ -102,8 +100,6 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
-                    SenderId = request.SenderId.Value,
-                    RecipientId = request.RecipientId.Value,
                     MessageId = messageDto.Id,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);

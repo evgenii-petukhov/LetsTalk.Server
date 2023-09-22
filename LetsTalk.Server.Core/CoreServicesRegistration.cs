@@ -19,7 +19,6 @@ public static class CoreServicesRegistration
         IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddMediatR(options => options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddTransient<IOpenAuthProvider, FacebookOpenAuthProvider>();
         services.AddTransient<IOpenAuthProvider, VkOpenAuthProvider>();
         services.AddTransient<IRegexService, RegexService>();

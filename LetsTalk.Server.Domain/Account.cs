@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LetsTalk.Server.Domain.Events;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
@@ -58,6 +59,11 @@ public class Account : BaseEntity
 
     public void UpdateProfile(string firstName, string lastName, string email, int? imageId)
     {
+        var avatarChangedDomainEvent = ImageId.HasValue ? new AvatarChangedDomainEvent
+        {
+            PreviousImageId = ImageId.Value
+        } : null;
+
         FirstName = firstName;
         LastName = lastName;
         Email = email;
@@ -65,6 +71,11 @@ public class Account : BaseEntity
         if (imageId.HasValue)
         {
             ImageId = imageId.Value;
+        }
+
+        if (avatarChangedDomainEvent != null)
+        {
+            AddDomainEvent(avatarChangedDomainEvent);
         }
     }
 }

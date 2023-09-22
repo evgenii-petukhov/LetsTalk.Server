@@ -2,7 +2,8 @@
 
 namespace LetsTalk.Server.Domain.Events;
 
-public class MessageDomainEvent<T> : INotification where T: BaseEntity
+public class MessageDomainEvent<T> : INotification
+    where T: BaseEntity
 {
     public Message? Message { get; set; }
 

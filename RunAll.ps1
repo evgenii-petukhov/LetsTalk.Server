@@ -1,5 +1,5 @@
 Get-ChildItem -include bin,obj -Recurse | foreach ($_) { remove-item $_.fullname -Force -Recurse }
-dotnet publish -r win-x64
+dotnet publish -r win-x64 --self-contained false
 start LetsTalk.Server.API\bin\Debug\net7.0\win-x64\publish\LetsTalk.Server.API.exe
 start LetsTalk.Server.Authentication\bin\Debug\net7.0\win-x64\publish\LetsTalk.Server.Authentication.exe
 start LetsTalk.Server.FileStorage.Service\bin\Debug\net7.0\win-x64\publish\LetsTalk.Server.FileStorage.Service.exe

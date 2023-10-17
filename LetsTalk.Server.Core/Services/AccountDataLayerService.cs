@@ -8,21 +8,27 @@ namespace LetsTalk.Server.Core.Services;
 public class AccountDataLayerService: IAccountDataLayerService
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly IEntityFactory _entityFactory;
+    private readonly IAccountDomainService _accountDomainService;
     private readonly IUnitOfWork _unitOfWork;
 
     public AccountDataLayerService(
         IAccountRepository accountRepository,
-        IEntityFactory entityFactory,
+        IAccountDomainService accountDomainService,
         IUnitOfWork unitOfWork)
     {
         _accountRepository = accountRepository;
-        _entityFactory = entityFactory;
+        _accountDomainService = accountDomainService;
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<int> CreateOrUpdateAsync(string externalId, AccountTypes accountType, string? firstName, string? lastName,
-    string? email, string? photoUrl, CancellationToken cancellationToken = default)
+    public async Task<int> CreateOrUpdateAsync(
+        string externalId,
+        AccountTypes accountType,
+        string firstName,
+        string lastName,
+        string email,
+        string photoUrl,
+        CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByExternalIdAsTrackingAsync(externalId, accountType, cancellationToken);
 
@@ -30,8 +36,7 @@ public class AccountDataLayerService: IAccountDataLayerService
         {
             try
             {
-                account = _entityFactory.CreateAccount(externalId, (int)accountType, firstName!, lastName!, photoUrl!, email!);
-                await _accountRepository.CreateAsync(account, cancellationToken);
+                account = await _accountDomainService.CreateAccountAsync(externalId, accountType, firstName, lastName, email, photoUrl, cancellationToken);
                 await _unitOfWork.SaveAsync(cancellationToken);
                 return account.Id;
             }

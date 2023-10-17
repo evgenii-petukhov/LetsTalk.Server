@@ -15,20 +15,23 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     private readonly IImageService _imageService;
     private readonly IFileService _fileService;
     private readonly IImageResizeService _imageResizeService;
-    private readonly IImageDataLayerService _imageDataLayerService;
+    private readonly IImageDomainService _imageDomainService;
     private readonly FileStorageSettings _fileStorageSettings;
+    private readonly IUnitOfWork _unitOfWork;
 
     public ImageResizeRequestHandler(
         IImageService imageService,
         IFileService fileService,
         IImageResizeService imageResizeService,
-        IImageDataLayerService imageDataLayerService,
+        IImageDomainService imageDomainService,
+        IUnitOfWork unitOfWork,
         IOptions<FileStorageSettings> fileStorageSettings)
     {
         _imageService = imageService;
         _fileService = fileService;
         _imageResizeService = imageResizeService;
-        _imageDataLayerService = imageDataLayerService;
+        _imageDomainService = imageDomainService;
+        _unitOfWork = unitOfWork;
         _fileStorageSettings = fileStorageSettings.Value;
     }
 
@@ -41,11 +44,13 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
             _fileStorageSettings.ImagePreviewMaxHeight);
         var filename = await _fileService.SaveDataAsync(data!, FileTypes.Image, ImageRoles.Message);
 
-        await _imageDataLayerService.CreateImagePreviewAsync(
+        await _imageDomainService.CreateImagePreviewAsync(
             filename,
             ImageFormats.Webp,
             width,
             height,
             message.MessageId);
+
+        await _unitOfWork.SaveAsync();
     }
 }

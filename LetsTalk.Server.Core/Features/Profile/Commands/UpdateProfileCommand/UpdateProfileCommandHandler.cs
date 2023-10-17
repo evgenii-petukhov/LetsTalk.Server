@@ -9,15 +9,18 @@ namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, AccountDto>
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IAccountDomainService _accountDomainService;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
+        IAccountDomainService accountDomainService,
         IMapper mapper,
         IUnitOfWork unitOfWork)
     {
         _accountRepository = accountRepository;
+        _accountDomainService = accountDomainService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
@@ -32,8 +35,14 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var account = await _accountRepository.GetByIdAsTrackingAsync(request.AccountId!.Value, cancellationToken);
-        account.UpdateProfile(request.FirstName!, request.LastName!, request.Email!, request.ImageId);
+        var account = await _accountDomainService.UpdateProfileAsync(
+            request.AccountId!.Value,
+            request.FirstName!,
+            request.LastName!,
+            request.Email!,
+            request.ImageId,
+            cancellationToken);
+
         await _unitOfWork.SaveAsync(cancellationToken);
 
         return _mapper.Map<AccountDto>(account);

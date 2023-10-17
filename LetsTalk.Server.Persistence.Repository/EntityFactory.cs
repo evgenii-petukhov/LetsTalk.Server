@@ -32,7 +32,7 @@ public class EntityFactory : IEntityFactory
         return new Image((int)imageFormat, (int)imageRole, width, height);
     }
 
-    public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl, string email)
+    public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)
     {
         return new Account(externalId, accountTypeId, firstName, lastName, photoUrl, email);
     }

@@ -48,10 +48,10 @@ public class FacebookOpenAuthProvider : IOpenAuthProvider
             var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
                 data.Id!,
                 AccountTypes.Facebook,
-                data.FirstName,
-                data.LastName,
-                data.Email,
-                data.Picture!.Data!.Url,
+                data.FirstName!,
+                data.LastName!,
+                data.Email!,
+                data.Picture!.Data!.Url!,
                 cancellationToken);
 
             // generate jwt token to access secure routes on this API

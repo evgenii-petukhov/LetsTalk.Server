@@ -57,10 +57,10 @@ public class VkOpenAuthProvider : IOpenAuthProvider
             var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
                 data.Response![0].Id!,
                 AccountTypes.VK,
-                data.Response[0].FirstName,
-                data.Response[0].LastName,
-                null,
-                data.Response[0].PictureUrl,
+                data.Response[0].FirstName!,
+                data.Response[0].LastName!,
+                null!,
+                data.Response[0].PictureUrl!,
                 cancellationToken);
 
             // generate jwt token to access secure routes on this API

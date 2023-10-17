@@ -7,6 +7,8 @@ using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.Repository;
+using System.Threading;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
@@ -16,20 +18,23 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IImageValidationService _imageValidationService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
-    private readonly IImageDataLayerService _imageDataLayerService;
+    private readonly IImageDomainService _imageDomainService;
+    private readonly IUnitOfWork _unitOfWork;
 
     public FileUploadGrpcEndpoint(
         IImageService imageService,
         IImageValidationService imageValidationService,
         IMapper mapper,
         IFileService fileService,
-        IImageDataLayerService imageDataLayerService)
+        IImageDomainService imageDomainService,
+        IUnitOfWork unitOfWork)
     {
         _imageService = imageService;
         _imageValidationService = imageValidationService;
         _mapper = mapper;
         _fileService = fileService;
-        _imageDataLayerService = imageDataLayerService;
+        _imageDomainService = imageDomainService;
+        _unitOfWork = unitOfWork;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -40,7 +45,9 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
         var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, context.CancellationToken);
 
-        var image = await _imageDataLayerService.CreateImageAsync(filename, imageFormat, imageRole, width, height, context.CancellationToken);
+        var image = await _imageDomainService.CreateImageAsync(filename, imageFormat, imageRole, width, height, context.CancellationToken);
+
+        await _unitOfWork.SaveAsync();
 
         return new UploadImageResponse
         {

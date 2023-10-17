@@ -11,7 +11,7 @@ public interface IEntityFactory
 
     Image CreateImage(ImageFormats imageFormat, ImageRoles imageRole, int width, int height);
 
-    Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl, string email);
+    Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl);
 
     LinkPreview CreateLinkPreview(string url, string title, string imageUrl);
 }

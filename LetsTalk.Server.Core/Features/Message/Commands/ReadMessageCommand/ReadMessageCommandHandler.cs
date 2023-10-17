@@ -5,21 +5,20 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 
 public class ReadMessageCommandHandler : IRequestHandler<ReadMessageCommand, Unit>
 {
-    private readonly IEntityFactory _entityFactory;
+    private readonly IMessageDomainService _messageDomainService;
     private readonly IUnitOfWork _unitOfWork;
 
     public ReadMessageCommandHandler(
-        IEntityFactory entityFactory,
+        IMessageDomainService messageDomainService,
         IUnitOfWork unitOfWork)
     {
-        _entityFactory = entityFactory;
+        _messageDomainService = messageDomainService;
         _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(ReadMessageCommand request, CancellationToken cancellationToken)
     {
-        var message = _entityFactory.CreateMessage(request.MessageId);
-        message.MarkAsRead();
+        _messageDomainService.MarkAsRead(request.MessageId);
         await _unitOfWork.SaveAsync(cancellationToken);
         return Unit.Value;
     }

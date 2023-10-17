@@ -10,16 +10,16 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 {
     private readonly ILinkPreviewGenerator _linkPreviewGenerator;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMessageRepository _messageRepository;
+    private readonly IMessageDomainService _messageDomainService;
 
     public LinkPreviewRequestHandler(
         ILinkPreviewGenerator linkPreviewGenerator,
         IUnitOfWork unitOfWork,
-        IMessageRepository messageRepository)
+        IMessageDomainService messageDomainService)
     {
         _linkPreviewGenerator = linkPreviewGenerator;
         _unitOfWork = unitOfWork;
-        _messageRepository = messageRepository;
+        _messageDomainService = messageDomainService;
     }
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
@@ -36,8 +36,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             return;
         }
 
-        var message = await _messageRepository.GetByIdAsTrackingAsync(request.MessageId);
-        message.SetLinkPreview(linkPreview);
+        await _messageDomainService.SetLinkPreviewAsync(linkPreview, request.MessageId);
         await _unitOfWork.SaveAsync();
     }
 }

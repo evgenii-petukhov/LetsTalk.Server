@@ -7,8 +7,6 @@ using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
-using LetsTalk.Server.Persistence.Repository;
-using System.Threading;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 

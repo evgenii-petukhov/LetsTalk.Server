@@ -37,10 +37,6 @@ public class Account : BaseEntity
         Email = email;
     }
 
-    public Account(int id): base(id)
-    {
-    }
-
     protected Account()
     {
     }

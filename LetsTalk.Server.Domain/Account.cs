@@ -27,14 +27,14 @@ public class Account : BaseEntity
 
     public int? ImageId { get; protected set; }
 
-    public Account(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl, string email)
+    public Account(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)
     {
         ExternalId = externalId;
         AccountTypeId = accountTypeId;
         FirstName = firstName;
         LastName = lastName;
-        PhotoUrl = photoUrl;
         Email = email;
+        PhotoUrl = photoUrl;
     }
 
     protected Account()

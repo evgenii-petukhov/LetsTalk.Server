@@ -34,7 +34,7 @@ public class EntityFactory : IEntityFactory
 
     public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)
     {
-        return new Account(externalId, accountTypeId, firstName, lastName, photoUrl, email);
+        return new Account(externalId, accountTypeId, firstName, lastName, email, photoUrl);
     }
 
     public LinkPreview CreateLinkPreview(string url, string title, string imageUrl)

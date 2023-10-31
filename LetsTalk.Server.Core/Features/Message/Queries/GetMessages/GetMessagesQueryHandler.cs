@@ -40,20 +40,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messages = await _messageRepository.GetPagedAsTrackingAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
-
-        messages
-            .Where(message => !message.IsRead)
-            .ToList()
-            .ForEach(message => message.MarkAsRead());
-
-        var messagesToProcess = messages
-            .Where(message => message.TextHtml == null && !message.ImageId.HasValue)
-            .ToList();
-
-        Parallel.ForEach(messagesToProcess, message => _messageProcessor.SetTextHtml(message, out _));
-
-        await _unitOfWork.SaveAsync(cancellationToken);
+        var messages = await _messageRepository.GetPagedAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
 
         var messageDtos = _mapper.Map<List<MessageDto>>(messages)
             .ConvertAll(messageDto =>

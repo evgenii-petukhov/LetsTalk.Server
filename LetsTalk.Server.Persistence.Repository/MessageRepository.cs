@@ -11,10 +11,9 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
     }
 
-    public Task<List<Message>> GetPagedAsTrackingAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
+    public Task<List<Message>> GetPagedAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
     {
         return _context.Messages
-            .AsTracking()
             .Include(message => message.LinkPreview)
             .Include(message => message.ImagePreview)
             .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
@@ -23,5 +22,13 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .Take(messagesPerPage)
             .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public Task MarkAllAsRead(int recipientId, int messageId)
+    {
+        return _context.Messages
+            .AsTracking()
+            .Where(message => message.Id <= messageId && message.RecipientId == recipientId && !message.IsRead)
+            .ForEachAsync(message => message.MarkAsRead());
     }
 }

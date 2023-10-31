@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models;
 using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
-using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
 
@@ -18,6 +16,5 @@ public class MessageProfile : Profile
 			.ForMember(x => x.Created, x => x.MapFrom(source => source.DateCreatedUnix));
 		CreateMap<Domain.LinkPreview, LinkPreviewDto>();
         CreateMap<Image, ImagePreviewDto>();
-        CreateMap<MarkAsReadRequest, ReadMessageCommand>();
     }
 }

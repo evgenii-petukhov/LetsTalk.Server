@@ -33,4 +33,9 @@ public class MessageDomainService: IMessageDomainService
         var message = _entityFactory.CreateMessage(messageId);
         message.MarkAsRead();
     }
+
+    public Task MarkAllAsRead(int recipientId, int messageId)
+    {
+        return _messageRepository.MarkAllAsRead(recipientId, messageId);
+    }
 }

@@ -50,7 +50,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
     }
 
-    public Task<List<AccountListItem>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
+    public Task<List<AccountListItem>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
     {
         var lastMessageDates = _context.Messages
             .Where(x => x.SenderId == id || x.RecipientId == id)
@@ -63,6 +63,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             {
                 AccountId = g.Key.RecipientId == id ? g.Key.SenderId : g.Key.RecipientId,
                 LastMessageDate = g.Max(x => x.DateCreatedUnix),
+                LastMessageId = g.Max(x => x.Id),
                 UnreadCount = g.Count(x => g.Key.RecipientId == id && !x.IsRead)
             })
             .GroupBy(g => g.AccountId)
@@ -70,6 +71,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             {
                 AccountId = g.Key,
                 LastMessageDate = g.Max(x => x.LastMessageDate),
+                LastMessageId = g.Max(x => x.LastMessageId),
                 UnreadCount = g.Sum(x => x.UnreadCount)
             });
 
@@ -95,6 +97,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 PhotoUrl = x.Account.PhotoUrl,
                 AccountTypeId = x.Account.AccountTypeId,
                 LastMessageDate = x.Metrics!.LastMessageDate,
+                LastMessageId = x.Metrics!.LastMessageId,
                 UnreadCount = x.Metrics.UnreadCount,
                 ImageId = x.Account.ImageId
             })

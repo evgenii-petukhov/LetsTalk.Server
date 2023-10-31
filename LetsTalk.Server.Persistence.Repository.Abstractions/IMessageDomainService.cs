@@ -9,4 +9,6 @@ public interface IMessageDomainService
     Task SetImagePreviewAsync(Image image, int messageId);
 
     void MarkAsRead(int messageId);
+
+    Task MarkAllAsRead(int recipientId, int messageId);
 }

@@ -48,10 +48,26 @@ public class MessageController : ApiController
     }
 
     [HttpPut("MarkAsRead")]
-    public async Task<ActionResult> MarkAsReadAsync(MarkAsReadRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult> MarkAsReadAsync(int messageId, CancellationToken cancellationToken)
     {
-        var cmd = _mapper.Map<ReadMessageCommand>(request);
-        cmd.RecipientId = GetAccountId();
+        var cmd = new ReadMessageCommand
+        {
+            MessageId = messageId,
+            RecipientId = GetAccountId()
+        };
+        await _mediator.Send(cmd, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPut("MarkAllAsRead")]
+    public async Task<ActionResult> MarkAllAsReadAsync(int messageId, CancellationToken cancellationToken)
+    {
+        var cmd = new ReadMessageCommand
+        {
+            MessageId = messageId,
+            RecipientId = GetAccountId(),
+            UpdatePreviousMessages = true
+        };
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

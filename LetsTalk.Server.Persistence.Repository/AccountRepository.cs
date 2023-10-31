@@ -50,7 +50,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
     }
 
-    public async Task<IReadOnlyCollection<AccountListItem>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
+    public Task<List<AccountListItem>> GetOthersAsync(int id, CancellationToken cancellationToken = default)
     {
         var lastMessageDates = _context.Messages
             .Where(x => x.SenderId == id || x.RecipientId == id)
@@ -73,7 +73,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 UnreadCount = g.Sum(x => x.UnreadCount)
             });
 
-        return await _context.Accounts
+        return _context.Accounts
             .Where(account => account.Id != id)
             .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
             {

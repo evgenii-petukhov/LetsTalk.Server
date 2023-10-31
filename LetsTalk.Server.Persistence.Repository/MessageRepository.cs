@@ -11,7 +11,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
     }
 
-    public async Task<IReadOnlyList<Message>> GetPagedAsTrackingAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Message>> GetPagedAsTrackingAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
     {
         return await _context.Messages
             .AsTracking()

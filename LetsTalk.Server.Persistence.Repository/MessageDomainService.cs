@@ -38,7 +38,7 @@ public class MessageDomainService: IMessageDomainService
     {
         var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
 
-        if (message.SenderId == recipientId)
+        if (message.SenderId == recipientId || message.IsRead)
         {
             return;
         }

@@ -34,10 +34,4 @@ public class Image : BaseEntity
         Width = width;
         Height = height;
     }
-
-    public void SetDimensions(int width, int height)
-    {
-        Width = width;
-        Height = height;
-    }
 }

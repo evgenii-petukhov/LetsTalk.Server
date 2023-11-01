@@ -40,7 +40,6 @@ public static class CoreServicesRegistration
                 .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.SetImageDimensionsRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.RemoveImageRequest!.Topic, 1, 1)
                 .AddProducer(
                     kafkaSettings.MessageNotification.Producer,
@@ -56,11 +55,6 @@ public static class CoreServicesRegistration
                     kafkaSettings.ImageResizeRequest.Producer,
                     producer => producer
                         .DefaultTopic(kafkaSettings.ImageResizeRequest.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-                .AddProducer(
-                    kafkaSettings.SetImageDimensionsRequest.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.SetImageDimensionsRequest.Topic)
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
                 .AddProducer(
                     kafkaSettings.RemoveImageRequest.Producer,

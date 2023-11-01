@@ -14,7 +14,6 @@ public static class KafkaSettingsHelper
             LinkPreviewRequest = GetKafkaEventSettings(configuration, "Kafka:LinkPreviewRequest"),
             LinkPreviewNotification = GetKafkaEventSettings(configuration, "Kafka:LinkPreviewNotification"),
             ImageResizeRequest = GetKafkaEventSettings(configuration, "Kafka:ImageResizeRequest"),
-            SetImageDimensionsRequest = GetKafkaEventSettings(configuration, "Kafka:SetImageDimensionsRequest"),
             ImagePreviewNotification = GetKafkaEventSettings(configuration, "Kafka:ImagePreviewNotification"),
             RemoveImageRequest = GetKafkaEventSettings(configuration, "Kafka:RemoveImageRequest"),
         };

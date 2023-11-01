@@ -20,7 +20,7 @@ public class ReadMessageCommandHandler : IRequestHandler<ReadMessageCommand, Uni
     {
         if (request.UpdatePreviousMessages)
         {
-            await _messageDomainService.MarkAllAsRead(request.RecipientId, request.MessageId);
+            await _messageDomainService.MarkAllAsRead(request.RecipientId, request.MessageId, cancellationToken);
         }
         else
         {

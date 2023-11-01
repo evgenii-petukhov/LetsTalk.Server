@@ -24,11 +24,11 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public Task MarkAllAsRead(int recipientId, int messageId)
+    public Task MarkAllAsRead(int senderId, int recipientId, int messageId)
     {
         return _context.Messages
             .AsTracking()
-            .Where(message => message.Id <= messageId && message.RecipientId == recipientId && !message.IsRead)
+            .Where(message => message.Id <= messageId && message.SenderId == senderId && message.RecipientId == recipientId && !message.IsRead)
             .ForEachAsync(message => message.MarkAsRead());
     }
 }

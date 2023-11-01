@@ -6,5 +6,5 @@ public interface IMessageRepository : IGenericRepository<Message>
 {
     Task<List<Message>> GetPagedAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default);
 
-    Task MarkAllAsRead(int recipientId, int messageId);
+    Task MarkAllAsRead(int senderId, int recipientId, int messageId);
 }

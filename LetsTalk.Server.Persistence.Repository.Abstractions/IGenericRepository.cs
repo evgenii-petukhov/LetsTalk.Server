@@ -9,4 +9,6 @@ public interface IGenericRepository<T> where T : BaseEntity
     void Delete(T entity);
 
     Task<T> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default);
+
+    Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 }

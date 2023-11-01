@@ -10,5 +10,5 @@ public interface IMessageDomainService
 
     void MarkAsRead(int messageId);
 
-    Task MarkAllAsRead(int recipientId, int messageId);
+    Task MarkAllAsRead(int recipientId, int messageId, CancellationToken cancellationToken);
 }

@@ -34,8 +34,15 @@ public class MessageDomainService: IMessageDomainService
         message.MarkAsRead();
     }
 
-    public Task MarkAllAsRead(int recipientId, int messageId)
+    public async Task MarkAllAsRead(int recipientId, int messageId, CancellationToken cancellationToken)
     {
-        return _messageRepository.MarkAllAsRead(recipientId, messageId);
+        var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
+
+        if (message.SenderId == recipientId)
+        {
+            return;
+        }
+
+        await _messageRepository.MarkAllAsRead(message.SenderId, recipientId, messageId);
     }
 }

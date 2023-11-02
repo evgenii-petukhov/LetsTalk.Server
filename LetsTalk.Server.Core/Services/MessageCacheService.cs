@@ -17,7 +17,7 @@ public class MessageCacheService: IMessageCacheService
             RecipientId = recipientId
         };
 
-        var dict = _cache.GetOrAdd(key, new ConcurrentDictionary<int, Task<List<MessageDto>>>());
+        var dict = _cache.GetOrAdd(key, _ => new ConcurrentDictionary<int, Task<List<MessageDto>>>());
 
         return dict.GetOrAdd(pageIndex, _ => factory());
     }

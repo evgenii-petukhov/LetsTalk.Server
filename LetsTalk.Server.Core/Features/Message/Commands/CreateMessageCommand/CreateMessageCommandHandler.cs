@@ -4,12 +4,14 @@ using KafkaFlow.Producers;
 using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Core.Models.Caching;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
@@ -22,6 +24,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMessageProcessor _messageProcessor;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMemoryCache _memoryCache;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -35,7 +38,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IMapper mapper,
         IUnitOfWork unitOfWork,
         IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings)
+        IOptions<KafkaSettings> kafkaSettings,
+        IMemoryCache memoryCache)
     {
         _accountRepository = accountRepository;
         _messageRepository = messageRepository;
@@ -43,6 +47,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         _imageRepository = imageRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _memoryCache = memoryCache;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -103,6 +108,10 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
+
+        var cacheKey = _mapper.Map<MessageCacheKey>(request);
+
+        _memoryCache.Remove(cacheKey);
 
         return new CreateMessageResponse
         {

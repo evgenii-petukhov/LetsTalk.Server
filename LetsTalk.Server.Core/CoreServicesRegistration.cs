@@ -64,6 +64,7 @@ public static class CoreServicesRegistration
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.AddMemoryCache();
 
         return services;
     }

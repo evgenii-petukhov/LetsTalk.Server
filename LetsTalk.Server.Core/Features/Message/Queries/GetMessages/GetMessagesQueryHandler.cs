@@ -11,7 +11,7 @@ namespace LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 
 public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<MessageDto>>
 {
-    private readonly TimeSpan CacheExpirationPeriod;
+    private readonly TimeSpan CacheExpirationIntervalInSeconds;
 
     private readonly IMessageRepository _messageRepository;
     private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
         _mapper = mapper;
         _memoryCache = memoryCache;
 
-        CacheExpirationPeriod = TimeSpan.FromSeconds(messagingSettings.Value.CachePeriodInSeconds);
+        CacheExpirationIntervalInSeconds = TimeSpan.FromSeconds(messagingSettings.Value.CacheExpirationIntervalInSeconds);
     }
 
     public Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
@@ -36,7 +36,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
         return _memoryCache.GetOrCreateAsync(cacheKey, async cacheEntry =>
         {
-            cacheEntry.SlidingExpiration = CacheExpirationPeriod;
+            cacheEntry.SlidingExpiration = CacheExpirationIntervalInSeconds;
             var messages = await _messageRepository.GetPagedAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
             return _mapper.Map<List<MessageDto>>(messages)
                 .ConvertAll(messageDto =>

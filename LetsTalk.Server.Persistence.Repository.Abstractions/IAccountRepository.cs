@@ -7,8 +7,6 @@ namespace LetsTalk.Server.Persistence.Repository.Abstractions;
 
 public interface IAccountRepository : IGenericRepository<Account>
 {
-    Task<Account> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-
     Task<T?> GetByIdAsync<T>(int id, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default);
 
     Task<Account> GetByExternalIdAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default);

@@ -14,12 +14,6 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
     }
 
-    public Task<Account> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .FirstOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken)!;
-    }
-
     public override Task<Account> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Accounts

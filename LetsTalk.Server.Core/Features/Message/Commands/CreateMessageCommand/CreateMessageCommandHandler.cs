@@ -4,7 +4,6 @@ using KafkaFlow.Producers;
 using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Models.Caching;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
@@ -109,9 +108,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
 
-        var cacheKey = _mapper.Map<MessageCacheKey>(request);
-
-        _memoryCache.Remove(cacheKey);
+        _memoryCache.Remove($"messages_{request.SenderId}_{request.RecipientId}");
 
         return new CreateMessageResponse
         {

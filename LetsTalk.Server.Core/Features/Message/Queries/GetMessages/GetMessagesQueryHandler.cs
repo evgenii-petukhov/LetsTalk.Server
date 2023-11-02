@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Models.Caching;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
@@ -11,7 +10,7 @@ namespace LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 
 public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<MessageDto>>
 {
-    private readonly TimeSpan CacheExpirationIntervalInSeconds;
+    private readonly TimeSpan _cacheExpirationIntervalInSeconds;
 
     private readonly IMessageRepository _messageRepository;
     private readonly IMapper _mapper;
@@ -27,16 +26,14 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
         _mapper = mapper;
         _memoryCache = memoryCache;
 
-        CacheExpirationIntervalInSeconds = TimeSpan.FromSeconds(messagingSettings.Value.CacheExpirationIntervalInSeconds);
+        _cacheExpirationIntervalInSeconds = TimeSpan.FromSeconds(messagingSettings.Value.CacheExpirationIntervalInSeconds);
     }
 
     public Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var cacheKey = _mapper.Map<MessageCacheKey>(request);
-
-        return _memoryCache.GetOrCreateAsync(cacheKey, async cacheEntry =>
+        return _memoryCache.GetOrCreateAsync($"messages_{request.SenderId}_{request.RecipientId}", async cacheEntry =>
         {
-            cacheEntry.SlidingExpiration = CacheExpirationIntervalInSeconds;
+            cacheEntry.SetAbsoluteExpiration(_cacheExpirationIntervalInSeconds);
             var messages = await _messageRepository.GetPagedAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
             return _mapper.Map<List<MessageDto>>(messages)
                 .ConvertAll(messageDto =>

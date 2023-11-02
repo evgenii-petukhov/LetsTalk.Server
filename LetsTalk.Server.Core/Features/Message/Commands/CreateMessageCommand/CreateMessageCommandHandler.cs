@@ -10,7 +10,6 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
@@ -23,7 +22,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMessageProcessor _messageProcessor;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMemoryCache _memoryCache;
+    private readonly IMessageCacheService _messageCacheService;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -38,7 +37,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IUnitOfWork unitOfWork,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
-        IMemoryCache memoryCache)
+        IMessageCacheService messageCacheService)
     {
         _accountRepository = accountRepository;
         _messageRepository = messageRepository;
@@ -46,7 +45,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         _imageRepository = imageRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
-        _memoryCache = memoryCache;
+        _messageCacheService = messageCacheService;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -108,7 +107,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
 
-        _memoryCache.Remove($"messages_{request.SenderId}_{request.RecipientId}");
+        _messageCacheService.Remove(request.SenderId.Value, request.RecipientId.Value);
 
         return new CreateMessageResponse
         {

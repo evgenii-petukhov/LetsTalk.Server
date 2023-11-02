@@ -25,6 +25,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
         services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
+        services.AddSingleton<IMessageCacheService, MessageCacheService>();
         services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddPersistenceRepositoryServices(configuration, Assembly.GetExecutingAssembly());
 
@@ -63,7 +64,6 @@ public static class CoreServicesRegistration
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.AddMemoryCache();
 
         return services;
     }

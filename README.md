@@ -23,6 +23,7 @@ This project is a showcase of my technical skills and talent for potential IT re
   * basic principles of the OpenAPI Specification
   * microservice communication patterns and protocols, such as GRPC
   * main principles of microservice architecture, event-driven development, and experienced in Apache Kafka
+  * Domain-driven design data consistency aspects (please, read [my article about DDD on LinkedIn](https://www.linkedin.com/pulse/how-i-practiced-ddd-principles-ignoring-them-evgenii-petukhov/))
 ## Architecture
 ![scheme](scheme-compressed.svg)
 

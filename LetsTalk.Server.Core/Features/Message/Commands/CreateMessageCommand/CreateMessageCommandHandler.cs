@@ -108,7 +108,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
 
-        _messageCacheService.RemoveMessages(request.SenderId.Value, request.RecipientId.Value);
+        await _messageCacheService.RemoveMessagesAsync(request.SenderId.Value, request.RecipientId.Value);
 
         return new CreateMessageResponse
         {

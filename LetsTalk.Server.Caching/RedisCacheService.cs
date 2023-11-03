@@ -45,7 +45,7 @@ public class RedisCacheService : ICacheService
         return JsonSerializer.Deserialize<List<MessageDto>>(cachedMessages!)!;
     }
 
-    public Task RemoveMessages(int senderId, int recipientId)
+    public Task RemoveMessagesAsync(int senderId, int recipientId)
     {
         return _database.KeyDeleteAsync(new RedisKey($"Messages:{senderId}:{recipientId}"));
     }

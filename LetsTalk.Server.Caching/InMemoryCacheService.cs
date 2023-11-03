@@ -35,7 +35,7 @@ public class InMemoryCacheService: ICacheService
         return dict.GetOrAdd(pageIndex, _ => factory());
     }
 
-    public Task RemoveMessages(int senderId, int recipientId)
+    public Task RemoveMessagesAsync(int senderId, int recipientId)
     {
         var key = new MessageCacheKey
         {

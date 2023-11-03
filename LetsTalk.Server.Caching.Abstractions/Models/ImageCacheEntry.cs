@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Caching.Abstractions;
+﻿namespace LetsTalk.Server.Caching.Abstractions.Models;
 
 public class ImageCacheEntry
 {

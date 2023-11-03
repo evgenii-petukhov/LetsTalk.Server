@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Caching.Abstractions;
+using LetsTalk.Server.Caching.Abstractions.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
@@ -22,17 +23,19 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
         _messageCacheService = messageCacheService;
     }
 
-    public Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
+    public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        return _messageCacheService.GetOrAddMessagesAsync(request.SenderId, request.RecipientId, request.PageIndex, async () =>
+        var messageCacheEntries = await _messageCacheService.GetOrAddMessagesAsync(request.SenderId, request.RecipientId, request.PageIndex, async () =>
         {
             var messages = await _messageRepository.GetPagedAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
-            return _mapper.Map<List<MessageDto>>(messages)
+            return _mapper.Map<List<MessageCacheEntry>>(messages)
                 .ConvertAll(messageDto =>
                 {
                     messageDto.IsMine = messageDto.SenderId == request.SenderId;
                     return messageDto;
                 });
         })!;
+
+        return _mapper.Map<List<MessageDto>>(messageCacheEntries);
     }
 }

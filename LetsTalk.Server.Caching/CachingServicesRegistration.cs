@@ -22,7 +22,7 @@ public static class CachingServicesRegistration
         else
         {
             services.AddMemoryCache();
-            services.AddSingleton<ICacheService, InMemoryCacheService>();
+            services.AddSingleton<ICacheService, MemoryCacheService>();
         }
         return services;
     }

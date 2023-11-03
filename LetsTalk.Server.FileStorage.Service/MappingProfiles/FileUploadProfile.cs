@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Google.Protobuf;
-using LetsTalk.Server.Caching.Abstractions;
+using LetsTalk.Server.Caching.Abstractions.Models;
 using LetsTalk.Server.FileStorage.Service.Protos;
 using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 

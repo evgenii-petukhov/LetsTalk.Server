@@ -1,20 +1,20 @@
 ﻿using System.Collections.Concurrent;
-using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Caching.Abstractions;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Caching.Abstractions.Models;
 
 namespace LetsTalk.Server.Caching;
 
-public class InMemoryCacheService: ICacheService
+public class MemoryCacheService: ICacheService
 {
     private readonly TimeSpan _contactsCacheLifeTimeInSeconds;
 
-    private readonly ConcurrentDictionary<MessageCacheKey, ConcurrentDictionary<int, Task<List<MessageDto>>>> _cache = new();
+    private readonly ConcurrentDictionary<MessageCacheKey, ConcurrentDictionary<int, Task<List<MessageCacheEntry>>>> _cache = new();
     private readonly IMemoryCache _memoryCache;
 
-    public InMemoryCacheService(
+    public MemoryCacheService(
         IMemoryCache memoryCache,
         IOptions<CachingSettings> cachingSettings)
     {
@@ -22,7 +22,7 @@ public class InMemoryCacheService: ICacheService
         _contactsCacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ContactsCacheLifeTimeInSeconds);
     }
 
-    public Task<List<MessageDto>> GetOrAddMessagesAsync(int senderId, int recipientId, int pageIndex, Func<Task<List<MessageDto>>> factory)
+    public Task<List<MessageCacheEntry>> GetOrAddMessagesAsync(int senderId, int recipientId, int pageIndex, Func<Task<List<MessageCacheEntry>>> factory)
     {
         var key = new MessageCacheKey
         {
@@ -30,12 +30,12 @@ public class InMemoryCacheService: ICacheService
             RecipientId = recipientId
         };
 
-        var dict = _cache.GetOrAdd(key, _ => new ConcurrentDictionary<int, Task<List<MessageDto>>>());
+        var dict = _cache.GetOrAdd(key, _ => new ConcurrentDictionary<int, Task<List<MessageCacheEntry>>>());
 
         return dict.GetOrAdd(pageIndex, _ => factory());
     }
 
-    public Task<List<AccountDto>> GetOrAddAccountsAsync(int accountId, Func<Task<List<AccountDto>>> factory)
+    public Task<List<AccountCacheEntry>> GetOrAddAccountsAsync(int accountId, Func<Task<List<AccountCacheEntry>>> factory)
     {
         return _memoryCache.GetOrCreateAsync(accountId, cacheEntry =>
         {

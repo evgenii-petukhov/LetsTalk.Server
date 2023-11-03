@@ -8,6 +8,7 @@ using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using LetsTalk.Server.Caching.Abstractions;
+using LetsTalk.Server.Caching.Abstractions.Models;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 

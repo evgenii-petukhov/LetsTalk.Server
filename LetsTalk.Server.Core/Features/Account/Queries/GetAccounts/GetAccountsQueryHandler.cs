@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Caching.Abstractions;
+using LetsTalk.Server.Caching.Abstractions.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
@@ -22,12 +23,14 @@ public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, List<Ac
         _cacheService = cacheService;
     }
 
-    public Task<List<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
+    public async Task<List<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
     {
-        return _cacheService.GetOrAddAccountsAsync(request.Id, async () =>
+        var accountCacheEntries = await _cacheService.GetOrAddAccountsAsync(request.Id, async () =>
         {
             var accounts = await _accountRepository.GetContactsAsync(request.Id, cancellationToken);
-            return _mapper.Map<List<AccountDto>>(accounts);
+            return _mapper.Map<List<AccountCacheEntry>>(accounts);
         })!;
+
+        return _mapper.Map<List<AccountDto>>(accountCacheEntries);
     }
 }

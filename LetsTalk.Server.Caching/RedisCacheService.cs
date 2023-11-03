@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using LetsTalk.Server.Caching.Abstractions;
+using LetsTalk.Server.Caching.Abstractions.Models;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
@@ -27,7 +27,7 @@ public class RedisCacheService : ICacheService
         _imageSizeThresholdInBytes = cachingSettings.Value.ImageSizeThresholdInBytes;
     }
 
-    public async Task<List<MessageDto>> GetOrAddMessagesAsync(int senderId, int recipientId, int pageIndex, Func<Task<List<MessageDto>>> factory)
+    public async Task<List<MessageCacheEntry>> GetOrAddMessagesAsync(int senderId, int recipientId, int pageIndex, Func<Task<List<MessageCacheEntry>>> factory)
     {
         var key = new RedisKey($"Messages:{senderId}:{recipientId}");
         await _database.KeyExpireAsync(key, _messagesCacheLifeTimeInSeconds);
@@ -46,10 +46,10 @@ public class RedisCacheService : ICacheService
             return messageDtos;
         }
 
-        return JsonSerializer.Deserialize<List<MessageDto>>(cachedMessages!)!;
+        return JsonSerializer.Deserialize<List<MessageCacheEntry>>(cachedMessages!)!;
     }
 
-    public async Task<List<AccountDto>> GetOrAddAccountsAsync(int accountId, Func<Task<List<AccountDto>>> factory)
+    public async Task<List<AccountCacheEntry>> GetOrAddAccountsAsync(int accountId, Func<Task<List<AccountCacheEntry>>> factory)
     {
         var key = new RedisKey($"Accounts:{accountId}");
         await _database.KeyExpireAsync(key, _contactsCacheLifeTimeInSeconds);

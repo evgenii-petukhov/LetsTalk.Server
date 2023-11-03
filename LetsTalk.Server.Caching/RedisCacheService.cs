@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.Caching;
 
-public class RedisCacheService : ICacheService
+public class RedisCacheService: CacheServiceBase, ICacheService
 {
     private readonly TimeSpan _messagesCacheLifeTimeInSeconds;
     private readonly TimeSpan _contactsCacheLifeTimeInSeconds;
@@ -29,7 +29,7 @@ public class RedisCacheService : ICacheService
 
     public async Task<List<MessageCacheEntry>> GetOrAddMessagesAsync(int senderId, int recipientId, int pageIndex, Func<Task<List<MessageCacheEntry>>> factory)
     {
-        var key = new RedisKey($"Messages:{senderId}:{recipientId}");
+        var key = new RedisKey(GetMessageKey(senderId, recipientId));
         await _database.KeyExpireAsync(key, _messagesCacheLifeTimeInSeconds);
 
         var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString()));
@@ -85,7 +85,7 @@ public class RedisCacheService : ICacheService
 
     public Task RemoveMessagesAsync(int senderId, int recipientId)
     {
-        return _database.KeyDeleteAsync(new RedisKey($"Messages:{senderId}:{recipientId}"));
+        return _database.KeyDeleteAsync(new RedisKey(GetMessageKey(senderId, recipientId)));
     }
 
     private async Task<List<T>> GetOrAddAsync<T>(RedisKey key, TimeSpan lifetime, Func<Task<List<T>>> factory)

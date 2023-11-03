@@ -7,9 +7,10 @@ using LetsTalk.Server.Caching.Abstractions.Models;
 
 namespace LetsTalk.Server.Caching;
 
-public class MemoryCacheService: ICacheService
+public class MemoryCacheService: CacheServiceBase, ICacheService
 {
     private readonly TimeSpan _contactsCacheLifeTimeInSeconds;
+    private readonly TimeSpan _messagesCacheLifeTimeInSeconds;
 
     private readonly IMemoryCache _memoryCache;
 
@@ -19,18 +20,14 @@ public class MemoryCacheService: ICacheService
     {
         _memoryCache = memoryCache;
         _contactsCacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ContactsCacheLifeTimeInSeconds);
+        _messagesCacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
     }
 
     public Task<List<MessageCacheEntry>> GetOrAddMessagesAsync(int senderId, int recipientId, int pageIndex, Func<Task<List<MessageCacheEntry>>> factory)
     {
-        var key = new MessageCacheKey
+        return _memoryCache.GetOrCreateAsync(GetMessageKey(senderId, recipientId), cacheEntry =>
         {
-            SenderId = senderId,
-            RecipientId = recipientId
-        };
-
-        return _memoryCache.GetOrCreateAsync(key, _ =>
-        {
+            cacheEntry.SetAbsoluteExpiration(_messagesCacheLifeTimeInSeconds);
             var dict = new ConcurrentDictionary<int, Task<List<MessageCacheEntry>>>();
             return dict.GetOrAdd(pageIndex, _ => factory());
         })!;
@@ -38,7 +35,7 @@ public class MemoryCacheService: ICacheService
 
     public Task<List<AccountCacheEntry>> GetOrAddAccountsAsync(int accountId, Func<Task<List<AccountCacheEntry>>> factory)
     {
-        return _memoryCache.GetOrCreateAsync(accountId, cacheEntry =>
+        return _memoryCache.GetOrCreateAsync($"Accounts:{accountId}", cacheEntry =>
         {
             cacheEntry.SetAbsoluteExpiration(_contactsCacheLifeTimeInSeconds);
             return factory();
@@ -52,13 +49,7 @@ public class MemoryCacheService: ICacheService
 
     public Task RemoveMessagesAsync(int senderId, int recipientId)
     {
-        var key = new MessageCacheKey
-        {
-            SenderId = senderId,
-            RecipientId = recipientId
-        };
-
-        _memoryCache.Remove(key);
+        _memoryCache.Remove(GetMessageKey(senderId, recipientId));
 
         return Task.CompletedTask;
     }

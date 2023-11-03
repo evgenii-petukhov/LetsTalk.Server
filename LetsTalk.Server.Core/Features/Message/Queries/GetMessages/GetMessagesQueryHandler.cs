@@ -10,12 +10,12 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IMapper _mapper;
-    private readonly IMessageCacheService _messageCacheService;
+    private readonly ICacheService _messageCacheService;
 
     public GetMessagesQueryHandler(
         IMessageRepository messageRepository,
         IMapper mapper,
-        IMessageCacheService messageCacheService)
+        ICacheService messageCacheService)
     {
         _messageRepository = messageRepository;
         _mapper = mapper;
@@ -24,7 +24,7 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        return _messageCacheService.GetOrAddAsync(request.SenderId, request.RecipientId, request.PageIndex, async () =>
+        return _messageCacheService.GetOrAddMessagesAsync(request.SenderId, request.RecipientId, request.PageIndex, async () =>
         {
             var messages = await _messageRepository.GetPagedAsync(request.SenderId, request.RecipientId, request.PageIndex, request.MessagesPerPage, cancellationToken);
             return _mapper.Map<List<MessageDto>>(messages)

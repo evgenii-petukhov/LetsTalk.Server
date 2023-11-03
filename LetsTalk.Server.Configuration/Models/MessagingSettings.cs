@@ -3,6 +3,4 @@
 public class MessagingSettings
 {
     public int MessagesPerPage { get; set; }
-
-    public int ContactsCacheLifeTimeInSeconds { get; set; }
 }

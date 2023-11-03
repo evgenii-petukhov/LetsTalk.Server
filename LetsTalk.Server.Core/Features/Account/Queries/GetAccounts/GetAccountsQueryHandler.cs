@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
@@ -14,28 +15,26 @@ public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, List<Ac
 
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
-    private readonly IMemoryCache _memoryCache;
+    private readonly ICacheService _cacheService;
 
     public GetAccountsQueryHandler(
         IAccountRepository accountRepository,
         IMapper mapper,
-        IMemoryCache memoryCache,
-        IOptions<MessagingSettings> messagingSettings)
+        ICacheService cacheService,
+        IOptions<CachingSettings> cachingSettings)
     {
         _accountRepository = accountRepository;
         _mapper = mapper;
-        _memoryCache = memoryCache;
-        _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(messagingSettings.Value.ContactsCacheLifeTimeInSeconds);
+        _cacheService = cacheService;
+        _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ContactsCacheLifeTimeInSeconds);
     }
 
     public Task<List<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
     {
-        return _memoryCache.GetOrCreateAsync(request.Id, async cacheEntry =>
+        return _cacheService.GetOrAddAccountsAsync(request.Id, async () =>
         {
-            cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
             var accounts = await _accountRepository.GetContactsAsync(request.Id, cancellationToken);
             return _mapper.Map<List<AccountDto>>(accounts);
         })!;
-
     }
 }

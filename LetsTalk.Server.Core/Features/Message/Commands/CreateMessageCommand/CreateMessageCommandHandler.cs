@@ -22,7 +22,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMessageProcessor _messageProcessor;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMessageCacheService _messageCacheService;
+    private readonly ICacheService _messageCacheService;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -37,7 +37,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IUnitOfWork unitOfWork,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
-        IMessageCacheService messageCacheService)
+        ICacheService messageCacheService)
     {
         _accountRepository = accountRepository;
         _messageRepository = messageRepository;
@@ -107,7 +107,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
 
-        _messageCacheService.Remove(request.SenderId.Value, request.RecipientId.Value);
+        _messageCacheService.RemoveMessages(request.SenderId.Value, request.RecipientId.Value);
 
         return new CreateMessageResponse
         {

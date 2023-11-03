@@ -11,7 +11,6 @@ public class MemoryCacheService: ICacheService
 {
     private readonly TimeSpan _contactsCacheLifeTimeInSeconds;
 
-    private readonly ConcurrentDictionary<MessageCacheKey, ConcurrentDictionary<int, Task<List<MessageCacheEntry>>>> _cache = new();
     private readonly IMemoryCache _memoryCache;
 
     public MemoryCacheService(
@@ -30,9 +29,11 @@ public class MemoryCacheService: ICacheService
             RecipientId = recipientId
         };
 
-        var dict = _cache.GetOrAdd(key, _ => new ConcurrentDictionary<int, Task<List<MessageCacheEntry>>>());
-
-        return dict.GetOrAdd(pageIndex, _ => factory());
+        return _memoryCache.GetOrCreateAsync(key, _ =>
+        {
+            var dict = new ConcurrentDictionary<int, Task<List<MessageCacheEntry>>>();
+            return dict.GetOrAdd(pageIndex, _ => factory());
+        })!;
     }
 
     public Task<List<AccountCacheEntry>> GetOrAddAccountsAsync(int accountId, Func<Task<List<AccountCacheEntry>>> factory)
@@ -57,7 +58,7 @@ public class MemoryCacheService: ICacheService
             RecipientId = recipientId
         };
 
-        _cache.TryRemove(key, out _);
+        _memoryCache.Remove(key);
 
         return Task.CompletedTask;
     }

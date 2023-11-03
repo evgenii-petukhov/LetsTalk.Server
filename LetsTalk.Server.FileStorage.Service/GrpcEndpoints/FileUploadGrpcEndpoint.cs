@@ -7,6 +7,7 @@ using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Caching.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
@@ -18,6 +19,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IFileService _fileService;
     private readonly IImageDomainService _imageDomainService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICacheService _cacheService;
 
     public FileUploadGrpcEndpoint(
         IImageService imageService,
@@ -25,7 +27,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         IMapper mapper,
         IFileService fileService,
         IImageDomainService imageDomainService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        ICacheService cacheService)
     {
         _imageService = imageService;
         _imageValidationService = imageValidationService;
@@ -33,6 +36,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         _fileService = fileService;
         _imageDomainService = imageDomainService;
         _unitOfWork = unitOfWork;
+        _cacheService = cacheService;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -55,7 +59,12 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var image = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
-        return _mapper.Map<DownloadImageResponse>(image);
+        var model = await _cacheService.GetOrAddImageAsync(request.ImageId, async() =>
+        {
+            var image = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
+            return _mapper.Map<ImageCacheEntry>(image);
+        });
+
+        return _mapper.Map<DownloadImageResponse>(model);
     }
 }

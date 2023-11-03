@@ -11,6 +11,8 @@ using System.Reflection;
 using KafkaFlow;
 using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
+using LetsTalk.Server.Caching.Abstractions;
+using LetsTalk.Server.Caching;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -65,6 +67,7 @@ public static class FileStorageServiceRegistration
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.AddCachingServices(configuration);
 
         return services;
     }

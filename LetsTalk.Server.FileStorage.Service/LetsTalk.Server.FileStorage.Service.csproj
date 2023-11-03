@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Authentication.Abstractions\LetsTalk.Server.Authentication.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Caching\LetsTalk.Server.Caching.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj" />

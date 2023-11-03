@@ -16,7 +16,6 @@ public class MessageProfile : Profile
 		CreateMap<Message, MessageCacheEntry>()
             .ForMember(x => x.Created, x => x.MapFrom(source => source.DateCreatedUnix));
         CreateMap<Domain.LinkPreview, LinkPreviewDto>();
-        CreateMap<Message, MessageCacheEntry>();
         CreateMap<Domain.LinkPreview, LinkPreviewCacheEntry>();
         CreateMap<MessageCacheEntry, MessageDto>();
         CreateMap<LinkPreviewCacheEntry, LinkPreviewDto>();

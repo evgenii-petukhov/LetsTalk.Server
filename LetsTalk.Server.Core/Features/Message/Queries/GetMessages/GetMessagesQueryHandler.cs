@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Caching.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;

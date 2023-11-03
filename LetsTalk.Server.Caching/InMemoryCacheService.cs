@@ -1,12 +1,11 @@
-﻿using LetsTalk.Server.Core.Abstractions;
-using System.Collections.Concurrent;
-using LetsTalk.Server.Core.Models;
+﻿using System.Collections.Concurrent;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Configuration.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using LetsTalk.Server.Caching.Abstractions;
+using LetsTalk.Server.Configuration.Models;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.Caching;
 
 public class InMemoryCacheService: ICacheService
 {

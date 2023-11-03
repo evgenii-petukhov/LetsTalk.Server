@@ -8,8 +8,8 @@ using LetsTalk.Server.Core.Services;
 using LetsTalk.Server.Persistence.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
 using System.Reflection;
+using LetsTalk.Server.Caching;
 
 namespace LetsTalk.Server.Core;
 
@@ -25,19 +25,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
-        services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
-
-        if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
-        {
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
-            services.AddSingleton<ICacheService, RedisCacheService>();
-        }
-        else
-        {
-            services.AddMemoryCache();
-            services.AddSingleton<ICacheService, InMemoryCacheService>();
-        }
-        
+        services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();        
         services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddPersistenceRepositoryServices(configuration, Assembly.GetExecutingAssembly());
 
@@ -76,6 +64,7 @@ public static class CoreServicesRegistration
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.AddCachingServices(configuration);
 
         return services;
     }

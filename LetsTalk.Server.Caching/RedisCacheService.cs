@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
+using LetsTalk.Server.Caching.Abstractions;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.Caching;
 
 public class RedisCacheService : ICacheService
 {

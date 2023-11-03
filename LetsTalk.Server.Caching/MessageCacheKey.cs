@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Models;
+﻿namespace LetsTalk.Server.Caching;
 
 public struct MessageCacheKey
 {

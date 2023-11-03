@@ -2,6 +2,7 @@
 using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.API.Models.Messages;
+using LetsTalk.Server.Caching.Abstractions;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;

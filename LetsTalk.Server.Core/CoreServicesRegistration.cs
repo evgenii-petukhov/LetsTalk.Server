@@ -9,6 +9,9 @@ using LetsTalk.Server.Persistence.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using StackExchange.Redis;
+using LetsTalk.Server.Core.Services.Cache.Messages;
+using LetsTalk.Server.DependencyInjection;
 
 namespace LetsTalk.Server.Core;
 
@@ -24,6 +27,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
+        services.AddTransient<IMessageService, MessageService>();
         services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
         services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddPersistenceRepositoryServices(configuration, Assembly.GetExecutingAssembly());
@@ -40,7 +44,6 @@ public static class CoreServicesRegistration
                 .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.SetImageDimensionsRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.RemoveImageRequest!.Topic, 1, 1)
                 .AddProducer(
                     kafkaSettings.MessageNotification.Producer,
@@ -58,17 +61,32 @@ public static class CoreServicesRegistration
                         .DefaultTopic(kafkaSettings.ImageResizeRequest.Topic)
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
                 .AddProducer(
-                    kafkaSettings.SetImageDimensionsRequest.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.SetImageDimensionsRequest.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-                .AddProducer(
                     kafkaSettings.RemoveImageRequest.Producer,
                     producer => producer
                         .DefaultTopic(kafkaSettings.RemoveImageRequest.Topic)
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.Configure<CachingSettings>(configuration.GetSection("Caching"));
+
+        if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+            services.AddTransient<IMessageService, MessageService>();
+            services.DecorateTransient<IMessageService, RedisCacheMessageService>();
+            services.AddTransient<IMessageCacheManager, RedisCacheMessageService>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.DecorateTransient<IAccountService, RedisCacheAccountService>();
+        }
+        else
+        {
+            services.AddMemoryCache();
+            services.AddTransient<IMessageService, MessageService>();
+            services.DecorateTransient<IMessageService, MemoryCacheMessageService>();
+            services.AddTransient<IMessageCacheManager, MemoryCacheMessageService>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.DecorateTransient<IAccountService, MemoryCacheAccountService>();
+        }
 
         return services;
     }

@@ -31,7 +31,6 @@ public static class ImageProcessingServiceRegistration
                         })
                         .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
                         .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
-                        .CreateTopicIfNotExists(kafkaSettings.SetImageDimensionsRequest!.Topic, 1, 1)
                         .AddConsumer(consumer => consumer
                             .Topic(kafkaSettings.ImageResizeRequest.Topic)
                             .WithGroupId(kafkaSettings.ImageResizeRequest.GroupId)
@@ -40,16 +39,6 @@ public static class ImageProcessingServiceRegistration
                             .AddMiddlewares(middlewares => middlewares
                                 .AddSerializer<JsonCoreSerializer>()
                                 .AddTypedHandlers(h => h.AddHandler<ImageResizeRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
-                            )
-                        )
-                        .AddConsumer(consumer => consumer
-                            .Topic(kafkaSettings.SetImageDimensionsRequest.Topic)
-                            .WithGroupId(kafkaSettings.SetImageDimensionsRequest.GroupId)
-                            .WithBufferSize(100)
-                            .WithWorkersCount(10)
-                            .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
-                                .AddTypedHandlers(h => h.AddHandler<SetImageDimensionsRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
                         .AddProducer(

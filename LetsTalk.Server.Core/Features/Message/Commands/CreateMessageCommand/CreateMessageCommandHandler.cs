@@ -22,6 +22,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMessageProcessor _messageProcessor;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMessageCacheManager _messageCacheManager;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -35,7 +36,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IMapper mapper,
         IUnitOfWork unitOfWork,
         IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings)
+        IOptions<KafkaSettings> kafkaSettings,
+        IMessageCacheManager messageCacheManager)
     {
         _accountRepository = accountRepository;
         _messageRepository = messageRepository;
@@ -43,6 +45,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         _imageRepository = imageRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _messageCacheManager = messageCacheManager;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -103,6 +106,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
+
+        await _messageCacheManager.RemoveAsync(request.SenderId.Value, request.RecipientId.Value);
 
         return new CreateMessageResponse
         {

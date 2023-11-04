@@ -18,5 +18,7 @@ public class AccountDto
 
     public long LastMessageDate { get; set; }
 
+    public int LastMessageId { get; set; }
+
     public int? ImageId { get; set; }
 }

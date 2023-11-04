@@ -12,27 +12,27 @@ namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
 public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {
-    private readonly IImageService _imageService;
     private readonly IImageValidationService _imageValidationService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
     private readonly IImageDomainService _imageDomainService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IImageService _imageService;
 
     public FileUploadGrpcEndpoint(
-        IImageService imageService,
         IImageValidationService imageValidationService,
         IMapper mapper,
         IFileService fileService,
         IImageDomainService imageDomainService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IImageService imageService)
     {
-        _imageService = imageService;
         _imageValidationService = imageValidationService;
         _mapper = mapper;
         _fileService = fileService;
         _imageDomainService = imageDomainService;
         _unitOfWork = unitOfWork;
+        _imageService = imageService;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -55,7 +55,8 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var image = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
-        return _mapper.Map<DownloadImageResponse>(image);
+        var model = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
+
+        return _mapper.Map<DownloadImageResponse>(model);
     }
 }

@@ -20,14 +20,14 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Caching.Abstractions\LetsTalk.Server.Caching.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Caching\LetsTalk.Server.Caching.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj" />

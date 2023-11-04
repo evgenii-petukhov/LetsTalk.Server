@@ -9,7 +9,9 @@ using LetsTalk.Server.Persistence.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using LetsTalk.Server.Caching;
+using StackExchange.Redis;
+using LetsTalk.Server.Core.Services.Cache.Messages;
+using LetsTalk.Server.DependencyInjection;
 
 namespace LetsTalk.Server.Core;
 
@@ -25,6 +27,7 @@ public static class CoreServicesRegistration
         services.AddTransient<IRegexService, RegexService>();
         services.AddTransient<IHtmlGenerator, HtmlGenerator>();
         services.AddTransient<IMessageProcessor, MessageProcessor>();
+        services.AddTransient<IMessageService, MessageService>();
         services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
         services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddPersistenceRepositoryServices(configuration, Assembly.GetExecutingAssembly());
@@ -64,7 +67,26 @@ public static class CoreServicesRegistration
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.AddCachingServices(configuration);
+        services.Configure<CachingSettings>(configuration.GetSection("Caching"));
+
+        if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+            services.AddTransient<IMessageService, MessageService>();
+            services.DecorateTransient<IMessageService, RedisCacheMessageService>();
+            services.AddTransient<IMessageCacheManager, RedisCacheMessageService>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.DecorateTransient<IAccountService, RedisCacheAccountService>();
+        }
+        else
+        {
+            services.AddMemoryCache();
+            services.AddTransient<IMessageService, MessageService>();
+            services.DecorateTransient<IMessageService, MemoryCacheMessageService>();
+            services.AddTransient<IMessageCacheManager, MemoryCacheMessageService>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.DecorateTransient<IAccountService, MemoryCacheAccountService>();
+        }
 
         return services;
     }

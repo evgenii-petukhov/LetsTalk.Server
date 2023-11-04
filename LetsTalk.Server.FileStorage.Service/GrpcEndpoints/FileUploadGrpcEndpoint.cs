@@ -7,37 +7,32 @@ using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
-using LetsTalk.Server.Caching.Abstractions;
-using LetsTalk.Server.Caching.Abstractions.Models;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
 public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 {
-    private readonly IImageService _imageService;
     private readonly IImageValidationService _imageValidationService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
     private readonly IImageDomainService _imageDomainService;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ICacheService _cacheService;
+    private readonly IImageService _imageService;
 
     public FileUploadGrpcEndpoint(
-        IImageService imageService,
         IImageValidationService imageValidationService,
         IMapper mapper,
         IFileService fileService,
         IImageDomainService imageDomainService,
         IUnitOfWork unitOfWork,
-        ICacheService cacheService)
+        IImageService imageService)
     {
-        _imageService = imageService;
         _imageValidationService = imageValidationService;
         _mapper = mapper;
         _fileService = fileService;
         _imageDomainService = imageDomainService;
         _unitOfWork = unitOfWork;
-        _cacheService = cacheService;
+        _imageService = imageService;
     }
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
@@ -60,11 +55,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var model = await _cacheService.GetOrAddImageAsync(request.ImageId, async() =>
-        {
-            var image = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
-            return _mapper.Map<ImageCacheEntry>(image);
-        });
+        var model = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
 
         return _mapper.Map<DownloadImageResponse>(model);
     }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Messages;
-using LetsTalk.Server.Caching.Abstractions.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
@@ -13,11 +12,7 @@ public class MessageProfile : Profile
 	{
 		CreateMap<CreateMessageRequest, CreateMessageCommand>();
 		CreateMap<CreateMessageCommand, Message>();
-		CreateMap<Message, MessageCacheEntry>()
+		CreateMap<Message, MessageDto>()
             .ForMember(x => x.Created, x => x.MapFrom(source => source.DateCreatedUnix));
-        CreateMap<Domain.LinkPreview, LinkPreviewDto>();
-        CreateMap<Domain.LinkPreview, LinkPreviewCacheEntry>();
-        CreateMap<MessageCacheEntry, MessageDto>();
-        CreateMap<LinkPreviewCacheEntry, LinkPreviewDto>();
     }
 }

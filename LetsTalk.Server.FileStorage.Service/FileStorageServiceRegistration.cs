@@ -11,8 +11,10 @@ using System.Reflection;
 using KafkaFlow;
 using KafkaFlow.Serializer;
 using KafkaFlow.TypedHandler;
-using LetsTalk.Server.Caching.Abstractions;
-using LetsTalk.Server.Caching;
+using StackExchange.Redis;
+using LetsTalk.Server.FileStorage.Utility.Abstractions;
+using LetsTalk.Server.FileStorage.Service.Services.Cache;
+using LetsTalk.Server.DependencyInjection;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -40,7 +42,6 @@ public static class FileStorageServiceRegistration
         services.AddTransient<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
-        services.AddFileStorageUtilityServices(configuration, Assembly.GetExecutingAssembly());
         services.AddImageProcessingUtilityServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -67,7 +68,19 @@ public static class FileStorageServiceRegistration
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.AddCachingServices(configuration);
+        services.Configure<CachingSettings>(configuration.GetSection("Caching"));
+
+        services.AddFileStorageUtilityServices(configuration, Assembly.GetExecutingAssembly());
+        if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+            services.DecorateTransient<IImageService, RedisCacheImageService>();
+        }
+        else
+        {
+            services.AddMemoryCache();
+            services.DecorateTransient<IImageService, MemoryCacheImageService>();
+        }
 
         return services;
     }

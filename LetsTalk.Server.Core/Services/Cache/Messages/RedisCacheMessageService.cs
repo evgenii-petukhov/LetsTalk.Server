@@ -49,6 +49,8 @@ public class RedisCacheMessageService : CacheMessageServiceBase, IMessageService
 
     public Task RemoveAsync(int senderId, int recipientId)
     {
-        return _database.KeyDeleteAsync(GetMessageKey(senderId, recipientId));
+        return Task.WhenAll(
+            _database.KeyDeleteAsync(GetMessageKey(senderId, recipientId)),
+            _database.KeyDeleteAsync(GetMessageKey(recipientId, senderId)));
     }
 }

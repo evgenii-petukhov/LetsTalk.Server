@@ -38,6 +38,7 @@ public class MemoryCacheMessageService : CacheMessageServiceBase, IMessageServic
     public Task RemoveAsync(int senderId, int recipientId)
     {
         _memoryCache.Remove(GetMessageKey(senderId, recipientId));
+        _memoryCache.Remove(GetMessageKey(recipientId, senderId));
 
         return Task.CompletedTask;
     }

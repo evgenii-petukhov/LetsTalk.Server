@@ -29,7 +29,6 @@ public class RedisCacheImageService : IImageService
     public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
     {
         var key = new RedisKey($"Images:{imageId}");
-        await _database.KeyExpireAsync(key, _imagesCacheLifeTimeInSeconds);
 
         var cached = await _database.StringGetAsync(key);
 
@@ -44,6 +43,8 @@ public class RedisCacheImageService : IImageService
                     new RedisValue(JsonSerializer.Serialize(content)),
                     _imagesCacheLifeTimeInSeconds,
                     When.NotExists);
+
+                await _database.KeyExpireAsync(key, _imagesCacheLifeTimeInSeconds);
             }
 
             return content;

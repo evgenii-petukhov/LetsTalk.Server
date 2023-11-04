@@ -28,7 +28,6 @@ public class RedisCacheMessageService : CacheMessageServiceBase, IMessageService
     public async Task<List<MessageDto>> GetPagedAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         var key = new RedisKey(GetMessageKey(senderId, recipientId));
-        await _database.KeyExpireAsync(key, _messagesCacheLifeTimeInSeconds);
 
         var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString()));
 
@@ -40,6 +39,8 @@ public class RedisCacheMessageService : CacheMessageServiceBase, IMessageService
                 new RedisValue(pageIndex.ToString()),
                 new RedisValue(JsonSerializer.Serialize(messageDtos)),
                 When.NotExists);
+
+            await _database.KeyExpireAsync(key, _messagesCacheLifeTimeInSeconds);
 
             return messageDtos;
         }

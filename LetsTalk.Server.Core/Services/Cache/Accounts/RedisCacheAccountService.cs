@@ -28,7 +28,6 @@ public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
     public async Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken)
     {
         var key = new RedisKey($"Accounts:{accountId}");
-        await _database.KeyExpireAsync(key, _accountCacheLifeTimeInSeconds);
 
         var cachedAccounts = await _database.StringGetAsync(key);
 
@@ -40,6 +39,8 @@ public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),
                 _accountCacheLifeTimeInSeconds,
                 When.NotExists);
+
+            await _database.KeyExpireAsync(key, _accountCacheLifeTimeInSeconds);
 
             return accountDtos;
         }

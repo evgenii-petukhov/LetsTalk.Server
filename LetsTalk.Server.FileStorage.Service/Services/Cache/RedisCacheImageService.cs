@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
@@ -8,7 +9,7 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 
-public class RedisCacheImageService : IImageService
+public class RedisCacheImageService : IImageService, IImageCacheManager
 {
     private readonly TimeSpan _imagesCacheLifeTimeInSeconds;
     private readonly int _imageSizeThresholdInBytes;
@@ -29,7 +30,12 @@ public class RedisCacheImageService : IImageService
 
     public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
     {
-        var key = new RedisKey($"Images:{imageId}");
+        if (!useDimensions)
+        {
+            return await _imageService.FetchImageAsync(imageId, useDimensions, cancellationToken);
+        }
+
+        var key = new RedisKey(GetImageKey(imageId));
 
         var cached = await _database.StringGetAsync(key);
 
@@ -57,5 +63,15 @@ public class RedisCacheImageService : IImageService
         }
 
         return JsonSerializer.Deserialize<FetchImageResponse>(cached!)!;
+    }
+
+    public Task RemoveAsync(int imageId)
+    {
+        return _database.KeyDeleteAsync(GetImageKey(imageId), CommandFlags.FireAndForget);
+    }
+
+    private static string GetImageKey(int imageId)
+    {
+        return $"Image:{imageId}";
     }
 }

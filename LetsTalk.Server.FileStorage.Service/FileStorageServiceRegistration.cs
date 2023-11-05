@@ -74,11 +74,13 @@ public static class FileStorageServiceRegistration
         if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
         {
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+            services.AddTransient<IImageCacheManager, RedisCacheImageService>();
             services.DecorateTransient<IImageService, RedisCacheImageService>();
         }
         else
         {
             services.AddMemoryCache();
+            services.AddTransient<IImageCacheManager, MemoryCacheImageService>();
             services.DecorateTransient<IImageService, MemoryCacheImageService>();
         }
 

@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Dto.Models;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
+namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 
 public class UpdateProfileCommand : IRequest<AccountDto>
 {

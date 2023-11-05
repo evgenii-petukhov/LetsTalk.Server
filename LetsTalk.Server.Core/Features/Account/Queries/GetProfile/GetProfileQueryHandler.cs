@@ -3,7 +3,7 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
+namespace LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
 
 public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, AccountDto>
 {

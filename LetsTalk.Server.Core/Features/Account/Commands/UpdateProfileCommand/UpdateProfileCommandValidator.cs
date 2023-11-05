@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
-namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
+namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 
 public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
 {

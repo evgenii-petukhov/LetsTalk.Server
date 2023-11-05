@@ -29,11 +29,11 @@ public class MessageController : ApiController
         _messagingSettings = messagingSettings.Value;
     }
 
-    [HttpGet("{recipientId}")]
-    public async Task<ActionResult<List<MessageDto>>> GetAsync(int recipientId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
+    [HttpGet("{accountId}")]
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(int accountId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
     {
         var senderId = GetAccountId();
-        var query = new GetMessagesQuery(senderId, recipientId, pageIndex, _messagingSettings.MessagesPerPage);
+        var query = new GetMessagesQuery(senderId, accountId, pageIndex, _messagingSettings.MessagesPerPage);
         var messageDtos = await _mediator.Send(query, cancellationToken);
         return Ok(messageDtos);
     }

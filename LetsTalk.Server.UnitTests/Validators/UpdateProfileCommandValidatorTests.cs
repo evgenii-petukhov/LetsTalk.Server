@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
+using LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Moq;
 

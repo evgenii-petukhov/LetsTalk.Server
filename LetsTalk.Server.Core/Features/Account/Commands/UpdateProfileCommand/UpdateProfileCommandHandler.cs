@@ -4,7 +4,7 @@ using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
+namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 
 public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, AccountDto>
 {

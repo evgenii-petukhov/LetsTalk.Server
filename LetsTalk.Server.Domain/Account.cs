@@ -53,13 +53,13 @@ public class Account : BaseEntity
         }
     }
 
-    public void UpdateProfile(string firstName, string lastName, string email, int? imageId)
+    public void UpdateProfile(string firstName, string lastName, string email, int? newImageId)
     {
         FirstName = firstName;
         LastName = lastName;
         Email = email;
 
-        if (ImageId.HasValue)
+        if (ImageId.HasValue && newImageId.HasValue)
         {
             AddDomainEvent(new AvatarChangedDomainEvent
             {
@@ -67,9 +67,9 @@ public class Account : BaseEntity
             });
         }
 
-        if (imageId.HasValue)
+        if (newImageId.HasValue)
         {
-            ImageId = imageId.Value;
+            ImageId = newImageId.Value;
         }
     }
 }

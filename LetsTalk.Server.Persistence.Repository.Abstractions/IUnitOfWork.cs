@@ -1,4 +1,7 @@
-﻿namespace LetsTalk.Server.Persistence.Repository.Abstractions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace LetsTalk.Server.Persistence.Repository.Abstractions;
 
 public interface IUnitOfWork
 {

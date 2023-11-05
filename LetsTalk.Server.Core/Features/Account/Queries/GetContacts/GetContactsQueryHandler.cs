@@ -3,14 +3,14 @@ using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Account.Queries.GetAccounts;
+namespace LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
 
-public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, List<AccountDto>>
+public class GetContactsQueryHandler : IRequestHandler<GetContactsQuery, List<AccountDto>>
 {
     private readonly IMapper _mapper;
     private readonly IAccountService _accountService;
 
-    public GetAccountsQueryHandler(
+    public GetContactsQueryHandler(
         IMapper mapper,
         IAccountService accountService)
     {
@@ -18,7 +18,7 @@ public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, List<Ac
         _accountService = accountService;
     }
 
-    public async Task<List<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
+    public async Task<List<AccountDto>> Handle(GetContactsQuery request, CancellationToken cancellationToken)
     {
         var accountCacheEntries = await _accountService.GetContactsAsync(request.Id, cancellationToken);
 

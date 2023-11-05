@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.Core.Services.Cache.Messages;
 
-public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
+public class RedisCacheAccountService : CacheAccountServiceBase, IAccountService, IAccountCacheManager
 {
     private readonly TimeSpan _cacheLifeTimeInSeconds;
 
@@ -27,7 +27,7 @@ public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
 
     public async Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken)
     {
-        var key = new RedisKey($"Accounts:{accountId}");
+        var key = new RedisKey(GetContactsKey(accountId));
 
         var cachedAccounts = await _database.StringGetAsync(key);
 
@@ -46,5 +46,33 @@ public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
         }
 
         return JsonSerializer.Deserialize<List<AccountDto>>(cachedAccounts!)!;
+    }
+
+    public async Task<AccountDto> GetProfileAsync(int accountId, CancellationToken cancellationToken)
+    {
+        var key = new RedisKey(GetProfileKey(accountId));
+
+        var cachedProfile = await _database.StringGetAsync(key);
+
+        if (cachedProfile == RedisValue.Null)
+        {
+            var profile = await _accountService.GetProfileAsync(accountId, cancellationToken);
+            await _database.StringSetAsync(
+                key,
+                new RedisValue(JsonSerializer.Serialize(profile)),
+                _cacheLifeTimeInSeconds,
+                When.NotExists);
+
+            await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
+
+            return profile;
+        }
+
+        return JsonSerializer.Deserialize<AccountDto>(cachedProfile!)!;
+    }
+
+    public Task RemoveAsync(int accountId)
+    {
+        return _database.KeyDeleteAsync(GetProfileKey(accountId), CommandFlags.FireAndForget);
     }
 }

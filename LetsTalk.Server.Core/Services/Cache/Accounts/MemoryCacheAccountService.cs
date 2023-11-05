@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Services.Cache.Messages;
 
-public class MemoryCacheAccountService : CacheMessageServiceBase, IAccountService
+public class MemoryCacheAccountService : CacheAccountServiceBase, IAccountService, IAccountCacheManager
 {
     private readonly TimeSpan _cacheLifeTimeInSeconds;
 
@@ -26,10 +26,26 @@ public class MemoryCacheAccountService : CacheMessageServiceBase, IAccountServic
 
     public Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken)
     {
-        return _memoryCache.GetOrCreateAsync($"Accounts:{accountId}", cacheEntry =>
+        return _memoryCache.GetOrCreateAsync(GetContactsKey(accountId), cacheEntry =>
         {
             cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
             return _accountService.GetContactsAsync(accountId, cancellationToken);
         })!;
+    }
+
+    public Task<AccountDto> GetProfileAsync(int accountId, CancellationToken cancellationToken)
+    {
+        return _memoryCache.GetOrCreateAsync(GetProfileKey(accountId), cacheEntry =>
+        {
+            cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
+            return _accountService.GetProfileAsync(accountId, cancellationToken);
+        })!;
+    }
+
+    public Task RemoveAsync(int accountId)
+    {
+        _memoryCache.Remove(GetProfileKey(accountId));
+
+        return Task.CompletedTask;
     }
 }

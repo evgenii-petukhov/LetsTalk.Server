@@ -77,6 +77,7 @@ public static class CoreServicesRegistration
             services.AddScoped<IMessageCacheManager, RedisCacheMessageService>();
             services.AddScoped<IAccountService, AccountService>();
             services.DecorateScoped<IAccountService, RedisCacheAccountService>();
+            services.AddScoped<IAccountCacheManager, RedisCacheAccountService>();
         }
         else
         {
@@ -86,6 +87,7 @@ public static class CoreServicesRegistration
             services.AddScoped<IMessageCacheManager, MemoryCacheMessageService>();
             services.AddScoped<IAccountService, AccountService>();
             services.DecorateScoped<IAccountService, MemoryCacheAccountService>();
+            services.AddScoped<IAccountCacheManager, MemoryCacheAccountService>();
         }
 
         return services;

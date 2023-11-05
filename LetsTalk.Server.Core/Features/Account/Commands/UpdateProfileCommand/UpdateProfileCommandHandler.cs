@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
@@ -12,17 +13,20 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
     private readonly IAccountDomainService _accountDomainService;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAccountCacheManager _accountCacheManager;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
         IAccountDomainService accountDomainService,
         IMapper mapper,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IAccountCacheManager accountCacheManager)
     {
         _accountRepository = accountRepository;
         _accountDomainService = accountDomainService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _accountCacheManager = accountCacheManager;
     }
 
     public async Task<AccountDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
@@ -44,6 +48,8 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             cancellationToken);
 
         await _unitOfWork.SaveAsync(cancellationToken);
+
+        await _accountCacheManager.RemoveAsync(request.AccountId!.Value);
 
         return _mapper.Map<AccountDto>(account);
     }

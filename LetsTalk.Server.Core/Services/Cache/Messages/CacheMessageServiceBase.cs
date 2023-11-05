@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Services;
+﻿namespace LetsTalk.Server.Core.Services.Cache.Messages;
 
 public abstract class CacheMessageServiceBase
 {

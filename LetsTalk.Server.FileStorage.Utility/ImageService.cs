@@ -25,20 +25,23 @@ public class ImageService : IImageService
             {
                 x.File!.FileName,
                 x.Width,
-                x.Height
+                x.Height,
+                x.ImageRoleId
             }, cancellationToken)
             : await _imageRepository.GetByIdWithFileAsync(imageId, x => new
             {
                 x.File!.FileName,
                 Width = 0,
-                Height = 0
+                Height = 0,
+                x.ImageRoleId
             }, cancellationToken);
 
         return new FetchImageResponse
         {
             Content = await _fileService.ReadFileAsync(image!.FileName!, FileTypes.Image, cancellationToken),
             Width = image.Width ?? 0,
-            Height = image.Height ?? 0
+            Height = image.Height ?? 0,
+            ImageRole = (ImageRoles)image.ImageRoleId
         };
     }
 }

@@ -9,7 +9,7 @@ namespace LetsTalk.Server.Core.Services.Cache.Messages;
 
 public class RedisCacheMessageService : CacheMessageServiceBase, IMessageService, IMessageCacheManager
 {
-    private readonly TimeSpan _messagesCacheLifeTimeInSeconds;
+    private readonly TimeSpan _cacheLifeTimeInSeconds;
 
     private readonly IDatabase _database;
 
@@ -22,25 +22,41 @@ public class RedisCacheMessageService : CacheMessageServiceBase, IMessageService
     {
         _messageService = messageService;
         _database = сonnectionMultiplexer.GetDatabase();
-        _messagesCacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
+        _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
     }
 
-    public async Task<List<MessageDto>> GetPagedAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public async Task<List<MessageDto>> GetPagedAsync(
+        int senderId,
+        int recipientId,
+        int pageIndex,
+        int messagesPerPage,
+        CancellationToken cancellationToken)
     {
-        var key = new RedisKey(GetMessageKey(senderId, recipientId));
+        var key = new RedisKey(pageIndex == 0
+            ? GetFirstMessagePageKey(senderId, recipientId)
+            : GetMessagePageKey(senderId, recipientId));
 
         var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString()));
 
         if (cachedMessages == RedisValue.Null)
         {
-            var messageDtos = await _messageService.GetPagedAsync(senderId, recipientId, pageIndex, messagesPerPage, cancellationToken);
+            var messageDtos = await _messageService.GetPagedAsync(
+                senderId,
+                recipientId,
+                pageIndex,
+                messagesPerPage,
+                cancellationToken);
+
             await _database.HashSetAsync(
                 key,
                 new RedisValue(pageIndex.ToString()),
                 new RedisValue(JsonSerializer.Serialize(messageDtos)),
                 When.NotExists);
 
-            await _database.KeyExpireAsync(key, _messagesCacheLifeTimeInSeconds);
+            if (pageIndex > 0)
+            {
+                await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
+            }
 
             return messageDtos;
         }
@@ -51,7 +67,9 @@ public class RedisCacheMessageService : CacheMessageServiceBase, IMessageService
     public Task RemoveAsync(int senderId, int recipientId)
     {
         return Task.WhenAll(
-            _database.KeyDeleteAsync(GetMessageKey(senderId, recipientId)),
-            _database.KeyDeleteAsync(GetMessageKey(recipientId, senderId)));
+            _database.KeyDeleteAsync(GetMessagePageKey(senderId, recipientId), CommandFlags.FireAndForget),
+            _database.KeyDeleteAsync(GetMessagePageKey(recipientId, senderId), CommandFlags.FireAndForget),
+            _database.KeyDeleteAsync(GetFirstMessagePageKey(senderId, recipientId), CommandFlags.FireAndForget),
+            _database.KeyDeleteAsync(GetFirstMessagePageKey(recipientId, senderId), CommandFlags.FireAndForget));
     }
 }

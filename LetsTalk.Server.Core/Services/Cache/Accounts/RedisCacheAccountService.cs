@@ -9,7 +9,7 @@ namespace LetsTalk.Server.Core.Services.Cache.Messages;
 
 public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
 {
-    private readonly TimeSpan _accountCacheLifeTimeInSeconds;
+    private readonly TimeSpan _cacheLifeTimeInSeconds;
 
     private readonly IDatabase _database;
 
@@ -22,7 +22,7 @@ public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
     {
         _accountService = accountService;
         _database = сonnectionMultiplexer.GetDatabase();
-        _accountCacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ContactsCacheLifeTimeInSeconds);
+        _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ContactsCacheLifeTimeInSeconds);
     }
 
     public async Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken)
@@ -37,10 +37,10 @@ public class RedisCacheAccountService : CacheMessageServiceBase, IAccountService
             await _database.StringSetAsync(
                 key,
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),
-                _accountCacheLifeTimeInSeconds,
+                _cacheLifeTimeInSeconds,
                 When.NotExists);
 
-            await _database.KeyExpireAsync(key, _accountCacheLifeTimeInSeconds);
+            await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
 
             return accountDtos;
         }

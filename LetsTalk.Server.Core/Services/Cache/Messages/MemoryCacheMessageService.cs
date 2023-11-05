@@ -11,7 +11,7 @@ public class MemoryCacheMessageService : CacheMessageServiceBase, IMessageServic
 {
     private readonly IMessageService _messageService;
 
-    private readonly TimeSpan _messagesCacheLifeTimeInSeconds;
+    private readonly TimeSpan _cacheLifeTimeInSeconds;
 
     private readonly IMemoryCache _memoryCache;
 
@@ -22,14 +22,17 @@ public class MemoryCacheMessageService : CacheMessageServiceBase, IMessageServic
     {
         _messageService = messageService;
         _memoryCache = memoryCache;
-        _messagesCacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
+        _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
     }
 
     public Task<List<MessageDto>> GetPagedAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
-        return _memoryCache.GetOrCreateAsync(GetMessageKey(senderId, recipientId), cacheEntry =>
+        return _memoryCache.GetOrCreateAsync(GetMessagePageKey(senderId, recipientId), cacheEntry =>
         {
-            cacheEntry.SetAbsoluteExpiration(_messagesCacheLifeTimeInSeconds);
+            if (pageIndex > 0)
+            {
+                cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
+            }
             var dict = new ConcurrentDictionary<int, Task<List<MessageDto>>>();
             return dict.GetOrAdd(pageIndex, _ => _messageService.GetPagedAsync(senderId, recipientId, pageIndex, messagesPerPage, cancellationToken));
         })!;
@@ -37,8 +40,10 @@ public class MemoryCacheMessageService : CacheMessageServiceBase, IMessageServic
 
     public Task RemoveAsync(int senderId, int recipientId)
     {
-        _memoryCache.Remove(GetMessageKey(senderId, recipientId));
-        _memoryCache.Remove(GetMessageKey(recipientId, senderId));
+        _memoryCache.Remove(GetMessagePageKey(senderId, recipientId));
+        _memoryCache.Remove(GetMessagePageKey(recipientId, senderId));
+        _memoryCache.Remove(GetFirstMessagePageKey(senderId, recipientId));
+        _memoryCache.Remove(GetFirstMessagePageKey(recipientId, senderId));
 
         return Task.CompletedTask;
     }

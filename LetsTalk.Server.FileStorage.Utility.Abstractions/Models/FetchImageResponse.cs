@@ -1,3 +1,5 @@
-﻿namespace LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+﻿using LetsTalk.Server.Persistence.Enums;
 
-public readonly record struct FetchImageResponse(byte[]? Content, int Width, int Height);
+namespace LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+
+public readonly record struct FetchImageResponse(byte[]? Content, int Width, int Height, ImageRoles ImageRole);

@@ -19,7 +19,7 @@ public static class NotificationsServicesRegistration
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddSingleton<IConnectionManager, ConnectionManager>();
-        services.AddTransient<INotificationService, NotificationService>();
+        services.AddScoped<INotificationService, NotificationService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddControllers();
         services.AddSignalR(o => o.EnableDetailedErrors = true);

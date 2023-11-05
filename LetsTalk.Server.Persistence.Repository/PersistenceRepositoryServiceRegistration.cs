@@ -13,16 +13,16 @@ public static class PersistenceRepositoryServiceRegistration
         Assembly assembly)
     {
         services.AddPersistenceServices(configuration);
-        services.AddTransient<IAccountRepository, AccountRepository>();
-        services.AddTransient<IMessageRepository, MessageRepository>();
-        services.AddTransient<IImageRepository, ImageRepository>();
-        services.AddTransient<IFileRepository, FileRepository>();
-        services.AddTransient<ILinkPreviewRepository, LinkPreviewRepository>();
-        services.AddTransient<IImageDomainService, ImageDomainService>();
-        services.AddTransient<IMessageDomainService, MessageDomainService>();
-        services.AddTransient<IAccountDomainService, AccountDomainService>();
-        services.AddTransient<IUnitOfWork, UnitOfWork>();
-        services.AddTransient<IEntityFactory, EntityFactory>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IImageRepository, ImageRepository>();
+        services.AddScoped<IFileRepository, FileRepository>();
+        services.AddScoped<ILinkPreviewRepository, LinkPreviewRepository>();
+        services.AddScoped<IImageDomainService, ImageDomainService>();
+        services.AddScoped<IMessageDomainService, MessageDomainService>();
+        services.AddScoped<IAccountDomainService, AccountDomainService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IEntityFactory, EntityFactory>();
         services.AddMediatR(options => options.RegisterServicesFromAssembly(assembly));
         return services;
     }

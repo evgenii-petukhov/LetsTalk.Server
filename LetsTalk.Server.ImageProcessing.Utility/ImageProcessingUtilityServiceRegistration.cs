@@ -8,8 +8,8 @@ public static class ImageProcessingUtilityServiceRegistration
     public static IServiceCollection AddImageProcessingUtilityServices(
         this IServiceCollection services)
     {
-        services.AddTransient<IImageInfoService, ImageInfoService>();
-        services.AddTransient<IImageResizeService, ImageResizeService>();
+        services.AddScoped<IImageInfoService, ImageInfoService>();
+        services.AddScoped<IImageResizeService, ImageResizeService>();
 
         return services;
     }

@@ -38,8 +38,8 @@ public static class FileStorageServiceRegistration
         });
         services.AddGrpc(options => options.Interceptors.Add<JwtInterceptor>());
         services.AddGrpcReflection();
-        services.AddTransient<IImageValidationService, ImageValidationService>();
-        services.AddTransient<IIOService, IOService>();
+        services.AddScoped<IImageValidationService, ImageValidationService>();
+        services.AddScoped<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddImageProcessingUtilityServices();
@@ -74,14 +74,14 @@ public static class FileStorageServiceRegistration
         if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
         {
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
-            services.AddTransient<IImageCacheManager, RedisCacheImageService>();
-            services.DecorateTransient<IImageService, RedisCacheImageService>();
+            services.AddScoped<IImageCacheManager, RedisCacheImageService>();
+            services.DecorateScoped<IImageService, RedisCacheImageService>();
         }
         else
         {
             services.AddMemoryCache();
-            services.AddTransient<IImageCacheManager, MemoryCacheImageService>();
-            services.DecorateTransient<IImageService, MemoryCacheImageService>();
+            services.AddScoped<IImageCacheManager, MemoryCacheImageService>();
+            services.DecorateScoped<IImageService, MemoryCacheImageService>();
         }
 
         return services;

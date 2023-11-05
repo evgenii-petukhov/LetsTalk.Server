@@ -22,14 +22,14 @@ public static class CoreServicesRegistration
         IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddTransient<IOpenAuthProvider, FacebookOpenAuthProvider>();
-        services.AddTransient<IOpenAuthProvider, VkOpenAuthProvider>();
-        services.AddTransient<IRegexService, RegexService>();
-        services.AddTransient<IHtmlGenerator, HtmlGenerator>();
-        services.AddTransient<IMessageProcessor, MessageProcessor>();
-        services.AddTransient<IMessageService, MessageService>();
-        services.AddTransient<IAccountDataLayerService, AccountDataLayerService>();
-        services.AddTransient<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
+        services.AddScoped<IOpenAuthProvider, FacebookOpenAuthProvider>();
+        services.AddScoped<IOpenAuthProvider, VkOpenAuthProvider>();
+        services.AddScoped<IRegexService, RegexService>();
+        services.AddScoped<IHtmlGenerator, HtmlGenerator>();
+        services.AddScoped<IMessageProcessor, MessageProcessor>();
+        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IAccountDataLayerService, AccountDataLayerService>();
+        services.AddScoped<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddPersistenceRepositoryServices(configuration, Assembly.GetExecutingAssembly());
 
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
@@ -72,20 +72,20 @@ public static class CoreServicesRegistration
         if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
         {
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
-            services.AddTransient<IMessageService, MessageService>();
-            services.DecorateTransient<IMessageService, RedisCacheMessageService>();
-            services.AddTransient<IMessageCacheManager, RedisCacheMessageService>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.DecorateTransient<IAccountService, RedisCacheAccountService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.DecorateScoped<IMessageService, RedisCacheMessageService>();
+            services.AddScoped<IMessageCacheManager, RedisCacheMessageService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.DecorateScoped<IAccountService, RedisCacheAccountService>();
         }
         else
         {
             services.AddMemoryCache();
-            services.AddTransient<IMessageService, MessageService>();
-            services.DecorateTransient<IMessageService, MemoryCacheMessageService>();
-            services.AddTransient<IMessageCacheManager, MemoryCacheMessageService>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.DecorateTransient<IAccountService, MemoryCacheAccountService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.DecorateScoped<IMessageService, MemoryCacheMessageService>();
+            services.AddScoped<IMessageCacheManager, MemoryCacheMessageService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.DecorateScoped<IAccountService, MemoryCacheAccountService>();
         }
 
         return services;

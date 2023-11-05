@@ -13,10 +13,10 @@ public static class FileStorageUtilityServiceRegistration
         IConfiguration configuration,
         Assembly assembly)
     {
-        services.AddTransient<IFileService, FileService>();
-        services.AddTransient<IFileNameGenerator, FileNameGenerator>();
-        services.AddTransient<IFileStoragePathProvider, FileStoragePathProvider>();
-        services.AddTransient<IImageService, ImageService>();
+        services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IFileNameGenerator, FileNameGenerator>();
+        services.AddScoped<IFileStoragePathProvider, FileStoragePathProvider>();
+        services.AddScoped<IImageService, ImageService>();
         services.AddPersistenceRepositoryServices(configuration, assembly);
 
         return services;

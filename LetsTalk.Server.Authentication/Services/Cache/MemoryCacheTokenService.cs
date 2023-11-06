@@ -1,10 +1,9 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Authentication.Models;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace LetsTalk.Server.Authentication.Services.Cache;
 
-public class MemoryCacheTokenService : IJwtStorageService
+public class MemoryCacheTokenService : IJwtCacheService
 {
     private readonly IJwtStorageService _jwtStorageService;
     private readonly IMemoryCache _memoryCache;
@@ -17,7 +16,7 @@ public class MemoryCacheTokenService : IJwtStorageService
         _memoryCache = memoryCache;
     }
 
-    public async Task<StoredToken?> GetStoredTokenAsync(string? token)
+    public async Task<int?> GetAccountIdAsync(string? token)
     {
         return token == null
             ? null
@@ -25,14 +24,14 @@ public class MemoryCacheTokenService : IJwtStorageService
             {
                 var storedToken = await _jwtStorageService.GetStoredTokenAsync(token);
                 cacheEntry.AbsoluteExpiration = storedToken!.ValidTo;
-                return storedToken;
+                return storedToken.AccountId;
             });
     }
 
-    public async Task<StoredToken> GenerateJwtToken(int accountId)
+    public async Task<string> GenerateAsync(int accountId)
     {
-        var storedToken = await _jwtStorageService.GenerateJwtToken(accountId);
-        _memoryCache.Set(storedToken.Token!, storedToken, storedToken.ValidTo);
-        return storedToken;
+        var storedToken = await _jwtStorageService.GenerateAsync(accountId);
+        _memoryCache.Set(storedToken.Token!, storedToken.AccountId, storedToken.ValidTo);
+        return storedToken.Token!;
     }
 }

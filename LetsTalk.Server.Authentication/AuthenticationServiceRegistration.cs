@@ -3,7 +3,6 @@ using LetsTalk.Server.Authentication.Services;
 using LetsTalk.Server.Authentication.Services.Cache;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Logging;
-using LetsTalk.Server.DependencyInjection;
 using StackExchange.Redis;
 
 namespace LetsTalk.Server.Authentication
@@ -37,12 +36,12 @@ namespace LetsTalk.Server.Authentication
             if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
             {
                 services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
-                services.DecorateScoped<IJwtStorageService, RedisCacheTokenService>();
+                services.AddScoped<IJwtCacheService, RedisCacheTokenService>();
             }
             else
             {
                 services.AddMemoryCache();
-                services.DecorateScoped<IJwtStorageService, MemoryCacheTokenService>();
+                services.AddScoped<IJwtCacheService, MemoryCacheTokenService>();
             }
 
             return services;

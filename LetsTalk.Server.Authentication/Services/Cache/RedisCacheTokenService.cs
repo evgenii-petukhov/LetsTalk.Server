@@ -1,11 +1,10 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Authentication.Models;
 using StackExchange.Redis;
 using System.Text.Json;
 
 namespace LetsTalk.Server.Authentication.Services.Cache;
 
-public class RedisCacheTokenService : IJwtStorageService
+public class RedisCacheTokenService : IJwtCacheService
 {
     private readonly IJwtStorageService _jwtStorageService;
     private readonly IDatabase _database;
@@ -18,7 +17,7 @@ public class RedisCacheTokenService : IJwtStorageService
         _database = сonnectionMultiplexer.GetDatabase();
     }
 
-    public async Task<StoredToken?> GetStoredTokenAsync(string? token)
+    public async Task<int?> GetAccountIdAsync(string? token)
     {
         if (token == null)
         {
@@ -27,38 +26,38 @@ public class RedisCacheTokenService : IJwtStorageService
 
         var key = new RedisKey(GetTokenKey(token!));
 
-        var cached = await _database.StringGetAsync(key);
+        var cachedAccountId = await _database.StringGetAsync(key);
 
-        if (cached == RedisValue.Null)
+        if (cachedAccountId == RedisValue.Null)
         {
             var storedToken = await _jwtStorageService.GetStoredTokenAsync(token);
 
             await _database.StringSetAsync(
                 key,
-                new RedisValue(JsonSerializer.Serialize(storedToken)),
+                new RedisValue(JsonSerializer.Serialize(storedToken!.AccountId)),
                 storedToken!.ValidTo - DateTime.Now,
             When.NotExists);
 
             await _database.KeyExpireAsync(key, storedToken.ValidTo);
 
-            return storedToken;
+            return storedToken.AccountId;
         }
 
-        return JsonSerializer.Deserialize<StoredToken>(cached!)!;
+        return JsonSerializer.Deserialize<int?>(cachedAccountId!)!;
     }
 
-    public async Task<StoredToken> GenerateJwtToken(int accountId)
+    public async Task<string> GenerateAsync(int accountId)
     {
-        var storedToken = await _jwtStorageService.GenerateJwtToken(accountId);
+        var storedToken = await _jwtStorageService.GenerateAsync(accountId);
 
         var key = new RedisKey(GetTokenKey(storedToken.Token!));
 
         await _database.StringSetAsync(
                 key,
-                new RedisValue(JsonSerializer.Serialize(storedToken)),
+                new RedisValue(JsonSerializer.Serialize(storedToken.AccountId)),
                 storedToken.ValidTo - DateTime.Now);
 
-        return storedToken;
+        return storedToken.Token!;
     }
 
     private static string GetTokenKey(string token)

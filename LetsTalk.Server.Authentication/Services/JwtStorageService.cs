@@ -56,7 +56,7 @@ public class JwtStorageService: IJwtStorageService
         };
     }
 
-    public Task<StoredToken> GenerateJwtToken(int accountId)
+    public Task<StoredToken> GenerateAsync(int accountId)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor

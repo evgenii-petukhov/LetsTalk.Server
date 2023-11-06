@@ -1,7 +1,9 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Authentication.Services;
+using LetsTalk.Server.Authentication.Services.Cache;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Logging;
+using StackExchange.Redis;
 
 namespace LetsTalk.Server.Authentication
 {
@@ -23,10 +25,25 @@ namespace LetsTalk.Server.Authentication
             });
             services.AddGrpc();
             services.AddGrpcReflection();
-            services.AddSingleton<IJwtService, JwtService>();
+            services.AddScoped<IJwtStorageService, JwtStorageService>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddMemoryCache();
             services.AddLoggingServices();
+
+            services.Configure<CachingSettings>(configuration.GetSection("Caching"));
+            services.AddScoped<IJwtStorageService, JwtStorageService>();
+
+            if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
+            {
+                services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+                services.AddScoped<IJwtCacheService, RedisCacheTokenService>();
+            }
+            else
+            {
+                services.AddMemoryCache();
+                services.AddScoped<IJwtCacheService, MemoryCacheTokenService>();
+            }
+
             return services;
         }
     }

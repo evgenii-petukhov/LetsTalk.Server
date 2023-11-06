@@ -4,11 +4,11 @@ public abstract class CacheAccountServiceBase
 {
     protected static string GetContactsKey(int accountId)
     {
-        return $"Contacts:{accountId}";
+        return $"account:{accountId}:contacts";
     }
 
     protected static string GetProfileKey(int accountId)
     {
-        return $"Profile:{accountId}";
+        return $"account:{accountId}:profile";
     }
 }

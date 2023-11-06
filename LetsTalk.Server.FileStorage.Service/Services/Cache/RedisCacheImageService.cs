@@ -72,6 +72,6 @@ public class RedisCacheImageService : IImageService, IImageCacheManager
 
     private static string GetImageKey(int imageId)
     {
-        return $"Image:{imageId}";
+        return $"image:{imageId}";
     }
 }

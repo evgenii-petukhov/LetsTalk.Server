@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.Authentication.Services.Cache;
 
-public class RedisCacheTokenService : IJwtCacheService
+public class RedisCacheTokenService : CacheTokenServiceBase, IJwtCacheService
 {
     private readonly IJwtStorageService _jwtStorageService;
     private readonly IDatabase _database;
@@ -58,10 +58,5 @@ public class RedisCacheTokenService : IJwtCacheService
                 storedToken.ValidTo - DateTime.Now);
 
         return storedToken.Token!;
-    }
-
-    private static string GetTokenKey(string token)
-    {
-        return $"Jwt:{token}";
     }
 }

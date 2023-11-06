@@ -4,11 +4,11 @@ public abstract class CacheMessageServiceBase
 {
     protected static string GetMessagePageKey(int senderId, int recipientId)
     {
-        return $"MessagePage:{senderId}:{recipientId}";
+        return $"messages:{senderId}:{recipientId}";
     }
 
     protected static string GetFirstMessagePageKey(int senderId, int recipientId)
     {
-        return $"MessagePageFirst:{senderId}:{recipientId}";
+        return $"messages:{senderId}:{recipientId}:first-page";
     }
 }

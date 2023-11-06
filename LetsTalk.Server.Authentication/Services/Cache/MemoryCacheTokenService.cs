@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace LetsTalk.Server.Authentication.Services.Cache;
 
-public class MemoryCacheTokenService : IJwtCacheService
+public class MemoryCacheTokenService : CacheTokenServiceBase, IJwtCacheService
 {
     private readonly IJwtStorageService _jwtStorageService;
     private readonly IMemoryCache _memoryCache;
@@ -20,7 +20,7 @@ public class MemoryCacheTokenService : IJwtCacheService
     {
         return token == null
             ? null
-            : await _memoryCache.GetOrCreateAsync(token!, async cacheEntry =>
+            : await _memoryCache.GetOrCreateAsync(GetTokenKey(token), async cacheEntry =>
             {
                 var storedToken = await _jwtStorageService.GetStoredTokenAsync(token);
                 cacheEntry.AbsoluteExpiration = storedToken!.ValidTo;
@@ -31,7 +31,7 @@ public class MemoryCacheTokenService : IJwtCacheService
     public async Task<string> GenerateAsync(int accountId)
     {
         var storedToken = await _jwtStorageService.GenerateAsync(accountId);
-        _memoryCache.Set(storedToken.Token!, storedToken.AccountId, storedToken.ValidTo);
+        _memoryCache.Set(GetTokenKey(storedToken.Token!), storedToken.AccountId, storedToken.ValidTo);
         return storedToken.Token!;
     }
 }

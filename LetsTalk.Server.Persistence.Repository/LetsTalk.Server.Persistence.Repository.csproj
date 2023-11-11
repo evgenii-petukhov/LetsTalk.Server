@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions\LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository.Abstractions\LetsTalk.Server.Persistence.Repository.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
   </ItemGroup>

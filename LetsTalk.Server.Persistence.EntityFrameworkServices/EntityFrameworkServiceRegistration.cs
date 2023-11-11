@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -9,9 +9,9 @@ public static class EntityFrameworkServiceRegistration
     public static IServiceCollection AddEntityFrameworkServices(
         this IServiceCollection services)
     {
-        services.AddScoped<IMessageDatabaseAgnosticService, MessageEntityFrameworkService>();
-        services.AddScoped<IAccountDatabaseAgnosticService, AccountEntityFrameworkService>();
-        services.AddScoped<IImageDatabaseAgnosticService, ImageEntityFrameworkService>();
+        services.AddScoped<IMessageAgnosticService, MessageEntityFrameworkService>();
+        services.AddScoped<IAccountAgnosticService, AccountEntityFrameworkService>();
+        services.AddScoped<IImageAgnosticService, ImageEntityFrameworkService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         return services;
     }

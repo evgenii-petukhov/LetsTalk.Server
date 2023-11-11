@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions.Models;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
-namespace LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
+namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
-public interface IMessageDatabaseAgnosticService
+public interface IMessageAgnosticService
 {
     Task<MessageAgnosticModel> CreateMessageAsync(
         int senderId,

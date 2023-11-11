@@ -8,7 +8,7 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Models;
-using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -17,33 +17,33 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
-    private readonly IAccountDatabaseAgnosticService _accountDatabaseAgnosticService;
-    private readonly IImageDatabaseAgnosticService _imageDatabaseAgnosticService;
+    private readonly IAccountAgnosticService _accountAgnosticService;
+    private readonly IImageAgnosticService _imageAgnosticService;
     private readonly IHtmlGenerator _htmlGenerator;
     private readonly IMapper _mapper;
     private readonly IMessageCacheManager _messageCacheManager;
-    private readonly IMessageDatabaseAgnosticService _messageDatabaseAgnosticService;
+    private readonly IMessageAgnosticService _messageAgnosticService;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
     private readonly IMessageProducer _imageResizeRequestProducer;
 
     public CreateMessageCommandHandler(
-        IAccountDatabaseAgnosticService accountDatabaseAgnosticService,
-        IImageDatabaseAgnosticService imageDatabaseAgnosticService,
+        IAccountAgnosticService accountAgnosticService,
+        IImageAgnosticService imageAgnosticService,
         IHtmlGenerator htmlGenerator,
         IMapper mapper,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
         IMessageCacheManager messageCacheManager,
-        IMessageDatabaseAgnosticService messageDatabaseAgnosticService)
+        IMessageAgnosticService messageDatabaseAgnosticService)
     {
-        _accountDatabaseAgnosticService = accountDatabaseAgnosticService;
-        _imageDatabaseAgnosticService = imageDatabaseAgnosticService;
+        _accountAgnosticService = accountAgnosticService;
+        _imageAgnosticService = imageAgnosticService;
         _htmlGenerator = htmlGenerator;
         _mapper = mapper;
         _messageCacheManager = messageCacheManager;
-        _messageDatabaseAgnosticService = messageDatabaseAgnosticService;
+        _messageAgnosticService = messageDatabaseAgnosticService;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -52,7 +52,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateMessageCommandValidator(_accountDatabaseAgnosticService, _imageDatabaseAgnosticService);
+        var validator = new CreateMessageCommandValidator(_accountAgnosticService, _imageAgnosticService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
@@ -62,7 +62,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
         var (html, url) = _htmlGenerator.GetHtml(request.Text!);
 
-        var message = await _messageDatabaseAgnosticService.CreateMessageAsync(
+        var message = await _messageAgnosticService.CreateMessageAsync(
             request.SenderId!.Value,
             request.RecipientId!.Value,
             request.Text,

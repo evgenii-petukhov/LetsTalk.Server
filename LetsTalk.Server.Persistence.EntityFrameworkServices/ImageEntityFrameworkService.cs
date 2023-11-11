@@ -1,9 +1,9 @@
-﻿using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFrameworkServices;
 
-public class ImageEntityFrameworkService : IImageDatabaseAgnosticService
+public class ImageEntityFrameworkService : IImageAgnosticService
 {
     private readonly IImageRepository _imageRepository;
 

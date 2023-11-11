@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFrameworkServices;
 
-public class MessageEntityFrameworkService: IMessageDatabaseAgnosticService
+public class MessageEntityFrameworkService: IMessageAgnosticService
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IUnitOfWork _unitOfWork;

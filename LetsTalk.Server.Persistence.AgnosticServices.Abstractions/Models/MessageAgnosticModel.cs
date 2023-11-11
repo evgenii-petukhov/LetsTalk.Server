@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions.Models;
+﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
 public class MessageAgnosticModel
 {

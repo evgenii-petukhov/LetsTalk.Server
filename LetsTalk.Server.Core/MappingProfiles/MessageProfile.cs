@@ -3,7 +3,7 @@ using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 

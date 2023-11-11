@@ -1,9 +1,9 @@
-﻿using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFrameworkServices;
 
-public class AccountEntityFrameworkService: IAccountDatabaseAgnosticService
+public class AccountEntityFrameworkService: IAccountAgnosticService
 {
     private readonly IAccountRepository _accountRepository;
 

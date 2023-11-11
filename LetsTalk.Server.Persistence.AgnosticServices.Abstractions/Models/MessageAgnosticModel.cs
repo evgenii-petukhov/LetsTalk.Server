@@ -21,4 +21,6 @@ public class MessageAgnosticModel
     public int? ImageId { get; set; }
 
     public ImagePreviewAgnosticModel? ImagePreview { get; set; }
+
+    public LinkPreviewAgnosticModel? LinkPreview { get; set; }
 }

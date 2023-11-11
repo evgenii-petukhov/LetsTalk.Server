@@ -11,4 +11,11 @@ public interface IMessageAgnosticService
         string? textHtml,
         int? imageId,
         CancellationToken cancellationToken);
+
+    Task<List<MessageAgnosticModel>> GetPagedAsync(
+        int senderId,
+        int recipientId,
+        int pageIndex,
+        int messagesPerPage,
+        CancellationToken cancellationToken = default);
 }

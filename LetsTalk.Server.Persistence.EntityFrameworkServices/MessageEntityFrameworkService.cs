@@ -35,4 +35,21 @@ public class MessageEntityFrameworkService: IMessageAgnosticService
 
         return _mapper.Map<MessageAgnosticModel>(message);
     }
+
+    public async Task<List<MessageAgnosticModel>> GetPagedAsync(
+        int senderId,
+        int recipientId,
+        int pageIndex,
+        int messagesPerPage,
+        CancellationToken cancellationToken = default)
+    {
+        var messages = await _messageRepository.GetPagedAsync(
+            senderId,
+            recipientId,
+            pageIndex,
+            messagesPerPage,
+            cancellationToken);
+
+        return _mapper.Map<List<MessageAgnosticModel>>(messages);
+    }
 }

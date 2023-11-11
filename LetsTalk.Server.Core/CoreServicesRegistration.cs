@@ -26,7 +26,6 @@ public static class CoreServicesRegistration
         services.AddScoped<IOpenAuthProvider, VkOpenAuthProvider>();
         services.AddScoped<IRegexService, RegexService>();
         services.AddScoped<IHtmlGenerator, HtmlGenerator>();
-        services.AddScoped<IMessageProcessor, MessageProcessor>();
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IAccountDataLayerService, AccountDataLayerService>();
         services.AddScoped<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();

@@ -19,7 +19,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IAccountRepository _accountRepository;
     private readonly IMessageRepository _messageRepository;
     private readonly IImageRepository _imageRepository;
-    private readonly IMessageProcessor _messageProcessor;
+    private readonly IHtmlGenerator _htmlGenerator;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMessageCacheManager _messageCacheManager;
@@ -32,7 +32,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IAccountRepository accountRepository,
         IMessageRepository messageRepository,
         IImageRepository imageRepository,
-        IMessageProcessor messageProcessor,
+        IHtmlGenerator htmlGenerator,
         IMapper mapper,
         IUnitOfWork unitOfWork,
         IProducerAccessor producerAccessor,
@@ -41,7 +41,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     {
         _accountRepository = accountRepository;
         _messageRepository = messageRepository;
-        _messageProcessor = messageProcessor;
+        _htmlGenerator = htmlGenerator;
         _imageRepository = imageRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
@@ -63,7 +63,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         }
 
         var message = _mapper.Map<Domain.Message>(request);
-        _messageProcessor.SetTextHtml(message, out string? url);
+        var (html, url) = _htmlGenerator.GetHtml(message.Text!);
+        message.SetTextHtml(html);
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 

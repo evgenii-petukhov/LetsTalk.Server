@@ -4,7 +4,6 @@ using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Repository.Abstractions.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Repository.Repositories;
 
@@ -19,16 +18,6 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
         return _context.Accounts
             .AsTracking()
             .FirstOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken)!;
-    }
-
-    public Task<T?> GetByIdAsync<T>(int id, Expression<Func<Account, T>> selector, CancellationToken cancellationToken = default)
-    {
-        return _context.Accounts
-            .Include(account => account.Image)
-            .ThenInclude(image => image!.File)
-            .Where(account => account.Id == id)
-            .Select(selector)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
     public Task<Account> GetByExternalIdAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default)

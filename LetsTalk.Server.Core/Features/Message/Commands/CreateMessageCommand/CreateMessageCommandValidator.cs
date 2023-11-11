@@ -1,16 +1,16 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
-    private readonly IAccountRepository _accountRepository;
-    private readonly IImageRepository _imageRepository;
+    private readonly IAccountDatabaseAgnosticService _accountDatabaseAgnosticService;
+    private readonly IImageDatabaseAgnosticService _imageDatabaseAgnosticService;
 
     public CreateMessageCommandValidator(
-        IAccountRepository accountRepository,
-        IImageRepository imageRepository)
+        IAccountDatabaseAgnosticService accountDatabaseAgnosticService,
+        IImageDatabaseAgnosticService imageDatabaseAgnosticService)
     {
         RuleFor(model => model)
             .Must(IsContentValid)
@@ -42,20 +42,20 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Image with {PropertyName} = {PropertyValue} does not exist");
         });
 
-        _accountRepository = accountRepository;
-        _imageRepository = imageRepository;
+        _accountDatabaseAgnosticService = accountDatabaseAgnosticService;
+        _imageDatabaseAgnosticService = imageDatabaseAgnosticService;
     }
 
     private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            && await _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken);
+            && await _accountDatabaseAgnosticService.IsAccountIdValidAsync(id.Value, cancellationToken);
     }
 
     private async Task<bool> IsImageIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            && await _imageRepository.IsImageIdValidAsync(id.Value, cancellationToken);
+            && await _imageDatabaseAgnosticService.IsImageIdValidAsync(id.Value, cancellationToken);
     }
 
     private bool IsContentValid(CreateMessageCommand model)

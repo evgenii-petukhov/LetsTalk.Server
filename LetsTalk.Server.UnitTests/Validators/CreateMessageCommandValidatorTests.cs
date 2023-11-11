@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
 using Moq;
 
 namespace LetsTalk.Server.UnitTests.Validators;
@@ -9,14 +9,14 @@ namespace LetsTalk.Server.UnitTests.Validators;
 public class CreateMessageCommandValidatorTests
 {
     private CreateMessageCommandValidator _validator;
-    private Mock<IAccountRepository> _mockAccountRepository;
-    private Mock<IImageRepository> _mockImageRepository;
+    private Mock<IAccountDatabaseAgnosticService> _mockAccountRepository;
+    private Mock<IImageDatabaseAgnosticService> _mockImageRepository;
 
     [SetUp]
     public void SetUp()
     {
-        _mockAccountRepository = new Mock<IAccountRepository>();
-        _mockImageRepository = new Mock<IImageRepository>();
+        _mockAccountRepository = new Mock<IAccountDatabaseAgnosticService>();
+        _mockImageRepository = new Mock<IImageDatabaseAgnosticService>();
         _validator = new(_mockAccountRepository.Object, _mockImageRepository.Object);
     }
 

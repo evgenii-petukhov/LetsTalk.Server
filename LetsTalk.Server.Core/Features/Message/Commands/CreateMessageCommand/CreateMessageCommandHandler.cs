@@ -17,8 +17,8 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
-    private readonly IAccountRepository _accountRepository;
-    private readonly IImageRepository _imageRepository;
+    private readonly IAccountDatabaseAgnosticService _accountDatabaseAgnosticService;
+    private readonly IImageDatabaseAgnosticService _imageDatabaseAgnosticService;
     private readonly IHtmlGenerator _htmlGenerator;
     private readonly IMapper _mapper;
     private readonly IMessageCacheManager _messageCacheManager;
@@ -29,8 +29,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMessageProducer _imageResizeRequestProducer;
 
     public CreateMessageCommandHandler(
-        IAccountRepository accountRepository,
-        IImageRepository imageRepository,
+        IAccountDatabaseAgnosticService accountDatabaseAgnosticService,
+        IImageDatabaseAgnosticService imageDatabaseAgnosticService,
         IHtmlGenerator htmlGenerator,
         IMapper mapper,
         IProducerAccessor producerAccessor,
@@ -38,9 +38,9 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IMessageCacheManager messageCacheManager,
         IMessageDatabaseAgnosticService messageDatabaseAgnosticService)
     {
-        _accountRepository = accountRepository;
+        _accountDatabaseAgnosticService = accountDatabaseAgnosticService;
+        _imageDatabaseAgnosticService = imageDatabaseAgnosticService;
         _htmlGenerator = htmlGenerator;
-        _imageRepository = imageRepository;
         _mapper = mapper;
         _messageCacheManager = messageCacheManager;
         _messageDatabaseAgnosticService = messageDatabaseAgnosticService;
@@ -52,7 +52,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateMessageCommandValidator(_accountRepository, _imageRepository);
+        var validator = new CreateMessageCommandValidator(_accountDatabaseAgnosticService, _imageDatabaseAgnosticService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)

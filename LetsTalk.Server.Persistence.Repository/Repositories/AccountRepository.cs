@@ -6,7 +6,7 @@ using LetsTalk.Server.Persistence.Repository.Abstractions.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace LetsTalk.Server.Persistence.Repository;
+namespace LetsTalk.Server.Persistence.Repository.Repositories;
 
 public class AccountRepository : GenericRepository<Account>, IAccountRepository
 {

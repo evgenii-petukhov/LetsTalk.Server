@@ -1,9 +1,9 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
-namespace LetsTalk.Server.Persistence.Repository;
+namespace LetsTalk.Server.Persistence.Repository.DomainServices;
 
-public class MessageDomainService: IMessageDomainService
+public class MessageDomainService : IMessageDomainService
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IEntityFactory _entityFactory;

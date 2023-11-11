@@ -8,6 +8,7 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Models;
+using LetsTalk.Server.Persistence.DatabaseAgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -17,12 +18,11 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly IMessageRepository _messageRepository;
     private readonly IImageRepository _imageRepository;
     private readonly IHtmlGenerator _htmlGenerator;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IMessageCacheManager _messageCacheManager;
+    private readonly IMessageDatabaseAgnosticService _messageDatabaseAgnosticService;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -30,22 +30,20 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public CreateMessageCommandHandler(
         IAccountRepository accountRepository,
-        IMessageRepository messageRepository,
         IImageRepository imageRepository,
         IHtmlGenerator htmlGenerator,
         IMapper mapper,
-        IUnitOfWork unitOfWork,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
-        IMessageCacheManager messageCacheManager)
+        IMessageCacheManager messageCacheManager,
+        IMessageDatabaseAgnosticService messageDatabaseAgnosticService)
     {
         _accountRepository = accountRepository;
-        _messageRepository = messageRepository;
         _htmlGenerator = htmlGenerator;
         _imageRepository = imageRepository;
         _mapper = mapper;
-        _unitOfWork = unitOfWork;
         _messageCacheManager = messageCacheManager;
+        _messageDatabaseAgnosticService = messageDatabaseAgnosticService;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -62,11 +60,15 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var message = _mapper.Map<Domain.Message>(request);
-        var (html, url) = _htmlGenerator.GetHtml(message.Text!);
-        message.SetTextHtml(html);
-        await _messageRepository.CreateAsync(message, cancellationToken);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        var (html, url) = _htmlGenerator.GetHtml(request.Text!);
+
+        var message = await _messageDatabaseAgnosticService.CreateMessageAsync(
+            request.SenderId!.Value,
+            request.RecipientId!.Value,
+            request.Text,
+            html,
+            request.ImageId,
+            cancellationToken);
 
         var messageDto = _mapper.Map<MessageDto>(message);
 
@@ -76,14 +78,16 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new Notification<MessageDto>[]
                 {
-                    new Notification<MessageDto> {
+                    new Notification<MessageDto>
+                    {
                         RecipientId = request.RecipientId!.Value,
                         Message = messageDto! with
                         {
                             IsMine = false
                         }
                     },
-                    new Notification<MessageDto> {
+                    new Notification<MessageDto>
+                    {
                         RecipientId = request.SenderId!.Value,
                         Message = messageDto with
                         {

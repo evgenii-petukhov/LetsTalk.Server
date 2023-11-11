@@ -2,7 +2,7 @@
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
-namespace LetsTalk.Server.Persistence.Repository;
+namespace LetsTalk.Server.Persistence.Repository.DomainServices;
 
 public class ImageDomainService : IImageDomainService
 {

@@ -1,4 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.Repository.DomainServices;
+using LetsTalk.Server.Persistence.Repository.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

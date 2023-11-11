@@ -2,9 +2,9 @@
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 
-namespace LetsTalk.Server.Persistence.Repository;
+namespace LetsTalk.Server.Persistence.Repository.DomainServices;
 
-public class AccountDomainService: IAccountDomainService
+public class AccountDomainService : IAccountDomainService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IEntityFactory _entityFactory;

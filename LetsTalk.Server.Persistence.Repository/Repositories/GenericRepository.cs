@@ -3,7 +3,7 @@ using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace LetsTalk.Server.Persistence.Repository;
+namespace LetsTalk.Server.Persistence.Repository.Repositories;
 
 public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     where T : BaseEntity

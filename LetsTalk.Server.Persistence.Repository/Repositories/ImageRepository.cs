@@ -4,7 +4,7 @@ using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace LetsTalk.Server.Persistence.Repository;
+namespace LetsTalk.Server.Persistence.Repository.Repositories;
 
 public class ImageRepository : GenericRepository<Image>, IImageRepository
 {

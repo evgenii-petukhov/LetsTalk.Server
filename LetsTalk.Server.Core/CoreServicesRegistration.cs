@@ -12,6 +12,7 @@ using System.Reflection;
 using StackExchange.Redis;
 using LetsTalk.Server.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
+using LetsTalk.Server.Persistence.EntityFrameworkServices;
 
 namespace LetsTalk.Server.Core;
 
@@ -88,6 +89,8 @@ public static class CoreServicesRegistration
             services.DecorateScoped<IAccountService, MemoryCacheAccountService>();
             services.AddScoped<IAccountCacheManager, MemoryCacheAccountService>();
         }
+
+        services.AddEntityFrameworkServices();
 
         return services;
     }

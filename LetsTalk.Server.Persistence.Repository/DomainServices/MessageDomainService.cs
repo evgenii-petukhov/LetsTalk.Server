@@ -16,12 +16,6 @@ public class MessageDomainService : IMessageDomainService
         _entityFactory = entityFactory;
     }
 
-    public async Task SetLinkPreviewAsync(LinkPreview linkPreview, int messageId)
-    {
-        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId);
-        message.SetLinkPreview(linkPreview);
-    }
-
     public async Task SetImagePreviewAsync(Image image, int messageId)
     {
         var message = await _messageRepository.GetByIdAsTrackingAsync(messageId);

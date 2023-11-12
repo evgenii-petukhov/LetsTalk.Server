@@ -23,10 +23,10 @@ public class MessageService: IMessageService
         var messages = await _messageAgnosticService.GetPagedAsync(senderId, recipientId, pageIndex, messagesPerPage, cancellationToken);
 
         return _mapper.Map<List<MessageDto>>(messages)
-        .ConvertAll(messageDto =>
-        {
-            messageDto.IsMine = messageDto.SenderId == senderId;
-            return messageDto;
-        });
+            .ConvertAll(messageDto =>
+            {
+                messageDto.IsMine = messageDto.SenderId == senderId;
+                return messageDto;
+            });
     }
 }

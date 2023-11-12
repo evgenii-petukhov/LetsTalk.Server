@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.LinkPreview.Abstractions;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
-using Microsoft.EntityFrameworkCore;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Web;
 
@@ -8,36 +7,30 @@ namespace LetsTalk.Server.LinkPreview.Services;
 
 public class LinkPreviewGenerator : ILinkPreviewGenerator
 {
-    private readonly ILinkPreviewRepository _linkPreviewRepository;
+    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService;
+    private readonly IMessageAgnosticService _messageAgnosticService;
     private readonly IDownloadService _downloadService;
     private readonly IRegexService _regexService;
     private readonly ILogger<LinkPreviewGenerator> _logger;
-    private readonly IEntityFactory _entityFactory;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMessageDomainService _messageDomainService;
 
     public LinkPreviewGenerator(
-        ILinkPreviewRepository linkPreviewRepository,
+        ILinkPreviewAgnosticService linkPreviewAgnosticService,
+        IMessageAgnosticService messageAgnosticService,
         IDownloadService downloadService,
         IRegexService regexService,
-        ILogger<LinkPreviewGenerator> logger,
-        IEntityFactory entityFactory,
-        IUnitOfWork unitOfWork,
-        IMessageDomainService messageDomainService)
+        ILogger<LinkPreviewGenerator> logger)
     {
-        _linkPreviewRepository = linkPreviewRepository;
+        _linkPreviewAgnosticService = linkPreviewAgnosticService;
+        _messageAgnosticService = messageAgnosticService;
         _downloadService = downloadService;
         _regexService = regexService;
         _logger = logger;
-        _entityFactory = entityFactory;
-        _unitOfWork = unitOfWork;
-        _messageDomainService = messageDomainService;
     }
 
     public async Task SetLinkPreviewAsync(int messageId, string url)
     {
-        var linkPreview = await _linkPreviewRepository.GetByUrlOrDefaultAsync(url);
-        if (linkPreview == null)
+        var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
+        if (linkPreviewId == 0)
         {
             try
             {
@@ -54,17 +47,14 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 title = HttpUtility.HtmlDecode(title);
                 try
                 {
-                    linkPreview = _entityFactory.CreateLinkPreview(url, title, imageUrl!);
-                    _logger.LogInformation("New LinkPreview added: {@linkPreview}", linkPreview);
-                    await _messageDomainService.SetLinkPreviewAsync(linkPreview, messageId);
-                    await _unitOfWork.SaveAsync();
-
+                    await _messageAgnosticService.SetLinkPreviewAsync(messageId, url, title, imageUrl!);
+                    _logger.LogInformation("New LinkPreview added: {url}", url);
                     return;
                 }
-                catch (DbUpdateException)
+                catch
                 {
-                    linkPreview = await _linkPreviewRepository.GetByUrlOrDefaultAsync(url);
-                    _logger.LogInformation("Fetched from DB: {@linkPreview}", linkPreview);
+                    linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
+                    _logger.LogInformation("Fetched from DB: {url}", url);
                 }
             }
             catch (Exception e)
@@ -75,10 +65,9 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
         }
         else
         {
-            _logger.LogInformation("Fetched from DB: {@linkPreview}", linkPreview);
+            _logger.LogInformation("Fetched from DB: {url}", url);
         }
 
-        await _messageDomainService.SetLinkPreviewAsync(linkPreview!, messageId);
-        await _unitOfWork.SaveAsync();
+        await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId);
     }
 }

@@ -18,4 +18,13 @@ public interface IMessageAgnosticService
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default);
+
+    Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
+
+    Task SetLinkPreviewAsync(
+        int messageId,
+        string url,
+        string title,
+        string imageUrl,
+        CancellationToken cancellationToken = default);
 }

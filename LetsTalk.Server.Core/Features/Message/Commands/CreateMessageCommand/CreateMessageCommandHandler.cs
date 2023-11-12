@@ -9,7 +9,6 @@ using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
 

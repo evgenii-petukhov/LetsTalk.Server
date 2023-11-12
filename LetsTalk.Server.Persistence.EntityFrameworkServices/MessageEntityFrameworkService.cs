@@ -5,18 +5,24 @@ using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFrameworkServices;
 
-public class MessageEntityFrameworkService: IMessageAgnosticService
+public class MessageEntityFrameworkService : IMessageAgnosticService
 {
     private readonly IMessageRepository _messageRepository;
+    private readonly ILinkPreviewRepository _linkPreviewRepository;
+    private readonly IEntityFactory _entityFactory;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public MessageEntityFrameworkService(
         IMessageRepository messageRepository,
+        ILinkPreviewRepository linkPreviewRepository,
+        IEntityFactory entityFactory,
         IUnitOfWork unitOfWork,
         IMapper mapper)
     {
         _messageRepository = messageRepository;
+        _linkPreviewRepository = linkPreviewRepository;
+        _entityFactory = entityFactory;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -51,5 +57,26 @@ public class MessageEntityFrameworkService: IMessageAgnosticService
             cancellationToken);
 
         return _mapper.Map<List<MessageAgnosticModel>>(messages);
+    }
+
+    public async Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default)
+    {
+        var linkPreview = await _linkPreviewRepository.GetByIdAsync(linkPreviewId, cancellationToken);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
+        message.SetLinkPreview(linkPreview);
+        await _unitOfWork.SaveAsync(cancellationToken);
+    }
+
+    public async Task SetLinkPreviewAsync(
+        int messageId,
+        string url,
+        string title,
+        string imageUrl,
+        CancellationToken cancellationToken = default)
+    {
+        var linkPreview = _entityFactory.CreateLinkPreview(url, title, imageUrl);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
+        message.SetLinkPreview(linkPreview);
+        await _unitOfWork.SaveAsync(cancellationToken);
     }
 }

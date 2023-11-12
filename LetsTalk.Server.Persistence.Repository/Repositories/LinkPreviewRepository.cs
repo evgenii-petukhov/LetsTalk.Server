@@ -11,9 +11,11 @@ public class LinkPreviewRepository : GenericRepository<LinkPreview>, ILinkPrevie
     {
     }
 
-    public Task<LinkPreview?> GetByUrlOrDefaultAsync(string url, CancellationToken cancellationToken = default)
+    public Task<int> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default)
     {
         return _context.LinkPreviews
-            .FirstOrDefaultAsync(q => q.Url == url, cancellationToken);
+            .Where(x => x.Url == url)
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

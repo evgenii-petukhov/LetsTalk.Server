@@ -30,6 +30,6 @@ public class ContactsMemoryCacheService : ContactsCacheServiceBase, IContactsSer
 
                 return _accountService.GetContactsAsync(accountId, cancellationToken);
             })!
-            : _accountService.GetContactsAsync(accountId, cancellationToken); ;
+            : _accountService.GetContactsAsync(accountId, cancellationToken);
     }
 }

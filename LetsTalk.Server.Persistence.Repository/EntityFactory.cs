@@ -24,33 +24,21 @@ public class EntityFactory : IEntityFactory
 
     public Domain.File CreateFile(string filename, FileTypes fileType)
     {
-        var file = new Domain.File(filename, (int)fileType);
-        _context.Files.Attach(file);
-
-        return file;
+        return new Domain.File(filename, (int)fileType);
     }
 
-    public Domain.Image CreateImage(ImageFormats imageFormat, ImageRoles imageRole, int width, int height)
+    public Image CreateImage(ImageFormats imageFormat, ImageRoles imageRole, int width, int height)
     {
-        var image = new Domain.Image((int)imageFormat, (int)imageRole, width, height);
-        _context.Images.Attach(image);
-
-        return image;
+        return new Image((int)imageFormat, (int)imageRole, width, height);
     }
 
     public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)
     {
-        var account = new Account(externalId, accountTypeId, firstName, lastName, email, photoUrl);
-        _context.Accounts.Attach(account);
-
-        return account;
+        return new Account(externalId, accountTypeId, firstName, lastName, email, photoUrl);
     }
 
     public LinkPreview CreateLinkPreview(string url, string title, string imageUrl)
     {
-        var linkPreview = new LinkPreview(url, title, imageUrl);
-        _context.LinkPreviews.Attach(linkPreview);
-
-        return linkPreview;
+        return new LinkPreview(url, title, imageUrl);
     }
 }

@@ -8,19 +8,19 @@ namespace LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
 public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, AccountDto>
 {
     private readonly IMapper _mapper;
-    private readonly IAccountService _accountService;
+    private readonly IProfileService _profileService;
 
     public GetProfileQueryHandler(
         IMapper mapper,
-        IAccountService accountService)
+        IProfileService profileService)
     {
         _mapper = mapper;
-        _accountService = accountService;
+        _profileService = profileService;
     }
 
     public async Task<AccountDto> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {
-        var accounts = await _accountService.GetProfileAsync(request.Id, cancellationToken);
+        var accounts = await _profileService.GetProfileAsync(request.Id, cancellationToken);
         return _mapper.Map<AccountDto>(accounts);
     }
 }

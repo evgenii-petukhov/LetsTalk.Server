@@ -20,13 +20,13 @@ public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<Me
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messageCacheEntries = await _messageService.GetPagedAsync(
+        var messageDtos = await _messageService.GetPagedAsync(
             request.SenderId,
             request.RecipientId,
             request.PageIndex,
             request.MessagesPerPage,
             cancellationToken);
 
-        return _mapper.Map<List<MessageDto>>(messageCacheEntries);
+        return _mapper.Map<List<MessageDto>>(messageDtos);
     }
 }

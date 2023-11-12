@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Core.Abstractions;
 
-public interface IAccountCacheManager
+public interface IProfileCacheManager
 {
     Task RemoveAsync(int accountId);
 }

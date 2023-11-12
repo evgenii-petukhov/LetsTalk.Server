@@ -13,6 +13,8 @@ using StackExchange.Redis;
 using LetsTalk.Server.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.Persistence.EntityFrameworkServices;
+using LetsTalk.Server.Core.Services.Cache.Contacts;
+using LetsTalk.Server.Core.Services.Cache.Profile;
 
 namespace LetsTalk.Server.Core;
 
@@ -72,22 +74,26 @@ public static class CoreServicesRegistration
         if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
         {
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+
             services.AddScoped<IMessageService, MessageService>();
-            services.DecorateScoped<IMessageService, RedisCacheMessageService>();
-            services.AddScoped<IMessageCacheManager, RedisCacheMessageService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.DecorateScoped<IAccountService, RedisCacheAccountService>();
-            services.AddScoped<IAccountCacheManager, RedisCacheAccountService>();
+            services.DecorateScoped<IMessageService, MessageRedisCacheService>();
+            services.AddScoped<IMessageCacheManager, MessageRedisCacheService>();
+
+            services.AddScoped<IContactsService, ContactsService>();
+            services.DecorateScoped<IContactsService, ContactsRedisCacheService>();
+
+            services.AddScoped<IProfileService, ProfileService>();
+            services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
+            services.AddScoped<IProfileCacheManager, ProfileRedisCacheService>();
         }
         else
         {
             services.AddMemoryCache();
             services.AddScoped<IMessageService, MessageService>();
-            services.DecorateScoped<IMessageService, MemoryCacheMessageService>();
-            services.AddScoped<IMessageCacheManager, MemoryCacheMessageService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.DecorateScoped<IAccountService, MemoryCacheAccountService>();
-            services.AddScoped<IAccountCacheManager, MemoryCacheAccountService>();
+            services.DecorateScoped<IMessageService, MessageMemoryCacheService>();
+            services.AddScoped<IMessageCacheManager, MessageMemoryCacheService>();
+            services.AddScoped<IContactsService, ContactsService>();
+            services.DecorateScoped<IContactsService, ContactsMemoryCacheService>();
         }
 
         services.AddEntityFrameworkServices();

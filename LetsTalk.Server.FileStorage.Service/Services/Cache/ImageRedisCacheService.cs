@@ -9,28 +9,38 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 
-public class RedisCacheImageService : IImageService, IImageCacheManager
+public class ImageRedisCacheService : IImageService, IImageCacheManager
 {
-    private readonly TimeSpan _imagesCacheLifeTimeInSeconds;
+    private readonly bool _isActive;
+    private readonly bool _isVolotile;
+
+    private readonly TimeSpan _cacheLifeTimeInSeconds;
     private readonly int _imageSizeThresholdInBytes;
 
     private readonly IDatabase _database;
     private readonly IImageService _imageService;
 
-    public RedisCacheImageService(
+    public ImageRedisCacheService(
         IConnectionMultiplexer сonnectionMultiplexer,
         IOptions<CachingSettings> cachingSettings,
         IImageService imageService)
     {
         _database = сonnectionMultiplexer.GetDatabase();
-        _imagesCacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ImagesCacheLifeTimeInSeconds);
         _imageSizeThresholdInBytes = cachingSettings.Value.ImageSizeThresholdInBytes;
         _imageService = imageService;
+
+        _isActive = cachingSettings.Value.ImagesCacheLifeTimeInSeconds != 0;
+        _isVolotile = _isActive && cachingSettings.Value.ImagesCacheLifeTimeInSeconds > 0;
+
+        if (_isVolotile)
+        {
+            _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ImagesCacheLifeTimeInSeconds);
+        }
     }
 
     public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
     {
-        if (!useDimensions)
+        if (!useDimensions || !_isActive)
         {
             return await _imageService.FetchImageAsync(imageId, useDimensions, cancellationToken);
         }
@@ -50,12 +60,11 @@ public class RedisCacheImageService : IImageService, IImageCacheManager
                 await _database.StringSetAsync(
                     key,
                     new RedisValue(JsonSerializer.Serialize(image)),
-                    isAvatar ? null : _imagesCacheLifeTimeInSeconds,
-                    When.NotExists);
+                    when: When.NotExists);
 
-                if (!isAvatar)
+                if (_isVolotile && !isAvatar)
                 {
-                    await _database.KeyExpireAsync(key, _imagesCacheLifeTimeInSeconds);
+                    await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
                 }
             }
 
@@ -67,7 +76,9 @@ public class RedisCacheImageService : IImageService, IImageCacheManager
 
     public Task RemoveAsync(int imageId)
     {
-        return _database.KeyDeleteAsync(GetImageKey(imageId), CommandFlags.FireAndForget);
+        return _isActive
+            ? _database.KeyDeleteAsync(GetImageKey(imageId), CommandFlags.FireAndForget)
+            : Task.CompletedTask;
     }
 
     private static string GetImageKey(int imageId)

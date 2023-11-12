@@ -2,9 +2,7 @@
 
 namespace LetsTalk.Server.Core.Abstractions;
 
-public interface IAccountService
+public interface IProfileService
 {
-    Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken);
-
     Task<AccountDto> GetProfileAsync(int accountId, CancellationToken cancellationToken);
 }

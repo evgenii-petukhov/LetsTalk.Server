@@ -13,20 +13,20 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
     private readonly IAccountDomainService _accountDomainService;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IAccountCacheManager _accountCacheManager;
+    private readonly IProfileCacheManager _profileCacheManager;
 
     public UpdateProfileCommandHandler(
         IAccountRepository accountRepository,
         IAccountDomainService accountDomainService,
         IMapper mapper,
         IUnitOfWork unitOfWork,
-        IAccountCacheManager accountCacheManager)
+        IProfileCacheManager profileCacheManager)
     {
         _accountRepository = accountRepository;
         _accountDomainService = accountDomainService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
-        _accountCacheManager = accountCacheManager;
+        _profileCacheManager = profileCacheManager;
     }
 
     public async Task<AccountDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
@@ -49,7 +49,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
 
         await _unitOfWork.SaveAsync(cancellationToken);
 
-        await _accountCacheManager.RemoveAsync(request.AccountId!.Value);
+        await _profileCacheManager.RemoveAsync(request.AccountId!.Value);
 
         return _mapper.Map<AccountDto>(account);
     }

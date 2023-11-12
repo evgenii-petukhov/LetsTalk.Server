@@ -4,11 +4,11 @@ using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 
 namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 
-public class MemoryCacheImageService : IImageService, IImageCacheManager
+public class ImageMemoryCacheService : IImageService, IImageCacheManager
 {
     private readonly IImageService _cacheService;
 
-    public MemoryCacheImageService(IImageService cacheService)
+    public ImageMemoryCacheService(IImageService cacheService)
     {
         _cacheService = cacheService;
     }

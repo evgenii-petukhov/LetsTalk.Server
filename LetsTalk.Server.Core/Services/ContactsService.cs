@@ -5,12 +5,12 @@ using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Core.Services;
 
-public class AccountService : IAccountService
+public class ContactsService : IContactsService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
 
-    public AccountService(
+    public ContactsService(
         IAccountRepository accountRepository,
         IMapper mapper)
     {
@@ -22,11 +22,5 @@ public class AccountService : IAccountService
     {
         var messages = await _accountRepository.GetContactsAsync(accountId, cancellationToken);
         return _mapper.Map<List<AccountDto>>(messages);
-    }
-
-    public async Task<AccountDto> GetProfileAsync(int accountId, CancellationToken cancellationToken)
-    {
-        var accounts = await _accountRepository.GetByIdAsync(accountId, cancellationToken);
-        return _mapper.Map<AccountDto>(accounts);
     }
 }

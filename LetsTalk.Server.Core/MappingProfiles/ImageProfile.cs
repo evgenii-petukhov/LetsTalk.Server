@@ -8,6 +8,6 @@ public class ImageProfile : Profile
 {
 	public ImageProfile()
 	{
-        CreateMap<ImagePreviewAgnosticModel, ImagePreviewDto>();
+        CreateMap<ImagePreviewServiceModel, ImagePreviewDto>();
     }
 }

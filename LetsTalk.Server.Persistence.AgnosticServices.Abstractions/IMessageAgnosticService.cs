@@ -4,7 +4,7 @@ namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 public interface IMessageAgnosticService
 {
-    Task<MessageAgnosticModel> CreateMessageAsync(
+    Task<MessageServiceModel> CreateMessageAsync(
         int senderId,
         int recipientId,
         string? text,
@@ -12,16 +12,16 @@ public interface IMessageAgnosticService
         int? imageId,
         CancellationToken cancellationToken);
 
-    Task<List<MessageAgnosticModel>> GetPagedAsync(
+    Task<List<MessageServiceModel>> GetPagedAsync(
         int senderId,
         int recipientId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default);
 
-    Task<MessageAgnosticModel> SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
+    Task<MessageServiceModel> SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
 
-    Task<MessageAgnosticModel> SetLinkPreviewAsync(
+    Task<MessageServiceModel> SetLinkPreviewAsync(
         int messageId,
         string url,
         string title,

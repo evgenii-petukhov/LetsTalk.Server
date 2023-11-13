@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
-public class LinkPreviewAgnosticModel
+public class LinkPreviewServiceModel
 {
     public int MessageId { get; set; }
 

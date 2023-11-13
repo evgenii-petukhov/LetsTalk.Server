@@ -28,7 +28,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
         _logger = logger;
     }
 
-    public async Task<MessageAgnosticModel?> ProcessMessageAsync(int messageId, string url)
+    public async Task<MessageServiceModel?> ProcessMessageAsync(int messageId, string url)
     {
         var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
         if (linkPreviewId == 0)

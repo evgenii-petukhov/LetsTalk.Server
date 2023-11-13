@@ -7,6 +7,6 @@ public class ImageProfile : Profile
 {
     public ImageProfile()
     {
-        CreateMap<Domain.Image, ImagePreviewAgnosticModel>();
+        CreateMap<Domain.Image, ImagePreviewServiceModel>();
     }
 }

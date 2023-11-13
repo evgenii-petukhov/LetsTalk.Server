@@ -14,7 +14,7 @@ public class MessageProfile : Profile
 		CreateMap<CreateMessageRequest, CreateMessageCommand>();
 		CreateMap<Message, MessageDto>()
             .ForMember(x => x.Created, x => x.MapFrom(source => source.DateCreatedUnix));
-        CreateMap<MessageAgnosticModel, MessageDto>()
+        CreateMap<MessageServiceModel, MessageDto>()
             .ForMember(x => x.Created, x => x.MapFrom(source => source.DateCreatedUnix));
     }
 }

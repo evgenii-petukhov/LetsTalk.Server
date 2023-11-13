@@ -7,6 +7,6 @@ public class MessageProfile: Profile
 {
     public MessageProfile()
     {
-        CreateMap<Domain.Message, MessageAgnosticModel>();
+        CreateMap<Domain.Message, MessageServiceModel>();
     }
 }

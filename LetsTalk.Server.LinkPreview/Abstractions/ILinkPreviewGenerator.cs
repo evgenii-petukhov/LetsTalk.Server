@@ -4,5 +4,5 @@ namespace LetsTalk.Server.LinkPreview.Abstractions;
 
 public interface ILinkPreviewGenerator
 {
-    Task<MessageAgnosticModel?> ProcessMessageAsync(int messageId, string url);
+    Task<MessageServiceModel?> ProcessMessageAsync(int messageId, string url);
 }

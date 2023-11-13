@@ -8,6 +8,6 @@ public class LinkPreviewProfile : Profile
 {
 	public LinkPreviewProfile()
 	{
-        CreateMap<LinkPreviewAgnosticModel, LinkPreviewDto>();
+        CreateMap<LinkPreviewServiceModel, LinkPreviewDto>();
     }
 }

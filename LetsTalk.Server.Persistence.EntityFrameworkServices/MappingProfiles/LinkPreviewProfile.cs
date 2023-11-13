@@ -7,6 +7,6 @@ public class LinkPreviewProfile : Profile
 {
     public LinkPreviewProfile()
     {
-        CreateMap<Domain.LinkPreview, LinkPreviewAgnosticModel>();
+        CreateMap<Domain.LinkPreview, LinkPreviewServiceModel>();
     }
 }

@@ -29,7 +29,6 @@ public static class CoreServicesRegistration
         services.AddScoped<IRegexService, RegexService>();
         services.AddScoped<IHtmlGenerator, HtmlGenerator>();
         services.AddScoped<IMessageService, MessageService>();
-        services.AddScoped<IAccountDataLayerService, AccountDataLayerService>();
         services.AddScoped<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
 
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);

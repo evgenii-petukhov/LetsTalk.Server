@@ -6,6 +6,7 @@ using LetsTalk.Server.Core.Constants;
 using LetsTalk.Server.Core.Models.Authentication;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Newtonsoft.Json;
 using RestSharp;
@@ -18,14 +19,14 @@ public class FacebookOpenAuthProvider : IOpenAuthProvider
     private const string FACEBOOK_URL = "https://graph.facebook.com/";
 
     private readonly IAuthenticationClient _authenticationClient;
-    private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IAccountAgnosticService _accountAgnosticService;
 
     public FacebookOpenAuthProvider(
         IAuthenticationClient authenticationClient,
-        IAccountDataLayerService accountDataLayerService)
+        IAccountAgnosticService accountAgnosticService)
     {
         _authenticationClient = authenticationClient;
-        _accountDataLayerService = accountDataLayerService;
+        _accountAgnosticService = accountAgnosticService;
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
@@ -45,7 +46,7 @@ public class FacebookOpenAuthProvider : IOpenAuthProvider
             // get data from response and account from db
             var data = JsonConvert.DeserializeObject<FacebookResponse>(response.Content!)!;
 
-            var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
+            var accountId = await _accountAgnosticService.CreateOrUpdateAsync(
                 data.Id!,
                 AccountTypes.Facebook,
                 data.FirstName!,

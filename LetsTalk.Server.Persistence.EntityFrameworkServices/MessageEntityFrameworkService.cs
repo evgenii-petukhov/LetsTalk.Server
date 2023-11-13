@@ -83,4 +83,39 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
 
         return _mapper.Map<MessageServiceModel>(message);
     }
+
+    public async Task MarkAsRead(
+        int messageId,
+        int recipientId,
+        bool updatePreviousMessages,
+        CancellationToken cancellationToken)
+    {
+        if (updatePreviousMessages)
+        {
+            await MarkAllAsRead(recipientId, messageId, cancellationToken);
+        }
+        else
+        {
+            MarkAsRead(messageId);
+        }
+        await _unitOfWork.SaveAsync(cancellationToken);
+    }
+
+    private void MarkAsRead(int messageId)
+    {
+        var message = _entityFactory.CreateMessage(messageId);
+        message.MarkAsRead();
+    }
+
+    private async Task MarkAllAsRead(int recipientId, int messageId, CancellationToken cancellationToken)
+    {
+        var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
+
+        if (message.SenderId == recipientId || message.IsRead)
+        {
+            return;
+        }
+
+        await _messageRepository.MarkAllAsRead(message.SenderId, recipientId, messageId);
+    }
 }

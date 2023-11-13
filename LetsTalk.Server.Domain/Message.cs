@@ -65,11 +65,6 @@ public class Message : BaseEntity
     public void SetLinkPreview(LinkPreview linkPreview)
     {
         LinkPreview = linkPreview;
-        AddDomainEvent(new MessageDomainEvent<LinkPreview>
-        {
-            Message = this,
-            Payload = linkPreview
-        });
     }
 
     public void SetDateCreatedUnix(long? dateCreatedUnix)

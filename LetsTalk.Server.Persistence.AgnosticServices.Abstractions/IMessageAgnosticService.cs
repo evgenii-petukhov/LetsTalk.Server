@@ -19,9 +19,9 @@ public interface IMessageAgnosticService
         int messagesPerPage,
         CancellationToken cancellationToken = default);
 
-    Task SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
+    Task<MessageAgnosticModel> SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
 
-    Task SetLinkPreviewAsync(
+    Task<MessageAgnosticModel> SetLinkPreviewAsync(
         int messageId,
         string url,
         string title,

@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Logging;
 using System.Web;
 
@@ -27,7 +28,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
         _logger = logger;
     }
 
-    public async Task SetLinkPreviewAsync(int messageId, string url)
+    public async Task<MessageAgnosticModel?> ProcessMessageAsync(int messageId, string url)
     {
         var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
         if (linkPreviewId == 0)
@@ -41,15 +42,15 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
                 if (string.IsNullOrWhiteSpace(title))
                 {
                     _logger.LogInformation("Title is empty: {url}", url);
-                    return;
+                    return null;
                 }
 
                 title = HttpUtility.HtmlDecode(title);
                 try
                 {
-                    await _messageAgnosticService.SetLinkPreviewAsync(messageId, url, title, imageUrl!);
+                    var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, url, title, imageUrl!);
                     _logger.LogInformation("New LinkPreview added: {url}", url);
-                    return;
+                    return message;
                 }
                 catch
                 {
@@ -60,7 +61,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             catch (Exception e)
             {
                 _logger.LogError(e, "Unable to download: {url}", url);
-                return;
+                return null;
             }
         }
         else
@@ -68,6 +69,6 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             _logger.LogInformation("Fetched from DB: {url}", url);
         }
 
-        await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId);
+        return await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId);
     }
 }

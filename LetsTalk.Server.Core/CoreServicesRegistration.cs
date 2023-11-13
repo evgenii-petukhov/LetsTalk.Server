@@ -5,7 +5,6 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Attributes;
 using LetsTalk.Server.Core.Services;
-using LetsTalk.Server.Persistence.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -32,7 +31,6 @@ public static class CoreServicesRegistration
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IAccountDataLayerService, AccountDataLayerService>();
         services.AddScoped<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
-        services.AddPersistenceRepositoryServices(configuration, Assembly.GetExecutingAssembly());
 
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
 
@@ -96,7 +94,7 @@ public static class CoreServicesRegistration
             services.DecorateScoped<IContactsService, ContactsMemoryCacheService>();
         }
 
-        services.AddEntityFrameworkServices();
+        services.AddEntityFrameworkServices(configuration, Assembly.GetExecutingAssembly());
 
         return services;
     }

@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository.Abstractions\LetsTalk.Server.Persistence.Repository.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository\LetsTalk.Server.Persistence.Repository.csproj" />
   </ItemGroup>
 
 </Project>

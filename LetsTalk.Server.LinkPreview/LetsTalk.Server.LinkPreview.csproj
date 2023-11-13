@@ -32,8 +32,6 @@
     <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.EntityFrameworkServices\LetsTalk.Server.Persistence.EntityFrameworkServices.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository.Abstractions\LetsTalk.Server.Persistence.Repository.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.Repository\LetsTalk.Server.Persistence.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
+﻿using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.Repository.DomainServices;
 
@@ -14,12 +13,6 @@ public class MessageDomainService : IMessageDomainService
     {
         _messageRepository = messageRepository;
         _entityFactory = entityFactory;
-    }
-
-    public async Task SetImagePreviewAsync(Image image, int messageId)
-    {
-        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId);
-        message.SetImagePreview(image);
     }
 
     public void MarkAsRead(int messageId)

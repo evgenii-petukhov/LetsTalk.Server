@@ -20,7 +20,6 @@ public static class PersistenceRepositoryServiceRegistration
         services.AddScoped<IImageRepository, ImageRepository>();
         services.AddScoped<IFileRepository, FileRepository>();
         services.AddScoped<ILinkPreviewRepository, LinkPreviewRepository>();
-        services.AddScoped<IImageDomainService, ImageDomainService>();
         services.AddScoped<IMessageDomainService, MessageDomainService>();
         services.AddScoped<IAccountDomainService, AccountDomainService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();

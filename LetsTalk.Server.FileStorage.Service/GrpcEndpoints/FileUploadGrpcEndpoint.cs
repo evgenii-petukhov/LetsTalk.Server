@@ -6,7 +6,7 @@ using LetsTalk.Server.Persistence.Enums;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
@@ -15,23 +15,20 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IImageValidationService _imageValidationService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
-    private readonly IImageDomainService _imageDomainService;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IImageAgnosticService _imageAgnosticService;
     private readonly IImageService _imageService;
 
     public FileUploadGrpcEndpoint(
         IImageValidationService imageValidationService,
         IMapper mapper,
         IFileService fileService,
-        IImageDomainService imageDomainService,
-        IUnitOfWork unitOfWork,
+        IImageAgnosticService imageAgnosticService,
         IImageService imageService)
     {
         _imageValidationService = imageValidationService;
         _mapper = mapper;
         _fileService = fileService;
-        _imageDomainService = imageDomainService;
-        _unitOfWork = unitOfWork;
+        _imageAgnosticService = imageAgnosticService;
         _imageService = imageService;
     }
 
@@ -43,9 +40,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
         var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, context.CancellationToken);
 
-        var image = await _imageDomainService.CreateImageAsync(filename, imageFormat, imageRole, width, height, context.CancellationToken);
-
-        await _unitOfWork.SaveAsync();
+        var image = await _imageAgnosticService.CreateImageAsync(filename, imageFormat, imageRole, width, height, context.CancellationToken);
 
         return new UploadImageResponse
         {

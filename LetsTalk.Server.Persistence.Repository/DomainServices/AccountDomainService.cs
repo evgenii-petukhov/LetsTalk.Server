@@ -30,17 +30,4 @@ public class AccountDomainService : IAccountDomainService
         await _accountRepository.CreateAsync(account, cancellationToken);
         return account;
     }
-
-    public async Task<Account> UpdateProfileAsync(
-        int accountId,
-        string firstName,
-        string lastName,
-        string email,
-        int? imageId,
-        CancellationToken cancellationToken = default)
-    {
-        var account = await _accountRepository.GetByIdAsTrackingAsync(accountId, cancellationToken);
-        account.UpdateProfile(firstName, lastName, email, imageId);
-        return account;
-    }
 }

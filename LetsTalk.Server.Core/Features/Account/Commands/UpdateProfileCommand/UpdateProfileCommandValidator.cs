@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 
 public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IAccountAgnosticService _accountAgnosticService;
 
-    public UpdateProfileCommandValidator(IAccountRepository accountRepository)
+    public UpdateProfileCommandValidator(IAccountAgnosticService accountAgnosticService)
     {
         RuleFor(model => model.AccountId)
             .NotNull()
@@ -36,12 +36,12 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
             .EmailAddress()
         .WithMessage("{PropertyName} is invalid");
 
-        _accountRepository = accountRepository;
+        _accountAgnosticService = accountAgnosticService;
     }
 
     private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            && await _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken);
+            && await _accountAgnosticService.IsAccountIdValidAsync(id.Value, cancellationToken);
     }
 }

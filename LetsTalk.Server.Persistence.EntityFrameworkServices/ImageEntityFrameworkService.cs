@@ -51,10 +51,7 @@ public class ImageEntityFrameworkService : IImageAgnosticService
         int height,
         CancellationToken cancellationToken = default)
     {
-        var file = _entityFactory.CreateFile(filename, FileTypes.Image);
-        var image = _entityFactory.CreateImage(imageFormat, imageRole, width, height);
-        file.SetImage(image);
-        await _fileRepository.CreateAsync(file, cancellationToken);
+        var image = await CreateImageInternalAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 
         return _mapper.Map<ImageServiceModel>(image);
@@ -69,15 +66,28 @@ public class ImageEntityFrameworkService : IImageAgnosticService
         int height,
         CancellationToken cancellationToken = default)
     {
+        var image = await CreateImageInternalAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
+        message.SetImagePreview(image);
+
+        await _unitOfWork.SaveAsync(cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);
+    }
+
+    private async Task<Domain.Image> CreateImageInternalAsync(
+        string filename,
+        ImageFormats imageFormat,
+        ImageRoles imageRole,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
+    {
         var file = _entityFactory.CreateFile(filename, FileTypes.Image);
         var image = _entityFactory.CreateImage(imageFormat, imageRole, width, height);
         file.SetImage(image);
         await _fileRepository.CreateAsync(file, cancellationToken);
 
-        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
-        message.SetImagePreview(image);
-        await _unitOfWork.SaveAsync(cancellationToken);
-
-        return _mapper.Map<MessageServiceModel>(message);
+        return image;
     }
 }

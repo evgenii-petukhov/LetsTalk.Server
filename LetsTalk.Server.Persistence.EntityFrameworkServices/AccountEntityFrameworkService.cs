@@ -32,6 +32,13 @@ public class AccountEntityFrameworkService: IAccountAgnosticService
         return _accountRepository.IsAccountIdValidAsync(id, cancellationToken);
     }
 
+    public async Task<AccountServiceModel> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
+
+        return _mapper.Map<AccountServiceModel>(account);
+    }
+
     public async Task<AccountServiceModel> UpdateProfileAsync(
         int accountId,
         string firstName,

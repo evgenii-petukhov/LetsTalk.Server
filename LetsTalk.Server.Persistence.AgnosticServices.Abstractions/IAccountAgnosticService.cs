@@ -7,6 +7,8 @@ public interface IAccountAgnosticService
 {
     Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default);
 
+    Task<AccountServiceModel> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+
     Task<int> CreateOrUpdateAsync(
         string externalId,
         AccountTypes accountType,

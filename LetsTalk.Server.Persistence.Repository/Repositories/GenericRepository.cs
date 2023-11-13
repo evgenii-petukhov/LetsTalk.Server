@@ -33,7 +33,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken)!;
     }
 
-    public virtual Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Set<T>()
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken)!;

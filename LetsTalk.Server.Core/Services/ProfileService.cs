@@ -1,26 +1,27 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.Core.Services;
 
 public class ProfileService : IProfileService
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IAccountAgnosticService _accountAgnosticService;
     private readonly IMapper _mapper;
 
     public ProfileService(
-        IAccountRepository accountRepository,
+        IAccountAgnosticService accountAgnosticService,
         IMapper mapper)
     {
-        _accountRepository = accountRepository;
+        _accountAgnosticService = accountAgnosticService;
         _mapper = mapper;
     }
 
     public async Task<AccountDto> GetProfileAsync(int accountId, CancellationToken cancellationToken)
     {
-        var accounts = await _accountRepository.GetByIdAsync(accountId, cancellationToken);
+        var accounts = await _accountAgnosticService.GetByIdAsync(accountId, cancellationToken);
+
         return _mapper.Map<AccountDto>(accounts);
     }
 }

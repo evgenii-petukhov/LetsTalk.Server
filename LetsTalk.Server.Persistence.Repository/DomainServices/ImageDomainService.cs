@@ -8,36 +8,16 @@ public class ImageDomainService : IImageDomainService
 {
     private readonly IFileRepository _fileRepository;
     private readonly IEntityFactory _entityFactory;
-    private readonly IMessageDomainService _messageDomainService;
 
     public ImageDomainService(
         IFileRepository fileRepository,
-        IEntityFactory entityFactory,
-        IMessageDomainService messageDomainService)
+        IEntityFactory entityFactory)
     {
         _fileRepository = fileRepository;
         _entityFactory = entityFactory;
-        _messageDomainService = messageDomainService;
     }
 
-    public async Task CreateImagePreviewAsync(
-        string filename,
-        ImageFormats imageFormat,
-        int width,
-        int height,
-        int messageId)
-    {
-        var image = await CreateImageInternalAsync(filename, imageFormat, ImageRoles.Message, width, height);
-        await _messageDomainService.SetImagePreviewAsync(image, messageId);
-    }
-
-    public Task<Image> CreateImageAsync(string filename, ImageFormats imageFormat, ImageRoles imageRole,
-        int width, int height, CancellationToken cancellationToken)
-    {
-        return CreateImageInternalAsync(filename, imageFormat, ImageRoles.Avatar, width, height, cancellationToken);
-    }
-
-    private async Task<Image> CreateImageInternalAsync(
+    public async Task<Image> CreateImageAsync(
         string filename,
         ImageFormats imageFormat,
         ImageRoles imageRole,

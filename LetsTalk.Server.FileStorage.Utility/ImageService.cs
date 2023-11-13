@@ -1,44 +1,30 @@
 ﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
 public class ImageService : IImageService
 {
     private readonly IFileService _fileService;
-    private readonly IImageRepository _imageRepository;
+    private readonly IImageAgnosticService _imageAgnosticService;
 
     public ImageService(
         IFileService fileService,
-        IImageRepository imageRepository)
+        IImageAgnosticService imageAgnosticService)
     {
         _fileService = fileService;
-        _imageRepository = imageRepository;
+        _imageAgnosticService = imageAgnosticService;
     }
 
-    public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
     {
-        dynamic? image = useDimensions
-            ? await _imageRepository.GetByIdWithFileAsync(imageId, x => new
-            {
-                x.File!.FileName,
-                x.Width,
-                x.Height,
-                x.ImageRoleId
-            }, cancellationToken)
-            : await _imageRepository.GetByIdWithFileAsync(imageId, x => new
-            {
-                x.File!.FileName,
-                Width = 0,
-                Height = 0,
-                x.ImageRoleId
-            }, cancellationToken);
+        var image = await _imageAgnosticService.GetByIdWithFileAsync(imageId, cancellationToken);
 
         return new FetchImageResponse
         {
-            Content = await _fileService.ReadFileAsync(image!.FileName!, FileTypes.Image, cancellationToken),
+            Content = await _fileService.ReadFileAsync(image!.File!.FileName!, FileTypes.Image, cancellationToken),
             Width = image.Width ?? 0,
             Height = image.Height ?? 0,
             ImageRole = (ImageRoles)image.ImageRoleId

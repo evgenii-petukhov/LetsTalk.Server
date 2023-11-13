@@ -2,7 +2,6 @@
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace LetsTalk.Server.Persistence.Repository.Repositories;
 
@@ -12,13 +11,11 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
     {
     }
 
-    public Task<T?> GetByIdWithFileAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default)
+    public Task<Image?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Images
             .Include(x => x.File)
-            .Where(image => image.Id == id)
-            .Select(selector)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(image => image.Id == id, cancellationToken);
     }
 
     public override Task<Image> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)

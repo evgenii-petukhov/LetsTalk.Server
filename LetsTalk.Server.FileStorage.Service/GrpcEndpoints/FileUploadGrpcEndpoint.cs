@@ -55,7 +55,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var model = await _imageService.FetchImageAsync(request.ImageId, true, context.CancellationToken);
+        var model = await _imageService.FetchImageAsync(request.ImageId, context.CancellationToken);
 
         return _mapper.Map<DownloadImageResponse>(model);
     }

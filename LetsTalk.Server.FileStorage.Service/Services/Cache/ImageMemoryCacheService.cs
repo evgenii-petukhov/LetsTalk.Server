@@ -13,9 +13,9 @@ public class ImageMemoryCacheService : IImageService, IImageCacheManager
         _cacheService = cacheService;
     }
 
-    public Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
+    public Task<FetchImageResponse> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
     {
-        return _cacheService.FetchImageAsync(imageId, useDimensions, cancellationToken);
+        return _cacheService.FetchImageAsync(imageId, cancellationToken);
     }
 
     public Task RemoveAsync(int imageId)

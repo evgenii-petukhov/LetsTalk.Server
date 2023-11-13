@@ -16,6 +16,7 @@ public static class EntityFrameworkServiceRegistration
         services.AddScoped<IMessageAgnosticService, MessageEntityFrameworkService>();
         services.AddScoped<IAccountAgnosticService, AccountEntityFrameworkService>();
         services.AddScoped<IImageAgnosticService, ImageEntityFrameworkService>();
+        services.AddScoped<IFileAgnosticService, FileEntityFrameworkService>();
         services.AddScoped<ILinkPreviewAgnosticService, LinkPreviewEntityFrameworkService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddPersistenceRepositoryServices(configuration, assembly);

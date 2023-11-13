@@ -38,11 +38,11 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
         }
     }
 
-    public async Task<FetchImageResponse> FetchImageAsync(int imageId, bool useDimensions = false, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
     {
-        if (!useDimensions || !_isActive)
+        if (!_isActive)
         {
-            return await _imageService.FetchImageAsync(imageId, useDimensions, cancellationToken);
+            return await _imageService.FetchImageAsync(imageId, cancellationToken);
         }
 
         var key = new RedisKey(GetImageKey(imageId));
@@ -51,7 +51,7 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
 
         if (cached == RedisValue.Null)
         {
-            var image = await _imageService.FetchImageAsync(imageId, useDimensions, cancellationToken);
+            var image = await _imageService.FetchImageAsync(imageId, cancellationToken);
 
             if (image.Content!.Length < _imageSizeThresholdInBytes)
             {

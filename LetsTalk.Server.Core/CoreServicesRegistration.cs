@@ -14,6 +14,7 @@ using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.Persistence.EntityFrameworkServices;
 using LetsTalk.Server.Core.Services.Cache.Contacts;
 using LetsTalk.Server.Core.Services.Cache.Profile;
+using LetsTalk.Server.Persistence.MongoDBServices;
 
 namespace LetsTalk.Server.Core;
 
@@ -24,6 +25,7 @@ public static class CoreServicesRegistration
         IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddMediatR(options => options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddScoped<IOpenAuthProvider, FacebookOpenAuthProvider>();
         services.AddScoped<IOpenAuthProvider, VkOpenAuthProvider>();
         services.AddScoped<IRegexService, RegexService>();
@@ -95,7 +97,15 @@ public static class CoreServicesRegistration
                 break;
         }
 
-        services.AddEntityFrameworkServices(configuration, Assembly.GetExecutingAssembly());
+        switch (configuration.GetValue<string>("Database:databaseType"))
+        {
+            case "MongoDB":
+                services.AddMongoDBServices(configuration);
+                break;
+            default:
+                services.AddEntityFrameworkServices(configuration);
+                break;
+        }
 
         return services;
     }

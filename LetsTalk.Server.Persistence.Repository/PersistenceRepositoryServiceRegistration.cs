@@ -2,7 +2,6 @@
 using LetsTalk.Server.Persistence.Repository.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace LetsTalk.Server.Persistence.Repository;
 
@@ -10,8 +9,7 @@ public static class PersistenceRepositoryServiceRegistration
 {
     public static IServiceCollection AddPersistenceRepositoryServices(
         this IServiceCollection services,
-        IConfiguration configuration,
-        Assembly assembly)
+        IConfiguration configuration)
     {
         services.AddPersistenceServices(configuration);
         services.AddScoped<IAccountRepository, AccountRepository>();
@@ -21,7 +19,6 @@ public static class PersistenceRepositoryServiceRegistration
         services.AddScoped<ILinkPreviewRepository, LinkPreviewRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEntityFactory, EntityFactory>();
-        services.AddMediatR(options => options.RegisterServicesFromAssembly(assembly));
         return services;
     }
 }

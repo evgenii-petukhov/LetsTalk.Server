@@ -8,7 +8,6 @@ using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.Persistence.EntityFrameworkServices;
-using System.Reflection;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -55,7 +54,7 @@ public static class LinkPreviewServiceRegistration
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.AddEntityFrameworkServices(configuration, Assembly.GetExecutingAssembly());
+        services.AddEntityFrameworkServices(configuration);
 
         return services;
     }

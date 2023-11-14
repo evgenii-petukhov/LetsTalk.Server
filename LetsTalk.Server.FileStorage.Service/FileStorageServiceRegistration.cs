@@ -70,7 +70,7 @@ public static class FileStorageServiceRegistration
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 
-        services.AddFileStorageUtilityServices(configuration, Assembly.GetExecutingAssembly());
+        services.AddFileStorageUtilityServices(configuration);
 
         switch (configuration.GetValue<string>("Caching:cachingMode"))
         {

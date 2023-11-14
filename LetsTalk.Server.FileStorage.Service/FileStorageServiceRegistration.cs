@@ -71,17 +71,19 @@ public static class FileStorageServiceRegistration
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 
         services.AddFileStorageUtilityServices(configuration, Assembly.GetExecutingAssembly());
-        if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
+
+        switch (configuration.GetValue<string>("Caching:cachingMode"))
         {
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
-            services.AddScoped<IImageCacheManager, ImageRedisCacheService>();
-            services.DecorateScoped<IImageService, ImageRedisCacheService>();
-        }
-        else
-        {
-            services.AddMemoryCache();
-            services.AddScoped<IImageCacheManager, ImageMemoryCacheService>();
-            services.DecorateScoped<IImageService, ImageMemoryCacheService>();
+            case "redis":
+                services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+                services.AddScoped<IImageCacheManager, ImageRedisCacheService>();
+                services.DecorateScoped<IImageService, ImageRedisCacheService>();
+                break;
+            default:
+                services.AddMemoryCache();
+                services.AddScoped<IImageCacheManager, ImageMemoryCacheService>();
+                services.DecorateScoped<IImageService, ImageMemoryCacheService>();
+                break;
         }
 
         return services;

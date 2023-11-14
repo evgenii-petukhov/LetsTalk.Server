@@ -9,15 +9,15 @@ namespace LetsTalk.Server.UnitTests.Validators;
 public class CreateMessageCommandValidatorTests
 {
     private CreateMessageCommandValidator _validator;
-    private Mock<IAccountAgnosticService> _mockAccountRepository;
-    private Mock<IImageAgnosticService> _mockImageRepository;
+    private Mock<IAccountAgnosticService> _mockAccountAgnosticService;
+    private Mock<IImageAgnosticService> _mockImageAgnosticService;
 
     [SetUp]
     public void SetUp()
     {
-        _mockAccountRepository = new Mock<IAccountAgnosticService>();
-        _mockImageRepository = new Mock<IImageAgnosticService>();
-        _validator = new(_mockAccountRepository.Object, _mockImageRepository.Object);
+        _mockAccountAgnosticService = new Mock<IAccountAgnosticService>();
+        _mockImageAgnosticService = new Mock<IImageAgnosticService>();
+        _validator = new(_mockAccountAgnosticService.Object, _mockImageAgnosticService.Object);
     }
 
     [Test]
@@ -75,7 +75,7 @@ public class CreateMessageCommandValidatorTests
             RecipientId = 0
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(false));
 
@@ -104,7 +104,7 @@ public class CreateMessageCommandValidatorTests
             SenderId = 0
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
             .Returns(Task.FromResult(false));
 
@@ -133,7 +133,7 @@ public class CreateMessageCommandValidatorTests
             SenderId = 2
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(false));
 
@@ -161,7 +161,7 @@ public class CreateMessageCommandValidatorTests
             SenderId = 2
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -189,7 +189,7 @@ public class CreateMessageCommandValidatorTests
             Text = string.Empty
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -217,7 +217,7 @@ public class CreateMessageCommandValidatorTests
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -241,7 +241,7 @@ public class CreateMessageCommandValidatorTests
             ImageId = 1
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -266,7 +266,7 @@ public class CreateMessageCommandValidatorTests
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -288,7 +288,7 @@ public class CreateMessageCommandValidatorTests
             ImageId = 1
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
@@ -316,7 +316,7 @@ public class CreateMessageCommandValidatorTests
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountRepository
+        _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 

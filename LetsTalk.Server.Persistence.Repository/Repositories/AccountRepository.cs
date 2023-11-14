@@ -2,7 +2,6 @@
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.Repository.Abstractions;
-using LetsTalk.Server.Persistence.Repository.Abstractions.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.Repository.Repositories;
@@ -33,7 +32,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
     }
 
-    public Task<List<AccountListItem>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
+    public Task<List<Contact>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
     {
         var lastMessageDates = _context.Messages
             .Where(x => x.SenderId == id || x.RecipientId == id)
@@ -72,7 +71,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                     x.Account,
                     Metrics = y
                 })
-            .Select(x => new AccountListItem
+            .Select(x => new Contact
             {
                 Id = x.Account.Id,
                 FirstName = x.Account.FirstName,

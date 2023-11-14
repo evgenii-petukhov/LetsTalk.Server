@@ -25,4 +25,6 @@ public interface IAccountAgnosticService
         string email,
         int? imageId,
         CancellationToken cancellationToken = default);
+
+    Task<List<ContactServiceModel>> GetContactsAsync(int id, CancellationToken cancellationToken = default);
 }

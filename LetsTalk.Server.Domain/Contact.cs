@@ -1,6 +1,6 @@
-﻿namespace LetsTalk.Server.Persistence.Repository.Abstractions.Models;
+﻿namespace LetsTalk.Server.Domain;
 
-public class AccountListItem
+public class Contact
 {
     public int Id { get; set; }
 

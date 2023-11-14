@@ -16,7 +16,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
         return _context.Messages
             .Include(message => message.LinkPreview)
             .Include(message => message.ImagePreview)
-            .Where(message => message.SenderId == senderId && message.RecipientId == recipientId || message.SenderId == recipientId && message.RecipientId == senderId)
+            .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
             .OrderByDescending(mesage => mesage.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
             .Take(messagesPerPage)

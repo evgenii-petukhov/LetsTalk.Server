@@ -89,6 +89,13 @@ public class AccountEntityFrameworkService: IAccountAgnosticService
         }
     }
 
+    public async Task<List<ContactServiceModel>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var contacts = await _accountRepository.GetContactsAsync(id, cancellationToken);
+
+        return _mapper.Map<List<ContactServiceModel>>(contacts);
+    }
+
     private async Task<Account> CreateAccountAsync(
         string externalId,
         AccountTypes accountType,

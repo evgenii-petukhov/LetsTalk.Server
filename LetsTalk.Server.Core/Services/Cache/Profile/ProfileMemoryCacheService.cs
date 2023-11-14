@@ -18,7 +18,7 @@ public class ProfileMemoryCacheService : ProfileCacheServiceBase, IProfileServic
         _memoryCache = memoryCache;
     }
 
-    public Task<AccountDto> GetProfileAsync(int accountId, CancellationToken cancellationToken)
+    public Task<AccountDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
         return _isActive
             ? _memoryCache.GetOrCreateAsync(GetProfileKey(accountId), cacheEntry =>
@@ -29,7 +29,7 @@ public class ProfileMemoryCacheService : ProfileCacheServiceBase, IProfileServic
             : _profileService.GetProfileAsync(accountId, cancellationToken);
     }
 
-    public Task RemoveAsync(int accountId)
+    public Task RemoveAsync(string accountId)
     {
         if (_isActive)
         {

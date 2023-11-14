@@ -18,7 +18,7 @@ public class ContactsMemoryCacheService : ContactsCacheServiceBase, IContactsSer
         _memoryCache = memoryCache;
     }
 
-    public Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken)
+    public Task<List<AccountDto>> GetContactsAsync(string accountId, CancellationToken cancellationToken)
     {
         return _isActive
             ? _memoryCache.GetOrCreateAsync(GetContactsKey(accountId), cacheEntry =>

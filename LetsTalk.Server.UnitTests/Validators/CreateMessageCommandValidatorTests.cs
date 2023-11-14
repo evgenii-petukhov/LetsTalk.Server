@@ -48,7 +48,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            SenderId = 0
+            SenderId = "0"
         };
         var cancellationToken = new CancellationToken();
 
@@ -72,11 +72,11 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 0
+            RecipientId = "0"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(false));
 
         // Act
@@ -100,12 +100,12 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 0,
-            SenderId = 0
+            RecipientId = "0",
+            SenderId = "0"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(false));
 
         // Act
@@ -129,12 +129,12 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 1,
-            SenderId = 2
+            RecipientId = "1",
+            SenderId = "2"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(false));
 
         // Act
@@ -157,12 +157,12 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 1,
-            SenderId = 2
+            RecipientId = "1",
+            SenderId = "2"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -184,13 +184,13 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 1,
-            SenderId = 2,
+            RecipientId = "1",
+            SenderId = "2",
             Text = string.Empty
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -212,13 +212,13 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 1,
-            SenderId = 2,
+            RecipientId = "1",
+            SenderId = "2",
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -236,13 +236,16 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 1,
-            SenderId = 2,
+            RecipientId = "1",
+            SenderId = "2",
             ImageId = 1
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
+            .Returns(Task.FromResult(true));
+        _mockImageAgnosticService
+            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -260,14 +263,17 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = 1,
-            SenderId = 2,
+            RecipientId = "1",
+            SenderId = "2",
             ImageId = 1,
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
+            .Returns(Task.FromResult(true));
+        _mockImageAgnosticService
+            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -289,7 +295,10 @@ public class CreateMessageCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
+            .Returns(Task.FromResult(true));
+        _mockImageAgnosticService
+            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -317,7 +326,10 @@ public class CreateMessageCommandValidatorTests
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
+            .Returns(Task.FromResult(true));
+        _mockImageAgnosticService
+            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act

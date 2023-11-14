@@ -18,6 +18,6 @@ public class NotificationHandler<T> : IMessageHandler<Notification<T>[]>
 
     public Task Handle(IMessageContext context, Notification<T>[] notifications)
     {
-        return Task.WhenAll(notifications.Select(notification => _notificationService.SendNotificationAsync(notification.RecipientId, notification.Message!, typeof(T).Name)));
+        return Task.WhenAll(notifications.Select(notification => _notificationService.SendNotificationAsync(notification.RecipientId!, notification.Message!, typeof(T).Name)));
     }
 }

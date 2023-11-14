@@ -85,6 +85,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Services", "LetsTalk.Server.Persistence.MongoDB.Services\LetsTalk.Server.Persistence.MongoDB.Services.csproj", "{B12EB2B7-62E7-4BFD-94E9-10B5252D0305}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Repository", "LetsTalk.Server.Persistence.MongoDB.Repository\LetsTalk.Server.Persistence.MongoDB.Repository.csproj", "{C29D4D60-83F8-4368-AF38-509D2AD5D9AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Models", "LetsTalk.Server.Persistence.MongoDB.Models\LetsTalk.Server.Persistence.MongoDB.Models.csproj", "{1E5CF9B7-0D33-4514-9B23-04772B6EC9BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions", "LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions\LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions.csproj", "{C6A46CAA-6494-4CFF-834B-19831F8DCD3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +229,18 @@ Global
 		{B12EB2B7-62E7-4BFD-94E9-10B5252D0305}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B12EB2B7-62E7-4BFD-94E9-10B5252D0305}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B12EB2B7-62E7-4BFD-94E9-10B5252D0305}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C29D4D60-83F8-4368-AF38-509D2AD5D9AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29D4D60-83F8-4368-AF38-509D2AD5D9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29D4D60-83F8-4368-AF38-509D2AD5D9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29D4D60-83F8-4368-AF38-509D2AD5D9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5CF9B7-0D33-4514-9B23-04772B6EC9BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5CF9B7-0D33-4514-9B23-04772B6EC9BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5CF9B7-0D33-4514-9B23-04772B6EC9BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5CF9B7-0D33-4514-9B23-04772B6EC9BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A46CAA-6494-4CFF-834B-19831F8DCD3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A46CAA-6494-4CFF-834B-19831F8DCD3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A46CAA-6494-4CFF-834B-19831F8DCD3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A46CAA-6494-4CFF-834B-19831F8DCD3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -267,6 +285,9 @@ Global
 		{3B5E0771-5D08-40F5-914C-B8693E1E26B6} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{551B85DF-E337-493D-88DB-3447A7BFA947} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{B12EB2B7-62E7-4BFD-94E9-10B5252D0305} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
+		{C29D4D60-83F8-4368-AF38-509D2AD5D9AE} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
+		{1E5CF9B7-0D33-4514-9B23-04772B6EC9BA} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
+		{C6A46CAA-6494-4CFF-834B-19831F8DCD3B} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

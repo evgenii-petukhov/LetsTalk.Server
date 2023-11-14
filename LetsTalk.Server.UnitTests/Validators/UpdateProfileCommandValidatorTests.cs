@@ -48,11 +48,11 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0
+            AccountId = "0"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(false));
 
         // Act
@@ -78,11 +78,11 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0
+            AccountId = "0"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -107,13 +107,13 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0,
+            AccountId = "0",
             FirstName = string.Empty,
             LastName = string.Empty
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -136,13 +136,13 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0,
+            AccountId = "0",
             FirstName = "test",
             LastName = "test"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -160,14 +160,14 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0,
+            AccountId = "0",
             FirstName = "test",
             LastName = "test",
             Email = string.Empty
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -192,14 +192,14 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0,
+            AccountId = "0",
             FirstName = "test",
             LastName = "test",
             Email = email
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -221,14 +221,14 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0,
+            AccountId = "0",
             FirstName = "test",
             LastName = "test",
             Email = "test@localhost.com"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -246,14 +246,14 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
-            AccountId = 0,
+            AccountId = "0",
             FirstName = "test",
             LastName = "test",
             Email = "test@localhost.com"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync(0, cancellationToken))
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act

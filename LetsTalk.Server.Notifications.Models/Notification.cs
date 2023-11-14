@@ -2,7 +2,7 @@
 
 public class Notification<T> where T : class
 {
-    public int RecipientId { get; set; }
+    public string? RecipientId { get; set; }
 
     public T? Message { get; set; }
 }

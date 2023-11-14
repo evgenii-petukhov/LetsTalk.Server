@@ -5,16 +5,16 @@ namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 public interface IMessageAgnosticService
 {
     Task<MessageServiceModel> CreateMessageAsync(
-        int senderId,
-        int recipientId,
+        string senderId,
+        string recipientId,
         string? text,
         string? textHtml,
         int? imageId,
         CancellationToken cancellationToken);
 
     Task<List<MessageServiceModel>> GetPagedAsync(
-        int senderId,
-        int recipientId,
+        string senderId,
+        string recipientId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default);
@@ -30,7 +30,7 @@ public interface IMessageAgnosticService
 
     Task MarkAsRead(
         int messageId,
-        int recipientId,
+        string recipientId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken);
 }

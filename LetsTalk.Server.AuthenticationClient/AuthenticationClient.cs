@@ -13,7 +13,7 @@ public class AuthenticationClient: IAuthenticationClient
         _client = client;
     }
 
-    public async Task<string> GenerateJwtTokenAsync(int accountId)
+    public async Task<string> GenerateJwtTokenAsync(string accountId)
     {
         var response = await _client.GenerateJwtTokenAsync(new GenerateJwtTokenRequest
         {
@@ -23,7 +23,7 @@ public class AuthenticationClient: IAuthenticationClient
         return response.Token;
     }
 
-    public async Task<int?> ValidateJwtTokenAsync(string token)
+    public async Task<string?> ValidateJwtTokenAsync(string token)
     {
         var response = await _client.ValidateJwtTokenAsync(new ValidateJwtTokenRequest
         {

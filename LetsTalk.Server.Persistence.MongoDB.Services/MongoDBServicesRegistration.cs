@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using System.Reflection;
+using LetsTalk.Server.Persistence.MongoDB.Repository;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
@@ -20,6 +21,8 @@ public static class MongoDBServicesRegistration
         services.AddScoped<IFileAgnosticService, FileMongoDBService>();
         services.AddScoped<ILinkPreviewAgnosticService, LinkPreviewMongoDBService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddMongoDBRepository();
 
         return services;
     }

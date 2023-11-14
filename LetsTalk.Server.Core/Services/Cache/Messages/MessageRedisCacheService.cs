@@ -20,8 +20,8 @@ public class MessageRedisCacheService : MessageCacheServiceBase, IMessageService
     }
 
     public async Task<List<MessageDto>> GetPagedAsync(
-        int senderId,
-        int recipientId,
+        string senderId,
+        string recipientId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ public class MessageRedisCacheService : MessageCacheServiceBase, IMessageService
         return JsonSerializer.Deserialize<List<MessageDto>>(cachedMessages!)!;
     }
 
-    public Task RemoveAsync(int senderId, int recipientId)
+    public Task RemoveAsync(string senderId, string recipientId)
     {
         return _isActive
             ? Task.WhenAll(

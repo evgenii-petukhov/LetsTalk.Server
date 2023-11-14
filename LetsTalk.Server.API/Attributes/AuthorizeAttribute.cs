@@ -17,7 +17,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         }
 
         // authorization
-        var accountId = (int?)context.HttpContext.Items["AccountId"];
+        var accountId = (string?)context.HttpContext.Items["AccountId"];
         if (accountId == null)
         {
             // not logged in or role not authorized

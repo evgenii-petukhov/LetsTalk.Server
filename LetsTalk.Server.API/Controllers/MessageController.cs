@@ -30,7 +30,7 @@ public class MessageController : ApiController
     }
 
     [HttpGet("{accountId}")]
-    public async Task<ActionResult<List<MessageDto>>> GetAsync(int accountId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(string accountId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
     {
         var senderId = GetAccountId();
         var query = new GetMessagesQuery(senderId, accountId, pageIndex, _messagingSettings.MessagesPerPage);

@@ -45,12 +45,12 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var account = await _accountAgnosticService.GetByIdAsync(request.AccountId!.Value, cancellationToken);
+        var account = await _accountAgnosticService.GetByIdAsync(request.AccountId!, cancellationToken);
 
         var previousImageId = account.ImageId;
 
         account = await _accountAgnosticService.UpdateProfileAsync(
-            request.AccountId!.Value,
+            request.AccountId!,
             request.FirstName!,
             request.LastName!,
             request.Email!,
@@ -68,7 +68,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
                 });
         }
 
-        await _profileCacheManager.RemoveAsync(request.AccountId!.Value);
+        await _profileCacheManager.RemoveAsync(request.AccountId!);
 
         return _mapper.Map<AccountDto>(account);
     }

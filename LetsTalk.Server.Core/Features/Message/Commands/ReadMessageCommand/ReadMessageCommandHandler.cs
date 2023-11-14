@@ -16,7 +16,7 @@ public class ReadMessageCommandHandler : IRequestHandler<ReadMessageCommand, Uni
     {
         await _messageAgnosticService.MarkAsRead(
             request.MessageId,
-            request.RecipientId,
+            request.RecipientId!,
             request.UpdatePreviousMessages,
             cancellationToken);
 

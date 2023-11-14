@@ -24,7 +24,7 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             .NotNull()
             .WithMessage("{PropertyName} is required");
 
-        When(model => model.RecipientId.HasValue, () =>
+        When(model => !string.IsNullOrEmpty(model.RecipientId), () =>
         {
             RuleFor(model => model.RecipientId)
                 .NotEqual(model => model.SenderId)
@@ -46,10 +46,10 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
         _imageAgnosticService = imageAgnosticService;
     }
 
-    private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
+    private async Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken)
     {
-        return id.HasValue
-            && await _accountAgnosticService.IsAccountIdValidAsync(id.Value, cancellationToken);
+        return !string.IsNullOrEmpty(id)
+            && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
     }
 
     private async Task<bool> IsImageIdValidAsync(int? id, CancellationToken cancellationToken)

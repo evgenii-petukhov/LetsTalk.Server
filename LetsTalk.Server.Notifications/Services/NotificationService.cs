@@ -17,7 +17,7 @@ public class NotificationService : INotificationService
         _messageHub = messageHub;
     }
 
-    public Task SendNotificationAsync<T>(int accountId, T notification, string typeName)
+    public Task SendNotificationAsync<T>(string accountId, T notification, string typeName)
     {
         var notifications = _connectionManager.GetConnectionIds(accountId)?
             .Select(connectionId => _messageHub.Clients.Client(connectionId).SendNotificationAsync(notification, typeName));

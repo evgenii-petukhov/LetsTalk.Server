@@ -2,5 +2,5 @@
 
 public interface INotificationService
 {
-    Task SendNotificationAsync<T>(int accountId, T notification, string typeName);
+    Task SendNotificationAsync<T>(string accountId, T notification, string typeName);
 }

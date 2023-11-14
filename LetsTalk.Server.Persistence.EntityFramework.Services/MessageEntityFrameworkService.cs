@@ -28,14 +28,14 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
     }
 
     public async Task<MessageServiceModel> CreateMessageAsync(
-        int senderId,
-        int recipientId,
+        string senderId,
+        string recipientId,
         string? text,
         string? textHtml,
         int? imageId,
         CancellationToken cancellationToken)
     {
-        var message = new Domain.Message(senderId, recipientId, text, textHtml, imageId);
+        var message = new Domain.Message(int.Parse(senderId), int.Parse(recipientId), text, textHtml, imageId);
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 
@@ -43,15 +43,15 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
-        int senderId,
-        int recipientId,
+        string senderId,
+        string recipientId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default)
     {
         var messages = await _messageRepository.GetPagedAsync(
-            senderId,
-            recipientId,
+            int.Parse(senderId),
+            int.Parse(recipientId),
             pageIndex,
             messagesPerPage,
             cancellationToken);
@@ -86,13 +86,13 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
 
     public async Task MarkAsRead(
         int messageId,
-        int recipientId,
+        string recipientId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken)
     {
         if (updatePreviousMessages)
         {
-            await MarkAllAsRead(recipientId, messageId, cancellationToken);
+            await MarkAllAsRead(int.Parse(recipientId), messageId, cancellationToken);
         }
         else
         {

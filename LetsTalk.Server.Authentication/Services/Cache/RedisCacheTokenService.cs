@@ -17,7 +17,7 @@ public class RedisCacheTokenService : CacheTokenServiceBase, IJwtCacheService
         _database = сonnectionMultiplexer.GetDatabase();
     }
 
-    public async Task<int?> GetAccountIdAsync(string? token)
+    public async Task<string?> GetAccountIdAsync(string? token)
     {
         if (token == null)
         {
@@ -43,10 +43,10 @@ public class RedisCacheTokenService : CacheTokenServiceBase, IJwtCacheService
             return storedToken.AccountId;
         }
 
-        return JsonSerializer.Deserialize<int?>(cachedAccountId!)!;
+        return JsonSerializer.Deserialize<string?>(cachedAccountId!)!;
     }
 
-    public async Task<string> GenerateAsync(int accountId)
+    public async Task<string> GenerateAsync(string accountId)
     {
         var storedToken = await _jwtStorageService.GenerateAsync(accountId);
 

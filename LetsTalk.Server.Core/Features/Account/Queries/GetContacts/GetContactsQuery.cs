@@ -3,4 +3,4 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
 
-public record GetContactsQuery(int Id) : IRequest<List<AccountDto>>;
+public record GetContactsQuery(string Id) : IRequest<List<AccountDto>>;

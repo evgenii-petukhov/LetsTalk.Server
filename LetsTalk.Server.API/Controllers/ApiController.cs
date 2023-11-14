@@ -7,8 +7,8 @@ namespace LetsTalk.Server.API.Controllers;
 [Authorize]
 public class ApiController : ControllerBase
 {
-    protected int GetAccountId()
+    protected string GetAccountId()
     {
-        return (int)HttpContext.Items["AccountId"]!;
+        return (string)HttpContext.Items["AccountId"]!;
     }
 }

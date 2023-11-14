@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.MongoDB.Repository\LetsTalk.Server.Persistence.MongoDB.Repository.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,7 +19,7 @@ public class MessageMemoryCacheService : MessageCacheServiceBase, IMessageServic
         _memoryCache = memoryCache;
     }
 
-    public Task<List<MessageDto>> GetPagedAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public Task<List<MessageDto>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
@@ -47,7 +47,7 @@ public class MessageMemoryCacheService : MessageCacheServiceBase, IMessageServic
         })!;
     }
 
-    public Task RemoveAsync(int senderId, int recipientId)
+    public Task RemoveAsync(string senderId, string recipientId)
     {
         if (_isActive)
         {

@@ -6,8 +6,8 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services;
 public class MessageMongoDBService : IMessageAgnosticService
 {
     public async Task<MessageServiceModel> CreateMessageAsync(
-        int senderId,
-        int recipientId,
+        string senderId,
+        string recipientId,
         string? text,
         string? textHtml,
         int? imageId,
@@ -17,8 +17,8 @@ public class MessageMongoDBService : IMessageAgnosticService
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
-        int senderId,
-        int recipientId,
+        string senderId,
+        string recipientId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default)
@@ -43,7 +43,7 @@ public class MessageMongoDBService : IMessageAgnosticService
 
     public async Task MarkAsRead(
         int messageId,
-        int recipientId,
+        string recipientId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken)
     {

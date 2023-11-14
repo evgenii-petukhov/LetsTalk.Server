@@ -62,8 +62,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         var (html, url) = _htmlGenerator.GetHtml(request.Text!);
 
         var message = await _messageAgnosticService.CreateMessageAsync(
-            request.SenderId!.Value,
-            request.RecipientId!.Value,
+            request.SenderId!,
+            request.RecipientId!,
             request.Text,
             html,
             request.ImageId,
@@ -79,7 +79,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 {
                     new Notification<MessageDto>
                     {
-                        RecipientId = request.RecipientId!.Value,
+                        RecipientId = request.RecipientId!,
                         Message = messageDto! with
                         {
                             IsMine = false
@@ -87,7 +87,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     },
                     new Notification<MessageDto>
                     {
-                        RecipientId = request.SenderId!.Value,
+                        RecipientId = request.SenderId!,
                         Message = messageDto with
                         {
                             IsMine = true
@@ -111,7 +111,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     ImageId = request.ImageId.Value
                 }) : Task.CompletedTask);
 
-        await _messageCacheManager.RemoveAsync(request.SenderId.Value, request.RecipientId.Value);
+        await _messageCacheManager.RemoveAsync(request.SenderId!, request.RecipientId!);
 
         return new CreateMessageResponse
         {

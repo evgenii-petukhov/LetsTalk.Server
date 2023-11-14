@@ -2,7 +2,7 @@
 
 public interface IJwtCacheService
 {
-    Task<int?> GetAccountIdAsync(string? token);
+    Task<string?> GetAccountIdAsync(string? token);
 
-    Task<string> GenerateAsync(int accountId);
+    Task<string> GenerateAsync(string accountId);
 }

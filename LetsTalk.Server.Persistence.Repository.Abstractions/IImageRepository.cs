@@ -1,14 +1,10 @@
 ﻿using LetsTalk.Server.Domain;
-using System;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LetsTalk.Server.Persistence.Repository.Abstractions;
 
 public interface IImageRepository : IGenericRepository<Image>
 {
-    Task<T?> GetByIdWithFileAsync<T>(int id, Expression<Func<Image, T>> selector, CancellationToken cancellationToken = default);
+    Task<Image?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default);
 
     Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default);
 }

@@ -8,19 +8,19 @@ namespace LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
 public class GetContactsQueryHandler : IRequestHandler<GetContactsQuery, List<AccountDto>>
 {
     private readonly IMapper _mapper;
-    private readonly IAccountService _accountService;
+    private readonly IContactsService _contactsService;
 
     public GetContactsQueryHandler(
         IMapper mapper,
-        IAccountService accountService)
+        IContactsService contactsService)
     {
         _mapper = mapper;
-        _accountService = accountService;
+        _contactsService = contactsService;
     }
 
     public async Task<List<AccountDto>> Handle(GetContactsQuery request, CancellationToken cancellationToken)
     {
-        var accountCacheEntries = await _accountService.GetContactsAsync(request.Id, cancellationToken);
+        var accountCacheEntries = await _contactsService.GetContactsAsync(request.Id, cancellationToken);
 
         return _mapper.Map<List<AccountDto>>(accountCacheEntries);
     }

@@ -74,14 +74,14 @@ public static class FileStorageServiceRegistration
         if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
         {
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
-            services.AddScoped<IImageCacheManager, RedisCacheImageService>();
-            services.DecorateScoped<IImageService, RedisCacheImageService>();
+            services.AddScoped<IImageCacheManager, ImageRedisCacheService>();
+            services.DecorateScoped<IImageService, ImageRedisCacheService>();
         }
         else
         {
             services.AddMemoryCache();
-            services.AddScoped<IImageCacheManager, MemoryCacheImageService>();
-            services.DecorateScoped<IImageService, MemoryCacheImageService>();
+            services.AddScoped<IImageCacheManager, ImageMemoryCacheService>();
+            services.DecorateScoped<IImageService, ImageMemoryCacheService>();
         }
 
         return services;

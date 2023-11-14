@@ -43,6 +43,15 @@ public class Message : BaseEntity
     {
     }
 
+    public Message(int senderId, int recipientId, string? text, string? textHtml, int? imageId)
+    {
+        SenderId = senderId;
+        RecipientId = recipientId;
+        Text = text;
+        TextHtml = textHtml;
+        ImageId = imageId;
+    }
+
     public void SetImagePreview(Image image)
     {
         ImagePreview = image;
@@ -56,16 +65,6 @@ public class Message : BaseEntity
     public void SetLinkPreview(LinkPreview linkPreview)
     {
         LinkPreview = linkPreview;
-        AddDomainEvent(new MessageDomainEvent<LinkPreview>
-        {
-            Message = this,
-            Payload = linkPreview
-        });
-    }
-
-    public void SetTextHtml(string? html)
-    {
-        TextHtml = html;
     }
 
     public void SetDateCreatedUnix(long? dateCreatedUnix)

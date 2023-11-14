@@ -1,42 +1,37 @@
 ﻿using KafkaFlow;
 using KafkaFlow.TypedHandler;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
 public class RemoveImageRequestHandler : IMessageHandler<RemoveImageRequest>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IFileRepository _fileRepository;
-    private readonly IImageRepository _imageRepository;
     private readonly IIOService _iOService;
     private readonly IImageCacheManager _imageCacheManager;
+    private readonly IImageAgnosticService _imageAgnosticService;
+    private readonly IFileAgnosticService _fileAgnosticService;
 
     public RemoveImageRequestHandler(
-        IUnitOfWork unitOfWork,
-        IFileRepository fileRepository,
-        IImageRepository imageRepository,
         IIOService iOService,
-        IImageCacheManager imageCacheManager)
+        IImageCacheManager imageCacheManager,
+        IImageAgnosticService imageAgnosticService,
+        IFileAgnosticService fileAgnosticService)
     {
-        _unitOfWork = unitOfWork;
-        _fileRepository = fileRepository;
-        _imageRepository = imageRepository;
         _iOService = iOService;
         _imageCacheManager = imageCacheManager;
+        _imageAgnosticService = imageAgnosticService;
+        _fileAgnosticService = fileAgnosticService;
     }
 
     public async Task Handle(IMessageContext context, RemoveImageRequest message)
     {
-        var file = await _imageRepository.GetByIdWithFileAsync(message.ImageId, x => x.File);
-        _fileRepository.Delete(file!);
-        await _unitOfWork.SaveAsync();
+        var image = await _imageAgnosticService.GetByIdWithFileAsync(message.ImageId);
+        await _fileAgnosticService.DeleteByIdAsync(image!.File!.Id);
 
-        _iOService.DeleteFile(file!.FileName!, FileTypes.Image);
+        _iOService.DeleteFile(image.File!.FileName!, FileTypes.Image);
 
         await _imageCacheManager.RemoveAsync(message.ImageId);
     }

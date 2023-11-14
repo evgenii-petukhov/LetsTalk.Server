@@ -1,16 +1,16 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.Persistence.Repository.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
-    private readonly IAccountRepository _accountRepository;
-    private readonly IImageRepository _imageRepository;
+    private readonly IAccountAgnosticService _accountAgnosticService;
+    private readonly IImageAgnosticService _imageAgnosticService;
 
     public CreateMessageCommandValidator(
-        IAccountRepository accountRepository,
-        IImageRepository imageRepository)
+        IAccountAgnosticService accountAgnosticService,
+        IImageAgnosticService imageAgnosticService)
     {
         RuleFor(model => model)
             .Must(IsContentValid)
@@ -42,20 +42,20 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Image with {PropertyName} = {PropertyValue} does not exist");
         });
 
-        _accountRepository = accountRepository;
-        _imageRepository = imageRepository;
+        _accountAgnosticService = accountAgnosticService;
+        _imageAgnosticService = imageAgnosticService;
     }
 
     private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            && await _accountRepository.IsAccountIdValidAsync(id.Value, cancellationToken);
+            && await _accountAgnosticService.IsAccountIdValidAsync(id.Value, cancellationToken);
     }
 
     private async Task<bool> IsImageIdValidAsync(int? id, CancellationToken cancellationToken)
     {
         return id.HasValue
-            && await _imageRepository.IsImageIdValidAsync(id.Value, cancellationToken);
+            && await _imageAgnosticService.IsImageIdValidAsync(id.Value, cancellationToken);
     }
 
     private bool IsContentValid(CreateMessageCommand model)

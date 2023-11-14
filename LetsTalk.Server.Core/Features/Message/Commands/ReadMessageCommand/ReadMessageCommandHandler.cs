@@ -1,32 +1,25 @@
-﻿using LetsTalk.Server.Persistence.Repository.Abstractions;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 
 public class ReadMessageCommandHandler : IRequestHandler<ReadMessageCommand, Unit>
 {
-    private readonly IMessageDomainService _messageDomainService;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMessageAgnosticService _messageAgnosticService;
 
-    public ReadMessageCommandHandler(
-        IMessageDomainService messageDomainService,
-        IUnitOfWork unitOfWork)
+    public ReadMessageCommandHandler(IMessageAgnosticService messageAgnosticService)
     {
-        _messageDomainService = messageDomainService;
-        _unitOfWork = unitOfWork;
+        _messageAgnosticService = messageAgnosticService;
     }
 
     public async Task<Unit> Handle(ReadMessageCommand request, CancellationToken cancellationToken)
     {
-        if (request.UpdatePreviousMessages)
-        {
-            await _messageDomainService.MarkAllAsRead(request.RecipientId, request.MessageId, cancellationToken);
-        }
-        else
-        {
-            _messageDomainService.MarkAsRead(request.MessageId);
-        }
-        await _unitOfWork.SaveAsync(cancellationToken);
+        await _messageAgnosticService.MarkAsRead(
+            request.MessageId,
+            request.RecipientId,
+            request.UpdatePreviousMessages,
+            cancellationToken);
+
         return Unit.Value;
     }
 }

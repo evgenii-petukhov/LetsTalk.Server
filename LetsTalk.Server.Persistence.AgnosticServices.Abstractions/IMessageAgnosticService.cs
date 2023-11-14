@@ -1,0 +1,36 @@
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+
+namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+
+public interface IMessageAgnosticService
+{
+    Task<MessageServiceModel> CreateMessageAsync(
+        int senderId,
+        int recipientId,
+        string? text,
+        string? textHtml,
+        int? imageId,
+        CancellationToken cancellationToken);
+
+    Task<List<MessageServiceModel>> GetPagedAsync(
+        int senderId,
+        int recipientId,
+        int pageIndex,
+        int messagesPerPage,
+        CancellationToken cancellationToken = default);
+
+    Task<MessageServiceModel> SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default);
+
+    Task<MessageServiceModel> SetLinkPreviewAsync(
+        int messageId,
+        string url,
+        string title,
+        string imageUrl,
+        CancellationToken cancellationToken = default);
+
+    Task MarkAsRead(
+        int messageId,
+        int recipientId,
+        bool updatePreviousMessages,
+        CancellationToken cancellationToken);
+}

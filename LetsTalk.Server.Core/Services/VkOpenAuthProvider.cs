@@ -7,6 +7,7 @@ using LetsTalk.Server.Core.Models.Authentication;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Logging.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Newtonsoft.Json;
 using RestSharp;
@@ -20,16 +21,16 @@ public class VkOpenAuthProvider : IOpenAuthProvider
 
     private readonly IAppLogger<VkOpenAuthProvider> _appLogger;
     private readonly IAuthenticationClient _authenticationClient;
-    private readonly IAccountDataLayerService _accountDataLayerService;
+    private readonly IAccountAgnosticService _accountAgnosticService;
 
     public VkOpenAuthProvider(
         IAppLogger<VkOpenAuthProvider> appLogger,
         IAuthenticationClient authenticationClient,
-        IAccountDataLayerService accountDataLayerService)
+        IAccountAgnosticService accountAgnosticService)
     {
         _appLogger = appLogger;
         _authenticationClient = authenticationClient;
-        _accountDataLayerService = accountDataLayerService;
+        _accountAgnosticService = accountAgnosticService;
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
@@ -54,7 +55,7 @@ public class VkOpenAuthProvider : IOpenAuthProvider
                 throw new BadRequestException(data.Error.Message!);
             }
 
-            var accountId = await _accountDataLayerService.CreateOrUpdateAsync(
+            var accountId = await _accountAgnosticService.CreateOrUpdateAsync(
                 data.Response![0].Id!,
                 AccountTypes.VK,
                 data.Response[0].FirstName!,

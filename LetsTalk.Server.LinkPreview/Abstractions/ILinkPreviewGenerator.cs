@@ -1,6 +1,8 @@
-﻿namespace LetsTalk.Server.LinkPreview.Abstractions;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+
+namespace LetsTalk.Server.LinkPreview.Abstractions;
 
 public interface ILinkPreviewGenerator
 {
-    Task<Domain.LinkPreview?> GetLinkPreviewAsync(string url);
+    Task<MessageServiceModel?> ProcessMessageAsync(int messageId, string url);
 }

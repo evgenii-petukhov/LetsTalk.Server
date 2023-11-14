@@ -11,7 +11,7 @@ using System.Reflection;
 using StackExchange.Redis;
 using LetsTalk.Server.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.Persistence.EntityFrameworkServices;
+using LetsTalk.Server.Persistence.EntityFramework.Services;
 using LetsTalk.Server.Core.Services.Cache.Contacts;
 using LetsTalk.Server.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.MongoDBServices;

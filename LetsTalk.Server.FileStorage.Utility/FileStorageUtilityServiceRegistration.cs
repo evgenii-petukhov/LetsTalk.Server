@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LetsTalk.Server.Persistence.EntityFrameworkServices;
+using LetsTalk.Server.Persistence.EntityFramework.Services;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 

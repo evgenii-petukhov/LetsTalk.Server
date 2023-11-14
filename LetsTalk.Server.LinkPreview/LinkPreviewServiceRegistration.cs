@@ -7,7 +7,7 @@ using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LetsTalk.Server.Persistence.EntityFrameworkServices;
+using LetsTalk.Server.Persistence.EntityFramework.Services;
 
 namespace LetsTalk.Server.LinkPreview;
 

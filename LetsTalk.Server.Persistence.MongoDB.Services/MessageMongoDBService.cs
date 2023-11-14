@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
-namespace LetsTalk.Server.Persistence.MongoDBServices;
+namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public class MessageMongoDBService : IMessageAgnosticService
 {

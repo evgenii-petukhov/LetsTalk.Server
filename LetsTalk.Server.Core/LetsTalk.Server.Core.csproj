@@ -34,7 +34,7 @@
     <ProjectReference Include="..\LetsTalk.Server.Logging.Abstractions\LetsTalk.Server.Logging.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.EntityFramework.Services\LetsTalk.Server.Persistence.EntityFramework.Services.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.MongoDBServices\LetsTalk.Server.Persistence.MongoDBServices.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.MongoDB.Services\LetsTalk.Server.Persistence.MongoDB.Services.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
   </ItemGroup>
 

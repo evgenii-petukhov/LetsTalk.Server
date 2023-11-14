@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using System.Reflection;
 
-namespace LetsTalk.Server.Persistence.MongoDBServices;
+namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public static class MongoDBServicesRegistration
 {

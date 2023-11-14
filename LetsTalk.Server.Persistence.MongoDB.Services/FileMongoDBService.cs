@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
-namespace LetsTalk.Server.Persistence.MongoDBServices;
+namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public class FileMongoDBService : IFileAgnosticService
 {

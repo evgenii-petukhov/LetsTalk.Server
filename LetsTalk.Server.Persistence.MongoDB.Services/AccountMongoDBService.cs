@@ -2,7 +2,7 @@
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.Persistence.MongoDBServices;
+namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public class AccountMongoDBService : IAccountAgnosticService
 {

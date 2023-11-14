@@ -14,7 +14,7 @@ using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.Persistence.EntityFramework.Services;
 using LetsTalk.Server.Core.Services.Cache.Contacts;
 using LetsTalk.Server.Core.Services.Cache.Profile;
-using LetsTalk.Server.Persistence.MongoDBServices;
+using LetsTalk.Server.Persistence.MongoDB.Services;
 
 namespace LetsTalk.Server.Core;
 

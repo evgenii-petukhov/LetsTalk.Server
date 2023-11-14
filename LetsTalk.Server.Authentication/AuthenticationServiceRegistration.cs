@@ -36,7 +36,7 @@ namespace LetsTalk.Server.Authentication
             switch (configuration.GetValue<string>("Caching:cachingMode"))
             {
                 case "redis":
-                    services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+                    services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
                     services.AddScoped<IJwtCacheService, RedisCacheTokenService>();
                     break;
                 default:

@@ -75,7 +75,7 @@ public static class FileStorageServiceRegistration
         switch (configuration.GetValue<string>("Caching:cachingMode"))
         {
             case "redis":
-                services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+                services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
                 services.AddScoped<IImageCacheManager, ImageRedisCacheService>();
                 services.DecorateScoped<IImageService, ImageRedisCacheService>();
                 break;

@@ -72,7 +72,7 @@ public static class CoreServicesRegistration
         {
             case "redis":
                 services.AddSingleton<IConnectionMultiplexer>(
-                    ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+                    ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
 
                 services.AddScoped<IMessageService, MessageService>();
                 services.DecorateScoped<IMessageService, MessageRedisCacheService>();

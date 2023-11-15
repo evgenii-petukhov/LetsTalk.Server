@@ -16,20 +16,20 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
         return _context.Accounts
             .AsTracking()
-            .FirstOrDefaultAsync(account => account.Id == id, cancellationToken: cancellationToken)!;
+            .FirstOrDefaultAsync(account => account.Id == id, cancellationToken)!;
     }
 
     public Task<Account> GetByExternalIdAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
-            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
+            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken)!;
     }
 
     public Task<Account> GetByExternalIdAsTrackingAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
             .AsTracking()
-            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken: cancellationToken)!;
+            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken)!;
     }
 
     public Task<List<Contact>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
@@ -83,12 +83,12 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
                 UnreadCount = x.Metrics.UnreadCount,
                 ImageId = x.Account.ImageId
             })
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
     }
 
     public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
-            .AnyAsync(account => account.Id == id, cancellationToken: cancellationToken);
+            .AnyAsync(account => account.Id == id, cancellationToken);
     }
 }

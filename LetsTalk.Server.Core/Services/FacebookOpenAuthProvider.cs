@@ -36,7 +36,7 @@ public class FacebookOpenAuthProvider : IOpenAuthProvider
         var request = new RestRequest($"{model.Id}?fields=id,email,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
         try
         {
-            var response = await client.GetAsync(request, cancellationToken: cancellationToken);
+            var response = await client.GetAsync(request, cancellationToken);
 
             if (!response.IsSuccessful)
             {

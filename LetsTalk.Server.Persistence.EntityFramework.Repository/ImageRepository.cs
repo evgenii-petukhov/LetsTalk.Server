@@ -29,6 +29,6 @@ public class ImageRepository : GenericRepository<Image>, IImageRepository
     public Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Images
-            .AnyAsync(image => image.Id == id, cancellationToken: cancellationToken);
+            .AnyAsync(image => image.Id == id, cancellationToken);
     }
 }

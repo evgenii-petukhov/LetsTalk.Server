@@ -21,7 +21,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .Skip(messagesPerPage * pageIndex)
             .Take(messagesPerPage)
             .OrderBy(mesage => mesage.DateCreatedUnix)
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
     }
 
     public Task MarkAllAsRead(int senderId, int recipientId, int messageId)

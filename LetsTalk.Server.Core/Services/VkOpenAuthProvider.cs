@@ -40,7 +40,7 @@ public class VkOpenAuthProvider : IOpenAuthProvider
         var request = new RestRequest($"method/users.get?user_ids={model.Id}&fields=id,first_name,last_name,photo_max&access_token={model.AuthToken}&v=5.131");
         try
         {
-            var response = await client.GetAsync(request, cancellationToken: cancellationToken);
+            var response = await client.GetAsync(request, cancellationToken);
 
             if (!response.IsSuccessful)
             {

@@ -2,7 +2,7 @@
 
 public class ContactServiceModel
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     public int AccountTypeId { get; protected set; }
 

@@ -30,13 +30,13 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     {
         return _context.Set<T>()
             .AsTracking()
-            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken)!;
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
     }
 
     public Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Set<T>()
-            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken)!;
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
     }
 
     protected virtual void Dispose(bool disposing)

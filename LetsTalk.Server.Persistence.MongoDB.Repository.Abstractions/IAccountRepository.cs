@@ -4,7 +4,30 @@ namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 public interface IAccountRepository
 {
-    Task<Account> GetByExternalIdAsync(string externalId, int accountTypeId, CancellationToken cancellationToken);
+    Task<Account> GetByExternalIdAsync(
+        string externalId,
+        int accountTypeId,
+        CancellationToken cancellationToken);
 
-    Task<Account> CreateAccountAsync(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl);
+    Task<Account> CreateAccountAsync(
+        string externalId,
+        int accountTypeId,
+        string firstName,
+        string lastName,
+        string email,
+        string photoUrl,
+        CancellationToken cancellationToken);
+
+    Task<Account> SetupProfile(
+        string externalId,
+        int accountTypeId,
+        string firstName,
+        string lastName,
+        string email,
+        string photoUrl,
+        CancellationToken cancellationToken);
+
+    Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<Account> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 }

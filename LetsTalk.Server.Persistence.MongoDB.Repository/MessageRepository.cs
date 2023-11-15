@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
+using LetsTalk.Server.Persistence.Utility;
 using MongoDB.Driver;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository;
@@ -43,7 +44,8 @@ public class MessageRepository : IMessageRepository
             RecipientId = recipientId,
             Text = text,
             TextHtml = textHtml,
-            ImageId = imageId
+            ImageId = imageId,
+            DateCreatedUnix = DateHelper.GetUnixTimestamp()
         };
 
         await _messageCollection.InsertOneAsync(message, cancellationToken: cancellationToken);

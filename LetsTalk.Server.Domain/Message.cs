@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Domain.Utility;
+﻿using LetsTalk.Server.Persistence.Utility;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;

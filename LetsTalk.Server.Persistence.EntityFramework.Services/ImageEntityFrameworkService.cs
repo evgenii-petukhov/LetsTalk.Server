@@ -58,7 +58,7 @@ public class ImageEntityFrameworkService : IImageAgnosticService
     }
 
     public async Task<MessageServiceModel> SaveImagePreviewAsync(
-        int messageId,
+        string messageId,
         string filename,
         ImageFormats imageFormat,
         ImageRoles imageRole,
@@ -67,7 +67,7 @@ public class ImageEntityFrameworkService : IImageAgnosticService
         CancellationToken cancellationToken = default)
     {
         var image = await CreateImageInternalAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
-        var message = await _messageRepository.GetByIdAsTrackingAsync(messageId, cancellationToken);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(int.Parse(messageId), cancellationToken);
         message.SetImagePreview(image);
 
         await _unitOfWork.SaveAsync(cancellationToken);

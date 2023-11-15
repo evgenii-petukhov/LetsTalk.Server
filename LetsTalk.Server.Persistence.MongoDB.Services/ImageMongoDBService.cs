@@ -28,7 +28,7 @@ public class ImageMongoDBService : IImageAgnosticService
     }
 
     public async Task<MessageServiceModel> SaveImagePreviewAsync(
-        int messageId,
+        string messageId,
         string filename,
         ImageFormats imageFormat,
         ImageRoles imageRole,

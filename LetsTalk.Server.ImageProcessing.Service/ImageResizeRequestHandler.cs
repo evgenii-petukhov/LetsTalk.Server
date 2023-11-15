@@ -52,7 +52,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         var filename = await _fileService.SaveDataAsync(data!, FileTypes.Image, ImageRoles.Message);
 
         var message = await _imageAgnosticService.SaveImagePreviewAsync(
-            request.MessageId,
+            request.MessageId!,
             filename,
             ImageFormats.Webp,
             ImageRoles.Message,

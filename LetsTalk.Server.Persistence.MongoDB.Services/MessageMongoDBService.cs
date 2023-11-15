@@ -26,7 +26,9 @@ public class MessageMongoDBService : IMessageAgnosticService
         int? imageId,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, imageId, cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
@@ -46,13 +48,13 @@ public class MessageMongoDBService : IMessageAgnosticService
         return _mapper.Map<List<MessageServiceModel>>(messages);
     }
 
-    public async Task<MessageServiceModel> SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default)
+    public async Task<MessageServiceModel> SetLinkPreviewAsync(string messageId, int linkPreviewId, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
     public async Task<MessageServiceModel> SetLinkPreviewAsync(
-        int messageId,
+        string messageId,
         string url,
         string title,
         string imageUrl,

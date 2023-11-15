@@ -30,5 +30,7 @@ public interface IAccountRepository
 
     Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default);
 
+    Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default);
+
     Task<Account> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 }

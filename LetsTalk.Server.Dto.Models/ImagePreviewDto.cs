@@ -2,7 +2,7 @@
 
 public record ImagePreviewDto
 {
-    public int MessageId { get; set; }
+    public string? MessageId { get; set; }
 
     public int Id { get; set; }
 

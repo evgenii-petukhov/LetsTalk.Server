@@ -2,7 +2,7 @@
 
 public record LinkPreviewDto
 {
-    public int MessageId { get; set; }
+    public string? MessageId { get; set; }
 
     public string? AccountId { get; set; }
 

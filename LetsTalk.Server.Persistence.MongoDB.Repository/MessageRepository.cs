@@ -28,4 +28,26 @@ public class MessageRepository : IMessageRepository
             .SortBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<Message> CreateAsync(
+        string senderId,
+        string recipientId,
+        string? text,
+        string? textHtml,
+        int? imageId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = new Message
+        {
+            SenderId =  senderId,
+            RecipientId = recipientId,
+            Text = text,
+            TextHtml = textHtml,
+            ImageId = imageId
+        };
+
+        await _messageCollection.InsertOneAsync(message, cancellationToken: cancellationToken);
+
+        return message;
+    }
 }

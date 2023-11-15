@@ -18,7 +18,7 @@ public interface IImageAgnosticService
         CancellationToken cancellationToken = default);
 
     Task<MessageServiceModel> SaveImagePreviewAsync(
-        int messageId,
+        string messageId,
         string filename,
         ImageFormats imageFormat,
         ImageRoles imageRole,

@@ -4,5 +4,5 @@ public class ImageResizeRequest
 {
     public int ImageId { get; set; }
 
-    public int MessageId { get; set; }
+    public string? MessageId { get; set; }
 }

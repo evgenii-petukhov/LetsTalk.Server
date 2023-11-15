@@ -21,7 +21,7 @@ public class AccountMongoDBService : IAccountAgnosticService
 
     public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return _accountRepository.IsAccountIdValidAsync(id, cancellationToken);
     }
 
     public async Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)

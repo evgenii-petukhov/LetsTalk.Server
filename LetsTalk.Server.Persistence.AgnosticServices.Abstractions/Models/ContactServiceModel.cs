@@ -16,7 +16,7 @@ public class ContactServiceModel
 
     public long? LastMessageDate { get; set; }
 
-    public int? LastMessageId { get; set; }
+    public string? LastMessageId { get; set; }
 
     public int? ImageId { get; protected set; }
 }

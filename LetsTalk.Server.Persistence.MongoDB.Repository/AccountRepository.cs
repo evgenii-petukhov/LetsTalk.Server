@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository;
@@ -79,9 +80,9 @@ public class AccountRepository : IAccountRepository
 
     public async Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default)
     {
-        var lastSentMessageDates = _messageCollection
+        var lastMessageDates = _messageCollection
             .AsQueryable()
-            .Where(x => x.SenderId == id)
+            .Where(x => x.SenderId == id || x.RecipientId == id)
             .GroupBy(x => new
             {
                 x.RecipientId,
@@ -89,10 +90,18 @@ public class AccountRepository : IAccountRepository
             })
             .Select(g => new
             {
-                AccountId = g.Key.RecipientId,
+                AccountIds = g.Key,
                 LastMessageDate = g.Max(x => x.DateCreatedUnix),
                 LastMessageId = g.Max(x => x.Id),
-                UnreadCount = 0
+                UnreadCount = g.Key.RecipientId == id ? g.Count(x => !x.IsRead) : 0
+            })
+            .ToList()
+            .Select(g => new
+            {
+                AccountId = g.AccountIds.RecipientId == id ? g.AccountIds.SenderId : g.AccountIds.RecipientId,
+                g.LastMessageDate,
+                g.LastMessageId,
+                g.UnreadCount
             })
             .GroupBy(g => g.AccountId)
             .Select(g => new
@@ -101,50 +110,9 @@ public class AccountRepository : IAccountRepository
                 LastMessageDate = g.Max(x => x.LastMessageDate),
                 LastMessageId = g.Max(x => x.LastMessageId),
                 UnreadCount = g.Sum(x => x.UnreadCount)
-            })
-            .ToList();
+            }).ToList();
 
-        var lastReceivedMessageDates = _messageCollection
-            .AsQueryable()
-            .Where(x => x.RecipientId == id)
-            .GroupBy(x => new
-            {
-                x.RecipientId,
-                x.SenderId
-            })
-            .Select(g => new
-            {
-                AccountId = g.Key.SenderId,
-                LastMessageDate = g.Max(x => x.DateCreatedUnix),
-                LastMessageId = g.Max(x => x.Id),
-                UnreadCount = g.Count(x => g.Key.RecipientId == id && !x.IsRead)
-            })
-            .GroupBy(g => g.AccountId)
-            .Select(g => new
-            {
-                AccountId = g.Key,
-                LastMessageDate = g.Max(x => x.LastMessageDate),
-                LastMessageId = g.Max(x => x.LastMessageId),
-                UnreadCount = g.Sum(x => x.UnreadCount)
-            })
-            .ToList();
-
-        var lastMessageDates = lastSentMessageDates
-            .Concat(lastReceivedMessageDates)
-            .GroupBy(x => x.AccountId)
-            .Select(g => new
-            {
-                AccountId = g.Key,
-                LastMessageDate = g.Max(x => x.LastMessageDate),
-                LastMessageId = g.Max(x => x.LastMessageId),
-                UnreadCount = g.Sum(x => x.UnreadCount)
-            })
-            .ToList();
-
-        var accounts = await _accountCollection
-            .Find(_ => true).ToListAsync(cancellationToken: cancellationToken);
-
-        return accounts
+        return (await _accountCollection.Find(_ => true).ToListAsync(cancellationToken))
             .Where(account => account.Id != id)
             .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
             {

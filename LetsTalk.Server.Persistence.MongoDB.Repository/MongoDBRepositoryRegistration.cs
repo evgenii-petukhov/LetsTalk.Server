@@ -9,6 +9,7 @@ public static class MongoDBRepositoryRegistration
         this IServiceCollection services)
     {
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
 
         return services;
     }

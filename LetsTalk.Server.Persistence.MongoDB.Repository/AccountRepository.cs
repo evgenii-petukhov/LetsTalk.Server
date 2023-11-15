@@ -18,7 +18,7 @@ public class AccountRepository : IAccountRepository
     public Task<Account> GetByExternalIdAsync(
         string externalId,
         int accountTypeId,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         return _accountCollection
             .Find(Builders<Account>.Filter.Where(x => x.ExternalId == externalId && x.AccountTypeId == accountTypeId))
@@ -56,14 +56,23 @@ public class AccountRepository : IAccountRepository
         string lastName,
         string email,
         string photoUrl,
+        bool updateAvatar,
         CancellationToken cancellationToken)
     {
+        var filterdefinition = Builders<Account>.Filter
+            .Where(x => x.ExternalId == externalId && x.AccountTypeId == accountTypeId);
+
+        var updateDefinition = Builders<Account>.Update
+            .Set(x => x.FirstName, firstName)
+            .Set(x => x.LastName, lastName)
+            .Set(x => x.Email, email);
+
+        updateDefinition = updateAvatar
+            ? updateDefinition
+            : updateDefinition.Set(x => x.PhotoUrl, photoUrl);
+
         return _accountCollection
-            .FindOneAndUpdateAsync(Builders<Account>.Filter.Where(x => x.ExternalId == externalId && x.AccountTypeId == accountTypeId), Builders<Account>.Update
-                .Set(x => x.FirstName, firstName)
-                .Set(x => x.LastName, lastName)
-                .Set(x => x.Email, email)
-                .Set(x => x.PhotoUrl, photoUrl), cancellationToken: cancellationToken);
+            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, cancellationToken: cancellationToken);
     }
 
     public Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default)

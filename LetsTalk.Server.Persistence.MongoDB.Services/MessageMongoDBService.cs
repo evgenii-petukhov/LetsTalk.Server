@@ -1,10 +1,23 @@
-﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+﻿using AutoMapper;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public class MessageMongoDBService : IMessageAgnosticService
 {
+    private readonly IMessageRepository _messageRepository;
+    private readonly IMapper _mapper;
+
+    public MessageMongoDBService(
+        IMessageRepository messageRepository,
+        IMapper mapper)
+    {
+        _messageRepository = messageRepository;
+        _mapper = mapper;
+    }
+
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
         string recipientId,
@@ -23,7 +36,14 @@ public class MessageMongoDBService : IMessageAgnosticService
         int messagesPerPage,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var messages = await _messageRepository.GetPagedAsync(
+            senderId,
+            recipientId,
+            pageIndex,
+            messagesPerPage,
+            cancellationToken);
+
+        return _mapper.Map<List<MessageServiceModel>>(messages);
     }
 
     public async Task<MessageServiceModel> SetLinkPreviewAsync(int messageId, int linkPreviewId, CancellationToken cancellationToken = default)

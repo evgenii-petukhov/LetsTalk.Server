@@ -7,7 +7,7 @@ public interface IAccountRepository
     Task<Account> GetByExternalIdAsync(
         string externalId,
         int accountTypeId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken = default);
 
     Task<Account> CreateAccountAsync(
         string externalId,
@@ -25,6 +25,7 @@ public interface IAccountRepository
         string lastName,
         string email,
         string photoUrl,
+        bool updateAvatar,
         CancellationToken cancellationToken);
 
     Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default);

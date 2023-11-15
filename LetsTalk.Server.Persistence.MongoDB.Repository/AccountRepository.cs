@@ -80,22 +80,27 @@ public class AccountRepository : IAccountRepository
 
     public async Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default)
     {
-        var lastMessageDates = _messageCollection
-            .AsQueryable()
-            .Where(x => x.SenderId == id || x.RecipientId == id)
-            .GroupBy(x => new
+        var accounts = await _accountCollection
+            .Find(Builders<Account>.Filter.Empty)
+            .ToListAsync(cancellationToken);
+
+        var lastMessageByConversation = await _messageCollection
+            .Aggregate()
+            .Match(x => x.SenderId == id || x.RecipientId == id)
+            .Group(x => new
             {
                 x.RecipientId,
                 x.SenderId
-            })
-            .Select(g => new
+            }, g => new
             {
                 AccountIds = g.Key,
                 LastMessageDate = g.Max(x => x.DateCreatedUnix),
                 LastMessageId = g.Max(x => x.Id),
                 UnreadCount = g.Key.RecipientId == id ? g.Count(x => !x.IsRead) : 0
             })
-            .ToList()
+            .ToListAsync(cancellationToken);
+
+        var lastMessageBySender = lastMessageByConversation
             .Select(g => new
             {
                 AccountId = g.AccountIds.RecipientId == id ? g.AccountIds.SenderId : g.AccountIds.RecipientId,
@@ -110,16 +115,11 @@ public class AccountRepository : IAccountRepository
                 LastMessageDate = g.Max(x => x.LastMessageDate),
                 LastMessageId = g.Max(x => x.LastMessageId),
                 UnreadCount = g.Sum(x => x.UnreadCount)
-            })
-            .ToList();
-
-        var accounts = await _accountCollection
-            .Find(Builders<Account>.Filter.Empty)
-            .ToListAsync(cancellationToken);
+            });
 
         return accounts
             .Where(account => account.Id != id)
-            .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
+            .GroupJoin(lastMessageBySender, x => x.Id, x => x.AccountId, (x, y) => new
             {
                 Account = x,
                 Metrics = y

@@ -43,7 +43,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
             })
             .Select(g => new
             {
-                AccountId = g.Key.RecipientId == id ? g.Key.SenderId : g.Key.RecipientId,
+                AccountId = g.Key.RecipientId + g.Key.SenderId - id,
                 LastMessageDate = g.Max(x => x.DateCreatedUnix),
                 LastMessageId = g.Max(x => x.Id),
                 UnreadCount = g.Count(x => g.Key.RecipientId == id && !x.IsRead)

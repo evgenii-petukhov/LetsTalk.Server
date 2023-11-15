@@ -110,9 +110,14 @@ public class AccountRepository : IAccountRepository
                 LastMessageDate = g.Max(x => x.LastMessageDate),
                 LastMessageId = g.Max(x => x.LastMessageId),
                 UnreadCount = g.Sum(x => x.UnreadCount)
-            }).ToList();
+            })
+            .ToList();
 
-        return (await _accountCollection.Find(_ => true).ToListAsync(cancellationToken))
+        var accounts = await _accountCollection
+            .Find(Builders<Account>.Filter.Empty)
+            .ToListAsync(cancellationToken);
+
+        return accounts
             .Where(account => account.Id != id)
             .GroupJoin(lastMessageDates, x => x.Id, x => x.AccountId, (x, y) => new
             {

@@ -29,7 +29,7 @@ public interface IMessageAgnosticService
         CancellationToken cancellationToken = default);
 
     Task MarkAsRead(
-        int messageId,
+        string messageId,
         string recipientId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken);

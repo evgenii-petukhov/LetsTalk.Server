@@ -64,7 +64,7 @@ public class MessageMongoDBService : IMessageAgnosticService
     }
 
     public async Task MarkAsRead(
-        int messageId,
+        string messageId,
         string recipientId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken)

@@ -48,7 +48,7 @@ public class MessageController : ApiController
     }
 
     [HttpPut("MarkAsRead")]
-    public async Task<ActionResult> MarkAsReadAsync(int messageId, CancellationToken cancellationToken)
+    public async Task<ActionResult> MarkAsReadAsync(string messageId, CancellationToken cancellationToken)
     {
         var cmd = new ReadMessageCommand
         {
@@ -60,7 +60,7 @@ public class MessageController : ApiController
     }
 
     [HttpPut("MarkAllAsRead")]
-    public async Task<ActionResult> MarkAllAsReadAsync(int messageId, CancellationToken cancellationToken)
+    public async Task<ActionResult> MarkAllAsReadAsync(string messageId, CancellationToken cancellationToken)
     {
         var cmd = new ReadMessageCommand
         {

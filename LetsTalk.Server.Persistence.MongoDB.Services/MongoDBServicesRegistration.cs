@@ -22,7 +22,7 @@ public static class MongoDBServicesRegistration
         services.AddScoped<ILinkPreviewAgnosticService, LinkPreviewMongoDBService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.AddMongoDBRepository();
+        services.AddMongoDBRepository(configuration);
 
         return services;
     }

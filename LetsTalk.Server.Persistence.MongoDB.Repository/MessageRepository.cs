@@ -1,6 +1,8 @@
-﻿using LetsTalk.Server.Persistence.MongoDB.Models;
+﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Utility;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository;
@@ -9,9 +11,11 @@ public class MessageRepository : IMessageRepository
 {
     private readonly IMongoCollection<Message> _messageCollection;
 
-    public MessageRepository(IMongoClient mongoClient)
+    public MessageRepository(
+        IMongoClient mongoClient,
+        IOptions<MongoDBSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase("LetsTalk");
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
     }

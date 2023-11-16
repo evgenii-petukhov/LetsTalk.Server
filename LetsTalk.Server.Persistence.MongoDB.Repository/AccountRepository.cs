@@ -1,6 +1,7 @@
-﻿using LetsTalk.Server.Persistence.MongoDB.Models;
+﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
-using MongoDB.Bson;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository;
@@ -10,9 +11,11 @@ public class AccountRepository : IAccountRepository
     private readonly IMongoCollection<Account> _accountCollection;
     private readonly IMongoCollection<Message> _messageCollection;
 
-    public AccountRepository(IMongoClient mongoClient)
+    public AccountRepository(
+        IMongoClient mongoClient,
+        IOptions<MongoDBSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase("LetsTalk");
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
         _accountCollection = mongoDatabase.GetCollection<Account>(nameof(Account));
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
@@ -81,7 +84,7 @@ public class AccountRepository : IAccountRepository
     public async Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default)
     {
         var accounts = await _accountCollection
-            .Find(Builders<Account>.Filter.Empty)
+            .Find(Builders<Account>.Filter.Where(x => x.Id != id))
             .ToListAsync(cancellationToken);
 
         var lastMessageByConversation = await _messageCollection

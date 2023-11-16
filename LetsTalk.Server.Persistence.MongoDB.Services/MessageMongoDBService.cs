@@ -65,10 +65,29 @@ public class MessageMongoDBService : IMessageAgnosticService
 
     public async Task MarkAsRead(
         string messageId,
-        string recipientId,
+        string accountId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        if (updatePreviousMessages)
+        {
+            await MarkAllAsRead(accountId, messageId, cancellationToken);
+        }
+        else
+        {
+            await _messageRepository.MarkAsRead(messageId, cancellationToken);
+        }
+    }
+
+    private async Task MarkAllAsRead(string recipientId, string messageId, CancellationToken cancellationToken)
+    {
+        var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
+
+        if (message == null || message.SenderId == recipientId || message.IsRead)
+        {
+            return;
+        }
+
+        await _messageRepository.MarkAllAsRead(message.SenderId!, recipientId, message.DateCreatedUnix!.Value, cancellationToken);
     }
 }

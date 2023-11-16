@@ -18,4 +18,10 @@ public interface IMessageRepository
         string? textHtml,
         int? imageId,
         CancellationToken cancellationToken = default);
+
+    Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+
+    Task MarkAsRead(string messageId, CancellationToken cancellationToken = default);
+
+    Task MarkAllAsRead(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default);
 }

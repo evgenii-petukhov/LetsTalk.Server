@@ -56,4 +56,27 @@ public class MessageRepository : IMessageRepository
 
         return message;
     }
+
+    public Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _messageCollection
+            .Find(Builders<Message>.Filter.Eq(x => x.Id, id))
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task MarkAsRead(string messageId, CancellationToken cancellationToken = default)
+    {
+        return _messageCollection.UpdateOneAsync(
+            Builders<Message>.Filter.Eq(x => x.Id, messageId),
+            Builders<Message>.Update.Set(x => x.IsRead, true),
+            cancellationToken: cancellationToken);
+    }
+
+    public Task MarkAllAsRead(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default)
+    {
+        return _messageCollection.UpdateManyAsync(
+            Builders<Message>.Filter.Where(message => message.DateCreatedUnix <= dateCreatedUnix && message.SenderId == senderId && message.RecipientId == recipientId && !message.IsRead),
+            Builders<Message>.Update.Set(x => x.IsRead, true),
+            cancellationToken: cancellationToken);
+    }
 }

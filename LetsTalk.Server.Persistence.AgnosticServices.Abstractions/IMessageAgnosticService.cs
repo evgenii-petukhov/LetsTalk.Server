@@ -30,7 +30,7 @@ public interface IMessageAgnosticService
 
     Task MarkAsRead(
         string messageId,
-        string recipientId,
+        string accountId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken);
 }

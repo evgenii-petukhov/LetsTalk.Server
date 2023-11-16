@@ -86,13 +86,13 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
 
     public async Task MarkAsRead(
         string messageId,
-        string recipientId,
+        string accountId,
         bool updatePreviousMessages,
         CancellationToken cancellationToken)
     {
         if (updatePreviousMessages)
         {
-            await MarkAllAsRead(int.Parse(recipientId), int.Parse(messageId), cancellationToken);
+            await MarkAllAsRead(int.Parse(accountId), int.Parse(messageId), cancellationToken);
         }
         else
         {
@@ -111,7 +111,7 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
     {
         var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
 
-        if (message.SenderId == recipientId || message.IsRead)
+        if (message == null || message.SenderId == recipientId || message.IsRead)
         {
             return;
         }

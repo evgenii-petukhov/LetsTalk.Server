@@ -18,7 +18,7 @@ public interface IAccountRepository
         string photoUrl,
         CancellationToken cancellationToken);
 
-    Task<Account> SetupProfile(
+    Task<Account> SetupProfileAsync(
         string externalId,
         int accountTypeId,
         string firstName,
@@ -27,6 +27,14 @@ public interface IAccountRepository
         string photoUrl,
         bool updateAvatar,
         CancellationToken cancellationToken);
+
+    Task<Account> UpdateProfileAsync(
+        string id,
+        string firstName,
+        string lastName,
+        string email,
+        int? imageId,
+        CancellationToken cancellationToken = default);
 
     Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default);
 

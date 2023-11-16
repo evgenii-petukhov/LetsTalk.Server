@@ -55,7 +55,7 @@ public class AccountRepository : IAccountRepository
         return account;
     }
 
-    public Task<Account> SetupProfile(
+    public Task<Account> SetupProfileAsync(
         string externalId,
         int accountTypeId,
         string firstName,
@@ -78,7 +78,37 @@ public class AccountRepository : IAccountRepository
             : updateDefinition.Set(x => x.PhotoUrl, photoUrl);
 
         return _accountCollection
-            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, cancellationToken: cancellationToken);
+            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
+            {
+                ReturnDocument = ReturnDocument.After
+            }, cancellationToken: cancellationToken);
+    }
+
+    public Task<Account> UpdateProfileAsync(
+        string id,
+        string firstName,
+        string lastName,
+        string email,
+        int? imageId,
+        CancellationToken cancellationToken = default)
+    {
+        var filterdefinition = Builders<Account>.Filter
+            .Eq(x => x.Id, id);
+
+        var updateDefinition = Builders<Account>.Update
+            .Set(x => x.FirstName, firstName)
+            .Set(x => x.LastName, lastName)
+            .Set(x => x.Email, email);
+
+        updateDefinition = imageId.HasValue
+            ? updateDefinition
+            : updateDefinition.Set(x => x.ImageId, imageId);
+
+        return _accountCollection
+            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
+            {
+                ReturnDocument = ReturnDocument.After
+            }, cancellationToken: cancellationToken);
     }
 
     public async Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default)

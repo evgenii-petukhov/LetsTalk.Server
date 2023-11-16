@@ -39,7 +39,9 @@ public class AccountMongoDBService : IAccountAgnosticService
         int? imageId,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, email, imageId, cancellationToken);
+
+        return _mapper.Map<AccountServiceModel>(account);
     }
 
     public async Task<string> CreateOrUpdateAsync(
@@ -74,7 +76,7 @@ public class AccountMongoDBService : IAccountAgnosticService
             }
         }
 
-        var account = await _accountRepository.SetupProfile(
+        var account = await _accountRepository.SetupProfileAsync(
             externalId,
             (int)accountType,
             firstName,

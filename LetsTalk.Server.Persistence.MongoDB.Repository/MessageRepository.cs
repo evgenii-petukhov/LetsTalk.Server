@@ -86,7 +86,9 @@ public class MessageRepository : IMessageRepository
     {
         return _messageCollection.UpdateOneAsync(
             Builders<Message>.Filter.Eq(x => x.Id, messageId),
-            Builders<Message>.Update.Set(x => x.IsRead, true),
+            Builders<Message>.Update
+                .Set(x => x.IsRead, true)
+                .Set(x => x.DateReadUnix, DateHelper.GetUnixTimestamp()),
             cancellationToken: cancellationToken);
     }
 
@@ -94,7 +96,9 @@ public class MessageRepository : IMessageRepository
     {
         return _messageCollection.UpdateManyAsync(
             Builders<Message>.Filter.Where(message => message.DateCreatedUnix <= dateCreatedUnix && message.SenderId == senderId && message.RecipientId == recipientId && !message.IsRead),
-            Builders<Message>.Update.Set(x => x.IsRead, true),
+            Builders<Message>.Update
+                .Set(x => x.IsRead, true)
+                .Set(x => x.DateReadUnix, DateHelper.GetUnixTimestamp()),
             cancellationToken: cancellationToken);
     }
 

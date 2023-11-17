@@ -59,9 +59,9 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
         return _mapper.Map<List<MessageServiceModel>>(messages);
     }
 
-    public async Task<MessageServiceModel> SetLinkPreviewAsync(string messageId, int linkPreviewId, CancellationToken cancellationToken = default)
+    public async Task<MessageServiceModel> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default)
     {
-        var linkPreview = await _linkPreviewRepository.GetByIdAsync(linkPreviewId, cancellationToken);
+        var linkPreview = await _linkPreviewRepository.GetByIdAsync(int.Parse(linkPreviewId), cancellationToken);
         var message = await _messageRepository.GetByIdAsTrackingAsync(int.Parse(messageId), cancellationToken);
         message.SetLinkPreview(linkPreview);
         await _unitOfWork.SaveAsync(cancellationToken);

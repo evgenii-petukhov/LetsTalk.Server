@@ -24,4 +24,13 @@ public interface IMessageRepository
     Task MarkAsRead(string messageId, CancellationToken cancellationToken = default);
 
     Task MarkAllAsRead(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default);
+
+    Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default);
+
+    Task<Message> SetLinkPreviewAsync(
+        string messageId,
+        string url,
+        string title,
+        string imageUrl,
+        CancellationToken cancellationToken = default);
 }

@@ -8,6 +8,7 @@ using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.Persistence.EntityFramework.Services;
+using LetsTalk.Server.Persistence.MongoDB.Services;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -55,6 +56,16 @@ public static class LinkPreviewServiceRegistration
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.AddEntityFrameworkServices(configuration);
+
+        switch (configuration.GetValue<string>("Database:databaseType"))
+        {
+            case "MongoDB":
+                services.AddMongoDBServices(configuration);
+                break;
+            default:
+                services.AddEntityFrameworkServices(configuration);
+                break;
+        }
 
         return services;
     }

@@ -33,7 +33,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             return;
         }
 
-        var message = await _linkPreviewGenerator.ProcessMessageAsync(request.MessageId, request.Url);
+        var message = await _linkPreviewGenerator.ProcessMessageAsync(request.MessageId!, request.Url);
 
         if (message == null)
         {

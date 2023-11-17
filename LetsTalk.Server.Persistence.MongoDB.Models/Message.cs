@@ -28,4 +28,9 @@ public class Message
     public int? ImageId { get; set; }
 
     public int? ImagePreviewId { get; set; }
+
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? LinkPreviewId { get; set; }
+
+    public LinkPreview? LinkPreview { get; set; }
 }

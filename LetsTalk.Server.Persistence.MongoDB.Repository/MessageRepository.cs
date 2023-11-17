@@ -10,28 +10,46 @@ namespace LetsTalk.Server.Persistence.MongoDB.Repository;
 public class MessageRepository : IMessageRepository
 {
     private readonly IMongoCollection<Message> _messageCollection;
+    private readonly IMongoCollection<LinkPreview> _linkPreviewCollection;
 
     public MessageRepository(
         IMongoClient mongoClient,
-        IOptions<MongoDBSettings> mongoDBSettings)
+        IOptions<DatabaseSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.MongoDatabaseName);
 
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
+        _linkPreviewCollection = mongoDatabase.GetCollection<LinkPreview>(nameof(LinkPreview));
     }
 
     public Task<List<Message>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
     {
-        var filterDefinition = Builders<Message>.Filter
-            .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId));
-
-        return _messageCollection
-            .Find(filterDefinition)
-            .SortByDescending(mesage => mesage.DateCreatedUnix)
+        var messages = _messageCollection
+            .AsQueryable()
+            .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
+            .GroupJoin(_linkPreviewCollection.AsQueryable(), x => x.LinkPreviewId, x => x.Id, (message, linkPreviews) => new
+            {
+                Message = message,
+                LinkPreviews = linkPreviews
+            })
+            .SelectMany(x => x.LinkPreviews.DefaultIfEmpty(),
+            (g, linkPreview) => new Message
+            {
+                Id = g.Message.Id,
+                Text = g.Message.Text,
+                TextHtml = g.Message.TextHtml,
+                SenderId = g.Message.SenderId,
+                RecipientId = g.Message.RecipientId,
+                IsRead = g.Message.IsRead,
+                DateCreatedUnix = g.Message.DateCreatedUnix,
+                LinkPreview = linkPreview
+            })
+            .OrderByDescending(mesage => mesage.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
-            .Limit(messagesPerPage)
-            .SortBy(mesage => mesage.DateCreatedUnix)
-            .ToListAsync(cancellationToken);
+            .Take(messagesPerPage)
+            .OrderBy(mesage => mesage.DateCreatedUnix);
+
+        return Task.FromResult(messages.ToList());
     }
 
     public async Task<Message> CreateAsync(
@@ -78,5 +96,53 @@ public class MessageRepository : IMessageRepository
             Builders<Message>.Filter.Where(message => message.DateCreatedUnix <= dateCreatedUnix && message.SenderId == senderId && message.RecipientId == recipientId && !message.IsRead),
             Builders<Message>.Update.Set(x => x.IsRead, true),
             cancellationToken: cancellationToken);
+    }
+
+    public async Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default)
+    {
+        var message = await _messageCollection.FindOneAndUpdateAsync(
+            Builders<Message>.Filter.Eq(x => x.Id, messageId),
+            Builders<Message>.Update.Set(x => x.LinkPreviewId, linkPreviewId),
+            new FindOneAndUpdateOptions<Message, Message>
+            {
+                ReturnDocument = ReturnDocument.After
+            },
+            cancellationToken: cancellationToken);
+
+        message.LinkPreview = await _linkPreviewCollection
+            .Find(Builders<LinkPreview>.Filter.Eq(x => x.Id, linkPreviewId))
+            .FirstOrDefaultAsync();
+
+        return message;
+    }
+
+    public async Task<Message> SetLinkPreviewAsync(
+        string messageId,
+        string url,
+        string title,
+        string imageUrl,
+        CancellationToken cancellationToken = default)
+    {
+        var linkPreview = new LinkPreview
+        {
+            Url = url,
+            Title = title,
+            ImageUrl = imageUrl
+        };
+
+        await _linkPreviewCollection.InsertOneAsync(linkPreview, cancellationToken: cancellationToken);
+
+        var message = await _messageCollection.FindOneAndUpdateAsync(
+            Builders<Message>.Filter.Eq(x => x.Id, messageId),
+            Builders<Message>.Update.Set(x => x.LinkPreviewId, linkPreview.Id),
+            new FindOneAndUpdateOptions<Message, Message>
+            {
+                ReturnDocument = ReturnDocument.After
+            },
+            cancellationToken: cancellationToken);
+
+        message.LinkPreview = linkPreview;
+
+        return message;
     }
 }

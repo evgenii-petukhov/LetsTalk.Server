@@ -13,9 +13,9 @@ public class AccountRepository : IAccountRepository
 
     public AccountRepository(
         IMongoClient mongoClient,
-        IOptions<MongoDBSettings> mongoDBSettings)
+        IOptions<DatabaseSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.MongoDatabaseName);
 
         _accountCollection = mongoDatabase.GetCollection<Account>(nameof(Account));
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));

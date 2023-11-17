@@ -31,7 +31,7 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
     public async Task<MessageServiceModel?> ProcessMessageAsync(string messageId, string url)
     {
         var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
-        if (linkPreviewId == 0)
+        if (linkPreviewId == null)
         {
             try
             {

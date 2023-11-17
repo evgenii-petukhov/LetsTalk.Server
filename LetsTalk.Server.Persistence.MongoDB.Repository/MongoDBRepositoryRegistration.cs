@@ -13,7 +13,8 @@ public static class MongoDBRepositoryRegistration
     {
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
-        services.Configure<MongoDBSettings>(configuration.GetSection("MongoDB"));
+        services.AddScoped<ILinkPreviewRepository, LinkPreviewRepository>();
+        services.Configure<DatabaseSettings>(configuration.GetSection("Database"));
 
         return services;
     }

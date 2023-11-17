@@ -12,8 +12,10 @@ public class LinkPreviewEntityFrameworkService : ILinkPreviewAgnosticService
         _linkPreviewRepository = linkPreviewRepository;
     }
 
-    public Task<int> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default)
+    public async Task<string?> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default)
     {
-        return _linkPreviewRepository.GetIdByUrlAsync(url, cancellationToken);
+        var linkPreviewId = await _linkPreviewRepository.GetIdByUrlAsync(url, cancellationToken);
+
+        return linkPreviewId.ToString();
     }
 }

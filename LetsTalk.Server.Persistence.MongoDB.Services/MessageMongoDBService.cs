@@ -48,9 +48,11 @@ public class MessageMongoDBService : IMessageAgnosticService
         return _mapper.Map<List<MessageServiceModel>>(messages);
     }
 
-    public async Task<MessageServiceModel> SetLinkPreviewAsync(string messageId, int linkPreviewId, CancellationToken cancellationToken = default)
+    public async Task<MessageServiceModel> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var message = await _messageRepository.SetLinkPreviewAsync(messageId, linkPreviewId, cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);
     }
 
     public async Task<MessageServiceModel> SetLinkPreviewAsync(
@@ -60,7 +62,9 @@ public class MessageMongoDBService : IMessageAgnosticService
         string imageUrl,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var message = await _messageRepository.SetLinkPreviewAsync(messageId, url, title, imageUrl, cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);
     }
 
     public async Task MarkAsRead(

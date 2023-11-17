@@ -4,6 +4,7 @@ using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Utility;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository;
 
@@ -24,7 +25,7 @@ public class MessageRepository : IMessageRepository
 
     public Task<List<Message>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
     {
-        var messages = _messageCollection
+        return _messageCollection
             .AsQueryable()
             .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
             .GroupJoin(_linkPreviewCollection.AsQueryable(), x => x.LinkPreviewId, x => x.Id, (message, linkPreviews) => new
@@ -32,8 +33,7 @@ public class MessageRepository : IMessageRepository
                 Message = message,
                 LinkPreviews = linkPreviews
             })
-            .SelectMany(x => x.LinkPreviews.DefaultIfEmpty(),
-            (g, linkPreview) => new Message
+            .SelectMany(x => x.LinkPreviews.DefaultIfEmpty(), (g, linkPreview) => new Message
             {
                 Id = g.Message.Id,
                 Text = g.Message.Text,
@@ -47,9 +47,8 @@ public class MessageRepository : IMessageRepository
             .OrderByDescending(mesage => mesage.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
             .Take(messagesPerPage)
-            .OrderBy(mesage => mesage.DateCreatedUnix);
-
-        return Task.FromResult(messages.ToList());
+            .OrderBy(mesage => mesage.DateCreatedUnix)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Message> CreateAsync(
@@ -115,7 +114,7 @@ public class MessageRepository : IMessageRepository
 
         message.LinkPreview = await _linkPreviewCollection
             .Find(Builders<LinkPreview>.Filter.Eq(x => x.Id, linkPreviewId))
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         return message;
     }

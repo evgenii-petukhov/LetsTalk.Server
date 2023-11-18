@@ -55,7 +55,6 @@ public static class LinkPreviewServiceRegistration
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.AddEntityFrameworkServices(configuration);
 
         switch (configuration.GetValue<string>("Database:databaseType"))
         {

@@ -54,9 +54,9 @@ public class MessageRepository : IMessageRepository
     public async Task<Message> CreateAsync(
         string senderId,
         string recipientId,
-        string? text,
-        string? textHtml,
-        int? imageId,
+        string text,
+        string textHtml,
+        string imageId,
         CancellationToken cancellationToken = default)
     {
         var message = new Message

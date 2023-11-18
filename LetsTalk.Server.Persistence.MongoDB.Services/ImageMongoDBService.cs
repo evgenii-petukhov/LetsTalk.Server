@@ -1,17 +1,30 @@
-﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+﻿using AutoMapper;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public class ImageMongoDBService : IImageAgnosticService
 {
-    public Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default)
+    private readonly IImageRepository _imageRepository;
+    private readonly IMapper _mapper;
+
+    public ImageMongoDBService(
+        IImageRepository imageRepository,
+        IMapper mapper)
     {
-        throw new NotImplementedException();
+        _imageRepository = imageRepository;
+        _mapper = mapper;
     }
 
-    public async Task<ImageServiceModel?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default)
+    public Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _imageRepository.IsImageIdValidAsync(id, cancellationToken);
+    }
+
+    public Task<ImageServiceModel?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -24,10 +37,12 @@ public class ImageMongoDBService : IImageAgnosticService
         int height,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var image = await _imageRepository.CreateImageAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
+
+        return _mapper.Map<ImageServiceModel>(image);
     }
 
-    public async Task<MessageServiceModel> SaveImagePreviewAsync(
+    public Task<MessageServiceModel> SaveImagePreviewAsync(
         string messageId,
         string filename,
         ImageFormats imageFormat,

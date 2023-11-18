@@ -238,14 +238,14 @@ public class CreateMessageCommandValidatorTests
         {
             RecipientId = "1",
             SenderId = "2",
-            ImageId = 1
+            ImageId = "1"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
         _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -265,7 +265,7 @@ public class CreateMessageCommandValidatorTests
         {
             RecipientId = "1",
             SenderId = "2",
-            ImageId = 1,
+            ImageId = "1",
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
@@ -273,7 +273,7 @@ public class CreateMessageCommandValidatorTests
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
         _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -291,14 +291,14 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            ImageId = 1
+            ImageId = "1"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
         _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -321,7 +321,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            ImageId = 1,
+            ImageId = "1",
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
@@ -329,7 +329,7 @@ public class CreateMessageCommandValidatorTests
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
         _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync(1, cancellationToken))
+            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act

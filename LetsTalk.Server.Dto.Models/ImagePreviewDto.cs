@@ -4,7 +4,7 @@ public record ImagePreviewDto
 {
     public string? MessageId { get; set; }
 
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     public string? AccountId { get; set; }
 

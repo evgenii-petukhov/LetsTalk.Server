@@ -44,7 +44,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
 
     public async Task Handle(IMessageContext context, ImageResizeRequest request)
     {
-        var fetchImageResponse = await _imageService.FetchImageAsync(request.ImageId);
+        var fetchImageResponse = await _imageService.FetchImageAsync(request.ImageId!);
         var (data, width, height) = _imageResizeService.Resize(
             fetchImageResponse.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,

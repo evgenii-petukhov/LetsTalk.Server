@@ -64,9 +64,9 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         var message = await _messageAgnosticService.CreateMessageAsync(
             request.SenderId!,
             request.RecipientId!,
-            request.Text,
-            html,
-            request.ImageId,
+            request.Text!,
+            html!,
+            request.ImageId!,
             cancellationToken);
 
         var messageDto = _mapper.Map<MessageDto>(message);
@@ -102,14 +102,14 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     Url = url
                 }),
-            request.ImageId.HasValue ? _imageResizeRequestProducer.ProduceAsync(
+            string.IsNullOrWhiteSpace(request.ImageId) ? Task.CompletedTask : _imageResizeRequestProducer.ProduceAsync(
                 _kafkaSettings.ImageResizeRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
                     MessageId = messageDto.Id,
-                    ImageId = request.ImageId.Value
-                }) : Task.CompletedTask);
+                    ImageId = request.ImageId
+                }));
 
         await _messageCacheManager.RemoveAsync(request.SenderId!, request.RecipientId!);
 

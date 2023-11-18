@@ -5,9 +5,9 @@ namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 public interface IImageAgnosticService
 {
-    Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default);
+    Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default);
 
-    Task<ImageServiceModel?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default);
+    Task<ImageServiceModel?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default);
 
     Task<ImageServiceModel> CreateImageAsync(
         string filename,

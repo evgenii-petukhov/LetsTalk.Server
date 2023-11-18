@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 using Microsoft.Extensions.Options;
@@ -23,17 +24,17 @@ public class AccountRepository : IAccountRepository
 
     public Task<Account> GetByExternalIdAsync(
         string externalId,
-        int accountTypeId,
+        AccountTypes accountType,
         CancellationToken cancellationToken = default)
     {
         return _accountCollection
-            .Find(Builders<Account>.Filter.Where(x => x.ExternalId == externalId && x.AccountTypeId == accountTypeId))
+            .Find(Builders<Account>.Filter.Where(x => x.ExternalId == externalId && x.AccountTypeId == (int)accountType))
             .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<Account> CreateAccountAsync(
         string externalId,
-        int accountTypeId,
+        AccountTypes accountType,
         string firstName,
         string lastName,
         string email,
@@ -42,7 +43,7 @@ public class AccountRepository : IAccountRepository
     {
         var account = new Account
         {
-            AccountTypeId = accountTypeId,
+            AccountTypeId = (int)accountType,
             ExternalId = externalId,
             FirstName = firstName,
             LastName = lastName,
@@ -57,7 +58,7 @@ public class AccountRepository : IAccountRepository
 
     public Task<Account> SetupProfileAsync(
         string externalId,
-        int accountTypeId,
+        AccountTypes accountType,
         string firstName,
         string lastName,
         string email,
@@ -66,7 +67,7 @@ public class AccountRepository : IAccountRepository
         CancellationToken cancellationToken)
     {
         var filterdefinition = Builders<Account>.Filter
-            .Where(x => x.ExternalId == externalId && x.AccountTypeId == accountTypeId);
+            .Where(x => x.ExternalId == externalId && x.AccountTypeId == (int)accountType);
 
         var updateDefinition = Builders<Account>.Update
             .Set(x => x.FirstName, firstName)
@@ -89,7 +90,7 @@ public class AccountRepository : IAccountRepository
         string firstName,
         string lastName,
         string email,
-        int? imageId,
+        string imageId,
         CancellationToken cancellationToken = default)
     {
         var filterdefinition = Builders<Account>.Filter
@@ -100,7 +101,7 @@ public class AccountRepository : IAccountRepository
             .Set(x => x.LastName, lastName)
             .Set(x => x.Email, email);
 
-        updateDefinition = imageId.HasValue
+        updateDefinition = imageId != null
             ? updateDefinition
             : updateDefinition.Set(x => x.ImageId, imageId);
 

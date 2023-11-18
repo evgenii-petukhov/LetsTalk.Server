@@ -30,12 +30,12 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
         string recipientId,
-        string? text,
-        string? textHtml,
-        int? imageId,
+        string text,
+        string textHtml,
+        string imageId,
         CancellationToken cancellationToken)
     {
-        var message = new Domain.Message(int.Parse(senderId), int.Parse(recipientId), text, textHtml, imageId);
+        var message = new Domain.Message(int.Parse(senderId), int.Parse(recipientId), text, textHtml, int.Parse(imageId));
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 

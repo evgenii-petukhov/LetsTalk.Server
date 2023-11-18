@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Persistence.MongoDB.Models;
+﻿using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.MongoDB.Models;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
@@ -6,12 +7,12 @@ public interface IAccountRepository
 {
     Task<Account> GetByExternalIdAsync(
         string externalId,
-        int accountTypeId,
+        AccountTypes accountType,
         CancellationToken cancellationToken = default);
 
     Task<Account> CreateAccountAsync(
         string externalId,
-        int accountTypeId,
+        AccountTypes accountType,
         string firstName,
         string lastName,
         string email,
@@ -20,7 +21,7 @@ public interface IAccountRepository
 
     Task<Account> SetupProfileAsync(
         string externalId,
-        int accountTypeId,
+        AccountTypes accountType,
         string firstName,
         string lastName,
         string email,
@@ -33,7 +34,7 @@ public interface IAccountRepository
         string firstName,
         string lastName,
         string email,
-        int? imageId,
+        string imageId,
         CancellationToken cancellationToken = default);
 
     Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default);

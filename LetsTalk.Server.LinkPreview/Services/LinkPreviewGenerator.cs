@@ -69,6 +69,6 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             _logger.LogInformation("Fetched from DB: {url}", url);
         }
 
-        return await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId);
+        return await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId!);
     }
 }

@@ -16,5 +16,5 @@ public class AccountServiceModel
 
     public string? LastName { get; protected set; }
 
-    public int? ImageId { get; protected set; }
+    public string? ImageId { get; protected set; }
 }

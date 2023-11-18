@@ -21,9 +21,9 @@ public class MessageMongoDBService : IMessageAgnosticService
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
         string recipientId,
-        string? text,
-        string? textHtml,
-        int? imageId,
+        string text,
+        string textHtml,
+        string imageId,
         CancellationToken cancellationToken)
     {
         var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, imageId, cancellationToken);

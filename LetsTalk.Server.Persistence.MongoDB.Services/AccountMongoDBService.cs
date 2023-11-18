@@ -36,7 +36,7 @@ public class AccountMongoDBService : IAccountAgnosticService
         string firstName,
         string lastName,
         string email,
-        int? imageId,
+        string imageId,
         CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, email, imageId, cancellationToken);
@@ -53,7 +53,7 @@ public class AccountMongoDBService : IAccountAgnosticService
         string photoUrl,
         CancellationToken cancellationToken = default)
     {
-        var acccount = await _accountRepository.GetByExternalIdAsync(externalId, (int)accountType, cancellationToken);
+        var acccount = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
 
         if (acccount == null)
         {
@@ -61,7 +61,7 @@ public class AccountMongoDBService : IAccountAgnosticService
             {
                 acccount = await _accountRepository.CreateAccountAsync(
                     externalId,
-                    (int)accountType,
+                    accountType,
                     firstName,
                     lastName,
                     email,
@@ -72,18 +72,18 @@ public class AccountMongoDBService : IAccountAgnosticService
             }
             catch
             {
-                return (await _accountRepository.GetByExternalIdAsync(externalId, (int)accountType, cancellationToken)).Id!;
+                return (await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken)).Id!;
             }
         }
 
         var account = await _accountRepository.SetupProfileAsync(
             externalId,
-            (int)accountType,
+            accountType,
             firstName,
             lastName,
             email,
             photoUrl,
-            !acccount.ImageId.HasValue,
+            acccount.ImageId == null,
             cancellationToken);
 
         return account.Id!;

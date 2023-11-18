@@ -31,14 +31,14 @@ public class ImageEntityFrameworkService : IImageAgnosticService
         _unitOfWork = unitOfWork;
     }
 
-    public Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default)
+    public Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default)
     {
-        return _imageRepository.IsImageIdValidAsync(id, cancellationToken);
+        return _imageRepository.IsImageIdValidAsync(int.Parse(id), cancellationToken);
     }
 
-    public async Task<ImageServiceModel?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<ImageServiceModel?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default)
     {
-        var image = await _imageRepository.GetByIdWithFileAsync(id, cancellationToken);
+        var image = await _imageRepository.GetByIdWithFileAsync(int.Parse(id), cancellationToken);
 
         return _mapper.Map<ImageServiceModel>(image);
     }

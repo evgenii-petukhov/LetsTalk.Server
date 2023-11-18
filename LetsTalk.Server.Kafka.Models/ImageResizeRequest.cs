@@ -2,7 +2,7 @@
 
 public class ImageResizeRequest
 {
-    public int ImageId { get; set; }
+    public string? ImageId { get; set; }
 
     public string? MessageId { get; set; }
 }

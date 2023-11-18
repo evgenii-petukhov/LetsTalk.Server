@@ -25,9 +25,11 @@ public class Message
 
     public long? DateReadUnix { get; set; }
 
-    public int? ImageId { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? ImageId { get; set; }
 
-    public int? ImagePreviewId { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? ImagePreviewId { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
     public string? LinkPreviewId { get; set; }

@@ -18,7 +18,7 @@ public class MessageServiceModel
 
     public long? DateReadUnix { get; set; }
 
-    public int? ImageId { get; set; }
+    public string? ImageId { get; set; }
 
     public ImagePreviewServiceModel? ImagePreview { get; set; }
 

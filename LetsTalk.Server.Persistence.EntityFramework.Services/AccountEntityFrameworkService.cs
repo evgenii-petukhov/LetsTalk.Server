@@ -43,11 +43,11 @@ public class AccountEntityFrameworkService: IAccountAgnosticService
         string firstName,
         string lastName,
         string email,
-        int? imageId,
+        string imageId,
         CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
-        account.UpdateProfile(firstName, lastName, email, imageId);
+        account.UpdateProfile(firstName, lastName, email, int.Parse(imageId));
 
         await _unitOfWork.SaveAsync(cancellationToken);
 

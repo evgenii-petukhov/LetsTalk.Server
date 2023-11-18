@@ -6,7 +6,6 @@ using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
-using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -54,17 +53,17 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
             request.FirstName!,
             request.LastName!,
             request.Email!,
-            request.ImageId,
+            request.ImageId!,
             cancellationToken);
 
-        if (previousImageId.HasValue && request.ImageId.HasValue)
+        if (previousImageId != null && !string.IsNullOrWhiteSpace(request.ImageId))
         {
             await _producer.ProduceAsync(
                 _kafkaSettings.RemoveImageRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new RemoveImageRequest
                 {
-                    ImageId = previousImageId.Value
+                    ImageId = previousImageId
                 });
         }
 

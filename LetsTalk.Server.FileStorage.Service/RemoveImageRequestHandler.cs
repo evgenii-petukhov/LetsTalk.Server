@@ -28,11 +28,11 @@ public class RemoveImageRequestHandler : IMessageHandler<RemoveImageRequest>
 
     public async Task Handle(IMessageContext context, RemoveImageRequest message)
     {
-        var image = await _imageAgnosticService.GetByIdWithFileAsync(message.ImageId);
+        var image = await _imageAgnosticService.GetByIdWithFileAsync(message.ImageId!);
         await _fileAgnosticService.DeleteByIdAsync(image!.File!.Id);
 
         _iOService.DeleteFile(image.File!.FileName!, FileTypes.Image);
 
-        await _imageCacheManager.RemoveAsync(message.ImageId);
+        await _imageCacheManager.RemoveAsync(message.ImageId!);
     }
 }

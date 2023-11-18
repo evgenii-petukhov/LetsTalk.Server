@@ -7,9 +7,9 @@ public interface IMessageAgnosticService
     Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
         string recipientId,
-        string? text,
-        string? textHtml,
-        int? imageId,
+        string text,
+        string textHtml,
+        string imageId,
         CancellationToken cancellationToken);
 
     Task<List<MessageServiceModel>> GetPagedAsync(

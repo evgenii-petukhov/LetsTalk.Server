@@ -14,9 +14,9 @@ public interface IMessageRepository
     Task<Message> CreateAsync(
         string senderId,
         string recipientId,
-        string? text,
-        string? textHtml,
-        int? imageId,
+        string text,
+        string textHtml,
+        string imageId,
         CancellationToken cancellationToken = default);
 
     Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default);

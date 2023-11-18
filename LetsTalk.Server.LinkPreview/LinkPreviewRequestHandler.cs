@@ -28,7 +28,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
     {
-        if (request.Url == null)
+        if (string.IsNullOrWhiteSpace(request.Url))
         {
             return;
         }

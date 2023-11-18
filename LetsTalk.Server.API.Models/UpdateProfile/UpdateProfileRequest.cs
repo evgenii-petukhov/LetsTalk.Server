@@ -8,5 +8,5 @@ public class UpdateProfileRequest
 
     public string? LastName { get; set; }
 
-    public int? ImageId { get; set; }
+    public string? ImageId { get; set; }
 }

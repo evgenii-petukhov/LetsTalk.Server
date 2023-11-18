@@ -101,7 +101,7 @@ public class AccountRepository : IAccountRepository
             .Set(x => x.LastName, lastName)
             .Set(x => x.Email, email);
 
-        updateDefinition = imageId != null
+        updateDefinition = imageId == null
             ? updateDefinition
             : updateDefinition.Set(x => x.ImageId, imageId);
 

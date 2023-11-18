@@ -14,4 +14,6 @@ public interface IImageRepository
         int width,
         int height,
         CancellationToken cancellationToken = default);
+
+    Task<Image?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default);
 }

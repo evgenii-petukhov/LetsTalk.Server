@@ -52,4 +52,12 @@ public class ImageRepository : IImageRepository
 
         return image;
     }
+
+    public Task<Image?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _uploadCollection
+            .Find(Builders<Upload>.Filter.OfType<Image>() & Builders<Upload>.Filter.Eq(x => x.Id, id))
+            .Project(Builders<Upload>.Projection.As<Image>())
+            .FirstOrDefaultAsync(cancellationToken)!;
+    }
 }

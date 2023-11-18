@@ -31,6 +31,8 @@ public class Message
     [BsonRepresentation(BsonType.ObjectId)]
     public string? ImagePreviewId { get; set; }
 
+    public Image? ImagePreview { get; set; }
+
     [BsonRepresentation(BsonType.ObjectId)]
     public string? LinkPreviewId { get; set; }
 

@@ -9,13 +9,16 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services;
 public class ImageMongoDBService : IImageAgnosticService
 {
     private readonly IImageRepository _imageRepository;
+    private readonly IMessageRepository _messageRepository;
     private readonly IMapper _mapper;
 
     public ImageMongoDBService(
         IImageRepository imageRepository,
+        IMessageRepository messageRepository,
         IMapper mapper)
     {
         _imageRepository = imageRepository;
+        _messageRepository = messageRepository;
         _mapper = mapper;
     }
 
@@ -24,9 +27,11 @@ public class ImageMongoDBService : IImageAgnosticService
         return _imageRepository.IsImageIdValidAsync(id, cancellationToken);
     }
 
-    public Task<ImageServiceModel?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<ImageServiceModel?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var image = await _imageRepository.GetByIdWithFileAsync(id, cancellationToken);
+
+        return _mapper.Map<ImageServiceModel>(image);
     }
 
     public async Task<ImageServiceModel> CreateImageAsync(
@@ -42,7 +47,7 @@ public class ImageMongoDBService : IImageAgnosticService
         return _mapper.Map<ImageServiceModel>(image);
     }
 
-    public Task<MessageServiceModel> SaveImagePreviewAsync(
+    public async Task<MessageServiceModel> SaveImagePreviewAsync(
         string messageId,
         string filename,
         ImageFormats imageFormat,
@@ -51,6 +56,12 @@ public class ImageMongoDBService : IImageAgnosticService
         int height,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var image = await _imageRepository.CreateImageAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
+
+        var message = await _messageRepository.SetImagePreviewAsync(messageId, image.Id!, cancellationToken);
+
+        message.ImagePreview = image;
+
+        return _mapper.Map<MessageServiceModel>(message);
     }
 }

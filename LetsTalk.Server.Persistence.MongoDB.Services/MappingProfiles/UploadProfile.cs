@@ -9,6 +9,7 @@ public class UploadProfile : Profile
     public UploadProfile()
     {
         CreateMap<Image, ImageServiceModel>();
+        CreateMap<Image, ImagePreviewServiceModel>();
         CreateMap<Models.File, FileServiceModel>();
     }
 }

@@ -12,6 +12,7 @@ public class MessageRepository : IMessageRepository
 {
     private readonly IMongoCollection<Message> _messageCollection;
     private readonly IMongoCollection<LinkPreview> _linkPreviewCollection;
+    private readonly IMongoCollection<Image> _imageCollection;
 
     public MessageRepository(
         IMongoClient mongoClient,
@@ -21,6 +22,7 @@ public class MessageRepository : IMessageRepository
 
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
         _linkPreviewCollection = mongoDatabase.GetCollection<LinkPreview>(nameof(LinkPreview));
+        _imageCollection = mongoDatabase.GetCollection<Image>(nameof(Upload));
     }
 
     public Task<List<Message>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
@@ -28,12 +30,23 @@ public class MessageRepository : IMessageRepository
         return _messageCollection
             .AsQueryable()
             .Where(message => (message.SenderId == senderId && message.RecipientId == recipientId) || (message.SenderId == recipientId && message.RecipientId == senderId))
-            .GroupJoin(_linkPreviewCollection.AsQueryable(), x => x.LinkPreviewId, x => x.Id, (message, linkPreviews) => new
+            .GroupJoin(_linkPreviewCollection, x => x.LinkPreviewId, x => x.Id, (message, linkPreviews) => new
             {
                 Message = message,
                 LinkPreviews = linkPreviews
             })
-            .SelectMany(x => x.LinkPreviews.DefaultIfEmpty(), (g, linkPreview) => new Message
+            .SelectMany(x => x.LinkPreviews.DefaultIfEmpty(), (g, linkPreview) => new
+            {
+                g.Message,
+                LinkPreview = linkPreview
+            })
+            .GroupJoin(_imageCollection, x => x.Message.ImagePreviewId, x => x.Id, (g, images) => new
+            {
+                g.Message,
+                g.LinkPreview,
+                Images = images
+            })
+            .SelectMany(x => x.Images.DefaultIfEmpty(), (g, image) => new Message
             {
                 Id = g.Message.Id,
                 Text = g.Message.Text,
@@ -42,7 +55,9 @@ public class MessageRepository : IMessageRepository
                 RecipientId = g.Message.RecipientId,
                 IsRead = g.Message.IsRead,
                 DateCreatedUnix = g.Message.DateCreatedUnix,
-                LinkPreview = linkPreview
+                LinkPreview = g.LinkPreview,
+                ImageId = g.Message.ImageId,
+                ImagePreview = image
             })
             .OrderByDescending(mesage => mesage.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
@@ -147,5 +162,17 @@ public class MessageRepository : IMessageRepository
         message.LinkPreview = linkPreview;
 
         return message;
+    }
+
+    public Task<Message> SetImagePreviewAsync(string messageId, string imageId, CancellationToken cancellationToken = default)
+    {
+        return _messageCollection.FindOneAndUpdateAsync(
+            Builders<Message>.Filter.Eq(x => x.Id, messageId),
+            Builders<Message>.Update.Set(x => x.ImagePreviewId, imageId),
+            new FindOneAndUpdateOptions<Message, Message>
+            {
+                ReturnDocument = ReturnDocument.After
+            },
+            cancellationToken: cancellationToken);
     }
 }

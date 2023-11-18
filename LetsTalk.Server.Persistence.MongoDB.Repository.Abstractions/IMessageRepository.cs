@@ -27,6 +27,8 @@ public interface IMessageRepository
 
     Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default);
 
+    Task<Message> SetImagePreviewAsync(string messageId, string imageId, CancellationToken cancellationToken = default);
+
     Task<Message> SetLinkPreviewAsync(
         string messageId,
         string url,

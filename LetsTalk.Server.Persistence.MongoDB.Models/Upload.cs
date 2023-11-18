@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Models;
 
-public class Upload
+public abstract class Upload
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

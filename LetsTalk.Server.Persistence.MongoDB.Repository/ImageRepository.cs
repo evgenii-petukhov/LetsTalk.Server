@@ -23,7 +23,7 @@ public class ImageRepository : IImageRepository
     public Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default)
     {
         return _uploadCollection
-            .Find(Builders<Upload>.Filter.Eq(x => x.Id, id))
+            .Find(Builders<Upload>.Filter.OfType<Image>() & Builders<Upload>.Filter.Eq(x => x.Id, id))
             .AnyAsync(cancellationToken);
     }
 

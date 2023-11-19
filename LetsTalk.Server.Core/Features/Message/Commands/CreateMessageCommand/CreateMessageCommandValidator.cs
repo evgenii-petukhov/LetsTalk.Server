@@ -36,8 +36,6 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
         When(model => !string.IsNullOrWhiteSpace(model.ImageId), () =>
         {
             RuleFor(model => model.ImageId)
-                .NotEqual("0")
-                .WithMessage("{PropertyName} can't be zero")
                 .MustAsync(IsImageIdValidAsync)
                 .WithMessage("Image with {PropertyName} = {PropertyValue} does not exist");
         });
@@ -52,7 +50,7 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
     }
 
-    private async Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken)
+    private async Task<bool> IsImageIdValidAsync(string? id, CancellationToken cancellationToken)
     {
         return !string.IsNullOrWhiteSpace(id)
             && await _imageAgnosticService.IsImageIdValidAsync(id, cancellationToken);

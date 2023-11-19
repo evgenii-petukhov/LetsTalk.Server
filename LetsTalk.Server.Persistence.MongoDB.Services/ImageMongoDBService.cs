@@ -8,28 +8,28 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public class ImageMongoDBService : IImageAgnosticService
 {
-    private readonly IImageRepository _imageRepository;
+    private readonly IUploadRepository _uploadRepository;
     private readonly IMessageRepository _messageRepository;
     private readonly IMapper _mapper;
 
     public ImageMongoDBService(
-        IImageRepository imageRepository,
+        IUploadRepository uploadRepository,
         IMessageRepository messageRepository,
         IMapper mapper)
     {
-        _imageRepository = imageRepository;
+        _uploadRepository = uploadRepository;
         _messageRepository = messageRepository;
         _mapper = mapper;
     }
 
     public Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default)
     {
-        return _imageRepository.IsImageIdValidAsync(id, cancellationToken);
+        return _uploadRepository.IsImageIdValidAsync(id, cancellationToken);
     }
 
     public async Task<ImageServiceModel?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default)
     {
-        var image = await _imageRepository.GetByIdWithFileAsync(id, cancellationToken);
+        var image = await _uploadRepository.GetByIdWithFileAsync(id, cancellationToken);
 
         return _mapper.Map<ImageServiceModel>(image);
     }
@@ -42,7 +42,7 @@ public class ImageMongoDBService : IImageAgnosticService
         int height,
         CancellationToken cancellationToken = default)
     {
-        var image = await _imageRepository.CreateImageAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
+        var image = await _uploadRepository.CreateImageAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
 
         return _mapper.Map<ImageServiceModel>(image);
     }
@@ -56,7 +56,7 @@ public class ImageMongoDBService : IImageAgnosticService
         int height,
         CancellationToken cancellationToken = default)
     {
-        var image = await _imageRepository.CreateImageAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
+        var image = await _uploadRepository.CreateImageAsync(filename, imageFormat, imageRole, width, height, cancellationToken);
 
         var message = await _messageRepository.SetImagePreviewAsync(messageId, image.Id!, cancellationToken);
 

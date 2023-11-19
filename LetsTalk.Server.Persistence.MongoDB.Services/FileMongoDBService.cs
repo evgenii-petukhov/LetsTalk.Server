@@ -1,11 +1,19 @@
 ﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public class FileMongoDBService : IFileAgnosticService
 {
-    public Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default)
+    private readonly IUploadRepository _uploadRepository;
+
+    public FileMongoDBService(IUploadRepository uploadRepository)
     {
-        throw new NotImplementedException();
+        _uploadRepository = uploadRepository;
+    }
+
+    public Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _uploadRepository.DeleteByIdAsync(id, cancellationToken);
     }
 }

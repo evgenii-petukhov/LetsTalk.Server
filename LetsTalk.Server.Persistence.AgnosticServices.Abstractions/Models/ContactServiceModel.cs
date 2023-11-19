@@ -4,13 +4,13 @@ public class ContactServiceModel
 {
     public string? Id { get; set; }
 
-    public int AccountTypeId { get; protected set; }
+    public int AccountTypeId { get; set; }
 
-    public string? PhotoUrl { get; protected set; }
+    public string? PhotoUrl { get; set; }
 
-    public string? FirstName { get; protected set; }
+    public string? FirstName { get; set; }
 
-    public string? LastName { get; protected set; }
+    public string? LastName { get; set; }
 
     public int? UnreadCount { get; set; }
 
@@ -18,5 +18,5 @@ public class ContactServiceModel
 
     public string? LastMessageId { get; set; }
 
-    public int? ImageId { get; protected set; }
+    public string? ImageId { get; set; }
 }

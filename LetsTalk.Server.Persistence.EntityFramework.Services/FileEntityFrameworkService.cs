@@ -19,9 +19,9 @@ public class FileEntityFrameworkService : IFileAgnosticService
         _unitOfWork = unitOfWork;
     }
 
-    public Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default)
+    public Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var file = _entityFactory.CreateFile(id);
+        var file = _entityFactory.CreateFile(int.Parse(id));
         _fileRepository.Delete(file);
         return _unitOfWork.SaveAsync(cancellationToken);
     }

@@ -2,9 +2,9 @@
 
 public class FileServiceModel
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
-    public string? FileName { get; protected set; }
+    public string? FileName { get; set; }
 
-    public int FileTypeId { get; protected set; }
+    public int FileTypeId { get; set; }
 }

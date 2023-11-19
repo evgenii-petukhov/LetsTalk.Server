@@ -7,11 +7,11 @@ using MongoDB.Driver;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository;
 
-public class ImageRepository : IImageRepository
+public class UploadRepository : IUploadRepository
 {
     private readonly IMongoCollection<Upload> _uploadCollection;
 
-    public ImageRepository(
+    public UploadRepository(
         IMongoClient mongoClient,
         IOptions<DatabaseSettings> mongoDBSettings)
     {
@@ -59,5 +59,10 @@ public class ImageRepository : IImageRepository
             .Find(Builders<Upload>.Filter.OfType<Image>() & Builders<Upload>.Filter.Eq(x => x.Id, id))
             .Project(Builders<Upload>.Projection.As<Image>())
             .FirstOrDefaultAsync(cancellationToken)!;
+    }
+
+    public Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _uploadCollection.DeleteOneAsync(Builders<Upload>.Filter.Eq(x => x.Id, id), cancellationToken);
     }
 }

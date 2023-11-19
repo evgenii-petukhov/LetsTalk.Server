@@ -3,7 +3,7 @@ using LetsTalk.Server.Persistence.MongoDB.Models;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
-public interface IImageRepository
+public interface IUploadRepository
 {
     Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default);
 
@@ -16,4 +16,6 @@ public interface IImageRepository
         CancellationToken cancellationToken = default);
 
     Task<Image?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default);
+
+    Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default);
 }

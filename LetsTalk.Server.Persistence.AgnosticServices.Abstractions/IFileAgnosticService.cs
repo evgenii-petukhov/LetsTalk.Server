@@ -2,5 +2,5 @@
 
 public interface IFileAgnosticService
 {
-    Task DeleteByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default);
 }

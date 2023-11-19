@@ -35,7 +35,11 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
         string imageId,
         CancellationToken cancellationToken)
     {
-        var message = new Domain.Message(int.Parse(senderId), int.Parse(recipientId), text, textHtml, int.Parse(imageId));
+        var message = new Domain.Message(
+            int.Parse(senderId),
+            int.Parse(recipientId),
+            text, textHtml,
+            string.IsNullOrWhiteSpace(imageId) ? null : int.Parse(imageId));
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 

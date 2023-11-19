@@ -16,6 +16,8 @@ public class LinkPreviewEntityFrameworkService : ILinkPreviewAgnosticService
     {
         var linkPreviewId = await _linkPreviewRepository.GetIdByUrlAsync(url, cancellationToken);
 
-        return linkPreviewId.ToString();
+        return linkPreviewId == 0
+            ? null
+            : linkPreviewId.ToString();
     }
 }

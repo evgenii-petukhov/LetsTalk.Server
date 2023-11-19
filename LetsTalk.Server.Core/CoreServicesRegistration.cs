@@ -11,10 +11,9 @@ using System.Reflection;
 using StackExchange.Redis;
 using LetsTalk.Server.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.Persistence.EntityFramework.Services;
 using LetsTalk.Server.Core.Services.Cache.Contacts;
 using LetsTalk.Server.Core.Services.Cache.Profile;
-using LetsTalk.Server.Persistence.MongoDB.Services;
+using LetsTalk.Server.Persistence.AgnosticServices;
 
 namespace LetsTalk.Server.Core;
 
@@ -97,15 +96,7 @@ public static class CoreServicesRegistration
                 break;
         }
 
-        switch (configuration.GetValue<string>("Database:databaseType"))
-        {
-            case "MongoDB":
-                services.AddMongoDBServices(configuration);
-                break;
-            default:
-                services.AddEntityFrameworkServices(configuration);
-                break;
-        }
+        services.AddAgnosticServices(configuration);
 
         return services;
     }

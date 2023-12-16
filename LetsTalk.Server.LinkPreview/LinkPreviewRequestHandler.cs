@@ -53,7 +53,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             Guid.NewGuid().ToString(),
             new Notification<LinkPreviewDto>[]
             {
-                new Notification<LinkPreviewDto>
+                new()
                 {
                     RecipientId = message.RecipientId,
                     Message = linkPreviewDto with
@@ -61,7 +61,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                         AccountId = message.SenderId
                     }
                 },
-                new Notification<LinkPreviewDto>
+                new()
                 {
                     RecipientId = message.SenderId,
                     Message = linkPreviewDto with

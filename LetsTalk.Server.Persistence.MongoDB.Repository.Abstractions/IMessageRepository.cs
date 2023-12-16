@@ -21,9 +21,9 @@ public interface IMessageRepository
 
     Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
-    Task MarkAsRead(string messageId, CancellationToken cancellationToken = default);
+    Task MarkAsReadAsync(string messageId, CancellationToken cancellationToken = default);
 
-    Task MarkAllAsRead(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default);
+    Task MarkAllAsReadAsync(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default);
 
     Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default);
 

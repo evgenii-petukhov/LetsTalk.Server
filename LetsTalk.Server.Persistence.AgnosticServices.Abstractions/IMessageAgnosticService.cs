@@ -28,7 +28,7 @@ public interface IMessageAgnosticService
         string imageUrl,
         CancellationToken cancellationToken = default);
 
-    Task MarkAsRead(
+    Task MarkAsReadAsync(
         string messageId,
         string accountId,
         bool updatePreviousMessages,

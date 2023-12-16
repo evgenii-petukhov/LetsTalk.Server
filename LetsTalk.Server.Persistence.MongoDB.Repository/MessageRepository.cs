@@ -96,7 +96,7 @@ public class MessageRepository : IMessageRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task MarkAsRead(string messageId, CancellationToken cancellationToken = default)
+    public Task MarkAsReadAsync(string messageId, CancellationToken cancellationToken = default)
     {
         return _messageCollection.UpdateOneAsync(
             Builders<Message>.Filter.Eq(x => x.Id, messageId),
@@ -106,7 +106,7 @@ public class MessageRepository : IMessageRepository
             cancellationToken: cancellationToken);
     }
 
-    public Task MarkAllAsRead(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default)
+    public Task MarkAllAsReadAsync(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default)
     {
         return _messageCollection.UpdateManyAsync(
             Builders<Message>.Filter.Where(message => message.DateCreatedUnix <= dateCreatedUnix && message.SenderId == senderId && message.RecipientId == recipientId && !message.IsRead),

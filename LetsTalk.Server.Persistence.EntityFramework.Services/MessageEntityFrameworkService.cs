@@ -88,7 +88,7 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
         return _mapper.Map<MessageServiceModel>(message);
     }
 
-    public async Task MarkAsRead(
+    public async Task MarkAsReadAsync(
         string messageId,
         string accountId,
         bool updatePreviousMessages,
@@ -96,7 +96,7 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
     {
         if (updatePreviousMessages)
         {
-            await MarkAllAsRead(int.Parse(accountId), int.Parse(messageId), cancellationToken);
+            await MarkAllAsReadAsync(int.Parse(accountId), int.Parse(messageId), cancellationToken);
         }
         else
         {
@@ -111,7 +111,7 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
         message.MarkAsRead();
     }
 
-    private async Task MarkAllAsRead(int recipientId, int messageId, CancellationToken cancellationToken)
+    private async Task MarkAllAsReadAsync(int recipientId, int messageId, CancellationToken cancellationToken)
     {
         var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
 
@@ -120,6 +120,6 @@ public class MessageEntityFrameworkService : IMessageAgnosticService
             return;
         }
 
-        await _messageRepository.MarkAllAsRead(message.SenderId, recipientId, messageId);
+        await _messageRepository.MarkAllAsReadAsync(message.SenderId, recipientId, messageId);
     }
 }

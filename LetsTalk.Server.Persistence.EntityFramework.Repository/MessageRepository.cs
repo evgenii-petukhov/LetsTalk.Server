@@ -24,7 +24,7 @@ public class MessageRepository : GenericRepository<Message>, IMessageRepository
             .ToListAsync(cancellationToken);
     }
 
-    public Task MarkAllAsRead(int senderId, int recipientId, int messageId)
+    public Task MarkAllAsReadAsync(int senderId, int recipientId, int messageId)
     {
         return _context.Messages
             .AsTracking()

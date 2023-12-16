@@ -14,7 +14,7 @@ public class ReadMessageCommandHandler : IRequestHandler<ReadMessageCommand, Uni
 
     public async Task<Unit> Handle(ReadMessageCommand request, CancellationToken cancellationToken)
     {
-        await _messageAgnosticService.MarkAsRead(
+        await _messageAgnosticService.MarkAsReadAsync(
             request.MessageId!,
             request.RecipientId!,
             request.UpdatePreviousMessages,

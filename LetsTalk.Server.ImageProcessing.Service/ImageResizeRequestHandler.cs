@@ -70,7 +70,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
             Guid.NewGuid().ToString(),
             new Notification<ImagePreviewDto>[]
             {
-                new Notification<ImagePreviewDto>
+                new()
                 {
                     RecipientId = message.RecipientId,
                     Message = imagePreviewDto with
@@ -78,7 +78,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
                         AccountId = message.SenderId
                     }
                 },
-                new Notification<ImagePreviewDto>
+                new()
                 {
                     RecipientId = message.SenderId,
                     Message = imagePreviewDto with

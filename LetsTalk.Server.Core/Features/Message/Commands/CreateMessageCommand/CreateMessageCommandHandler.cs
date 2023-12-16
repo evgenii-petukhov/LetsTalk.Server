@@ -77,7 +77,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new Notification<MessageDto>[]
                 {
-                    new Notification<MessageDto>
+                    new()
                     {
                         RecipientId = request.RecipientId!,
                         Message = messageDto! with
@@ -85,7 +85,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                             IsMine = false
                         }
                     },
-                    new Notification<MessageDto>
+                    new()
                     {
                         RecipientId = request.SenderId!,
                         Message = messageDto with

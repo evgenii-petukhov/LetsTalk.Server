@@ -67,7 +67,7 @@ public class MessageMongoDBService : IMessageAgnosticService
         return _mapper.Map<MessageServiceModel>(message);
     }
 
-    public async Task MarkAsRead(
+    public async Task MarkAsReadAsync(
         string messageId,
         string accountId,
         bool updatePreviousMessages,
@@ -75,15 +75,15 @@ public class MessageMongoDBService : IMessageAgnosticService
     {
         if (updatePreviousMessages)
         {
-            await MarkAllAsRead(accountId, messageId, cancellationToken);
+            await MarkAllAsReadAsync(accountId, messageId, cancellationToken);
         }
         else
         {
-            await _messageRepository.MarkAsRead(messageId, cancellationToken);
+            await _messageRepository.MarkAsReadAsync(messageId, cancellationToken);
         }
     }
 
-    private async Task MarkAllAsRead(string recipientId, string messageId, CancellationToken cancellationToken)
+    private async Task MarkAllAsReadAsync(string recipientId, string messageId, CancellationToken cancellationToken)
     {
         var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
 
@@ -92,6 +92,6 @@ public class MessageMongoDBService : IMessageAgnosticService
             return;
         }
 
-        await _messageRepository.MarkAllAsRead(message.SenderId!, recipientId, message.DateCreatedUnix!.Value, cancellationToken);
+        await _messageRepository.MarkAllAsReadAsync(message.SenderId!, recipientId, message.DateCreatedUnix!.Value, cancellationToken);
     }
 }

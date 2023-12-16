@@ -2,5 +2,5 @@
 
 public class RemoveImageRequest
 {
-    public int ImageId { get; set; }
+    public string? ImageId { get; set; }
 }

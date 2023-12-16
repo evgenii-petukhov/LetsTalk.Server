@@ -2,7 +2,7 @@
 
 public class AccountDto
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     public int AccountTypeId { get; set; }
 
@@ -18,7 +18,7 @@ public class AccountDto
 
     public long LastMessageDate { get; set; }
 
-    public int LastMessageId { get; set; }
+    public string? LastMessageId { get; set; }
 
-    public int? ImageId { get; set; }
+    public string? ImageId { get; set; }
 }

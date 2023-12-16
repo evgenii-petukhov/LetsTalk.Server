@@ -13,7 +13,7 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
             .NotNull()
             .WithMessage("{PropertyName} is required");
 
-        When(model => model.AccountId.HasValue, () =>
+        When(model => !string.IsNullOrWhiteSpace(model.AccountId), () =>
         {
             RuleFor(model => model.AccountId)
                 .MustAsync(IsAccountIdValidAsync)
@@ -39,9 +39,9 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
         _accountAgnosticService = accountAgnosticService;
     }
 
-    private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
+    private async Task<bool> IsAccountIdValidAsync(string? id, CancellationToken cancellationToken)
     {
-        return id.HasValue
-            && await _accountAgnosticService.IsAccountIdValidAsync(id.Value, cancellationToken);
+        return !string.IsNullOrWhiteSpace(id)
+            && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
     }
 }

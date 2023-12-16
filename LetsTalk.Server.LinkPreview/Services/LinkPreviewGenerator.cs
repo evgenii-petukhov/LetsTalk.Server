@@ -28,10 +28,10 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
         _logger = logger;
     }
 
-    public async Task<MessageServiceModel?> ProcessMessageAsync(int messageId, string url)
+    public async Task<MessageServiceModel?> ProcessMessageAsync(string messageId, string url)
     {
         var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
-        if (linkPreviewId == 0)
+        if (linkPreviewId == null)
         {
             try
             {
@@ -69,6 +69,6 @@ public class LinkPreviewGenerator : ILinkPreviewGenerator
             _logger.LogInformation("Fetched from DB: {url}", url);
         }
 
-        return await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId);
+        return await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId!);
     }
 }

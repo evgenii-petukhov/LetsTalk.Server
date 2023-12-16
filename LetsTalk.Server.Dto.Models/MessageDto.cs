@@ -2,15 +2,15 @@
 
 public record MessageDto
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     public string? Text { get; set; }
 
     public string? TextHtml { get; set; }
 
-    public int SenderId { get; set; }
+    public string? SenderId { get; set; }
 
-    public int RecipientId { get; set; }
+    public string? RecipientId { get; set; }
 
     public bool? IsMine { get; set; }
 
@@ -18,7 +18,7 @@ public record MessageDto
 
     public LinkPreviewDto? LinkPreview { get; set; }
 
-    public int? ImageId { get; set; }
+    public string? ImageId { get; set; }
 
     public ImagePreviewDto? ImagePreview { get; set; }
 }

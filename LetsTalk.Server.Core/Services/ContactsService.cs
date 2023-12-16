@@ -18,7 +18,7 @@ public class ContactsService : IContactsService
         _mapper = mapper;
     }
 
-    public async Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken)
+    public async Task<List<AccountDto>> GetContactsAsync(string accountId, CancellationToken cancellationToken)
     {
         var messages = await _accountAgnosticService.GetContactsAsync(accountId, cancellationToken);
         return _mapper.Map<List<AccountDto>>(messages);

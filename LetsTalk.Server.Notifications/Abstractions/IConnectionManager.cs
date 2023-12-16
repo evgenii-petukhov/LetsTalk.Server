@@ -2,9 +2,9 @@
 
 public interface IConnectionManager
 {
-    HashSet<string> GetConnectionIds(int accountId);
+    HashSet<string> GetConnectionIds(string accountId);
 
-    void AddConnectionId(int accountId, string connectionId);
+    void AddConnectionId(string accountId, string connectionId);
 
     void RemoveConnectionId(string connectionId);
 }

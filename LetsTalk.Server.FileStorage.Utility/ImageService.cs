@@ -18,7 +18,7 @@ public class ImageService : IImageService
         _imageAgnosticService = imageAgnosticService;
     }
 
-    public async Task<FetchImageResponse> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {
         var image = await _imageAgnosticService.GetByIdWithFileAsync(imageId, cancellationToken);
 

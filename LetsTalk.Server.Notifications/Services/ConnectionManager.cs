@@ -6,9 +6,9 @@ public class ConnectionManager : IConnectionManager
 {
     private readonly object _lock = new();
 
-    public readonly Dictionary<int, HashSet<string>> _connectionIdAccountIdBy = new();
+    public readonly Dictionary<string, HashSet<string>> _connectionIdAccountIdBy = new(StringComparer.Ordinal);
 
-    public HashSet<string> GetConnectionIds(int accountId)
+    public HashSet<string> GetConnectionIds(string accountId)
     {
         return _connectionIdAccountIdBy.GetValueOrDefault(accountId)!;
     }
@@ -35,7 +35,7 @@ public class ConnectionManager : IConnectionManager
         }
     }
 
-    public void AddConnectionId(int accountId, string connectionId)
+    public void AddConnectionId(string accountId, string connectionId)
     {
         lock (_lock)
         {

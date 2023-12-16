@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Domain.Events;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
@@ -58,14 +57,6 @@ public class Account : BaseEntity
         FirstName = firstName;
         LastName = lastName;
         Email = email;
-
-        if (ImageId.HasValue && newImageId.HasValue)
-        {
-            AddDomainEvent(new AvatarChangedDomainEvent
-            {
-                PreviousImageId = ImageId.Value
-            });
-        }
 
         if (newImageId.HasValue)
         {

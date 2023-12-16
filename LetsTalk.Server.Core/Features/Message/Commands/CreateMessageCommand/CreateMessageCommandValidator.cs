@@ -24,7 +24,7 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             .NotNull()
             .WithMessage("{PropertyName} is required");
 
-        When(model => model.RecipientId.HasValue, () =>
+        When(model => !string.IsNullOrWhiteSpace(model.RecipientId), () =>
         {
             RuleFor(model => model.RecipientId)
                 .NotEqual(model => model.SenderId)
@@ -33,11 +33,9 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
         });
 
-        When(model => model.ImageId.HasValue, () =>
+        When(model => !string.IsNullOrWhiteSpace(model.ImageId), () =>
         {
             RuleFor(model => model.ImageId)
-                .GreaterThan(0)
-                .WithMessage("{PropertyName} can't be zero")
                 .MustAsync(IsImageIdValidAsync)
                 .WithMessage("Image with {PropertyName} = {PropertyValue} does not exist");
         });
@@ -46,20 +44,20 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
         _imageAgnosticService = imageAgnosticService;
     }
 
-    private async Task<bool> IsAccountIdValidAsync(int? id, CancellationToken cancellationToken)
+    private async Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken)
     {
-        return id.HasValue
-            && await _accountAgnosticService.IsAccountIdValidAsync(id.Value, cancellationToken);
+        return !string.IsNullOrWhiteSpace(id)
+            && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
     }
 
-    private async Task<bool> IsImageIdValidAsync(int? id, CancellationToken cancellationToken)
+    private async Task<bool> IsImageIdValidAsync(string? id, CancellationToken cancellationToken)
     {
-        return id.HasValue
-            && await _imageAgnosticService.IsImageIdValidAsync(id.Value, cancellationToken);
+        return !string.IsNullOrWhiteSpace(id)
+            && await _imageAgnosticService.IsImageIdValidAsync(id, cancellationToken);
     }
 
     private bool IsContentValid(CreateMessageCommand model)
     {
-        return !string.IsNullOrEmpty(model.Text) || model.ImageId.HasValue;
+        return !string.IsNullOrWhiteSpace(model.Text) || !string.IsNullOrWhiteSpace(model.ImageId);
     }
 }

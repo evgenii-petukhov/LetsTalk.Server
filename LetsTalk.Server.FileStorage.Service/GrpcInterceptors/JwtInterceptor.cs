@@ -26,7 +26,7 @@ public class JwtInterceptor : Interceptor
         }
 
         var accountId = await _authenticationClient.ValidateJwtTokenAsync(token.Value);
-        if (!accountId.HasValue)
+        if (string.IsNullOrEmpty(accountId))
         {
             throw new UnauthorizedAccessException();
         }

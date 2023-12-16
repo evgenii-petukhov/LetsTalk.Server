@@ -62,11 +62,11 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         var (html, url) = _htmlGenerator.GetHtml(request.Text!);
 
         var message = await _messageAgnosticService.CreateMessageAsync(
-            request.SenderId!.Value,
-            request.RecipientId!.Value,
-            request.Text,
-            html,
-            request.ImageId,
+            request.SenderId!,
+            request.RecipientId!,
+            request.Text!,
+            html!,
+            request.ImageId!,
             cancellationToken);
 
         var messageDto = _mapper.Map<MessageDto>(message);
@@ -77,17 +77,17 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new Notification<MessageDto>[]
                 {
-                    new Notification<MessageDto>
+                    new()
                     {
-                        RecipientId = request.RecipientId!.Value,
+                        RecipientId = request.RecipientId!,
                         Message = messageDto! with
                         {
                             IsMine = false
                         }
                     },
-                    new Notification<MessageDto>
+                    new()
                     {
-                        RecipientId = request.SenderId!.Value,
+                        RecipientId = request.SenderId!,
                         Message = messageDto with
                         {
                             IsMine = true
@@ -102,16 +102,16 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     Url = url
                 }),
-            request.ImageId.HasValue ? _imageResizeRequestProducer.ProduceAsync(
+            string.IsNullOrWhiteSpace(request.ImageId) ? Task.CompletedTask : _imageResizeRequestProducer.ProduceAsync(
                 _kafkaSettings.ImageResizeRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
                     MessageId = messageDto.Id,
-                    ImageId = request.ImageId.Value
-                }) : Task.CompletedTask);
+                    ImageId = request.ImageId
+                }));
 
-        await _messageCacheManager.RemoveAsync(request.SenderId.Value, request.RecipientId.Value);
+        await _messageCacheManager.RemoveAsync(request.SenderId!, request.RecipientId!);
 
         return new CreateMessageResponse
         {

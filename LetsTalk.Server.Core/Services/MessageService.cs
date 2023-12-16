@@ -18,7 +18,7 @@ public class MessageService: IMessageService
         _mapper = mapper;
     }
 
-    public async Task<List<MessageDto>> GetPagedAsync(int senderId, int recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public async Task<List<MessageDto>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         var messages = await _messageAgnosticService.GetPagedAsync(senderId, recipientId, pageIndex, messagesPerPage, cancellationToken);
 

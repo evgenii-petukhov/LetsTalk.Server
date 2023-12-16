@@ -29,7 +29,7 @@ public abstract class ContactsCacheServiceBase
         }
     }
 
-    protected static string GetContactsKey(int accountId)
+    protected static string GetContactsKey(string accountId)
     {
         return $"account:{accountId}:contacts";
     }

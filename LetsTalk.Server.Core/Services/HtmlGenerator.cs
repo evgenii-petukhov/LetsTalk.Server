@@ -20,7 +20,7 @@ public class HtmlGenerator : IHtmlGenerator
 
     public HtmlGeneratorResult GetHtml(string text)
     {
-        if (string.IsNullOrEmpty(text))
+        if (string.IsNullOrWhiteSpace(text))
         {
             return new HtmlGeneratorResult();
         }

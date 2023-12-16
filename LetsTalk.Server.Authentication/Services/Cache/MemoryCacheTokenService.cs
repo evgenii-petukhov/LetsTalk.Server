@@ -16,7 +16,7 @@ public class MemoryCacheTokenService : CacheTokenServiceBase, IJwtCacheService
         _memoryCache = memoryCache;
     }
 
-    public async Task<int?> GetAccountIdAsync(string? token)
+    public async Task<string?> GetAccountIdAsync(string? token)
     {
         return token == null
             ? null
@@ -28,7 +28,7 @@ public class MemoryCacheTokenService : CacheTokenServiceBase, IJwtCacheService
             });
     }
 
-    public async Task<string> GenerateAsync(int accountId)
+    public async Task<string> GenerateAsync(string accountId)
     {
         var storedToken = await _jwtStorageService.GenerateAsync(accountId);
         _memoryCache.Set(GetTokenKey(storedToken.Token!), storedToken.AccountId, storedToken.ValidTo);

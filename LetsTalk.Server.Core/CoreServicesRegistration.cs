@@ -11,9 +11,9 @@ using System.Reflection;
 using StackExchange.Redis;
 using LetsTalk.Server.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.Persistence.EntityFrameworkServices;
 using LetsTalk.Server.Core.Services.Cache.Contacts;
 using LetsTalk.Server.Core.Services.Cache.Profile;
+using LetsTalk.Server.Persistence.AgnosticServices;
 
 namespace LetsTalk.Server.Core;
 
@@ -24,6 +24,7 @@ public static class CoreServicesRegistration
         IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddMediatR(options => options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddScoped<IOpenAuthProvider, FacebookOpenAuthProvider>();
         services.AddScoped<IOpenAuthProvider, VkOpenAuthProvider>();
         services.AddScoped<IRegexService, RegexService>();
@@ -68,32 +69,34 @@ public static class CoreServicesRegistration
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 
-        if (string.Equals(configuration.GetValue<string>("Caching:cachingMode"), "redis", StringComparison.OrdinalIgnoreCase))
+        switch (configuration.GetValue<string>("Caching:cachingMode"))
         {
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnectionString")!));
+            case "redis":
+                services.AddSingleton<IConnectionMultiplexer>(
+                    ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
 
-            services.AddScoped<IMessageService, MessageService>();
-            services.DecorateScoped<IMessageService, MessageRedisCacheService>();
-            services.AddScoped<IMessageCacheManager, MessageRedisCacheService>();
+                services.AddScoped<IMessageService, MessageService>();
+                services.DecorateScoped<IMessageService, MessageRedisCacheService>();
+                services.AddScoped<IMessageCacheManager, MessageRedisCacheService>();
 
-            services.AddScoped<IContactsService, ContactsService>();
-            services.DecorateScoped<IContactsService, ContactsRedisCacheService>();
+                services.AddScoped<IContactsService, ContactsService>();
+                services.DecorateScoped<IContactsService, ContactsRedisCacheService>();
 
-            services.AddScoped<IProfileService, ProfileService>();
-            services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
-            services.AddScoped<IProfileCacheManager, ProfileRedisCacheService>();
+                services.AddScoped<IProfileService, ProfileService>();
+                services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
+                services.AddScoped<IProfileCacheManager, ProfileRedisCacheService>();
+                break;
+            default:
+                services.AddMemoryCache();
+                services.AddScoped<IMessageService, MessageService>();
+                services.DecorateScoped<IMessageService, MessageMemoryCacheService>();
+                services.AddScoped<IMessageCacheManager, MessageMemoryCacheService>();
+                services.AddScoped<IContactsService, ContactsService>();
+                services.DecorateScoped<IContactsService, ContactsMemoryCacheService>();
+                break;
         }
-        else
-        {
-            services.AddMemoryCache();
-            services.AddScoped<IMessageService, MessageService>();
-            services.DecorateScoped<IMessageService, MessageMemoryCacheService>();
-            services.AddScoped<IMessageCacheManager, MessageMemoryCacheService>();
-            services.AddScoped<IContactsService, ContactsService>();
-            services.DecorateScoped<IContactsService, ContactsMemoryCacheService>();
-        }
 
-        services.AddEntityFrameworkServices(configuration, Assembly.GetExecutingAssembly());
+        services.AddAgnosticServices(configuration);
 
         return services;
     }

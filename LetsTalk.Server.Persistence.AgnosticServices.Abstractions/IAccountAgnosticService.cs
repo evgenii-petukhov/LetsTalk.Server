@@ -5,11 +5,11 @@ namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 public interface IAccountAgnosticService
 {
-    Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default);
+    Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default);
 
-    Task<AccountServiceModel> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
-    Task<int> CreateOrUpdateAsync(
+    Task<string> CreateOrUpdateAsync(
         string externalId,
         AccountTypes accountType,
         string firstName,
@@ -19,12 +19,12 @@ public interface IAccountAgnosticService
         CancellationToken cancellationToken = default);
 
     Task<AccountServiceModel> UpdateProfileAsync(
-        int accountId,
+        string accountId,
         string firstName,
         string lastName,
         string email,
-        int? imageId,
+        string imageId,
         CancellationToken cancellationToken = default);
 
-    Task<List<ContactServiceModel>> GetContactsAsync(int id, CancellationToken cancellationToken = default);
+    Task<List<ContactServiceModel>> GetContactsAsync(string id, CancellationToken cancellationToken = default);
 }

@@ -28,12 +28,12 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
     {
-        if (request.Url == null)
+        if (string.IsNullOrWhiteSpace(request.Url))
         {
             return;
         }
 
-        var message = await _linkPreviewGenerator.ProcessMessageAsync(request.MessageId, request.Url);
+        var message = await _linkPreviewGenerator.ProcessMessageAsync(request.MessageId!, request.Url);
 
         if (message == null)
         {
@@ -53,7 +53,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             Guid.NewGuid().ToString(),
             new Notification<LinkPreviewDto>[]
             {
-                new Notification<LinkPreviewDto>
+                new()
                 {
                     RecipientId = message.RecipientId,
                     Message = linkPreviewDto with
@@ -61,7 +61,7 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
                         AccountId = message.SenderId
                     }
                 },
-                new Notification<LinkPreviewDto>
+                new()
                 {
                     RecipientId = message.SenderId,
                     Message = linkPreviewDto with

@@ -19,7 +19,7 @@ public class ContactsRedisCacheService : ContactsCacheServiceBase, IContactsServ
         _database = сonnectionMultiplexer.GetDatabase();
     }
 
-    public async Task<List<AccountDto>> GetContactsAsync(int accountId, CancellationToken cancellationToken)
+    public async Task<List<AccountDto>> GetContactsAsync(string accountId, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {

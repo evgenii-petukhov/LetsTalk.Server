@@ -44,7 +44,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
 
     public async Task Handle(IMessageContext context, ImageResizeRequest request)
     {
-        var fetchImageResponse = await _imageService.FetchImageAsync(request.ImageId);
+        var fetchImageResponse = await _imageService.FetchImageAsync(request.ImageId!);
         var (data, width, height) = _imageResizeService.Resize(
             fetchImageResponse.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
@@ -52,7 +52,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         var filename = await _fileService.SaveDataAsync(data!, FileTypes.Image, ImageRoles.Message);
 
         var message = await _imageAgnosticService.SaveImagePreviewAsync(
-            request.MessageId,
+            request.MessageId!,
             filename,
             ImageFormats.Webp,
             ImageRoles.Message,
@@ -70,7 +70,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
             Guid.NewGuid().ToString(),
             new Notification<ImagePreviewDto>[]
             {
-                new Notification<ImagePreviewDto>
+                new()
                 {
                     RecipientId = message.RecipientId,
                     Message = imagePreviewDto with
@@ -78,7 +78,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
                         AccountId = message.SenderId
                     }
                 },
-                new Notification<ImagePreviewDto>
+                new()
                 {
                     RecipientId = message.SenderId,
                     Message = imagePreviewDto with

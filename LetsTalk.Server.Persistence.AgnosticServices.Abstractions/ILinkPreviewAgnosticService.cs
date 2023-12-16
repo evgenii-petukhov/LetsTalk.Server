@@ -2,5 +2,5 @@
 
 public interface ILinkPreviewAgnosticService
 {
-    Task<int> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default);
+    Task<string?> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default);
 }

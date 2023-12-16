@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Domain.Events;
-using LetsTalk.Server.Domain.Utility;
+﻿using LetsTalk.Server.Persistence.Utility;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
@@ -55,11 +54,6 @@ public class Message : BaseEntity
     public void SetImagePreview(Image image)
     {
         ImagePreview = image;
-        AddDomainEvent(new MessageDomainEvent<Image>
-        {
-            Message = this,
-            Payload = image
-        });
     }
 
     public void SetLinkPreview(LinkPreview linkPreview)

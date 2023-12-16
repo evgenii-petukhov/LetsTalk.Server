@@ -18,7 +18,7 @@ public class ProfileService : IProfileService
         _mapper = mapper;
     }
 
-    public async Task<AccountDto> GetProfileAsync(int accountId, CancellationToken cancellationToken)
+    public async Task<AccountDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
         var accounts = await _accountAgnosticService.GetByIdAsync(accountId, cancellationToken);
 

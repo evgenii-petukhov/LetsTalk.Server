@@ -38,7 +38,7 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
         }
     }
 
-    public async Task<FetchImageResponse> FetchImageAsync(int imageId, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {
         if (!_isActive)
         {
@@ -74,14 +74,14 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
         return JsonSerializer.Deserialize<FetchImageResponse>(cached!)!;
     }
 
-    public Task RemoveAsync(int imageId)
+    public Task RemoveAsync(string imageId)
     {
         return _isActive
             ? _database.KeyDeleteAsync(GetImageKey(imageId), CommandFlags.FireAndForget)
             : Task.CompletedTask;
     }
 
-    private static string GetImageKey(int imageId)
+    private static string GetImageKey(string imageId)
     {
         return $"image:{imageId}";
     }

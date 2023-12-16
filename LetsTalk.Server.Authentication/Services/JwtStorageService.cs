@@ -46,7 +46,7 @@ public class JwtStorageService: IJwtStorageService
         });
 
         var jwtToken = (JwtSecurityToken)validationResult.SecurityToken;
-        var accountId = int.Parse(jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value);
+        var accountId = jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value;
 
         return new StoredToken
         {
@@ -56,14 +56,14 @@ public class JwtStorageService: IJwtStorageService
         };
     }
 
-    public Task<StoredToken> GenerateAsync(int accountId)
+    public Task<StoredToken> GenerateAsync(string accountId)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(CLAIM_ID, accountId.ToString())
+                new Claim(CLAIM_ID, accountId)
             }),
             Expires = DateTime.UtcNow.AddYears(1),
             SigningCredentials = _signingCredentials

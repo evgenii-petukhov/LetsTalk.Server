@@ -11,7 +11,7 @@ service JwtTokenGrpcService {
 }
 
 message GenerateJwtTokenRequest {
-  int32 account_id = 1;
+  string account_id = 1;
 }
 
 message GenerateJwtTokenResponse {
@@ -23,5 +23,5 @@ message ValidateJwtTokenRequest {
 }
 
 message ValidateJwtTokenResponse {
-  google.protobuf.Int32Value account_id = 1;
+  google.protobuf.StringValue account_id = 1;
 }

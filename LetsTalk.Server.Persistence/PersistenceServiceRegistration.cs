@@ -13,7 +13,7 @@ public static class PersistenceServiceRegistration
     {
         services.AddDbContext<LetsTalkDbContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString("DbConnectionString");
+            var connectionString = configuration.GetConnectionString("MySql");
             options
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);

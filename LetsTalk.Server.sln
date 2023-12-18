@@ -91,7 +91,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Utility", "LetsTalk.Server.Persistence.Utility\LetsTalk.Server.Persistence.Utility.csproj", "{140DEA1C-FD30-45B1-8C54-D622D591A6AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.AgnosticServices", "LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj", "{9AE5AFF7-615D-482D-90C7-62CD710DD76D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.AgnosticServices", "LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj", "{9AE5AFF7-615D-482D-90C7-62CD710DD76D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{653FCCAF-7A2D-4C7F-B913-4220C8085D1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Tools.ImageInfoTool", "LetsTalk.Server.Tools.ImageInfoTool\LetsTalk.Server.Tools.ImageInfoTool.csproj", "{159A9E48-4082-4D33-9148-155F8F1934D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -247,6 +251,10 @@ Global
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{159A9E48-4082-4D33-9148-155F8F1934D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{159A9E48-4082-4D33-9148-155F8F1934D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{159A9E48-4082-4D33-9148-155F8F1934D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{159A9E48-4082-4D33-9148-155F8F1934D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -295,6 +303,8 @@ Global
 		{C6A46CAA-6494-4CFF-834B-19831F8DCD3B} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{140DEA1C-FD30-45B1-8C54-D622D591A6AA} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
+		{653FCCAF-7A2D-4C7F-B913-4220C8085D1B} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
+		{159A9E48-4082-4D33-9148-155F8F1934D5} = {653FCCAF-7A2D-4C7F-B913-4220C8085D1B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

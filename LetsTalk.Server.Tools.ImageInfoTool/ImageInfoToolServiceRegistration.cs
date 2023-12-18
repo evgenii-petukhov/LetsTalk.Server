@@ -1,0 +1,22 @@
+﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.ImageProcessing.Utility;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace LetsTalk.Server.Tools.ImageInfoTool;
+
+public static class ImageInfoToolServiceRegistration
+{
+    public static IServiceCollection AddImageInfoServices(
+    this IServiceCollection services,
+    IConfiguration configuration)
+    {
+        services.AddImageProcessingUtilityServices();
+
+        services.AddHostedService<ImageInfoHostedService>();
+
+        services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
+
+        return services;
+    }
+}

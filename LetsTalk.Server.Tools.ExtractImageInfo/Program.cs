@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Tools.ImageInfoTool;
+﻿using LetsTalk.Server.Tools.ExtractImageInfo;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

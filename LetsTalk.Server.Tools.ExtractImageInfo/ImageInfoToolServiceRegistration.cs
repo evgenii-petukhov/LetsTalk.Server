@@ -3,7 +3,7 @@ using LetsTalk.Server.ImageProcessing.Utility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LetsTalk.Server.Tools.ImageInfoTool;
+namespace LetsTalk.Server.Tools.ExtractImageInfo;
 
 public static class ImageInfoToolServiceRegistration
 {

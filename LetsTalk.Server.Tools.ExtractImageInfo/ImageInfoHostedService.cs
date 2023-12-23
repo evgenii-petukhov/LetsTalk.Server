@@ -1,10 +1,11 @@
 ﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.ImageInfo.Models;
 using LetsTalk.Server.ImageProcessing.Abstractions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System.IO;
+using System.Text.Json;
 
-namespace LetsTalk.Server.Tools.ImageInfoTool;
+namespace LetsTalk.Server.Tools.ExtractImageInfo;
 
 public class ImageInfoHostedService : IHostedService
 {
@@ -19,19 +20,27 @@ public class ImageInfoHostedService : IHostedService
         _imageInfoService = imageInfoService;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         var imagePath = Path.Combine(
             Environment.ExpandEnvironmentVariables(_fileStorageSettings.BasePath!),
             _fileStorageSettings.ImageFolder!);
 
-        foreach (var filename in Directory.GetFiles(imagePath))
+        foreach (var filename in Directory.GetFiles(imagePath).Where(x => string.IsNullOrEmpty(Path.GetExtension(x))))
         {
-            var data = File.ReadAllBytes(Path.Combine(imagePath, filename));
-            _imageInfoService.GetImageSize(data);
-        }
+            var data = await File.ReadAllBytesAsync(filename, cancellationToken);
+            var (width, height) = _imageInfoService.GetImageSize(data);
+            var imageInfo = new ImageInfoModel
+            {
+                Width = width,
+                Height = height
+            };
 
-        return Task.CompletedTask;
+            await File.WriteAllTextAsync(filename + ".info", JsonSerializer.Serialize(imageInfo, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            }), cancellationToken);
+        }
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

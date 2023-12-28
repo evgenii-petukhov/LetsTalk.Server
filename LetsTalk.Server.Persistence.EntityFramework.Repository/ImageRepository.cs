@@ -4,37 +4,14 @@ using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class ImageRepository : IImageRepository, IDisposable
+public abstract class ImageRepository : Repository, IImageRepository
 {
-    protected readonly LetsTalkDbContext _context;
-    private bool _disposed;
-
-    public ImageRepository(LetsTalkDbContext context)
+    protected ImageRepository(LetsTalkDbContext context) : base(context)
     {
-        _context = context;
     }
 
     public void Delete(Image image)
     {
         _context.Images.Remove(image);
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-
-            _disposed = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

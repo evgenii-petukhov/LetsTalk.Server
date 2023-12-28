@@ -5,15 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class GenericRepository<T> : IGenericRepository<T>, IDisposable
+public abstract class GenericRepository<T> : Repository, IGenericRepository<T>
     where T : BaseEntity
 {
-    protected readonly LetsTalkDbContext _context;
-    private bool _disposed;
-
-    public GenericRepository(LetsTalkDbContext context)
+    protected GenericRepository(LetsTalkDbContext context) : base(context)
     {
-        _context = context;
     }
 
     public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
@@ -32,24 +28,5 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     {
         return _context.Set<T>()
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-
-            _disposed = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

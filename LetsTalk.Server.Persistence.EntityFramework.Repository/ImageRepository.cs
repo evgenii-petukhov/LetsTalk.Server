@@ -1,34 +1,40 @@
 ﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
-using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class ImageRepository : GenericRepository<Image>, IImageRepository
+public class ImageRepository : IImageRepository, IDisposable
 {
-    public ImageRepository(LetsTalkDbContext context) : base(context)
+    protected readonly LetsTalkDbContext _context;
+    private bool _disposed;
+
+    public ImageRepository(LetsTalkDbContext context)
     {
+        _context = context;
     }
 
-    public Task<Image?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default)
+    public void Delete(Image image)
     {
-        return _context.Images
-            .Include(x => x.File)
-            .FirstOrDefaultAsync(image => image.Id == id, cancellationToken);
+        _context.Images.Remove(image);
     }
 
-    public override Task<Image> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
+    private void Dispose(bool disposing)
     {
-        return _context.Images
-            .AsTracking()
-            .Include(x => x.File)
-            .FirstOrDefaultAsync(image => image.Id == id, cancellationToken)!;
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+
+            _disposed = true;
+        }
     }
 
-    public Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default)
+    public void Dispose()
     {
-        return _context.Images
-            .AnyAsync(image => image.Id == id, cancellationToken);
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

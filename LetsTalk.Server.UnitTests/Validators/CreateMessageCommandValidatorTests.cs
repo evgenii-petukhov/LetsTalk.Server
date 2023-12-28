@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using Moq;
@@ -10,14 +11,12 @@ public class CreateMessageCommandValidatorTests
 {
     private CreateMessageCommandValidator _validator;
     private Mock<IAccountAgnosticService> _mockAccountAgnosticService;
-    private Mock<IImageAgnosticService> _mockImageAgnosticService;
 
     [SetUp]
     public void SetUp()
     {
         _mockAccountAgnosticService = new Mock<IAccountAgnosticService>();
-        _mockImageAgnosticService = new Mock<IImageAgnosticService>();
-        _validator = new(_mockAccountAgnosticService.Object, _mockImageAgnosticService.Object);
+        _validator = new(_mockAccountAgnosticService.Object);
     }
 
     [Test]
@@ -238,14 +237,14 @@ public class CreateMessageCommandValidatorTests
         {
             RecipientId = "1",
             SenderId = "2",
-            ImageId = "1"
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            }
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-        _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -265,15 +264,15 @@ public class CreateMessageCommandValidatorTests
         {
             RecipientId = "1",
             SenderId = "2",
-            ImageId = "1",
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            },
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-        _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -291,14 +290,14 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            ImageId = "1"
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            }
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-        _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act
@@ -321,15 +320,15 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            ImageId = "1",
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            },
             Text = "text"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-        _mockImageAgnosticService
-            .Setup(m => m.IsImageIdValidAsync("1", cancellationToken))
             .Returns(Task.FromResult(true));
 
         // Act

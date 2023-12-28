@@ -11,13 +11,16 @@ public class ImageInfoHostedService : IHostedService
 {
     private readonly FileStorageSettings _fileStorageSettings;
     private readonly IImageInfoService _imageInfoService;
+    private readonly TextWriter _outputWriter;
 
     public ImageInfoHostedService(
         IImageInfoService imageInfoService,
+        TextWriter outputWriter,
         IOptions<FileStorageSettings> options)
     {
         _fileStorageSettings = options.Value;
         _imageInfoService = imageInfoService;
+        _outputWriter = outputWriter;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -41,6 +44,8 @@ public class ImageInfoHostedService : IHostedService
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             }), cancellationToken);
         }
+
+        await _outputWriter.WriteLineAsync("Done");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

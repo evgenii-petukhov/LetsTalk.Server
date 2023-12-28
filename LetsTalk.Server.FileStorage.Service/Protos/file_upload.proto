@@ -22,6 +22,10 @@ message UploadImageRequest {
 
 message UploadImageResponse {
 	string image_id = 1;
+	int32 width = 2;
+	int32 height = 3;
+	int32 image_format = 4;
+	string signature = 5;
 }
 
 message DownloadImageRequest {

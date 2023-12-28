@@ -18,7 +18,11 @@ static IHostBuilder CreateDefaultBuilder()
             var filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
             app.AddJsonFile(filename, optional: false);
         })
-        .ConfigureServices((context, services) => services.AddImageInfoServices(context.Configuration))
+        .ConfigureServices((context, services) =>
+        {
+            services.AddImageInfoServices(context.Configuration);
+            services.AddSingleton(Console.Out);
+        })
         .UseSerilog((context, loggerConfig) =>
         {
             loggerConfig

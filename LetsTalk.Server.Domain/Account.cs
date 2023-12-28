@@ -24,7 +24,7 @@ public class Account : BaseEntity
 
     public Image? Image { get; protected set; }
 
-    public int? ImageId { get; protected set; }
+    public string? ImageId { get; protected set; }
 
     public Account(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)
     {
@@ -52,15 +52,15 @@ public class Account : BaseEntity
         }
     }
 
-    public void UpdateProfile(string firstName, string lastName, string email, int? newImageId)
+    public void UpdateProfile(string firstName, string lastName, string email, Image? image = null)
     {
         FirstName = firstName;
         LastName = lastName;
         Email = email;
 
-        if (newImageId.HasValue)
+        if (image != null)
         {
-            ImageId = newImageId.Value;
+            Image = image;
         }
     }
 }

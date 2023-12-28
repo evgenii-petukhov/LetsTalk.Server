@@ -71,7 +71,6 @@ public class MessageRepository : IMessageRepository
         string recipientId,
         string text,
         string textHtml,
-        string imageId,
         CancellationToken cancellationToken = default)
     {
         var message = new Message
@@ -80,7 +79,6 @@ public class MessageRepository : IMessageRepository
             RecipientId = recipientId,
             Text = text,
             TextHtml = textHtml,
-            ImageId = imageId,
             DateCreatedUnix = DateHelper.GetUnixTimestamp()
         };
 

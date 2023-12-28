@@ -7,6 +7,7 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.Enums;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -47,16 +48,28 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         var account = await _accountAgnosticService.GetByIdAsync(request.AccountId!, cancellationToken);
 
         var previousImageId = account.ImageId;
+        var updateImage = previousImageId != null && request.Image != null;
 
-        account = await _accountAgnosticService.UpdateProfileAsync(
-            request.AccountId!,
-            request.FirstName!,
-            request.LastName!,
-            request.Email!,
-            request.ImageId!,
-            cancellationToken);
+        account = request.Image == null
+            ? await _accountAgnosticService.UpdateProfileAsync(
+                request.AccountId!,
+                request.FirstName!,
+                request.LastName!,
+                request.Email!,
+                cancellationToken)
+            : await _accountAgnosticService.UpdateProfileAsync(
+                request.AccountId!,
+                request.FirstName!,
+                request.LastName!,
+                request.Email!,
+                request.Image.Id!,
+                request.Image.Width,
+                request.Image.Height,
+                (ImageFormats)request.Image.ImageFormat,
+                updateImage,
+                cancellationToken);
 
-        if (previousImageId != null && !string.IsNullOrWhiteSpace(request.ImageId))
+        if (updateImage)
         {
             await _producer.ProduceAsync(
                 _kafkaSettings.RemoveImageRequest!.Topic,

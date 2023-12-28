@@ -20,17 +20,9 @@ public class UploadRepository : IUploadRepository
         _uploadCollection = mongoDatabase.GetCollection<Upload>(nameof(Upload));
     }
 
-    public Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return _uploadCollection
-            .Find(Builders<Upload>.Filter.OfType<Image>() & Builders<Upload>.Filter.Eq(x => x.Id, id))
-            .AnyAsync(cancellationToken);
-    }
-
     public async Task<Image> CreateImageAsync(
         string filename,
         ImageFormats imageFormat,
-        ImageRoles imageRole,
         int width,
         int height,
         CancellationToken cancellationToken = default)
@@ -43,7 +35,6 @@ public class UploadRepository : IUploadRepository
                 FileTypeId = (int)FileTypes.Image
             },
             ImageFormatId = (int)imageFormat,
-            ImageRoleId = (int)imageRole,
             Width = width,
             Height = height
         };
@@ -51,18 +42,5 @@ public class UploadRepository : IUploadRepository
         await _uploadCollection.InsertOneAsync(image, cancellationToken: cancellationToken);
 
         return image;
-    }
-
-    public Task<Image?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return _uploadCollection
-            .Find(Builders<Upload>.Filter.OfType<Image>() & Builders<Upload>.Filter.Eq(x => x.Id, id))
-            .Project(Builders<Upload>.Projection.As<Image>())
-            .FirstOrDefaultAsync(cancellationToken)!;
-    }
-
-    public Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return _uploadCollection.DeleteOneAsync(Builders<Upload>.Filter.Eq(x => x.Id, id), cancellationToken);
     }
 }

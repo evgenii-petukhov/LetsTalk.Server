@@ -10,6 +10,5 @@ public class UploadProfile : Profile
     {
         CreateMap<Image, ImageServiceModel>();
         CreateMap<Image, ImagePreviewServiceModel>();
-        CreateMap<Models.File, FileServiceModel>();
     }
 }

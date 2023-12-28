@@ -1,21 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
 
 [Table("images")]
-public class Image : BaseEntity
+public class Image
 {
+    [MaxLength(36)]
+    public string? Id { get; protected set; }
+
     public ImageFormat? ImageFormat { get; protected set; }
 
     public int ImageFormatId { get; protected set; }
-
-    public ImageRole? ImageRole { get; protected set; }
-
-    public int ImageRoleId { get; protected set; }
-
-    public File? File { get; protected set; }
-
-    public int FileId { get; protected set; }
 
     public Account? Account { get; protected set; }
 
@@ -27,10 +23,10 @@ public class Image : BaseEntity
     {
     }
 
-    public Image(int imageFormatId, int imageRoleId, int width, int height)
+    public Image(string id, int imageFormatId, int width, int height)
     {
+        Id = id;
         ImageFormatId = imageFormatId;
-        ImageRoleId = imageRoleId;
         Width = width;
         Height = height;
     }

@@ -28,11 +28,11 @@ public class Message : BaseEntity
 
     public Image? Image { get; protected set; }
 
-    public int? ImageId { get; protected set; }
+    public string? ImageId { get; protected set; }
 
     public Image? ImagePreview { get; protected set; }
 
-    public int? ImagePreviewId { get; protected set; }
+    public string? ImagePreviewId { get; protected set; }
 
     protected Message()
     {
@@ -42,13 +42,13 @@ public class Message : BaseEntity
     {
     }
 
-    public Message(int senderId, int recipientId, string? text, string? textHtml, int? imageId)
+    public Message(int senderId, int recipientId, string? text, string? textHtml, Image? image = null)
     {
         SenderId = senderId;
         RecipientId = recipientId;
         Text = text;
         TextHtml = textHtml;
-        ImageId = imageId;
+        Image = image;
     }
 
     public void SetImagePreview(Image image)

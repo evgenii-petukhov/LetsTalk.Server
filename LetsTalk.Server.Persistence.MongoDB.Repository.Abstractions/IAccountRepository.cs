@@ -34,7 +34,6 @@ public interface IAccountRepository
         string firstName,
         string lastName,
         string email,
-        string imageId,
         CancellationToken cancellationToken = default);
 
     Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default);

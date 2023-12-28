@@ -9,7 +9,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     where T : BaseEntity
 {
     protected readonly LetsTalkDbContext _context;
-    private bool _disposedValue;
+    private bool _disposed;
 
     public GenericRepository(LetsTalkDbContext context)
     {
@@ -19,11 +19,6 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
     public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
         await _context.Set<T>().AddAsync(entity, cancellationToken);
-    }
-
-    public void Delete(T entity)
-    {
-        _context.Set<T>().Remove(entity);
     }
 
     public virtual Task<T> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
@@ -41,14 +36,14 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!_disposedValue)
+        if (!_disposed)
         {
             if (disposing)
             {
                 _context.Dispose();
             }
 
-            _disposedValue = true;
+            _disposed = true;
         }
     }
 

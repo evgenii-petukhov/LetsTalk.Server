@@ -67,8 +67,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing.Utility", "LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj", "{C226B714-D118-4E3D-81ED-1A52B4653BC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Domain.Abstractions", "LetsTalk.Server.Domain.Abstractions\LetsTalk.Server.Domain.Abstractions.csproj", "{2498C5DA-B55A-49F2-A72D-E85BC818EE58}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Kafka.Models", "LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj", "{4E29B863-F73F-4529-AE55-568F97319F88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.DependencyInjection", "LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj", "{9634ABFA-5784-4270-9402-DF2AA7E5DE97}"
@@ -97,7 +95,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{653FCCAF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Tools.ExtractImageInfo", "LetsTalk.Server.Tools.ExtractImageInfo\LetsTalk.Server.Tools.ExtractImageInfo.csproj", "{210DE8DA-98F3-4C74-A2B9-8E04CC2A53C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageInfo.Models", "LetsTalk.Server.ImageInfo.Models\LetsTalk.Server.ImageInfo.Models.csproj", "{C4803B5D-E00A-4A0C-899E-26717A4A44A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageInfo.Models", "LetsTalk.Server.ImageInfo.Models\LetsTalk.Server.ImageInfo.Models.csproj", "{C4803B5D-E00A-4A0C-899E-26717A4A44A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,10 +199,6 @@ Global
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4E29B863-F73F-4529-AE55-568F97319F88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4E29B863-F73F-4529-AE55-568F97319F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E29B863-F73F-4529-AE55-568F97319F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -296,7 +290,6 @@ Global
 		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{8195D81B-E5FE-4026-B6FE-28B7616330EA} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{4E29B863-F73F-4529-AE55-568F97319F88} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{9634ABFA-5784-4270-9402-DF2AA7E5DE97} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{052DE193-AB20-46C1-A678-166182065399} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}

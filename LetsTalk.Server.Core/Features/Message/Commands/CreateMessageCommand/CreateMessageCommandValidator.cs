@@ -6,11 +6,9 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
     private readonly IAccountAgnosticService _accountAgnosticService;
-    private readonly IImageAgnosticService _imageAgnosticService;
 
     public CreateMessageCommandValidator(
-        IAccountAgnosticService accountAgnosticService,
-        IImageAgnosticService imageAgnosticService)
+        IAccountAgnosticService accountAgnosticService)
     {
         RuleFor(model => model)
             .Must(IsContentValid)
@@ -33,15 +31,7 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
         });
 
-        When(model => !string.IsNullOrWhiteSpace(model.ImageId), () =>
-        {
-            RuleFor(model => model.ImageId)
-                .MustAsync(IsImageIdValidAsync)
-                .WithMessage("Image with {PropertyName} = {PropertyValue} does not exist");
-        });
-
         _accountAgnosticService = accountAgnosticService;
-        _imageAgnosticService = imageAgnosticService;
     }
 
     private async Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken)
@@ -50,14 +40,8 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
     }
 
-    private async Task<bool> IsImageIdValidAsync(string? id, CancellationToken cancellationToken)
-    {
-        return !string.IsNullOrWhiteSpace(id)
-            && await _imageAgnosticService.IsImageIdValidAsync(id, cancellationToken);
-    }
-
     private bool IsContentValid(CreateMessageCommand model)
     {
-        return !string.IsNullOrWhiteSpace(model.Text) || !string.IsNullOrWhiteSpace(model.ImageId);
+        return !string.IsNullOrWhiteSpace(model.Text) || model.Image != null;
     }
 }

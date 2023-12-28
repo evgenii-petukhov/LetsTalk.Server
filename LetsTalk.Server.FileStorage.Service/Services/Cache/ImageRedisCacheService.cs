@@ -3,7 +3,6 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
-using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
@@ -55,14 +54,12 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
 
             if (image.Content!.Length < _imageSizeThresholdInBytes)
             {
-                var isAvatar = image.ImageRole == ImageRoles.Avatar;
-
                 await _database.StringSetAsync(
                     key,
                     new RedisValue(JsonSerializer.Serialize(image)),
                     when: When.NotExists);
 
-                if (_isVolotile && !isAvatar)
+                if (_isVolotile)
                 {
                     await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
                 }

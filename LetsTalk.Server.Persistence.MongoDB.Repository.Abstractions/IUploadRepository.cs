@@ -5,17 +5,10 @@ namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 public interface IUploadRepository
 {
-    Task<bool> IsImageIdValidAsync(string id, CancellationToken cancellationToken = default);
-
     Task<Image> CreateImageAsync(
         string filename,
         ImageFormats imageFormat,
-        ImageRoles imageRole,
         int width,
         int height,
         CancellationToken cancellationToken = default);
-
-    Task<Image?> GetByIdWithFileAsync(string id, CancellationToken cancellationToken = default);
-
-    Task DeleteByIdAsync(string id, CancellationToken cancellationToken = default);
 }

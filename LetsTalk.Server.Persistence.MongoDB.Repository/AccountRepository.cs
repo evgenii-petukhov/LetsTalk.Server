@@ -90,7 +90,6 @@ public class AccountRepository : IAccountRepository
         string firstName,
         string lastName,
         string email,
-        string imageId,
         CancellationToken cancellationToken = default)
     {
         var filterdefinition = Builders<Account>.Filter
@@ -100,10 +99,6 @@ public class AccountRepository : IAccountRepository
             .Set(x => x.FirstName, firstName)
             .Set(x => x.LastName, lastName)
             .Set(x => x.Email, email);
-
-        updateDefinition = imageId == null
-            ? updateDefinition
-            : updateDefinition.Set(x => x.ImageId, imageId);
 
         return _accountCollection
             .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>

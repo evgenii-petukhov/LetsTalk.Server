@@ -10,8 +10,7 @@
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.ImageInfo.Models\LetsTalk.Server.ImageInfo.Models.csproj" />
   </ItemGroup>
 
 </Project>

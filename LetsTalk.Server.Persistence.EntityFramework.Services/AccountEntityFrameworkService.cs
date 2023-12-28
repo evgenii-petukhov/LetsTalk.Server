@@ -10,17 +10,20 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 public class AccountEntityFrameworkService: IAccountAgnosticService
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IImageRepository _imageRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IEntityFactory _entityFactory;
 
     public AccountEntityFrameworkService(
         IAccountRepository accountRepository,
+        IImageRepository imageRepository,
         IUnitOfWork unitOfWork,
         IMapper mapper,
         IEntityFactory entityFactory)
     {
         _accountRepository = accountRepository;
+        _imageRepository = imageRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _entityFactory = entityFactory;
@@ -43,11 +46,37 @@ public class AccountEntityFrameworkService: IAccountAgnosticService
         string firstName,
         string lastName,
         string email,
-        string imageId,
         CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
-        account.UpdateProfile(firstName, lastName, email, string.IsNullOrWhiteSpace(imageId) ? null : int.Parse(imageId));
+        account.UpdateProfile(firstName, lastName, email);
+
+        await _unitOfWork.SaveAsync(cancellationToken);
+
+        return _mapper.Map<AccountServiceModel>(account);
+    }
+
+    public async Task<AccountServiceModel> UpdateProfileAsync(
+        string accountId,
+        string firstName,
+        string lastName,
+        string email,
+        string imageId,
+        int width,
+        int height,
+        ImageFormats imageFormat,
+        bool updateImage,
+        CancellationToken cancellationToken = default)
+    {
+        var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
+        var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
+
+        if (updateImage)
+        {
+            _imageRepository.Delete(account.Image!);
+        }
+
+        account.UpdateProfile(firstName, lastName, email, image);
 
         await _unitOfWork.SaveAsync(cancellationToken);
 
@@ -82,7 +111,7 @@ public class AccountEntityFrameworkService: IAccountAgnosticService
         }
         else
         {
-            account.SetupProfile(firstName!, lastName!, email!, photoUrl!, account.ImageId.HasValue);
+            account.SetupProfile(firstName!, lastName!, email!, photoUrl!, !string.IsNullOrEmpty(account.ImageId));
             await _unitOfWork.SaveAsync(cancellationToken);
 
             return account.Id.ToString();

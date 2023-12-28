@@ -1,5 +1,7 @@
 ﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
+using LetsTalk.Server.ImageInfo.Models;
 using LetsTalk.Server.Persistence.Enums;
+using System.Text.Json;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
@@ -22,9 +24,43 @@ public class FileService : IFileService
         return File.ReadAllBytesAsync(imagePath, cancellationToken);
     }
 
-    public Task<string> SaveDataAsync(byte[] data, FileTypes fileType, ImageRoles imageRole, CancellationToken cancellationToken = default)
+    public Task<string> SaveDataAsync(
+        byte[] data,
+        FileTypes fileType,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
     {
         return SaveDataWithRetryAsync(data, () => _fileNameGenerator.Generate(fileType), cancellationToken);
+    }
+
+    public Task SaveImageInfoAsync(
+        string filename,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
+    {
+        var imageInfo = new ImageInfoModel
+        {
+            Width = width,
+            Height = height
+        };
+
+        var filepath = _fileStoragePathProvider.GetFilePath(filename, FileTypes.Image);
+
+        return File.WriteAllTextAsync(filepath + ".info", JsonSerializer.Serialize(imageInfo, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        }), cancellationToken);
+    }
+
+    public async Task<ImageInfoModel> LoadImageInfoAsync(string filename, CancellationToken cancellationToken = default)
+    {
+        var imageInfoString = await File.ReadAllTextAsync(filename, cancellationToken);
+        return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        })!;
     }
 
     private static async Task<string> SaveDataWithRetryAsync(

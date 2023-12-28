@@ -3,6 +3,7 @@ using System;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LetsTalk.Server.Persistence.Migrations
 {
     [DbContext(typeof(LetsTalkDbContext))]
-    partial class LetsTalkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231227070832_ImageTableFilenameAsId")]
+    partial class ImageTableFilenameAsId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

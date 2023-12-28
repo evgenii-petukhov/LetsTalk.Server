@@ -2,9 +2,7 @@
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
-public interface IImageRepository : IGenericRepository<Image>
+public interface IImageRepository
 {
-    Task<Image?> GetByIdWithFileAsync(int id, CancellationToken cancellationToken = default);
-
-    Task<bool> IsImageIdValidAsync(int id, CancellationToken cancellationToken = default);
+    void Delete(Image image);
 }

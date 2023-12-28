@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
@@ -8,13 +9,16 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services;
 public class MessageMongoDBService : IMessageAgnosticService
 {
     private readonly IMessageRepository _messageRepository;
+    private readonly IUploadRepository _uploadRepository;
     private readonly IMapper _mapper;
 
     public MessageMongoDBService(
         IMessageRepository messageRepository,
+        IUploadRepository uploadRepository,
         IMapper mapper)
     {
         _messageRepository = messageRepository;
+        _uploadRepository = uploadRepository;
         _mapper = mapper;
     }
 
@@ -23,12 +27,16 @@ public class MessageMongoDBService : IMessageAgnosticService
         string recipientId,
         string text,
         string textHtml,
-        string imageId,
         CancellationToken cancellationToken)
     {
-        var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, imageId, cancellationToken);
+        var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(message);
+    }
+
+    public Task<MessageServiceModel> CreateMessageAsync(string senderId, string recipientId, string text, string textHtml, string imageId, int width, int height, ImageFormats imageFormat, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
@@ -81,6 +89,22 @@ public class MessageMongoDBService : IMessageAgnosticService
         {
             await _messageRepository.MarkAsReadAsync(messageId, cancellationToken);
         }
+    }
+
+    public async Task<MessageServiceModel> SaveImagePreviewAsync(
+        string messageId,
+        string filename,
+        ImageFormats imageFormat,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
+    {
+        var image = await _uploadRepository.CreateImageAsync(filename, imageFormat, width, height, cancellationToken);
+        var message = await _messageRepository.SetImagePreviewAsync(messageId, image.Id!, cancellationToken);
+
+        message.ImagePreview = image;
+
+        return _mapper.Map<MessageServiceModel>(message);
     }
 
     private async Task MarkAllAsReadAsync(string recipientId, string messageId, CancellationToken cancellationToken)

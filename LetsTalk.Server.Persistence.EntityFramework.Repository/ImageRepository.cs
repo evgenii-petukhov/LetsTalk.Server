@@ -4,9 +4,9 @@ using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public abstract class ImageRepository : Repository, IImageRepository
+public class ImageRepository : Repository, IImageRepository
 {
-    protected ImageRepository(LetsTalkDbContext context) : base(context)
+    public ImageRepository(LetsTalkDbContext context) : base(context)
     {
     }
 

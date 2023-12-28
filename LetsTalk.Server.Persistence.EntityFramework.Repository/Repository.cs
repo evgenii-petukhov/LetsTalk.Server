@@ -2,12 +2,12 @@
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class Repository: IDisposable
+public abstract class Repository: IDisposable
 {
     protected readonly LetsTalkDbContext _context;
     private bool _disposed;
 
-    public Repository(LetsTalkDbContext context)
+    protected Repository(LetsTalkDbContext context)
     {
         _context = context;
     }

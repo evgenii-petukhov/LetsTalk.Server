@@ -43,7 +43,7 @@ public class AccountMongoDBService : IAccountAgnosticService
         return _mapper.Map<AccountServiceModel>(account);
     }
 
-    public Task<AccountServiceModel> UpdateProfileAsync(
+    public async Task<AccountServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
@@ -52,10 +52,20 @@ public class AccountMongoDBService : IAccountAgnosticService
         int width,
         int height,
         ImageFormats imageFormat,
-        bool updateImage,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var account = await _accountRepository.UpdateProfileAsync(
+            accountId,
+            firstName,
+            lastName,
+            email,
+            imageId,
+            width,
+            height,
+            imageFormat,
+            cancellationToken);
+
+        return _mapper.Map<AccountServiceModel>(account);
     }
 
     public async Task<string> CreateOrUpdateAsync(
@@ -97,7 +107,7 @@ public class AccountMongoDBService : IAccountAgnosticService
             lastName,
             email,
             photoUrl,
-            acccount.ImageId == null,
+            acccount.Image == null,
             cancellationToken);
 
         return account.Id!;

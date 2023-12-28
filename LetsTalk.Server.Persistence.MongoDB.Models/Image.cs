@@ -1,10 +1,10 @@
 ﻿namespace LetsTalk.Server.Persistence.MongoDB.Models;
 
-public class Image : Upload
+public class Image
 {
-    public int ImageFormatId { get; set; }
+    public string? Id { get; set; }
 
-    public int ImageRoleId { get; set; }
+    public int ImageFormatId { get; set; }
 
     public int? Width { get; set; }
 

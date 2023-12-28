@@ -48,7 +48,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         var account = await _accountAgnosticService.GetByIdAsync(request.AccountId!, cancellationToken);
 
         var previousImageId = account.ImageId;
-        var updateImage = previousImageId != null && request.Image != null;
+        var deletePreviousImage = previousImageId != null && request.Image != null;
 
         account = request.Image == null
             ? await _accountAgnosticService.UpdateProfileAsync(
@@ -66,10 +66,9 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
                 request.Image.Width,
                 request.Image.Height,
                 (ImageFormats)request.Image.ImageFormat,
-                updateImage,
                 cancellationToken);
 
-        if (updateImage)
+        if (deletePreviousImage)
         {
             await _producer.ProduceAsync(
                 _kafkaSettings.RemoveImageRequest!.Topic,

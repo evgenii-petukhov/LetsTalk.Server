@@ -21,6 +21,5 @@ public class Account
 
     public string? LastName { get; set; }
 
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string? ImageId { get; set; }
+    public Image? Image { get; set; }
 }

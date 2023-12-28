@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Utility;
@@ -12,7 +13,6 @@ public class MessageRepository : IMessageRepository
 {
     private readonly IMongoCollection<Message> _messageCollection;
     private readonly IMongoCollection<LinkPreview> _linkPreviewCollection;
-    private readonly IMongoCollection<Image> _imageCollection;
 
     public MessageRepository(
         IMongoClient mongoClient,
@@ -22,7 +22,6 @@ public class MessageRepository : IMessageRepository
 
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
         _linkPreviewCollection = mongoDatabase.GetCollection<LinkPreview>(nameof(LinkPreview));
-        _imageCollection = mongoDatabase.GetCollection<Image>(nameof(Upload));
     }
 
     public Task<List<Message>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
@@ -35,18 +34,7 @@ public class MessageRepository : IMessageRepository
                 Message = message,
                 LinkPreviews = linkPreviews
             })
-            .SelectMany(x => x.LinkPreviews.DefaultIfEmpty(), (g, linkPreview) => new
-            {
-                g.Message,
-                LinkPreview = linkPreview
-            })
-            .GroupJoin(_imageCollection, x => x.Message.ImagePreviewId, x => x.Id, (g, images) => new
-            {
-                g.Message,
-                g.LinkPreview,
-                Images = images
-            })
-            .SelectMany(x => x.Images.DefaultIfEmpty(), (g, image) => new Message
+            .SelectMany(x => x.LinkPreviews.DefaultIfEmpty(), (g, linkPreview) => new Message
             {
                 Id = g.Message.Id,
                 Text = g.Message.Text,
@@ -55,9 +43,9 @@ public class MessageRepository : IMessageRepository
                 RecipientId = g.Message.RecipientId,
                 IsRead = g.Message.IsRead,
                 DateCreatedUnix = g.Message.DateCreatedUnix,
-                LinkPreview = g.LinkPreview,
-                ImageId = g.Message.ImageId,
-                ImagePreview = image
+                LinkPreview = linkPreview,
+                Image = g.Message.Image,
+                ImagePreview = g.Message.ImagePreview
             })
             .OrderByDescending(mesage => mesage.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
@@ -80,6 +68,38 @@ public class MessageRepository : IMessageRepository
             Text = text,
             TextHtml = textHtml,
             DateCreatedUnix = DateHelper.GetUnixTimestamp()
+        };
+
+        await _messageCollection.InsertOneAsync(message, cancellationToken: cancellationToken);
+
+        return message;
+    }
+
+    public async Task<Message> CreateAsync(
+        string senderId,
+        string recipientId,
+        string text,
+        string textHtml,
+        string imageId,
+        int width,
+        int height,
+        ImageFormats imageFormat,
+        CancellationToken cancellationToken = default)
+    {
+        var message = new Message
+        {
+            SenderId = senderId,
+            RecipientId = recipientId,
+            Text = text,
+            TextHtml = textHtml,
+            DateCreatedUnix = DateHelper.GetUnixTimestamp(),
+            Image = new Image
+            {
+                Id = imageId,
+                ImageFormatId = (int)imageFormat,
+                Width = width,
+                Height = height
+            }
         };
 
         await _messageCollection.InsertOneAsync(message, cancellationToken: cancellationToken);
@@ -162,11 +182,23 @@ public class MessageRepository : IMessageRepository
         return message;
     }
 
-    public Task<Message> SetImagePreviewAsync(string messageId, string imageId, CancellationToken cancellationToken = default)
+    public Task<Message> SetImagePreviewAsync(
+        string messageId,
+        string filename,
+        ImageFormats imageFormat,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
     {
         return _messageCollection.FindOneAndUpdateAsync(
             Builders<Message>.Filter.Eq(x => x.Id, messageId),
-            Builders<Message>.Update.Set(x => x.ImagePreviewId, imageId),
+            Builders<Message>.Update.Set(x => x.ImagePreview, new Image
+            {
+                Id = filename,
+                ImageFormatId = (int)imageFormat,
+                Width = width,
+                Height = height
+            }),
             new FindOneAndUpdateOptions<Message, Message>
             {
                 ReturnDocument = ReturnDocument.After

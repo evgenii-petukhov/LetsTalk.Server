@@ -9,16 +9,13 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services;
 public class MessageMongoDBService : IMessageAgnosticService
 {
     private readonly IMessageRepository _messageRepository;
-    private readonly IUploadRepository _uploadRepository;
     private readonly IMapper _mapper;
 
     public MessageMongoDBService(
         IMessageRepository messageRepository,
-        IUploadRepository uploadRepository,
         IMapper mapper)
     {
         _messageRepository = messageRepository;
-        _uploadRepository = uploadRepository;
         _mapper = mapper;
     }
 
@@ -34,9 +31,29 @@ public class MessageMongoDBService : IMessageAgnosticService
         return _mapper.Map<MessageServiceModel>(message);
     }
 
-    public Task<MessageServiceModel> CreateMessageAsync(string senderId, string recipientId, string text, string textHtml, string imageId, int width, int height, ImageFormats imageFormat, CancellationToken cancellationToken)
+    public async Task<MessageServiceModel> CreateMessageAsync(
+        string senderId,
+        string recipientId,
+        string text,
+        string textHtml,
+        string imageId,
+        int width,
+        int height,
+        ImageFormats imageFormat,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var message = await _messageRepository.CreateAsync(
+            senderId,
+            recipientId,
+            text,
+            textHtml,
+            imageId,
+            width,
+            height,
+            imageFormat,
+            cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
@@ -99,10 +116,13 @@ public class MessageMongoDBService : IMessageAgnosticService
         int height,
         CancellationToken cancellationToken = default)
     {
-        var image = await _uploadRepository.CreateImageAsync(filename, imageFormat, width, height, cancellationToken);
-        var message = await _messageRepository.SetImagePreviewAsync(messageId, image.Id!, cancellationToken);
-
-        message.ImagePreview = image;
+        var message = await _messageRepository.SetImagePreviewAsync(
+            messageId,
+            filename,
+            imageFormat,
+            width,
+            height,
+            cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(message);
     }

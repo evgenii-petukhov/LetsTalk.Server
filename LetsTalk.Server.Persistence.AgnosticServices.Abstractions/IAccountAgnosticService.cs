@@ -34,7 +34,6 @@ public interface IAccountAgnosticService
         int width,
         int height,
         ImageFormats imageFormat,
-        bool updateImage,
         CancellationToken cancellationToken = default);
 
     Task<List<ContactServiceModel>> GetContactsAsync(string id, CancellationToken cancellationToken = default);

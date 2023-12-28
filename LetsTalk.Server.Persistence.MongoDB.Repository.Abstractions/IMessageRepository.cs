@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Persistence.MongoDB.Models;
+﻿using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Persistence.MongoDB.Models;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
@@ -18,6 +19,17 @@ public interface IMessageRepository
         string textHtml,
         CancellationToken cancellationToken = default);
 
+    Task<Message> CreateAsync(
+        string senderId,
+        string recipientId,
+        string text,
+        string textHtml,
+        string imageId,
+        int width,
+        int height,
+        ImageFormats imageFormat,
+        CancellationToken cancellationToken = default);
+
     Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
     Task MarkAsReadAsync(string messageId, CancellationToken cancellationToken = default);
@@ -26,7 +38,13 @@ public interface IMessageRepository
 
     Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default);
 
-    Task<Message> SetImagePreviewAsync(string messageId, string imageId, CancellationToken cancellationToken = default);
+    Task<Message> SetImagePreviewAsync(
+        string messageId,
+        string filename,
+        ImageFormats imageFormat,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default);
 
     Task<Message> SetLinkPreviewAsync(
         string messageId,

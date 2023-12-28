@@ -65,13 +65,12 @@ public class AccountEntityFrameworkService: IAccountAgnosticService
         int width,
         int height,
         ImageFormats imageFormat,
-        bool updateImage,
         CancellationToken cancellationToken = default)
     {
         var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
         var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
 
-        if (updateImage)
+        if (!string.IsNullOrEmpty(imageId))
         {
             _imageRepository.Delete(account.Image!);
         }

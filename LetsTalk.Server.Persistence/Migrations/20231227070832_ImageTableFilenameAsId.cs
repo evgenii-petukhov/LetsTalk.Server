@@ -18,16 +18,12 @@ namespace LetsTalk.Server.Persistence.Migrations
                 table: "messages");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_messages_images_ImagePreviewId",
+                table: "messages");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_accounts_images_ImageId",
                 table: "accounts");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_images_files_FileId",
-                table: "images");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_images_imageroles_ImageRoleId",
-                table: "images");
 
             migrationBuilder.AlterColumn<string>(
                 name: "ImagePreviewId",
@@ -100,6 +96,14 @@ namespace LetsTalk.Server.Persistence.Migrations
             migrationBuilder.Sql(@"update images i
 inner join files f on f.Id = i.FileId
 SET i.Id = FileName;");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_images_files_FileId",
+                table: "images");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_images_imageroles_ImageRoleId",
+                table: "images");
 
             migrationBuilder.DropTable(
                 name: "files");

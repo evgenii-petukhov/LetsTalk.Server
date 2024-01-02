@@ -18,10 +18,6 @@ namespace LetsTalk.Server.Persistence.Migrations
                 table: "messages");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_messages_images_ImagePreviewId",
-                table: "messages");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_accounts_images_ImageId",
                 table: "accounts");
 

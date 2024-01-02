@@ -17,17 +17,28 @@ public class ImageService : IImageService
         _fileStoragePathProvider = fileStoragePathProvider;
     }
 
-    public async Task<FetchImageResponse> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {
-        var filename = _fileStoragePathProvider.GetFilePath(imageId, FileTypes.Image);
-        var infoFilename = filename + ".info";
-        var imageInfo = File.Exists(infoFilename)
-            ? await _fileService.LoadImageInfoAsync(infoFilename, cancellationToken)
-            : null;
+        var filepath = _fileStoragePathProvider.GetFilePath(imageId, FileTypes.Image);
+        var infoFilename = filepath + ".info";
+
+        if (!File.Exists(infoFilename))
+        {
+            return null;
+        }
+
+        var imageInfo = await _fileService.LoadImageInfoAsync(infoFilename, cancellationToken);
+
+        var content = await _fileService.ReadFileAsync(filepath, FileTypes.Image, cancellationToken);
+
+        if (content.Length == 0)
+        {
+            return null;
+        }
 
         return new FetchImageResponse
         {
-            Content = await _fileService.ReadFileAsync(filename, FileTypes.Image, cancellationToken),
+            Content = content,
             Width = imageInfo?.Width ?? 0,
             Height = imageInfo?.Height ?? 0
         };

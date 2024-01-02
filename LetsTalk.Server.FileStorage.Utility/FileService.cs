@@ -18,10 +18,12 @@ public class FileService : IFileService
         _fileStoragePathProvider = fileStoragePathProvider;
     }
 
-    public Task<byte[]> ReadFileAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default)
+    public async Task<byte[]> ReadFileAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default)
     {
         var imagePath = _fileStoragePathProvider.GetFilePath(filename, fileType);
-        return File.ReadAllBytesAsync(imagePath, cancellationToken);
+        return File.Exists(imagePath)
+            ? await File.ReadAllBytesAsync(imagePath, cancellationToken)
+            : Array.Empty<byte>();
     }
 
     public Task<string> SaveDataAsync(
@@ -40,17 +42,10 @@ public class FileService : IFileService
         int height,
         CancellationToken cancellationToken = default)
     {
-        var filepath = _fileStoragePathProvider.GetFilePath(filename, FileTypes.Image);
+        var filepath = string.IsNullOrEmpty(Path.GetDirectoryName(filename))
+            ? _fileStoragePathProvider.GetFilePath(filename, FileTypes.Image)
+            : filename;
 
-        return SaveImageInfoToPathAsync(filepath, width, height, cancellationToken);
-    }
-
-    public Task SaveImageInfoToPathAsync(
-        string filepath,
-        int width,
-        int height,
-        CancellationToken cancellationToken = default)
-    {
         var imageInfo = new ImageInfoModel
         {
             Width = width,

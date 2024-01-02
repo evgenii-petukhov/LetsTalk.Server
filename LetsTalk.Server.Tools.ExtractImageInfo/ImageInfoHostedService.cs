@@ -35,7 +35,7 @@ public class ImageInfoHostedService : IHostedService
         {
             var data = await File.ReadAllBytesAsync(filepath, cancellationToken);
             var (width, height) = _imageInfoService.GetImageSize(data);
-            await _fileService.SaveImageInfoToPathAsync(filepath, width, height, cancellationToken);
+            await _fileService.SaveImageInfoAsync(filepath, width, height, cancellationToken);
         }
 
         await _outputWriter.WriteLineAsync("Done");

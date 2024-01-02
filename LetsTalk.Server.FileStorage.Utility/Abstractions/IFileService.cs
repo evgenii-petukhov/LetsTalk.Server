@@ -20,11 +20,5 @@ public interface IFileService
         int height,
         CancellationToken cancellationToken = default);
 
-    Task SaveImageInfoToPathAsync(
-            string filepath,
-            int width,
-            int height,
-            CancellationToken cancellationToken = default);
-
     Task<ImageInfoModel> LoadImageInfoAsync(string filename, CancellationToken cancellationToken = default);
 }

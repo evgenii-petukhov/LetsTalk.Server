@@ -52,7 +52,7 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
         {
             var image = await _imageService.FetchImageAsync(imageId, cancellationToken);
 
-            if (image.Content!.Length < _imageSizeThresholdInBytes)
+            if (image?.Content?.Length < _imageSizeThresholdInBytes)
             {
                 await _database.StringSetAsync(
                     key,

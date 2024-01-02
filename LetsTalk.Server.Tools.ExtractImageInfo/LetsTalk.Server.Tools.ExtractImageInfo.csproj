@@ -30,7 +30,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.ImageInfo.Models\LetsTalk.Server.ImageInfo.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility\LetsTalk.Server.FileStorage.Utility.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
   </ItemGroup>
 

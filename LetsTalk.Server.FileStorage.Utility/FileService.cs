@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.ImageInfo.Models;
+using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
 using System.Text.Json;
 
@@ -40,13 +40,22 @@ public class FileService : IFileService
         int height,
         CancellationToken cancellationToken = default)
     {
+        var filepath = _fileStoragePathProvider.GetFilePath(filename, FileTypes.Image);
+
+        return SaveImageInfoToPathAsync(filepath, width, height, cancellationToken);
+    }
+
+    public Task SaveImageInfoToPathAsync(
+        string filepath,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
+    {
         var imageInfo = new ImageInfoModel
         {
             Width = width,
             Height = height
         };
-
-        var filepath = _fileStoragePathProvider.GetFilePath(filename, FileTypes.Image);
 
         return File.WriteAllTextAsync(filepath + ".info", JsonSerializer.Serialize(imageInfo, new JsonSerializerOptions
         {

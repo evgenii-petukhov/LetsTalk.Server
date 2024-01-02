@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.ImageInfo.Models;
+﻿using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Utility.Abstractions;
@@ -19,6 +19,12 @@ public interface IFileService
         int width,
         int height,
         CancellationToken cancellationToken = default);
+
+    Task SaveImageInfoToPathAsync(
+            string filepath,
+            int width,
+            int height,
+            CancellationToken cancellationToken = default);
 
     Task<ImageInfoModel> LoadImageInfoAsync(string filename, CancellationToken cancellationToken = default);
 }

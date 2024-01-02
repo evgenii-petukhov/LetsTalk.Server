@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.ImageInfo.Models;
+﻿namespace LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 
 public class ImageInfoModel
 {

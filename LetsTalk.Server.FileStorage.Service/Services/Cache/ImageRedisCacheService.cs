@@ -37,7 +37,7 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
         }
     }
 
-    public async Task<FetchImageResponse> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {
         if (!_isActive)
         {

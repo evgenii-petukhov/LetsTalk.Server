@@ -13,7 +13,7 @@ public class ImageMemoryCacheService : IImageService, IImageCacheManager
         _cacheService = cacheService;
     }
 
-    public Task<FetchImageResponse> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
+    public Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {
         return _cacheService.FetchImageAsync(imageId, cancellationToken);
     }

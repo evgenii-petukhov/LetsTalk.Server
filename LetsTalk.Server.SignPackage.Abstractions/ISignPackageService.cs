@@ -4,5 +4,5 @@ public interface ISignPackageService
 {
     void Sign(object objectToSign);
 
-    bool Validate(object obj);
+    bool Validate(ISignable signable);
 }

@@ -27,13 +27,8 @@ public class SignPackageService: ISignPackageService
         signable.Signature = GetSignature(signable);
     }
 
-    public bool Validate(object obj)
+    public bool Validate(ISignable signable)
     {
-        if (obj is not ISignable signable)
-        {
-            return true;
-        }
-
         return string.Equals(GetSignature(signable), signable.Signature, StringComparison.OrdinalIgnoreCase);
     }
 

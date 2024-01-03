@@ -22,22 +22,9 @@ public class EntityFactory : IEntityFactory
         return message;
     }
 
-    public Domain.File CreateFile(int id)
+    public Image CreateImage(string id, ImageFormats imageFormat, int width, int height)
     {
-        var file = new Domain.File(id);
-        _context.Files.Attach(file);
-
-        return file;
-    }
-
-    public Domain.File CreateFile(string filename, FileTypes fileType)
-    {
-        return new Domain.File(filename, (int)fileType);
-    }
-
-    public Image CreateImage(ImageFormats imageFormat, ImageRoles imageRole, int width, int height)
-    {
-        return new Image((int)imageFormat, (int)imageRole, width, height);
+        return new Image(id, (int)imageFormat, width, height);
     }
 
     public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)

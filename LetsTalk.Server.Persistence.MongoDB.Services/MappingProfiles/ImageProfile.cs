@@ -4,12 +4,11 @@ using LetsTalk.Server.Persistence.MongoDB.Models;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services.MappingProfiles;
 
-public class UploadProfile : Profile
+public class ImageProfile : Profile
 {
-    public UploadProfile()
+    public ImageProfile()
     {
         CreateMap<Image, ImageServiceModel>();
         CreateMap<Image, ImagePreviewServiceModel>();
-        CreateMap<Models.File, FileServiceModel>();
     }
 }

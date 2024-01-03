@@ -7,6 +7,7 @@ using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
+using LetsTalk.Server.Persistence.AgnosticServices;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
@@ -17,7 +18,8 @@ public static class ImageProcessingServiceRegistration
         IConfiguration configuration)
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-        services.AddFileStorageUtilityServices(configuration);
+        services.AddFileStorageUtilityServices();
+        services.AddAgnosticServices(configuration);
         services.AddImageProcessingUtilityServices();
         services.AddKafka(
             kafka => kafka

@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Utility;
@@ -8,26 +7,40 @@ namespace LetsTalk.Server.FileStorage.Utility;
 public class ImageService : IImageService
 {
     private readonly IFileService _fileService;
-    private readonly IImageAgnosticService _imageAgnosticService;
+    private readonly IFileStoragePathProvider _fileStoragePathProvider;
 
     public ImageService(
         IFileService fileService,
-        IImageAgnosticService imageAgnosticService)
+        IFileStoragePathProvider fileStoragePathProvider)
     {
         _fileService = fileService;
-        _imageAgnosticService = imageAgnosticService;
+        _fileStoragePathProvider = fileStoragePathProvider;
     }
 
-    public async Task<FetchImageResponse> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {
-        var image = await _imageAgnosticService.GetByIdWithFileAsync(imageId, cancellationToken);
+        var filepath = _fileStoragePathProvider.GetFilePath(imageId, FileTypes.Image);
+        var infoFilename = filepath + ".info";
+
+        if (!File.Exists(infoFilename))
+        {
+            return null;
+        }
+
+        var imageInfo = await _fileService.LoadImageInfoAsync(infoFilename, cancellationToken);
+
+        var content = await _fileService.ReadFileAsync(filepath, FileTypes.Image, cancellationToken);
+
+        if (content.Length == 0)
+        {
+            return null;
+        }
 
         return new FetchImageResponse
         {
-            Content = await _fileService.ReadFileAsync(image!.File!.FileName!, FileTypes.Image, cancellationToken),
-            Width = image.Width ?? 0,
-            Height = image.Height ?? 0,
-            ImageRole = (ImageRoles)image.ImageRoleId
+            Content = content,
+            Width = imageInfo?.Width ?? 0,
+            Height = imageInfo?.Height ?? 0
         };
     }
 }

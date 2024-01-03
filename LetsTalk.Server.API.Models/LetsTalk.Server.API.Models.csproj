@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.SignPackage.Abstractions\LetsTalk.Server.SignPackage.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

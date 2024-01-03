@@ -15,6 +15,7 @@ using StackExchange.Redis;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Services.Cache;
 using LetsTalk.Server.DependencyInjection;
+using LetsTalk.Server.SignPackage;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -70,7 +71,8 @@ public static class FileStorageServiceRegistration
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 
-        services.AddFileStorageUtilityServices(configuration);
+        services.AddFileStorageUtilityServices();
+        services.AddSignPackageServices(configuration);
 
         switch (configuration.GetValue<string>("Caching:cachingMode"))
         {

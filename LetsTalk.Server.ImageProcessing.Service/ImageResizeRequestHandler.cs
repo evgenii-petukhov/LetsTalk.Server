@@ -19,7 +19,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     private readonly IFileService _fileService;
     private readonly IImageResizeService _imageResizeService;
 
-    private readonly IImageAgnosticService _imageAgnosticService;
+    private readonly IMessageAgnosticService _messageAgnosticService;
     private readonly IMessageProducer _producer;
     private readonly KafkaSettings _kafkaSettings;
     private readonly FileStorageSettings _fileStorageSettings;
@@ -28,7 +28,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         IImageService imageService,
         IFileService fileService,
         IImageResizeService imageResizeService,
-        IImageAgnosticService imageAgnosticService,
+        IMessageAgnosticService messageAgnosticService,
         IOptions<KafkaSettings> kafkaSettings,
         IOptions<FileStorageSettings> fileStorageSettings,
         IProducerAccessor producerAccessor)
@@ -36,7 +36,7 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         _imageService = imageService;
         _fileService = fileService;
         _imageResizeService = imageResizeService;
-        _imageAgnosticService = imageAgnosticService;
+        _messageAgnosticService = messageAgnosticService;
         _kafkaSettings = kafkaSettings.Value;
         _fileStorageSettings = fileStorageSettings.Value;
         _producer = producerAccessor.GetProducer(_kafkaSettings.ImagePreviewNotification!.Producer);
@@ -45,17 +45,24 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     public async Task Handle(IMessageContext context, ImageResizeRequest request)
     {
         var fetchImageResponse = await _imageService.FetchImageAsync(request.ImageId!);
+
+        if (fetchImageResponse == null)
+        {
+            return;
+        }
+
         var (data, width, height) = _imageResizeService.Resize(
             fetchImageResponse.Content!,
             _fileStorageSettings.ImagePreviewMaxWidth,
             _fileStorageSettings.ImagePreviewMaxHeight);
-        var filename = await _fileService.SaveDataAsync(data!, FileTypes.Image, ImageRoles.Message);
 
-        var message = await _imageAgnosticService.SaveImagePreviewAsync(
+        var filename = await _fileService.SaveDataAsync(data!, FileTypes.Image, width, height);
+        await _fileService.SaveImageInfoAsync(filename, width, height);
+
+        var message = await _messageAgnosticService.SaveImagePreviewAsync(
             request.MessageId!,
             filename,
             ImageFormats.Webp,
-            ImageRoles.Message,
             width,
             height);
 

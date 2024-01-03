@@ -15,6 +15,7 @@ public class AccountRepository : GenericRepository<Account>, IAccountRepository
     public override Task<Account> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
+            .Include(x => x.Image)
             .AsTracking()
             .FirstOrDefaultAsync(account => account.Id == id, cancellationToken)!;
     }

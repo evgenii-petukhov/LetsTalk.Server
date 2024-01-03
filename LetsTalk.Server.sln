@@ -67,8 +67,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.ImageProcessing.Utility", "LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj", "{C226B714-D118-4E3D-81ED-1A52B4653BC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Domain.Abstractions", "LetsTalk.Server.Domain.Abstractions\LetsTalk.Server.Domain.Abstractions.csproj", "{2498C5DA-B55A-49F2-A72D-E85BC818EE58}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Kafka.Models", "LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj", "{4E29B863-F73F-4529-AE55-568F97319F88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.DependencyInjection", "LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj", "{9634ABFA-5784-4270-9402-DF2AA7E5DE97}"
@@ -91,7 +89,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Utility", "LetsTalk.Server.Persistence.Utility\LetsTalk.Server.Persistence.Utility.csproj", "{140DEA1C-FD30-45B1-8C54-D622D591A6AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.AgnosticServices", "LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj", "{9AE5AFF7-615D-482D-90C7-62CD710DD76D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.AgnosticServices", "LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj", "{9AE5AFF7-615D-482D-90C7-62CD710DD76D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{653FCCAF-7A2D-4C7F-B913-4220C8085D1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Tools.ExtractImageInfo", "LetsTalk.Server.Tools.ExtractImageInfo\LetsTalk.Server.Tools.ExtractImageInfo.csproj", "{210DE8DA-98F3-4C74-A2B9-8E04CC2A53C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.SignPackage", "LetsTalk.Server.SignPackage\LetsTalk.Server.SignPackage.csproj", "{7166237F-0B74-4EDF-A9E7-27C78EC713B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.SignPackage.Abstractions", "LetsTalk.Server.SignPackage.Abstractions\LetsTalk.Server.SignPackage.Abstractions.csproj", "{430FAF3B-64CB-4701-B625-6C0B5620EF64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -195,10 +201,6 @@ Global
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4E29B863-F73F-4529-AE55-568F97319F88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4E29B863-F73F-4529-AE55-568F97319F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E29B863-F73F-4529-AE55-568F97319F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -247,6 +249,18 @@ Global
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{210DE8DA-98F3-4C74-A2B9-8E04CC2A53C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{210DE8DA-98F3-4C74-A2B9-8E04CC2A53C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{210DE8DA-98F3-4C74-A2B9-8E04CC2A53C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{210DE8DA-98F3-4C74-A2B9-8E04CC2A53C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7166237F-0B74-4EDF-A9E7-27C78EC713B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7166237F-0B74-4EDF-A9E7-27C78EC713B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7166237F-0B74-4EDF-A9E7-27C78EC713B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7166237F-0B74-4EDF-A9E7-27C78EC713B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430FAF3B-64CB-4701-B625-6C0B5620EF64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430FAF3B-64CB-4701-B625-6C0B5620EF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430FAF3B-64CB-4701-B625-6C0B5620EF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430FAF3B-64CB-4701-B625-6C0B5620EF64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -282,7 +296,6 @@ Global
 		{625E0A0B-6380-4410-9C64-E10B8DAA3FDE} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{8195D81B-E5FE-4026-B6FE-28B7616330EA} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{C226B714-D118-4E3D-81ED-1A52B4653BC5} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
-		{2498C5DA-B55A-49F2-A72D-E85BC818EE58} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{4E29B863-F73F-4529-AE55-568F97319F88} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{9634ABFA-5784-4270-9402-DF2AA7E5DE97} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{052DE193-AB20-46C1-A678-166182065399} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
@@ -295,6 +308,10 @@ Global
 		{C6A46CAA-6494-4CFF-834B-19831F8DCD3B} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{140DEA1C-FD30-45B1-8C54-D622D591A6AA} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{9AE5AFF7-615D-482D-90C7-62CD710DD76D} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
+		{653FCCAF-7A2D-4C7F-B913-4220C8085D1B} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
+		{210DE8DA-98F3-4C74-A2B9-8E04CC2A53C2} = {653FCCAF-7A2D-4C7F-B913-4220C8085D1B}
+		{7166237F-0B74-4EDF-A9E7-27C78EC713B8} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
+		{430FAF3B-64CB-4701-B625-6C0B5620EF64} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

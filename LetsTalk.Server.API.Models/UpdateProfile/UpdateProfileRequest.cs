@@ -1,4 +1,6 @@
-﻿namespace LetsTalk.Server.API.Models.UpdateProfile;
+﻿using LetsTalk.Server.API.Models.Messages;
+
+namespace LetsTalk.Server.API.Models.UpdateProfile;
 
 public class UpdateProfileRequest
 {
@@ -8,5 +10,5 @@ public class UpdateProfileRequest
 
     public string? LastName { get; set; }
 
-    public string? ImageId { get; set; }
+    public ImageRequestModel? Image { get; set; }
 }

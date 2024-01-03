@@ -8,8 +8,6 @@ public class ImageServiceModel
 
     public int ImageRoleId { get; set; }
 
-    public FileServiceModel? File { get; set; }
-
     public int? Width { get; set; }
 
     public int? Height { get; set; }

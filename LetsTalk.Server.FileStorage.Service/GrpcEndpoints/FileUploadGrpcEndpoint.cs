@@ -2,11 +2,10 @@
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Protos;
-using LetsTalk.Server.Persistence.Enums;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
@@ -15,20 +14,17 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
     private readonly IImageValidationService _imageValidationService;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
-    private readonly IImageAgnosticService _imageAgnosticService;
     private readonly IImageService _imageService;
 
     public FileUploadGrpcEndpoint(
         IImageValidationService imageValidationService,
         IMapper mapper,
         IFileService fileService,
-        IImageAgnosticService imageAgnosticService,
         IImageService imageService)
     {
         _imageValidationService = imageValidationService;
         _mapper = mapper;
         _fileService = fileService;
-        _imageAgnosticService = imageAgnosticService;
         _imageService = imageService;
     }
 
@@ -38,13 +34,15 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
         var imageRole = (ImageRoles)request.ImageRole;
         var (imageFormat, width, height) = _imageValidationService.ValidateImage(data, imageRole);
 
-        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, imageRole, context.CancellationToken);
-
-        var image = await _imageAgnosticService.CreateImageAsync(filename, imageFormat, imageRole, width, height, context.CancellationToken);
+        var filename = await _fileService.SaveDataAsync(data, FileTypes.Image, width, height, context.CancellationToken);
+        await _fileService.SaveImageInfoAsync(filename, width, height, context.CancellationToken);
 
         return new UploadImageResponse
         {
-            ImageId = image.Id
+            Id = filename,
+            Width = width,
+            Height = height,
+            ImageFormat = (int)imageFormat
         };
     }
 

@@ -23,7 +23,17 @@ public interface IAccountAgnosticService
         string firstName,
         string lastName,
         string email,
+        CancellationToken cancellationToken = default);
+
+    Task<AccountServiceModel> UpdateProfileAsync(
+        string accountId,
+        string firstName,
+        string lastName,
+        string email,
         string imageId,
+        int width,
+        int height,
+        ImageFormats imageFormat,
         CancellationToken cancellationToken = default);
 
     Task<List<ContactServiceModel>> GetContactsAsync(string id, CancellationToken cancellationToken = default);

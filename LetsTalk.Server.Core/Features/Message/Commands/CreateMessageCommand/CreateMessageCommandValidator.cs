@@ -1,16 +1,18 @@
 ﻿using FluentValidation;
+using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.SignPackage.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
     private readonly IAccountAgnosticService _accountAgnosticService;
-    private readonly IImageAgnosticService _imageAgnosticService;
+    private readonly ISignPackageService _signPackageService;
 
     public CreateMessageCommandValidator(
         IAccountAgnosticService accountAgnosticService,
-        IImageAgnosticService imageAgnosticService)
+        ISignPackageService signPackageService)
     {
         RuleFor(model => model)
             .Must(IsContentValid)
@@ -33,15 +35,15 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
         });
 
-        When(model => !string.IsNullOrWhiteSpace(model.ImageId), () =>
+        When(model => model.Image != null, () =>
         {
-            RuleFor(model => model.ImageId)
-                .MustAsync(IsImageIdValidAsync)
-                .WithMessage("Image with {PropertyName} = {PropertyValue} does not exist");
+            RuleFor(model => model.Image)
+                .Must(IsSignatureValid!)
+                .WithMessage("Image signature is invalid");
         });
 
         _accountAgnosticService = accountAgnosticService;
-        _imageAgnosticService = imageAgnosticService;
+        _signPackageService = signPackageService;
     }
 
     private async Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken)
@@ -50,14 +52,13 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
     }
 
-    private async Task<bool> IsImageIdValidAsync(string? id, CancellationToken cancellationToken)
-    {
-        return !string.IsNullOrWhiteSpace(id)
-            && await _imageAgnosticService.IsImageIdValidAsync(id, cancellationToken);
-    }
-
     private bool IsContentValid(CreateMessageCommand model)
     {
-        return !string.IsNullOrWhiteSpace(model.Text) || !string.IsNullOrWhiteSpace(model.ImageId);
+        return !string.IsNullOrWhiteSpace(model.Text) || model.Image != null;
+    }
+
+    private bool IsSignatureValid(ImageRequestModel model)
+    {
+        return _signPackageService.Validate(model);
     }
 }

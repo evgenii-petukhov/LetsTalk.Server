@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LetsTalk.Server.Persistence.Migrations
 {
     [DbContext(typeof(LetsTalkDbContext))]
-    [Migration("20230909171850_ImagesTableFileRelationship")]
-    partial class ImagesTableFileRelationship
+    [Migration("20231227070832_ImageTableFilenameAsId")]
+    partial class ImageTableFilenameAsId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Account", b =>
@@ -40,8 +40,8 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<string>("ImageId")
+                        .HasColumnType("varchar(36)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
@@ -88,59 +88,11 @@ namespace LetsTalk.Server.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("LetsTalk.Server.Domain.File", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("FileTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FileTypeId");
-
-                    b.ToTable("files");
-                });
-
-            modelBuilder.Entity("LetsTalk.Server.Domain.FileType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("filetypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Image"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Audio"
-                        });
-                });
-
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("FileId")
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
 
                     b.Property<int?>("Height")
                         .HasColumnType("int");
@@ -148,20 +100,12 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Property<int>("ImageFormatId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ImageRoleId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Width")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId")
-                        .IsUnique();
-
                     b.HasIndex("ImageFormatId");
-
-                    b.HasIndex("ImageRoleId");
 
                     b.ToTable("images");
                 });
@@ -207,32 +151,6 @@ namespace LetsTalk.Server.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("LetsTalk.Server.Domain.ImageRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("imageroles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Avatar"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Message"
-                        });
-                });
-
             modelBuilder.Entity("LetsTalk.Server.Domain.LinkPreview", b =>
                 {
                     b.Property<int>("Id")
@@ -269,11 +187,11 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Property<long?>("DateReadUnix")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<string>("ImageId")
+                        .HasColumnType("varchar(36)");
 
-                    b.Property<int?>("ImagePreviewId")
-                        .HasColumnType("int");
+                    b.Property<string>("ImagePreviewId")
+                        .HasColumnType("varchar(36)");
 
                     b.Property<bool>("IsRead")
                         .HasColumnType("tinyint(1)");
@@ -328,42 +246,15 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("LetsTalk.Server.Domain.File", b =>
-                {
-                    b.HasOne("LetsTalk.Server.Domain.FileType", "FileType")
-                        .WithMany()
-                        .HasForeignKey("FileTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FileType");
-                });
-
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>
                 {
-                    b.HasOne("LetsTalk.Server.Domain.File", "File")
-                        .WithOne("Image")
-                        .HasForeignKey("LetsTalk.Server.Domain.Image", "FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LetsTalk.Server.Domain.ImageFormat", "ImageFormat")
                         .WithMany()
                         .HasForeignKey("ImageFormatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LetsTalk.Server.Domain.ImageRole", "ImageRole")
-                        .WithMany()
-                        .HasForeignKey("ImageRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("File");
-
                     b.Navigation("ImageFormat");
-
-                    b.Navigation("ImageRole");
                 });
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Message", b =>
@@ -403,11 +294,6 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Navigation("Recipient");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("LetsTalk.Server.Domain.File", b =>
-                {
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>

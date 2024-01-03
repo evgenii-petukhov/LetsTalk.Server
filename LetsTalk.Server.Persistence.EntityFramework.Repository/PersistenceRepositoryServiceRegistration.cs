@@ -14,7 +14,6 @@ public static class PersistenceRepositoryServiceRegistration
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IImageRepository, ImageRepository>();
-        services.AddScoped<IFileRepository, FileRepository>();
         services.AddScoped<ILinkPreviewRepository, LinkPreviewRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEntityFactory, EntityFactory>();

@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

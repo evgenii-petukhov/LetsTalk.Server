@@ -9,6 +9,5 @@ public class ImageProfile : Profile
     {
         CreateMap<Domain.Image, ImagePreviewServiceModel>();
         CreateMap<Domain.Image, ImageServiceModel>();
-        CreateMap<Domain.File, FileServiceModel>();
     }
 }

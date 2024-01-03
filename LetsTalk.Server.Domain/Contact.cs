@@ -18,5 +18,5 @@ public class Contact
 
     public int? LastMessageId { get; set; }
 
-    public int? ImageId { get; set; }
+    public string? ImageId { get; set; }
 }

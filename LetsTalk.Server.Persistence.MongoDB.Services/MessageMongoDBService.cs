@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
@@ -23,10 +24,34 @@ public class MessageMongoDBService : IMessageAgnosticService
         string recipientId,
         string text,
         string textHtml,
-        string imageId,
         CancellationToken cancellationToken)
     {
-        var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, imageId, cancellationToken);
+        var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);
+    }
+
+    public async Task<MessageServiceModel> CreateMessageAsync(
+        string senderId,
+        string recipientId,
+        string text,
+        string textHtml,
+        string imageId,
+        int width,
+        int height,
+        ImageFormats imageFormat,
+        CancellationToken cancellationToken)
+    {
+        var message = await _messageRepository.CreateAsync(
+            senderId,
+            recipientId,
+            text,
+            textHtml,
+            imageId,
+            width,
+            height,
+            imageFormat,
+            cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(message);
     }
@@ -81,6 +106,25 @@ public class MessageMongoDBService : IMessageAgnosticService
         {
             await _messageRepository.MarkAsReadAsync(messageId, cancellationToken);
         }
+    }
+
+    public async Task<MessageServiceModel> SaveImagePreviewAsync(
+        string messageId,
+        string filename,
+        ImageFormats imageFormat,
+        int width,
+        int height,
+        CancellationToken cancellationToken = default)
+    {
+        var message = await _messageRepository.SetImagePreviewAsync(
+            messageId,
+            filename,
+            imageFormat,
+            width,
+            height,
+            cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);
     }
 
     private async Task MarkAllAsReadAsync(string recipientId, string messageId, CancellationToken cancellationToken)

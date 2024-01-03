@@ -90,7 +90,6 @@ public class AccountRepository : IAccountRepository
         string firstName,
         string lastName,
         string email,
-        string imageId,
         CancellationToken cancellationToken = default)
     {
         var filterdefinition = Builders<Account>.Filter
@@ -101,9 +100,42 @@ public class AccountRepository : IAccountRepository
             .Set(x => x.LastName, lastName)
             .Set(x => x.Email, email);
 
-        updateDefinition = imageId == null
-            ? updateDefinition
-            : updateDefinition.Set(x => x.ImageId, imageId);
+        return _accountCollection
+            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
+            {
+                ReturnDocument = ReturnDocument.After
+            }, cancellationToken: cancellationToken);
+    }
+
+    public Task<Account> UpdateProfileAsync(
+        string id,
+        string firstName,
+        string lastName,
+        string email,
+        string imageId,
+        int width,
+        int height,
+        ImageFormats imageFormat,
+        CancellationToken cancellationToken = default)
+    {
+        var filterdefinition = Builders<Account>.Filter
+            .Eq(x => x.Id, id);
+
+        var updateDefinition = Builders<Account>.Update
+            .Set(x => x.FirstName, firstName)
+            .Set(x => x.LastName, lastName)
+            .Set(x => x.Email, email);
+
+        if (!string.IsNullOrEmpty(imageId))
+        {
+            updateDefinition = updateDefinition.Set(x => x.Image, new Image
+            {
+                Id = imageId,
+                Width = width,
+                Height = height,
+                ImageFormatId = (int)imageFormat
+            });
+        }
 
         return _accountCollection
             .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
@@ -175,7 +207,7 @@ public class AccountRepository : IAccountRepository
                 LastMessageDate = x.Metrics?.LastMessageDate,
                 LastMessageId = x.Metrics?.LastMessageId,
                 UnreadCount = x.Metrics?.UnreadCount,
-                ImageId = x.Account.ImageId
+                Image = x.Account.Image
             })
             .ToList();
     }

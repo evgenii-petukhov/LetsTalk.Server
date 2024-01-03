@@ -9,6 +9,8 @@ using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.SignPackage.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -17,11 +19,11 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
     private readonly IAccountAgnosticService _accountAgnosticService;
-    private readonly IImageAgnosticService _imageAgnosticService;
     private readonly IHtmlGenerator _htmlGenerator;
     private readonly IMapper _mapper;
     private readonly IMessageCacheManager _messageCacheManager;
     private readonly IMessageAgnosticService _messageAgnosticService;
+    private readonly ISignPackageService _signPackageService;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -29,20 +31,20 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public CreateMessageCommandHandler(
         IAccountAgnosticService accountAgnosticService,
-        IImageAgnosticService imageAgnosticService,
         IHtmlGenerator htmlGenerator,
         IMapper mapper,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
         IMessageCacheManager messageCacheManager,
-        IMessageAgnosticService messageDatabaseAgnosticService)
+        IMessageAgnosticService messageDatabaseAgnosticService,
+        ISignPackageService signPackageService)
     {
         _accountAgnosticService = accountAgnosticService;
-        _imageAgnosticService = imageAgnosticService;
         _htmlGenerator = htmlGenerator;
         _mapper = mapper;
         _messageCacheManager = messageCacheManager;
         _messageAgnosticService = messageDatabaseAgnosticService;
+        _signPackageService = signPackageService;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -51,7 +53,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateMessageCommandValidator(_accountAgnosticService, _imageAgnosticService);
+        var validator = new CreateMessageCommandValidator(_accountAgnosticService, _signPackageService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
@@ -61,13 +63,23 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
         var (html, url) = _htmlGenerator.GetHtml(request.Text!);
 
-        var message = await _messageAgnosticService.CreateMessageAsync(
-            request.SenderId!,
-            request.RecipientId!,
-            request.Text!,
-            html!,
-            request.ImageId!,
-            cancellationToken);
+        var message = request.Image == null
+            ? await _messageAgnosticService.CreateMessageAsync(
+                request.SenderId!,
+                request.RecipientId!,
+                request.Text!,
+                html!,
+                cancellationToken)
+            : await _messageAgnosticService.CreateMessageAsync(
+                request.SenderId!,
+                request.RecipientId!,
+                request.Text!,
+                html!,
+                request.Image.Id!,
+                request.Image.Width,
+                request.Image.Height,
+                (ImageFormats)request.Image.ImageFormat,
+                cancellationToken);
 
         var messageDto = _mapper.Map<MessageDto>(message);
 
@@ -102,13 +114,13 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     Url = url
                 }),
-            string.IsNullOrWhiteSpace(request.ImageId) ? Task.CompletedTask : _imageResizeRequestProducer.ProduceAsync(
+            request.Image == null ? Task.CompletedTask : _imageResizeRequestProducer.ProduceAsync(
                 _kafkaSettings.ImageResizeRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
                     MessageId = messageDto.Id,
-                    ImageId = request.ImageId
+                    ImageId = request.Image.Id
                 }));
 
         await _messageCacheManager.RemoveAsync(request.SenderId!, request.RecipientId!);

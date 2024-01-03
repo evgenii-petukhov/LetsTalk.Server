@@ -11,5 +11,5 @@ public class CreateMessageCommand : IRequest<CreateMessageResponse>
 
     public string? Text { get; set; }
 
-    public string? ImageId { get; set; }
+    public ImageRequestModel? Image { get; set; }
 }

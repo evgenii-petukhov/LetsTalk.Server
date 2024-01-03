@@ -6,5 +6,5 @@ public class CreateMessageRequest
 
     public string? RecipientId { get; set; }
 
-    public string? ImageId { get; set; }
+    public ImageRequestModel? Image { get; set; }
 }

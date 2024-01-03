@@ -70,9 +70,9 @@ public class AccountEntityFrameworkService: IAccountAgnosticService
         var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
         var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
 
-        if (!string.IsNullOrEmpty(imageId))
+        if (account.Image != null && !string.IsNullOrEmpty(imageId))
         {
-            _imageRepository.Delete(account.Image!);
+            _imageRepository.Delete(account.Image);
         }
 
         account.UpdateProfile(firstName, lastName, email, image);

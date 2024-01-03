@@ -1,13 +1,18 @@
 ﻿using FluentValidation;
+using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.SignPackage.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 
 public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
 {
     private readonly IAccountAgnosticService _accountAgnosticService;
+    private readonly ISignPackageService _signPackageService;
 
-    public UpdateProfileCommandValidator(IAccountAgnosticService accountAgnosticService)
+    public UpdateProfileCommandValidator(
+        IAccountAgnosticService accountAgnosticService,
+        ISignPackageService signPackageService)
     {
         RuleFor(model => model.AccountId)
             .NotNull()
@@ -34,14 +39,27 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
 
         RuleFor(model => model.Email)
             .EmailAddress()
-        .WithMessage("{PropertyName} is invalid");
+            .WithMessage("{PropertyName} is invalid");
+
+        When(model => model.Image != null, () =>
+        {
+            RuleFor(model => model.Image)
+                .Must(IsSignatureValid!)
+                .WithMessage("Image signature is invalid");
+        });
 
         _accountAgnosticService = accountAgnosticService;
+        _signPackageService = signPackageService;
     }
 
     private async Task<bool> IsAccountIdValidAsync(string? id, CancellationToken cancellationToken)
     {
         return !string.IsNullOrWhiteSpace(id)
             && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
+    }
+
+    private bool IsSignatureValid(ImageRequestModel model)
+    {
+        return _signPackageService.Validate(model);
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace LetsTalk.Server.API.Models.Messages;
+﻿using LetsTalk.Server.SignPackage.Abstractions;
 
-public class ImageRequestModel
+namespace LetsTalk.Server.API.Models.Messages;
+
+public class ImageRequestModel: ISignable
 {
     public string? Id { get; set; }
 

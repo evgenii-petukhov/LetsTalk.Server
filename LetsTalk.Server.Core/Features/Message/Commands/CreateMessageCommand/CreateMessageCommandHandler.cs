@@ -10,6 +10,7 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.SignPackage.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -22,6 +23,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMapper _mapper;
     private readonly IMessageCacheManager _messageCacheManager;
     private readonly IMessageAgnosticService _messageAgnosticService;
+    private readonly ISignPackageService _signPackageService;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -34,13 +36,15 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
         IMessageCacheManager messageCacheManager,
-        IMessageAgnosticService messageDatabaseAgnosticService)
+        IMessageAgnosticService messageDatabaseAgnosticService,
+        ISignPackageService signPackageService)
     {
         _accountAgnosticService = accountAgnosticService;
         _htmlGenerator = htmlGenerator;
         _mapper = mapper;
         _messageCacheManager = messageCacheManager;
         _messageAgnosticService = messageDatabaseAgnosticService;
+        _signPackageService = signPackageService;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -49,7 +53,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateMessageCommandValidator(_accountAgnosticService);
+        var validator = new CreateMessageCommandValidator(_accountAgnosticService, _signPackageService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)

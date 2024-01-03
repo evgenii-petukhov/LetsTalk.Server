@@ -39,7 +39,7 @@ public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
 
         return new UploadImageResponse
         {
-            ImageId = filename,
+            Id = filename,
             Width = width,
             Height = height,
             ImageFormat = (int)imageFormat

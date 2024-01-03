@@ -1,17 +1,21 @@
 ﻿using Grpc.Core;
 using Grpc.Core.Interceptors;
 using LetsTalk.Server.Authentication.Abstractions;
+using LetsTalk.Server.SignPackage.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
 
 public class JwtInterceptor : Interceptor
 {
     private readonly IAuthenticationClient _authenticationClient;
+    private readonly ISignPackageService _signPackageService;
 
     public JwtInterceptor(
-        IAuthenticationClient authenticationClient)
+        IAuthenticationClient authenticationClient,
+        ISignPackageService signPackageService)
     {
         _authenticationClient = authenticationClient;
+        _signPackageService = signPackageService;
     }
 
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
@@ -32,6 +36,10 @@ public class JwtInterceptor : Interceptor
         }
 
         context.UserState.Add("AccountId", accountId);
-        return await continuation(request, context);
+        var response = await continuation(request, context);
+
+        _signPackageService.Sign(response);
+
+        return response;
     }
 }

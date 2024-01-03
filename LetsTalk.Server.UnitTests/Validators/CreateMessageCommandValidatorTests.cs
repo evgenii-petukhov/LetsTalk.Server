@@ -2,6 +2,7 @@
 using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 
 namespace LetsTalk.Server.UnitTests.Validators;
@@ -11,12 +12,14 @@ public class CreateMessageCommandValidatorTests
 {
     private CreateMessageCommandValidator _validator;
     private Mock<IAccountAgnosticService> _mockAccountAgnosticService;
+    private Mock<ISignPackageService> _mockSignPackageService;
 
     [SetUp]
     public void SetUp()
     {
         _mockAccountAgnosticService = new Mock<IAccountAgnosticService>();
-        _validator = new(_mockAccountAgnosticService.Object);
+        _mockSignPackageService = new Mock<ISignPackageService>();
+        _validator = new(_mockAccountAgnosticService.Object, _mockSignPackageService.Object);
     }
 
     [Test]

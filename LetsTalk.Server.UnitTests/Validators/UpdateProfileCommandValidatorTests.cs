@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 
 namespace LetsTalk.Server.UnitTests.Validators;
@@ -10,12 +11,14 @@ public class UpdateProfileCommandValidatorTests
 {
     private UpdateProfileCommandValidator _validator;
     private Mock<IAccountAgnosticService> _mockAccountAgnosticService;
+    private Mock<ISignPackageService> _mockSignPackageService;
 
     [SetUp]
     public void SetUp()
     {
         _mockAccountAgnosticService = new Mock<IAccountAgnosticService>();
-        _validator = new(_mockAccountAgnosticService.Object);
+        _mockSignPackageService = new Mock<ISignPackageService>();
+        _validator = new(_mockAccountAgnosticService.Object, _mockSignPackageService.Object);
     }
 
     [Test]

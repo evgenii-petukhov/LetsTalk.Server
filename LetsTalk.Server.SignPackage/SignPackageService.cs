@@ -49,17 +49,17 @@ public class SignPackageService: ISignPackageService
                 Value = x.GetValue(signable)
             })
             .OrderBy(x => x.Name)
-            .Select(x => $"{x.Name}={x.Value}");
+            .Select(x => $"{x.Name}={x.Value}")
+            .ToList();
 
-        var sb = new StringBuilder();
-        sb.AppendJoin(Separator, stringPairs);
-        if (sb.Length > 0)
-        {
-            sb.Append(Separator);
-        }
-        sb.Append(_signPackageSettings.Salt);
+        var s = new StringBuilder()
+            .AppendJoin(Separator, stringPairs)
+            .Append(stringPairs.Any() ? Separator : string.Empty)
+            .Append("salt=")
+            .Append(_signPackageSettings.Salt)
+            .ToString();
 
-        var hashBytes = MD5.HashData(Encoding.Default.GetBytes(sb.ToString()));
+        var hashBytes = MD5.HashData(Encoding.Default.GetBytes(s));
         return Convert.ToHexString(hashBytes);
     }
 }

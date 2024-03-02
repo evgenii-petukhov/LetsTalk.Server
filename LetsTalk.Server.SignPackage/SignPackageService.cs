@@ -9,17 +9,17 @@ namespace LetsTalk.Server.SignPackage;
 public class SignPackageService: ISignPackageService
 {
     private const char Separator = ';';
-
-    private readonly SignPackageSettings _signPackageSettings;
+    private readonly string _salt;
+    private readonly string[] _supportedTypes = new string[] { "System.Int32", "System.String" };
 
     public SignPackageService(IOptions<SignPackageSettings> options)
     {
-        _signPackageSettings = options.Value;
+        _salt = options.Value?.Salt ?? string.Empty;
     }
 
     public void Sign(object obj)
     {
-        if (obj is not ISignable signable)
+        if (obj == null || obj is not ISignable signable)
         {
             return;
         }
@@ -39,9 +39,9 @@ public class SignPackageService: ISignPackageService
             .GetProperties()
             .Where(x => {
                 var isSignature = string.Equals(x.Name, nameof(ISignable.Signature), StringComparison.Ordinal);
-                var isGoogleProtobuf = x.PropertyType.FullName?.StartsWith("Google.Protobuf.") ?? false;
+                var isSupported = _supportedTypes.Contains(x.PropertyType.FullName);
 
-                return !isSignature && !isGoogleProtobuf;
+                return !isSignature && isSupported && x.GetValue(signable) != null;
             })
             .Select(x => new
             {
@@ -52,11 +52,16 @@ public class SignPackageService: ISignPackageService
             .Select(x => $"{x.Name}={x.Value}")
             .ToList();
 
+        if (!stringPairs.Any())
+        {
+            throw new Exception("There is no supported properties to sign");
+        }
+
         var s = new StringBuilder()
             .AppendJoin(Separator, stringPairs)
             .Append(stringPairs.Any() ? Separator : string.Empty)
             .Append("salt=")
-            .Append(_signPackageSettings.Salt)
+            .Append(_salt)
             .ToString();
 
         var hashBytes = MD5.HashData(Encoding.Default.GetBytes(s));

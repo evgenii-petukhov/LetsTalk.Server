@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using LetsTalk.Server.API.Models.Messages;
 using LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.SignPackage.Abstractions;
@@ -46,7 +47,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountDoesNotExist_FirstNameIsNull_LastNameIsNull_EmailIsNull_PhotoUrlIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountDoesNotExist_FirstNameIsNull_LastNameIsNull_EmailIsNull_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -76,7 +77,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNull_LastNameIsNull_EmailIsNull_PhotoUrlIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNull_LastNameIsNull_EmailIsNull_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -105,7 +106,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsEmpty_LastNameIsEmpty_EmailIsNull_PhotoUrlIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsEmpty_LastNameIsEmpty_EmailIsNull_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -134,31 +135,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsNull_PhotoUrlIsNull_ShouldBeValid()
-    {
-        // Arrange
-        var request = new UpdateProfileCommand
-        {
-            AccountId = "0",
-            FirstName = "test",
-            LastName = "test"
-        };
-        var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
-            .Returns(Task.FromResult(true));
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeTrue();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEmpty();
-    }
-
-    [Test]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty_PhotoUrlIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -190,7 +167,7 @@ public class UpdateProfileCommandValidatorTests
     [TestCase("test")]
     [TestCase("test.com")]
     [TestCase("@com")]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsInvalid_PhotoUrlIsNull_ShouldContainValidationErrors
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsInvalid_ImageIsNull_ShouldContainValidationErrors
         (string email)
     {
         // Arrange
@@ -220,7 +197,64 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsNull_ShouldBeValid()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_ImageIsNotNull_SignatureIsInvalid_ShouldBeValid()
+    {
+        // Arrange
+        var request = new UpdateProfileCommand
+        {
+            AccountId = "0",
+            FirstName = "test",
+            LastName = "test",
+            Email = "test@localhost.com",
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            }
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
+            .Returns(Task.FromResult(true));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeFalse();
+        validationResult.Errors.Should().HaveCount(1);
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
+        {
+            "Image signature is invalid"
+        });
+    }
+
+    [Test]
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsNull_ImageIsNull_ShouldBeValid()
+    {
+        // Arrange
+        var request = new UpdateProfileCommand
+        {
+            AccountId = "0",
+            FirstName = "test",
+            LastName = "test"
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
+            .Returns(Task.FromResult(true));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeTrue();
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_ImageIsNull_ShouldBeValid()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -245,7 +279,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsValid_ShouldBeValid()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_ImageIsNotNull_SignatureIsValid_ShouldBeValid()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -253,12 +287,19 @@ public class UpdateProfileCommandValidatorTests
             AccountId = "0",
             FirstName = "test",
             LastName = "test",
-            Email = "test@localhost.com"
+            Email = "test@localhost.com",
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            }
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
             .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
             .Returns(Task.FromResult(true));
+        _mockSignPackageService
+            .Setup(x => x.Validate(request.Image))
+            .Returns(true);
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);

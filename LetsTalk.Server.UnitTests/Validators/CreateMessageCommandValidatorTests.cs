@@ -45,7 +45,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNull_RecipientIsNull_SenderIsZero_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsNull_SenderIsZero_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -69,7 +69,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNull_RecipientIsZero_SenderIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsZero_SenderIsNull_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -97,7 +97,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNull_RecipientIsZero_SenderIsZero_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsZero_SenderIsZero_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -126,7 +126,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNull_RecipientIsNotNull_SenderIsNotNull_AccountDoesNotExist_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountDoesNotExist_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -154,7 +154,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -181,7 +181,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsEmpty_ImageIdIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -209,31 +209,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNotEmpty_ImageIdIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ShouldBeValid()
-    {
-        // Arrange
-        var request = new CreateMessageCommand
-        {
-            RecipientId = "1",
-            SenderId = "2",
-            Text = "text"
-        };
-        var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeTrue();
-        validationResult.Errors.Should().BeEmpty();
-    }
-
-    [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNotNull_RecipientIsNotNull_SenderIsNotNull_SignatureIsInvalid_AccountExists_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -264,37 +240,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNotNull_RecipientIsNotNull_SenderIsNotNull_SignatureIsValid_AccountExists_ShouldBeValid()
-    {
-        // Arrange
-        var request = new CreateMessageCommand
-        {
-            RecipientId = "1",
-            SenderId = "2",
-            Image = new ImageRequestModel
-            {
-                Id = "1"
-            }
-        };
-        var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-        _mockSignPackageService
-            .Setup(x => x.Validate(request.Image))
-            .Returns(true);
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeTrue();
-        validationResult.Errors.Should().BeEmpty();
-    }
-
-    [Test]
-    public async Task ValidateAsync_When_TextIsNotNull_ImageIdIsNotNull_RecipientIsNotNull_SenderIsNotNull_SignatureIsInvalid_AccountExists_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNotNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -326,37 +272,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNotNull_ImageIdIsNotNull_RecipientIsNotNull_SenderIsNotNull_SignatureIsValid_AccountExists_ShouldBeValid()
-    {
-        // Arrange
-        var request = new CreateMessageCommand
-        {
-            RecipientId = "1",
-            SenderId = "2",
-            Image = new ImageRequestModel
-            {
-                Id = "1"
-            },
-            Text = "text"
-        };
-        var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-        _mockSignPackageService
-            .Setup(x => x.Validate(request.Image))
-            .Returns(true);
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeTrue();
-    }
-
-    [Test]
-    public async Task ValidateAsync_When_TextIsNull_ImageIdIsNotNull_RecipientIsNull_SenderIsNull_AccountExists_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsNull_SenderIsNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -387,7 +303,7 @@ public class CreateMessageCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNotNull_ImageIdIsNotNull_RecipientIsNull_SenderIsNull_AccountExists_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_TextIsNotNull_RecipientIsNull_SenderIsNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -416,5 +332,89 @@ public class CreateMessageCommandValidatorTests
             "Sender Id is required",
             "Image signature is invalid"
         });
+    }
+
+    [Test]
+    public async Task ValidateAsync_When_TextIsNotEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNull_ShouldBeValid()
+    {
+        // Arrange
+        var request = new CreateMessageCommand
+        {
+            RecipientId = "1",
+            SenderId = "2",
+            Text = "text"
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
+            .Returns(Task.FromResult(true));
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeTrue();
+        validationResult.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsValid_ShouldBeValid()
+    {
+        // Arrange
+        var request = new CreateMessageCommand
+        {
+            RecipientId = "1",
+            SenderId = "2",
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            }
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
+            .Returns(Task.FromResult(true));
+        _mockSignPackageService
+            .Setup(x => x.Validate(request.Image))
+            .Returns(true);
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeTrue();
+        validationResult.Errors.Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task ValidateAsync_When_TextIsNotNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsValid_ShouldBeValid()
+    {
+        // Arrange
+        var request = new CreateMessageCommand
+        {
+            RecipientId = "1",
+            SenderId = "2",
+            Image = new ImageRequestModel
+            {
+                Id = "1"
+            },
+            Text = "text"
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
+            .Returns(Task.FromResult(true));
+        _mockSignPackageService
+            .Setup(x => x.Validate(request.Image))
+            .Returns(true);
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeTrue();
     }
 }

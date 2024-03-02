@@ -22,7 +22,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_EmptyModel()
+    public async Task ValidateAsync_When_ModelIsEmpty_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand();
@@ -46,7 +46,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountDoesNotExist_FirstNameIsNull_LastNameIsNull_EmailIsNull_PhotoUrlIsNull()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountDoesNotExist_FirstNameIsNull_LastNameIsNull_EmailIsNull_PhotoUrlIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -76,7 +76,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNull_LastNameIsNull_EmailIsNull_PhotoUrlIsNull()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNull_LastNameIsNull_EmailIsNull_PhotoUrlIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -105,7 +105,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsEmpty_LastNameIsEmpty_EmailIsNull_PhotoUrlIsNull()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsEmpty_LastNameIsEmpty_EmailIsNull_PhotoUrlIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -134,7 +134,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsNull_PhotoUrlIsNull()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsNull_PhotoUrlIsNull_ShouldBeValid()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -158,7 +158,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty_PhotoUrlIsNull()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty_PhotoUrlIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -190,7 +190,8 @@ public class UpdateProfileCommandValidatorTests
     [TestCase("test")]
     [TestCase("test.com")]
     [TestCase("@com")]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsInvalid_PhotoUrlIsNull(string email)
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsInvalid_PhotoUrlIsNull_ShouldContainValidationErrors
+        (string email)
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -219,7 +220,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsNull()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsNull_ShouldBeValid()
     {
         // Arrange
         var request = new UpdateProfileCommand
@@ -244,7 +245,7 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task UpdateProfileCommandValidator_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsValid()
+    public async Task ValidateAsync_When_AccountIdIsZero_AccountExists_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsValid_PhotoUrlIsValid_ShouldBeValid()
     {
         // Arrange
         var request = new UpdateProfileCommand

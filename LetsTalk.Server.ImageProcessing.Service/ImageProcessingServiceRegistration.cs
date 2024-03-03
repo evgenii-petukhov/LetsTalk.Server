@@ -3,7 +3,6 @@ using LetsTalk.Server.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using KafkaFlow.Serializer;
-using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
@@ -47,7 +46,7 @@ public static class ImageProcessingServiceRegistration
                             producer => producer
                                 .DefaultTopic(kafkaSettings.ImagePreviewNotification.Topic)
                                 .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
+                                    m.AddSerializer<JsonCoreSerializer, SingleMessageTypeResolver>()
                                 )
                         )
                 )

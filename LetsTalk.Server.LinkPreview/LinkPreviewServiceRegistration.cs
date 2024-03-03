@@ -1,6 +1,5 @@
 ﻿using KafkaFlow;
 using KafkaFlow.Serializer;
-using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.LinkPreview.Abstractions;
@@ -48,7 +47,7 @@ public static class LinkPreviewServiceRegistration
                             producer => producer
                                 .DefaultTopic(kafkaSettings.LinkPreviewNotification.Topic)
                                 .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
+                                    m.AddSerializer<JsonCoreSerializer, SingleMessageTypeResolver>()
                                 )
                         )
                 )

@@ -1,26 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="FluentValidation" Version="11.8.0" />
-    <PackageReference Include="KafkaFlow" Version="2.5.0" />
-    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.5.0" />
-    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.5.0" />
-    <PackageReference Include="KafkaFlow.Serializer" Version="2.5.0" />
-    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.5.0" />
-    <PackageReference Include="KafkaFlow.TypedHandler" Version="2.5.0" />
-    <PackageReference Include="MediatR" Version="12.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+    <PackageReference Include="KafkaFlow" Version="3.0.4" />
+    <PackageReference Include="KafkaFlow.LogHandler.Console" Version="3.0.4" />
+    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="3.0.4" />
+    <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="3.0.4" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
-    <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
+    <PackageReference Include="StackExchange.Redis" Version="2.7.27" />
   </ItemGroup>
 
   <ItemGroup>

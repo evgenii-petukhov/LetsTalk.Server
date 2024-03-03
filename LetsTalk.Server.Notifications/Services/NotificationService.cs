@@ -4,18 +4,12 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace LetsTalk.Server.Notifications.Services;
 
-public class NotificationService : INotificationService
+public class NotificationService(
+    IConnectionManager connectionManager,
+    IHubContext<NotificationHub, INotificationHub> messageHub) : INotificationService
 {
-    private readonly IConnectionManager _connectionManager;
-    private readonly IHubContext<NotificationHub, INotificationHub> _messageHub;
-
-    public NotificationService(
-        IConnectionManager connectionManager,
-        IHubContext<NotificationHub, INotificationHub> messageHub)
-    {
-        _connectionManager = connectionManager;
-        _messageHub = messageHub;
-    }
+    private readonly IConnectionManager _connectionManager = connectionManager;
+    private readonly IHubContext<NotificationHub, INotificationHub> _messageHub = messageHub;
 
     public Task SendNotificationAsync<T>(string accountId, T notification, string typeName)
     {

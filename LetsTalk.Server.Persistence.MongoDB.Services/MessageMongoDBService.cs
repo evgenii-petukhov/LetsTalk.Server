@@ -6,18 +6,12 @@ using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
-public class MessageMongoDBService : IMessageAgnosticService
+public class MessageMongoDBService(
+    IMessageRepository messageRepository,
+    IMapper mapper) : IMessageAgnosticService
 {
-    private readonly IMessageRepository _messageRepository;
-    private readonly IMapper _mapper;
-
-    public MessageMongoDBService(
-        IMessageRepository messageRepository,
-        IMapper mapper)
-    {
-        _messageRepository = messageRepository;
-        _mapper = mapper;
-    }
+    private readonly IMessageRepository _messageRepository = messageRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,

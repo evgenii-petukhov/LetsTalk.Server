@@ -5,14 +5,9 @@ using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class EntityFactory : IEntityFactory
+public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
 {
-    private readonly LetsTalkDbContext _context;
-
-    public EntityFactory(LetsTalkDbContext context)
-    {
-        _context = context;
-    }
+    private readonly LetsTalkDbContext _context = context;
 
     public Message CreateMessage(int id)
     {

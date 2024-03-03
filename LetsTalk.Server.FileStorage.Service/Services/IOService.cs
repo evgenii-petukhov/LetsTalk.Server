@@ -4,14 +4,9 @@ using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Service.Services;
 
-public class IOService : IIOService
+public class IOService(IFileStoragePathProvider filePathGenerator) : IIOService
 {
-    private readonly IFileStoragePathProvider _filePathGenerator;
-
-    public IOService(IFileStoragePathProvider filePathGenerator)
-    {
-        _filePathGenerator = filePathGenerator;
-    }
+    private readonly IFileStoragePathProvider _filePathGenerator = filePathGenerator;
 
     public void DeleteFile(string filename, FileTypes fileType)
     {

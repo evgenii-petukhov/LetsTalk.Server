@@ -6,17 +6,12 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Services.Cache.Profile;
 
-public class ProfileMemoryCacheService : ProfileCacheServiceBase, IProfileService, IProfileCacheManager
+public class ProfileMemoryCacheService(
+    IMemoryCache memoryCache,
+    IOptions<CachingSettings> cachingSettings,
+    IProfileService profileService) : ProfileCacheServiceBase(profileService, cachingSettings), IProfileService, IProfileCacheManager
 {
-    private readonly IMemoryCache _memoryCache;
-
-    public ProfileMemoryCacheService(
-        IMemoryCache memoryCache,
-        IOptions<CachingSettings> cachingSettings,
-        IProfileService profileService) : base(profileService, cachingSettings)
-    {
-        _memoryCache = memoryCache;
-    }
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public Task<AccountDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {

@@ -3,14 +3,9 @@ using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
-public class LinkPreviewEntityFrameworkService : ILinkPreviewAgnosticService
+public class LinkPreviewEntityFrameworkService(ILinkPreviewRepository linkPreviewRepository) : ILinkPreviewAgnosticService
 {
-    private readonly ILinkPreviewRepository _linkPreviewRepository;
-
-    public LinkPreviewEntityFrameworkService(ILinkPreviewRepository linkPreviewRepository)
-    {
-        _linkPreviewRepository = linkPreviewRepository;
-    }
+    private readonly ILinkPreviewRepository _linkPreviewRepository = linkPreviewRepository;
 
     public async Task<string?> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default)
     {

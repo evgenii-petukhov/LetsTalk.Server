@@ -13,21 +13,14 @@ using Microsoft.Extensions.Options;
 namespace LetsTalk.Server.API.Controllers;
 
 [Route("api/[controller]")]
-public class MessageController : ApiController
+public class MessageController(
+    IMediator mediator,
+    IMapper mapper,
+    IOptions<MessagingSettings> messagingSettings) : ApiController
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-    private readonly MessagingSettings _messagingSettings;
-
-    public MessageController(
-        IMediator mediator,
-        IMapper mapper,
-        IOptions<MessagingSettings> messagingSettings)
-    {
-        _mediator = mediator;
-        _mapper = mapper;
-        _messagingSettings = messagingSettings.Value;
-    }
+    private readonly IMediator _mediator = mediator;
+    private readonly IMapper _mapper = mapper;
+    private readonly MessagingSettings _messagingSettings = messagingSettings.Value;
 
     [HttpGet("{accountId}")]
     public async Task<ActionResult<List<MessageDto>>> GetAsync(string accountId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)

@@ -9,18 +9,12 @@ namespace LetsTalk.Server.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController(
+    IMediator mediator,
+    IMapper mapper) : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-
-    public AuthenticationController(
-        IMediator mediator,
-        IMapper mapper)
-    {
-        _mediator = mediator;
-        _mapper = mapper;
-    }
+    private readonly IMediator _mediator = mediator;
+    private readonly IMapper _mapper = mapper;
 
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest model, CancellationToken cancellationToken)

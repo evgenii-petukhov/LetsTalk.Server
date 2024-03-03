@@ -7,17 +7,12 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.Core.Services.Cache.Messages;
 
-public class MessageRedisCacheService : MessageCacheServiceBase, IMessageService, IMessageCacheManager
+public class MessageRedisCacheService(
+    IConnectionMultiplexer сonnectionMultiplexer,
+    IOptions<CachingSettings> cachingSettings,
+    IMessageService messageService) : MessageCacheServiceBase(messageService, cachingSettings), IMessageService, IMessageCacheManager
 {
-    private readonly IDatabase _database;
-
-    public MessageRedisCacheService(
-        IConnectionMultiplexer сonnectionMultiplexer,
-        IOptions<CachingSettings> cachingSettings,
-        IMessageService messageService) : base(messageService, cachingSettings)
-    {
-        _database = сonnectionMultiplexer.GetDatabase();
-    }
+    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
     public async Task<List<MessageDto>> GetPagedAsync(
         string senderId,

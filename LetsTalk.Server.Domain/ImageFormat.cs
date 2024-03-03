@@ -3,12 +3,7 @@
 namespace LetsTalk.Server.Domain;
 
 [Table("imageformats")]
-public class ImageFormat : BaseEntity
+public class ImageFormat(int id, string name) : BaseEntity(id)
 {
-    public string? Name { get; protected set; }
-
-    public ImageFormat(int id, string name) : base(id)
-    {
-        Name = name;
-    }
+    public string? Name { get; protected set; } = name;
 }

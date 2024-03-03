@@ -4,18 +4,12 @@ using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
-public class ImageService : IImageService
+public class ImageService(
+    IFileService fileService,
+    IFileStoragePathProvider fileStoragePathProvider) : IImageService
 {
-    private readonly IFileService _fileService;
-    private readonly IFileStoragePathProvider _fileStoragePathProvider;
-
-    public ImageService(
-        IFileService fileService,
-        IFileStoragePathProvider fileStoragePathProvider)
-    {
-        _fileService = fileService;
-        _fileStoragePathProvider = fileStoragePathProvider;
-    }
+    private readonly IFileService _fileService = fileService;
+    private readonly IFileStoragePathProvider _fileStoragePathProvider = fileStoragePathProvider;
 
     public async Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {

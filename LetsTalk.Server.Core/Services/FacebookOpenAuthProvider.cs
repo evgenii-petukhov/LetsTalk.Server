@@ -14,20 +14,14 @@ using RestSharp;
 namespace LetsTalk.Server.Core.Services;
 
 [OpenAuthProviderId(OpenAuthProviderIdentifiers.FACEBOOK)]
-public class FacebookOpenAuthProvider : IOpenAuthProvider
+public class FacebookOpenAuthProvider(
+    IAuthenticationClient authenticationClient,
+    IAccountAgnosticService accountAgnosticService) : IOpenAuthProvider
 {
     private const string FACEBOOK_URL = "https://graph.facebook.com/";
 
-    private readonly IAuthenticationClient _authenticationClient;
-    private readonly IAccountAgnosticService _accountAgnosticService;
-
-    public FacebookOpenAuthProvider(
-        IAuthenticationClient authenticationClient,
-        IAccountAgnosticService accountAgnosticService)
-    {
-        _authenticationClient = authenticationClient;
-        _accountAgnosticService = accountAgnosticService;
-    }
+    private readonly IAuthenticationClient _authenticationClient = authenticationClient;
+    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
 
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
     {

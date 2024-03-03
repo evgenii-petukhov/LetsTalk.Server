@@ -3,21 +3,15 @@ using System.Globalization;
 
 namespace LetsTalk.Server.API.Middleware;
 
-public class JwtMiddleware
+public class JwtMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public JwtMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(
         HttpContext context,
         IAuthenticationClient authenticationClient)
     {
-        var token = context.Request.Headers["Authorization"]
-            .FirstOrDefault()?
+        var token = context.Request.Headers.Authorization.FirstOrDefault()?
             .Split(" ")
             .Last();
 

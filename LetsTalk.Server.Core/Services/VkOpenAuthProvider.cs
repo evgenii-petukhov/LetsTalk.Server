@@ -15,23 +15,16 @@ using RestSharp;
 namespace LetsTalk.Server.Core.Services;
 
 [OpenAuthProviderId(OpenAuthProviderIdentifiers.VK)]
-public class VkOpenAuthProvider : IOpenAuthProvider
+public class VkOpenAuthProvider(
+    IAppLogger<VkOpenAuthProvider> appLogger,
+    IAuthenticationClient authenticationClient,
+    IAccountAgnosticService accountAgnosticService) : IOpenAuthProvider
 {
     private const string VK_URL = "https://api.vk.com/";
 
-    private readonly IAppLogger<VkOpenAuthProvider> _appLogger;
-    private readonly IAuthenticationClient _authenticationClient;
-    private readonly IAccountAgnosticService _accountAgnosticService;
-
-    public VkOpenAuthProvider(
-        IAppLogger<VkOpenAuthProvider> appLogger,
-        IAuthenticationClient authenticationClient,
-        IAccountAgnosticService accountAgnosticService)
-    {
-        _appLogger = appLogger;
-        _authenticationClient = authenticationClient;
-        _accountAgnosticService = accountAgnosticService;
-    }
+    private readonly IAppLogger<VkOpenAuthProvider> _appLogger = appLogger;
+    private readonly IAuthenticationClient _authenticationClient = authenticationClient;
+    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
 
     public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
     {

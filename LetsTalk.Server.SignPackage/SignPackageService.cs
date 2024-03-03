@@ -6,16 +6,11 @@ using System.Text;
 
 namespace LetsTalk.Server.SignPackage;
 
-public class SignPackageService: ISignPackageService
+public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPackageService
 {
     private const char Separator = ';';
-    private readonly string _salt;
-    private readonly string[] _supportedTypes = new string[] { "System.Int32", "System.String" };
-
-    public SignPackageService(IOptions<SignPackageSettings> options)
-    {
-        _salt = options.Value?.Salt ?? string.Empty;
-    }
+    private readonly string _salt = options.Value?.Salt ?? string.Empty;
+    private readonly string[] _supportedTypes = ["System.Int32", "System.String"];
 
     public void Sign(object obj)
     {
@@ -52,14 +47,14 @@ public class SignPackageService: ISignPackageService
             .Select(x => $"{x.Name}={x.Value}")
             .ToList();
 
-        if (!stringPairs.Any())
+        if (stringPairs.Count == 0)
         {
             throw new Exception("There is no supported properties to sign");
         }
 
         var s = new StringBuilder()
             .AppendJoin(Separator, stringPairs)
-            .Append(stringPairs.Any() ? Separator : string.Empty)
+            .Append(stringPairs.Count != 0 ? Separator : string.Empty)
             .Append("salt=")
             .Append(_salt)
             .ToString();

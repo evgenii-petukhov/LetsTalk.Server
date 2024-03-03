@@ -3,18 +3,12 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace LetsTalk.Server.Authentication.Services.Cache;
 
-public class MemoryCacheTokenService : CacheTokenServiceBase, IJwtCacheService
+public class MemoryCacheTokenService(
+    IJwtStorageService jwtStorageService,
+    IMemoryCache memoryCache) : CacheTokenServiceBase, IJwtCacheService
 {
-    private readonly IJwtStorageService _jwtStorageService;
-    private readonly IMemoryCache _memoryCache;
-
-    public MemoryCacheTokenService(
-        IJwtStorageService jwtStorageService,
-        IMemoryCache memoryCache)
-    {
-        _jwtStorageService = jwtStorageService;
-        _memoryCache = memoryCache;
-    }
+    private readonly IJwtStorageService _jwtStorageService = jwtStorageService;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public async Task<string?> GetAccountIdAsync(string? token)
     {

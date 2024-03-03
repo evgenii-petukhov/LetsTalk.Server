@@ -3,14 +3,9 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
 
-public class ReadMessageCommandHandler : IRequestHandler<ReadMessageCommand, Unit>
+public class ReadMessageCommandHandler(IMessageAgnosticService messageAgnosticService) : IRequestHandler<ReadMessageCommand, Unit>
 {
-    private readonly IMessageAgnosticService _messageAgnosticService;
-
-    public ReadMessageCommandHandler(IMessageAgnosticService messageAgnosticService)
-    {
-        _messageAgnosticService = messageAgnosticService;
-    }
+    private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
 
     public async Task<Unit> Handle(ReadMessageCommand request, CancellationToken cancellationToken)
     {

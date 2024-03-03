@@ -4,14 +4,9 @@ using LetsTalk.Server.Authentication.Abstractions;
 
 namespace LetsTalk.Server.AuthenticationClient;
 
-public class AuthenticationClient: IAuthenticationClient
+public class AuthenticationClient(JwtTokenGrpcServiceClient client) : IAuthenticationClient
 {
-    private readonly JwtTokenGrpcServiceClient _client;
-
-    public AuthenticationClient(JwtTokenGrpcServiceClient client)
-    {
-        _client = client;
-    }
+    private readonly JwtTokenGrpcServiceClient _client = client;
 
     public async Task<string> GenerateJwtTokenAsync(string accountId)
     {

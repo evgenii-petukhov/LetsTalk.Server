@@ -6,18 +6,12 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Authentication.Commands;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDto>
+public class LoginCommandHandler(
+    IOpenAuthProviderResolver<string> openAuthProviderResolver,
+    IMapper mapper) : IRequestHandler<LoginCommand, LoginResponseDto>
 {
-    private readonly IOpenAuthProviderResolver<string> _openAuthProviderResolver;
-    private readonly IMapper _mapper;
-
-    public LoginCommandHandler(
-        IOpenAuthProviderResolver<string> openAuthProviderResolver,
-        IMapper mapper)
-    {
-        _openAuthProviderResolver = openAuthProviderResolver;
-        _mapper = mapper;
-    }
+    private readonly IOpenAuthProviderResolver<string> _openAuthProviderResolver = openAuthProviderResolver;
+    private readonly IMapper _mapper = mapper;
 
     public Task<LoginResponseDto> Handle(LoginCommand command, CancellationToken cancellationToken)
     {

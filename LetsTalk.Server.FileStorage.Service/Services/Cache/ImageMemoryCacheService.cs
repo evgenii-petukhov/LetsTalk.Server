@@ -4,14 +4,9 @@ using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
 
 namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 
-public class ImageMemoryCacheService : IImageService, IImageCacheManager
+public class ImageMemoryCacheService(IImageService cacheService) : IImageService, IImageCacheManager
 {
-    private readonly IImageService _cacheService;
-
-    public ImageMemoryCacheService(IImageService cacheService)
-    {
-        _cacheService = cacheService;
-    }
+    private readonly IImageService _cacheService = cacheService;
 
     public Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {

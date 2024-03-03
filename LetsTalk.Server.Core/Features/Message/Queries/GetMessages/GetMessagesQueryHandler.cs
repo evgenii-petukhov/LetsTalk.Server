@@ -5,18 +5,12 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
 
-public class GetMessagesQueryHandler : IRequestHandler<GetMessagesQuery, List<MessageDto>>
+public class GetMessagesQueryHandler(
+    IMapper mapper,
+    IMessageService messageService) : IRequestHandler<GetMessagesQuery, List<MessageDto>>
 {
-    private readonly IMapper _mapper;
-    private readonly IMessageService _messageService;
-
-    public GetMessagesQueryHandler(
-        IMapper mapper,
-        IMessageService messageService)
-    {
-        _mapper = mapper;
-        _messageService = messageService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IMessageService _messageService = messageService;
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {

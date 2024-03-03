@@ -7,17 +7,12 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.Core.Services.Cache.Contacts;
 
-public class ContactsRedisCacheService : ContactsCacheServiceBase, IContactsService
+public class ContactsRedisCacheService(
+    IConnectionMultiplexer сonnectionMultiplexer,
+    IOptions<CachingSettings> cachingSettings,
+    IContactsService accountService) : ContactsCacheServiceBase(accountService, cachingSettings), IContactsService
 {
-    private readonly IDatabase _database;
-
-    public ContactsRedisCacheService(
-        IConnectionMultiplexer сonnectionMultiplexer,
-        IOptions<CachingSettings> cachingSettings,
-        IContactsService accountService) : base(accountService, cachingSettings)
-    {
-        _database = сonnectionMultiplexer.GetDatabase();
-    }
+    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
     public async Task<List<AccountDto>> GetContactsAsync(string accountId, CancellationToken cancellationToken)
     {

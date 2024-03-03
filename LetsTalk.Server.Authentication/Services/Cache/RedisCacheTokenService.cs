@@ -4,18 +4,12 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.Authentication.Services.Cache;
 
-public class RedisCacheTokenService : CacheTokenServiceBase, IJwtCacheService
+public class RedisCacheTokenService(
+    IJwtStorageService jwtStorageService,
+    IConnectionMultiplexer сonnectionMultiplexer) : CacheTokenServiceBase, IJwtCacheService
 {
-    private readonly IJwtStorageService _jwtStorageService;
-    private readonly IDatabase _database;
-
-    public RedisCacheTokenService(
-        IJwtStorageService jwtStorageService,
-        IConnectionMultiplexer сonnectionMultiplexer)
-    {
-        _jwtStorageService = jwtStorageService;
-        _database = сonnectionMultiplexer.GetDatabase();
-    }
+    private readonly IJwtStorageService _jwtStorageService = jwtStorageService;
+    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
     public async Task<string?> GetAccountIdAsync(string? token)
     {

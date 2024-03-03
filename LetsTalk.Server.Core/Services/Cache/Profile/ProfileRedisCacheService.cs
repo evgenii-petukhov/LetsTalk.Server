@@ -7,17 +7,12 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.Core.Services.Cache.Profile;
 
-public class ProfileRedisCacheService : ProfileCacheServiceBase, IProfileService, IProfileCacheManager
+public class ProfileRedisCacheService(
+    IConnectionMultiplexer сonnectionMultiplexer,
+    IOptions<CachingSettings> cachingSettings,
+    IProfileService profileService) : ProfileCacheServiceBase(profileService, cachingSettings), IProfileService, IProfileCacheManager
 {
-    private readonly IDatabase _database;
-
-    public ProfileRedisCacheService(
-        IConnectionMultiplexer сonnectionMultiplexer,
-        IOptions<CachingSettings> cachingSettings,
-        IProfileService profileService) : base(profileService, cachingSettings)
-    {
-        _database = сonnectionMultiplexer.GetDatabase();
-    }
+    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
     public async Task<AccountDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {

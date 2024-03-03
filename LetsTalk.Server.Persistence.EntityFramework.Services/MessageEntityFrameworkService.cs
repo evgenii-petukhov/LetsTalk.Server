@@ -7,27 +7,18 @@ using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
-public class MessageEntityFrameworkService : IMessageAgnosticService
+public class MessageEntityFrameworkService(
+    IMessageRepository messageRepository,
+    ILinkPreviewRepository linkPreviewRepository,
+    IEntityFactory entityFactory,
+    IUnitOfWork unitOfWork,
+    IMapper mapper) : IMessageAgnosticService
 {
-    private readonly IMessageRepository _messageRepository;
-    private readonly ILinkPreviewRepository _linkPreviewRepository;
-    private readonly IEntityFactory _entityFactory;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public MessageEntityFrameworkService(
-        IMessageRepository messageRepository,
-        ILinkPreviewRepository linkPreviewRepository,
-        IEntityFactory entityFactory,
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
-    {
-        _messageRepository = messageRepository;
-        _linkPreviewRepository = linkPreviewRepository;
-        _entityFactory = entityFactory;
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    private readonly IMessageRepository _messageRepository = messageRepository;
+    private readonly ILinkPreviewRepository _linkPreviewRepository = linkPreviewRepository;
+    private readonly IEntityFactory _entityFactory = entityFactory;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,

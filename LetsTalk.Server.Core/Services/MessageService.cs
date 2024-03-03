@@ -5,18 +5,12 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.Core.Services;
 
-public class MessageService: IMessageService
+public class MessageService(
+    IMessageAgnosticService messageAgnosticService,
+    IMapper mapper) : IMessageService
 {
-    private readonly IMessageAgnosticService _messageAgnosticService;
-    private readonly IMapper _mapper;
-
-    public MessageService(
-        IMessageAgnosticService messageAgnosticService,
-        IMapper mapper)
-    {
-        _messageAgnosticService = messageAgnosticService;
-        _mapper = mapper;
-    }
+    private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<MessageDto>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {

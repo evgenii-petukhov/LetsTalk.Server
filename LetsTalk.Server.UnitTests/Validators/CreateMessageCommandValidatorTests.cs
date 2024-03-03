@@ -7,6 +7,8 @@ using Moq;
 
 namespace LetsTalk.Server.UnitTests.Validators;
 
+#pragma warning disable CA1861 // Avoid constant arrays as arguments
+
 [TestFixture]
 public class CreateMessageCommandValidatorTests
 {
@@ -36,6 +38,7 @@ public class CreateMessageCommandValidatorTests
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
         validationResult.Errors.Should().HaveCount(3);
+
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
             "Text and ImageId both cannot be empty",
@@ -418,3 +421,4 @@ public class CreateMessageCommandValidatorTests
         validationResult.IsValid.Should().BeTrue();
     }
 }
+#pragma warning restore CA1861 // Avoid constant arrays as arguments

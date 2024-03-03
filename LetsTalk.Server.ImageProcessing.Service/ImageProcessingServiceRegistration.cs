@@ -37,7 +37,7 @@ public static class ImageProcessingServiceRegistration
                             .WithBufferSize(100)
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
+                                .AddDeserializer<JsonCoreDeserializer>()
                                 .AddTypedHandlers(h => h.AddHandler<ImageResizeRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
@@ -46,7 +46,7 @@ public static class ImageProcessingServiceRegistration
                             producer => producer
                                 .DefaultTopic(kafkaSettings.ImagePreviewNotification.Topic)
                                 .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer, SingleMessageTypeResolver>()
+                                    m.AddSerializer<JsonCoreSerializer>()
                                 )
                         )
                 )

@@ -49,7 +49,7 @@ public static class NotificationsServicesRegistration
                     .WithBufferSize(100)
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
-                        .AddSerializer<JsonCoreSerializer>()
+                        .AddDeserializer<JsonCoreDeserializer>()
                         .AddTypedHandlers(h => h.AddHandler<NotificationHandler<MessageDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
                 .AddConsumer(consumer => consumer
                     .Topic(kafkaSettings.LinkPreviewNotification.Topic)
@@ -57,7 +57,7 @@ public static class NotificationsServicesRegistration
                     .WithBufferSize(100)
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
-                        .AddSerializer<JsonCoreSerializer>()
+                        .AddDeserializer<JsonCoreDeserializer>()
                         .AddTypedHandlers(h => h.AddHandler<NotificationHandler<LinkPreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
                 .AddConsumer(consumer => consumer
                     .Topic(kafkaSettings.ImagePreviewNotification.Topic)
@@ -65,7 +65,7 @@ public static class NotificationsServicesRegistration
                     .WithBufferSize(100)
                     .WithWorkersCount(10)
                     .AddMiddlewares(middlewares => middlewares
-                        .AddSerializer<JsonCoreSerializer>()
+                        .AddDeserializer<JsonCoreDeserializer>()
                         .AddTypedHandlers(h => h.AddHandler<NotificationHandler<ImagePreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))));
 
         return services;

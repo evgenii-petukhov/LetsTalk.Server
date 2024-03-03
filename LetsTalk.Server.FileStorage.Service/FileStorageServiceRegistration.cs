@@ -61,7 +61,7 @@ public static class FileStorageServiceRegistration
                             .WithBufferSize(100)
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
+                                .AddDeserializer<JsonCoreDeserializer>()
                                 .AddTypedHandlers(h => h.AddHandler<RemoveImageRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )

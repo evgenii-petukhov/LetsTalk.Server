@@ -38,7 +38,7 @@ public static class LinkPreviewServiceRegistration
                             .WithBufferSize(100)
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
+                                .AddDeserializer<JsonCoreDeserializer>()
                                 .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
@@ -47,7 +47,7 @@ public static class LinkPreviewServiceRegistration
                             producer => producer
                                 .DefaultTopic(kafkaSettings.LinkPreviewNotification.Topic)
                                 .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer, SingleMessageTypeResolver>()
+                                    m.AddSerializer<JsonCoreSerializer>()
                                 )
                         )
                 )

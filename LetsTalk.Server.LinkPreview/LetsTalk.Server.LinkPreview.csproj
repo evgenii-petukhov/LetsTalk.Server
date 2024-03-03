@@ -11,7 +11,6 @@
     <PackageReference Include="KafkaFlow" Version="3.0.4" />
     <PackageReference Include="KafkaFlow.LogHandler.Console" Version="3.0.4" />
     <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="3.0.4" />
-    <PackageReference Include="KafkaFlow.Serializer" Version="2.5.1" />
     <PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="3.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />

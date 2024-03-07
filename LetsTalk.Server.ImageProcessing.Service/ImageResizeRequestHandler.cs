@@ -1,6 +1,5 @@
 ﻿using KafkaFlow;
 using KafkaFlow.Producers;
-using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;

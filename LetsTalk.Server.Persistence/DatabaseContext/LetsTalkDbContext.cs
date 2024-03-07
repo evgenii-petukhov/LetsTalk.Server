@@ -4,12 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.DatabaseContext;
 
-public class LetsTalkDbContext : DbContext
+public class LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : DbContext(options)
 {
-    public LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<AccountType> AccountTypes { get; set; }
 
     public DbSet<Account> Accounts { get; set; }

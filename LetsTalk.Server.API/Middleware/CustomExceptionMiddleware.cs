@@ -4,14 +4,9 @@ using System.Net;
 
 namespace LetsTalk.Server.API.Middleware;
 
-public class CustomExceptionMiddleware
+public class CustomExceptionMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public CustomExceptionMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(HttpContext ctx)
     {

@@ -27,7 +27,7 @@ public class ConnectionManager : IConnectionManager
 
                 mapping.Value.RemoveWhere(x => string.Equals(x, connectionId, StringComparison.Ordinal));
 
-                if (!mapping.Value.Any())
+                if (mapping.Value.Count == 0)
                 {
                     _connectionIdAccountIdBy.Remove(mapping.Key);
                 }

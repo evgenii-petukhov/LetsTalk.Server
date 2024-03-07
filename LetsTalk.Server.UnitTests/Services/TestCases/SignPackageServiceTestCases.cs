@@ -2,8 +2,8 @@
 
 public static class SignPackageServiceTestCases
 {
-    public static readonly object[] ObjectsToSign = new object[]
-    {
+    public static readonly object[] ObjectsToSign =
+    [
         new SignTestData
         {
             Value = new SimpleSignable
@@ -39,14 +39,14 @@ public static class SignPackageServiceTestCases
             {
                 A = 1,
                 B = "B",
-                E = new List<string>()
+                E = []
             },
             Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
         }
-    };
+    ];
 
-    public static readonly object[] ObjectsToValidate = new object[]
-    {
+    public static readonly object[] ObjectsToValidate =
+    [
         new ValidateTestData
         {
             Value = new SimpleSignable
@@ -85,7 +85,7 @@ public static class SignPackageServiceTestCases
             {
                 A = 1,
                 B = "B",
-                E = new List<string>(),
+                E = [],
                 Signature = "BBCD0166BC1AA9C0D18D875C740ECD35"
             },
             Result = true
@@ -127,10 +127,10 @@ public static class SignPackageServiceTestCases
             {
                 A = 1,
                 B = "B",
-                E = new List<string>(),
+                E = [],
                 Signature = "b"
             },
             Result = false
         }
-    };
+    ];
 }

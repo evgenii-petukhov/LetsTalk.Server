@@ -7,27 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
-public class AccountEntityFrameworkService: IAccountAgnosticService
+public class AccountEntityFrameworkService(
+    IAccountRepository accountRepository,
+    IImageRepository imageRepository,
+    IUnitOfWork unitOfWork,
+    IMapper mapper,
+    IEntityFactory entityFactory) : IAccountAgnosticService
 {
-    private readonly IAccountRepository _accountRepository;
-    private readonly IImageRepository _imageRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    private readonly IEntityFactory _entityFactory;
-
-    public AccountEntityFrameworkService(
-        IAccountRepository accountRepository,
-        IImageRepository imageRepository,
-        IUnitOfWork unitOfWork,
-        IMapper mapper,
-        IEntityFactory entityFactory)
-    {
-        _accountRepository = accountRepository;
-        _imageRepository = imageRepository;
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _entityFactory = entityFactory;
-    }
+    private readonly IAccountRepository _accountRepository = accountRepository;
+    private readonly IImageRepository _imageRepository = imageRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMapper _mapper = mapper;
+    private readonly IEntityFactory _entityFactory = entityFactory;
 
     public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
     {

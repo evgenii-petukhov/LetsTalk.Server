@@ -5,15 +5,10 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
-public class FileStoragePathProvider : IFileStoragePathProvider
+public class FileStoragePathProvider(
+    IOptions<FileStorageSettings> fileStorageSettings) : IFileStoragePathProvider
 {
-    private readonly FileStorageSettings _fileStorageSettings;
-
-    public FileStoragePathProvider(
-        IOptions<FileStorageSettings> fileStorageSettings)
-    {
-        _fileStorageSettings = fileStorageSettings.Value;
-    }
+    private readonly FileStorageSettings _fileStorageSettings = fileStorageSettings.Value;
 
     public string GetFilePath(string filename, FileTypes fileType)
     {

@@ -3,12 +3,7 @@
 namespace LetsTalk.Server.Domain;
 
 [Table("accounttypes")]
-public class AccountType : BaseEntity
+public class AccountType(int id, string name) : BaseEntity(id)
 {
-    public string? Name { get; protected set; }
-
-    public AccountType(int id, string name) : base(id)
-    {
-        Name = name;
-    }
+    public string? Name { get; protected set; } = name;
 }

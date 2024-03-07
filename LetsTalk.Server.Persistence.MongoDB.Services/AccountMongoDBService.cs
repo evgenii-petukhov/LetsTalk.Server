@@ -6,18 +6,12 @@ using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
-public class AccountMongoDBService : IAccountAgnosticService
+public class AccountMongoDBService(
+    IAccountRepository accountRepository,
+    IMapper mapper) : IAccountAgnosticService
 {
-    private readonly IAccountRepository _accountRepository;
-    private readonly IMapper _mapper;
-
-    public AccountMongoDBService(
-        IAccountRepository accountRepository,
-        IMapper mapper)
-    {
-        _accountRepository = accountRepository;
-        _mapper = mapper;
-    }
+    private readonly IAccountRepository _accountRepository = accountRepository;
+    private readonly IMapper _mapper = mapper;
 
     public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
     {

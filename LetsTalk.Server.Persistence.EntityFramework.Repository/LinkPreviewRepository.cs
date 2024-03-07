@@ -5,12 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class LinkPreviewRepository : GenericRepository<LinkPreview>, ILinkPreviewRepository
+public class LinkPreviewRepository(LetsTalkDbContext context) : GenericRepository<LinkPreview>(context), ILinkPreviewRepository
 {
-    public LinkPreviewRepository(LetsTalkDbContext context) : base(context)
-    {
-    }
-
     public Task<int> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default)
     {
         return _context.LinkPreviews

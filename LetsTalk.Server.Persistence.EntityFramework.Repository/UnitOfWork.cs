@@ -3,15 +3,10 @@ using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class UnitOfWork : IUnitOfWork, IDisposable
+public class UnitOfWork(LetsTalkDbContext context) : IUnitOfWork, IDisposable
 {
-    private readonly LetsTalkDbContext _context;
+    private readonly LetsTalkDbContext _context = context;
     private bool _disposedValue;
-
-    public UnitOfWork(LetsTalkDbContext context)
-    {
-        _context = context;
-    }
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
     {

@@ -6,12 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class AccountRepository : GenericRepository<Account>, IAccountRepository
+public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Account>(context), IAccountRepository
 {
-    public AccountRepository(LetsTalkDbContext context) : base(context)
-    {
-    }
-
     public override Task<Account> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Accounts

@@ -6,24 +6,16 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Tools.ExtractImageInfo;
 
-public class ImageInfoHostedService : IHostedService
+public class ImageInfoHostedService(
+    IImageInfoService imageInfoService,
+    TextWriter outputWriter,
+    IFileService fileService,
+    IOptions<FileStorageSettings> options) : IHostedService
 {
-    private readonly FileStorageSettings _fileStorageSettings;
-    private readonly IImageInfoService _imageInfoService;
-    private readonly TextWriter _outputWriter;
-    private readonly IFileService _fileService;
-
-    public ImageInfoHostedService(
-        IImageInfoService imageInfoService,
-        TextWriter outputWriter,
-        IFileService fileService,
-        IOptions<FileStorageSettings> options)
-    {
-        _fileStorageSettings = options.Value;
-        _imageInfoService = imageInfoService;
-        _outputWriter = outputWriter;
-        _fileService = fileService;
-    }
+    private readonly FileStorageSettings _fileStorageSettings = options.Value;
+    private readonly IImageInfoService _imageInfoService = imageInfoService;
+    private readonly TextWriter _outputWriter = outputWriter;
+    private readonly IFileService _fileService = fileService;
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {

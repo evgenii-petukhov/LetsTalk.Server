@@ -7,17 +7,12 @@ using System.Collections.Concurrent;
 
 namespace LetsTalk.Server.Core.Services.Cache.Messages;
 
-public class MessageMemoryCacheService : MessageCacheServiceBase, IMessageService, IMessageCacheManager
+public class MessageMemoryCacheService(
+    IMemoryCache memoryCache,
+    IOptions<CachingSettings> cachingSettings,
+    IMessageService messageService) : MessageCacheServiceBase(messageService, cachingSettings), IMessageService, IMessageCacheManager
 {
-    private readonly IMemoryCache _memoryCache;
-
-    public MessageMemoryCacheService(
-        IMemoryCache memoryCache,
-        IOptions<CachingSettings> cachingSettings,
-        IMessageService messageService) : base(messageService, cachingSettings)
-    {
-        _memoryCache = memoryCache;
-    }
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public Task<List<MessageDto>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {

@@ -4,18 +4,12 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace LetsTalk.Server.Notifications.Hubs;
 
-public class NotificationHub : Hub<INotificationHub>
+public class NotificationHub(
+    IConnectionManager connectionManager,
+    IAuthenticationClient authenticationClient) : Hub<INotificationHub>
 {
-    private readonly IConnectionManager _connectionManager;
-    private readonly IAuthenticationClient _authenticationClient;
-
-    public NotificationHub(
-        IConnectionManager connectionManager,
-        IAuthenticationClient authenticationClient)
-    {
-        _connectionManager = connectionManager;
-        _authenticationClient = authenticationClient;
-    }
+    private readonly IConnectionManager _connectionManager = connectionManager;
+    private readonly IAuthenticationClient _authenticationClient = authenticationClient;
 
     public async Task AuthorizeAsync(string token)
     {

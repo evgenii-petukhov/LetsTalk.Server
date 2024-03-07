@@ -8,21 +8,15 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.FileStorage.Service.Services;
 
-public class ImageValidationService : IImageValidationService
+public class ImageValidationService(
+    IImageInfoService imageInfoService,
+    IOptions<FileStorageSettings> options) : IImageValidationService
 {
     private const string ImageDimensionsErrorMessage = "Image size exceeds max dimensions";
     private const string ImageFormatErrorMessage = "Image format is not supported";
 
-    private readonly IImageInfoService _imageInfoService;
-    private readonly FileStorageSettings _fileStorageSettings;
-
-    public ImageValidationService(
-        IImageInfoService imageInfoService,
-        IOptions<FileStorageSettings> options)
-    {
-        _imageInfoService = imageInfoService;
-        _fileStorageSettings = options.Value;
-    }
+    private readonly IImageInfoService _imageInfoService = imageInfoService;
+    private readonly FileStorageSettings _fileStorageSettings = options.Value;
 
     public ImageValidationResult ValidateImage(byte[] data, ImageRoles imageRole)
     {

@@ -3,7 +3,6 @@ using LetsTalk.Server.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using KafkaFlow.Serializer;
-using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
@@ -38,7 +37,7 @@ public static class ImageProcessingServiceRegistration
                             .WithBufferSize(100)
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
+                                .AddDeserializer<JsonCoreDeserializer>()
                                 .AddTypedHandlers(h => h.AddHandler<ImageResizeRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )

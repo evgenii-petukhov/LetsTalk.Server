@@ -1,23 +1,16 @@
 ﻿using KafkaFlow;
-using KafkaFlow.TypedHandler;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
-public class RemoveImageRequestHandler : IMessageHandler<RemoveImageRequest>
+public class RemoveImageRequestHandler(
+    IIOService iOService,
+    IImageCacheManager imageCacheManager) : IMessageHandler<RemoveImageRequest>
 {
-    private readonly IIOService _iOService;
-    private readonly IImageCacheManager _imageCacheManager;
-
-    public RemoveImageRequestHandler(
-        IIOService iOService,
-        IImageCacheManager imageCacheManager)
-    {
-        _iOService = iOService;
-        _imageCacheManager = imageCacheManager;
-    }
+    private readonly IIOService _iOService = iOService;
+    private readonly IImageCacheManager _imageCacheManager = imageCacheManager;
 
     public Task Handle(IMessageContext context, RemoveImageRequest message)
     {

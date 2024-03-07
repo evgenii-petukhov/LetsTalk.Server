@@ -7,6 +7,8 @@ using Moq;
 
 namespace LetsTalk.Server.UnitTests.Validators;
 
+#pragma warning disable CA1861 // Avoid constant arrays as arguments
+
 [TestFixture]
 public class UpdateProfileCommandValidatorTests
 {
@@ -310,3 +312,4 @@ public class UpdateProfileCommandValidatorTests
         validationResult.Errors.Should().BeEmpty();
     }
 }
+#pragma warning restore CA1861 // Avoid constant arrays as arguments

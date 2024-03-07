@@ -6,27 +6,18 @@ using System.Web;
 
 namespace LetsTalk.Server.LinkPreview.Services;
 
-public class LinkPreviewGenerator : ILinkPreviewGenerator
+public class LinkPreviewGenerator(
+    ILinkPreviewAgnosticService linkPreviewAgnosticService,
+    IMessageAgnosticService messageAgnosticService,
+    IDownloadService downloadService,
+    IRegexService regexService,
+    ILogger<LinkPreviewGenerator> logger) : ILinkPreviewGenerator
 {
-    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService;
-    private readonly IMessageAgnosticService _messageAgnosticService;
-    private readonly IDownloadService _downloadService;
-    private readonly IRegexService _regexService;
-    private readonly ILogger<LinkPreviewGenerator> _logger;
-
-    public LinkPreviewGenerator(
-        ILinkPreviewAgnosticService linkPreviewAgnosticService,
-        IMessageAgnosticService messageAgnosticService,
-        IDownloadService downloadService,
-        IRegexService regexService,
-        ILogger<LinkPreviewGenerator> logger)
-    {
-        _linkPreviewAgnosticService = linkPreviewAgnosticService;
-        _messageAgnosticService = messageAgnosticService;
-        _downloadService = downloadService;
-        _regexService = regexService;
-        _logger = logger;
-    }
+    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
+    private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
+    private readonly IDownloadService _downloadService = downloadService;
+    private readonly IRegexService _regexService = regexService;
+    private readonly ILogger<LinkPreviewGenerator> _logger = logger;
 
     public async Task<MessageServiceModel?> ProcessMessageAsync(string messageId, string url)
     {

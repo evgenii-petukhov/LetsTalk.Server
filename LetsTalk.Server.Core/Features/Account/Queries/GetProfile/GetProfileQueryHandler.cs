@@ -7,21 +7,14 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
 
-public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, AccountDto>
+public class GetProfileQueryHandler(
+    IMapper mapper,
+    IProfileService profileService,
+    IAccountAgnosticService accountAgnosticService) : IRequestHandler<GetProfileQuery, AccountDto>
 {
-    private readonly IMapper _mapper;
-    private readonly IProfileService _profileService;
-    private readonly IAccountAgnosticService _accountAgnosticService;
-
-    public GetProfileQueryHandler(
-        IMapper mapper,
-        IProfileService profileService,
-        IAccountAgnosticService accountAgnosticService)
-    {
-        _mapper = mapper;
-        _profileService = profileService;
-        _accountAgnosticService = accountAgnosticService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IProfileService _profileService = profileService;
+    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
 
     public async Task<AccountDto> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {

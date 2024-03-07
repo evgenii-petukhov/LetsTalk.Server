@@ -5,25 +5,24 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
-public class FileService : IFileService
+public class FileService(
+    IFileNameGenerator fileNameGenerator,
+    IFileStoragePathProvider fileStoragePathProvider) : IFileService
 {
-    private readonly IFileNameGenerator _fileNameGenerator;
-    private readonly IFileStoragePathProvider _fileStoragePathProvider;
-
-    public FileService(
-        IFileNameGenerator fileNameGenerator,
-        IFileStoragePathProvider fileStoragePathProvider)
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
-        _fileNameGenerator = fileNameGenerator;
-        _fileStoragePathProvider = fileStoragePathProvider;
-    }
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
+    private readonly IFileNameGenerator _fileNameGenerator = fileNameGenerator;
+    private readonly IFileStoragePathProvider _fileStoragePathProvider = fileStoragePathProvider;
 
     public async Task<byte[]> ReadFileAsync(string filename, FileTypes fileType, CancellationToken cancellationToken = default)
     {
         var imagePath = _fileStoragePathProvider.GetFilePath(filename, fileType);
         return File.Exists(imagePath)
             ? await File.ReadAllBytesAsync(imagePath, cancellationToken)
-            : Array.Empty<byte>();
+            : [];
     }
 
     public Task<string> SaveDataAsync(
@@ -52,19 +51,13 @@ public class FileService : IFileService
             Height = height
         };
 
-        return File.WriteAllTextAsync(filepath + ".info", JsonSerializer.Serialize(imageInfo, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        }), cancellationToken);
+        return File.WriteAllTextAsync(filepath + ".info", JsonSerializer.Serialize(imageInfo, JsonSerializerOptions), cancellationToken);
     }
 
     public async Task<ImageInfoModel> LoadImageInfoAsync(string filename, CancellationToken cancellationToken = default)
     {
         var imageInfoString = await File.ReadAllTextAsync(filename, cancellationToken);
-        return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        })!;
+        return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
     }
 
     private static async Task<string> SaveDataWithRetryAsync(

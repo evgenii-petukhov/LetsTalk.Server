@@ -9,24 +9,16 @@ using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
-public class FileUploadGrpcEndpoint : FileUploadGrpcEndpointBase
+public class FileUploadGrpcEndpoint(
+    IImageValidationService imageValidationService,
+    IMapper mapper,
+    IFileService fileService,
+    IImageService imageService) : FileUploadGrpcEndpointBase
 {
-    private readonly IImageValidationService _imageValidationService;
-    private readonly IMapper _mapper;
-    private readonly IFileService _fileService;
-    private readonly IImageService _imageService;
-
-    public FileUploadGrpcEndpoint(
-        IImageValidationService imageValidationService,
-        IMapper mapper,
-        IFileService fileService,
-        IImageService imageService)
-    {
-        _imageValidationService = imageValidationService;
-        _mapper = mapper;
-        _fileService = fileService;
-        _imageService = imageService;
-    }
+    private readonly IImageValidationService _imageValidationService = imageValidationService;
+    private readonly IMapper _mapper = mapper;
+    private readonly IFileService _fileService = fileService;
+    private readonly IImageService _imageService = imageService;
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
     {

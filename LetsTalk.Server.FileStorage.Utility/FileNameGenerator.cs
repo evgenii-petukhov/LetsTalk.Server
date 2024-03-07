@@ -3,14 +3,9 @@ using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.FileStorage.Utility;
 
-public class FileNameGenerator : IFileNameGenerator
+public class FileNameGenerator(IFileStoragePathProvider fileStoragePathProvider) : IFileNameGenerator
 {
-    private readonly IFileStoragePathProvider _fileStoragePathProvider;
-
-    public FileNameGenerator(IFileStoragePathProvider fileStoragePathProvider)
-    {
-        _fileStoragePathProvider = fileStoragePathProvider;
-    }
+    private readonly IFileStoragePathProvider _fileStoragePathProvider = fileStoragePathProvider;
 
     public (string, string) Generate(FileTypes fileType)
     {

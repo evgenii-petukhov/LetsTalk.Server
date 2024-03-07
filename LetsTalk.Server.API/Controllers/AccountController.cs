@@ -10,18 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace LetsTalk.Server.API.Controllers;
 
 [Route("api/[controller]")]
-public class AccountController : ApiController
+public class AccountController(
+    IMediator mediator,
+    IMapper mapper) : ApiController
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-
-    public AccountController(
-        IMediator mediator,
-        IMapper mapper)
-    {
-        _mediator = mediator;
-        _mapper = mapper;
-    }
+    private readonly IMediator _mediator = mediator;
+    private readonly IMapper _mapper = mapper;
 
     [HttpGet]
     public async Task<ActionResult<List<AccountDto>>> GetContactsAsync(CancellationToken cancellationToken)

@@ -7,21 +7,14 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
 
-public class GetContactsQueryHandler : IRequestHandler<GetContactsQuery, List<AccountDto>>
+public class GetContactsQueryHandler(
+    IMapper mapper,
+    IContactsService contactsService,
+    IAccountAgnosticService accountAgnosticService) : IRequestHandler<GetContactsQuery, List<AccountDto>>
 {
-    private readonly IMapper _mapper;
-    private readonly IContactsService _contactsService;
-    private readonly IAccountAgnosticService _accountAgnosticService;
-
-    public GetContactsQueryHandler(
-        IMapper mapper,
-        IContactsService contactsService,
-        IAccountAgnosticService accountAgnosticService)
-    {
-        _mapper = mapper;
-        _contactsService = contactsService;
-        _accountAgnosticService = accountAgnosticService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IContactsService _contactsService = contactsService;
+    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
 
     public async Task<List<AccountDto>> Handle(GetContactsQuery request, CancellationToken cancellationToken)
     {

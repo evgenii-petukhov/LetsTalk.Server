@@ -1,6 +1,5 @@
 ﻿using KafkaFlow;
 using KafkaFlow.Serializer;
-using KafkaFlow.TypedHandler;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.LinkPreview.Abstractions;
@@ -39,7 +38,7 @@ public static class LinkPreviewServiceRegistration
                             .WithBufferSize(100)
                             .WithWorkersCount(10)
                             .AddMiddlewares(middlewares => middlewares
-                                .AddSerializer<JsonCoreSerializer>()
+                                .AddDeserializer<JsonCoreDeserializer>()
                                 .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )

@@ -3,14 +3,9 @@ using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
-public class LinkPreviewMongoDBService : ILinkPreviewAgnosticService
+public class LinkPreviewMongoDBService(ILinkPreviewRepository linkPreviewRepository) : ILinkPreviewAgnosticService
 {
-    private readonly ILinkPreviewRepository _linkPreviewRepository;
-
-    public LinkPreviewMongoDBService(ILinkPreviewRepository linkPreviewRepository)
-    {
-        _linkPreviewRepository = linkPreviewRepository;
-    }
+    private readonly ILinkPreviewRepository _linkPreviewRepository = linkPreviewRepository;
 
     public Task<string?> GetIdByUrlAsync(string url, CancellationToken cancellationToken = default)
     {

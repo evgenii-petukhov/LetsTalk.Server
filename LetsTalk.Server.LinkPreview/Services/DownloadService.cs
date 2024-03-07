@@ -2,14 +2,9 @@
 
 namespace LetsTalk.Server.LinkPreview.Services;
 
-public class DownloadService : IDownloadService
+public class DownloadService(IHttpClientFactory httpClientFactory) : IDownloadService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public DownloadService(IHttpClientFactory httpClientFactory)
-    {
-        _httpClientFactory = httpClientFactory;
-    }
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
 
     public async Task<string> DownloadAsStringAsync(string url)
     {

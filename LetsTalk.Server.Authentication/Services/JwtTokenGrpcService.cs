@@ -4,14 +4,9 @@ using static LetsTalk.Server.Authentication.JwtTokenGrpcService;
 
 namespace LetsTalk.Server.Authentication.Services;
 
-public class JwtTokenGrpcService : JwtTokenGrpcServiceBase
+public class JwtTokenGrpcService(IJwtCacheService jwtCacheService) : JwtTokenGrpcServiceBase
 {
-    private readonly IJwtCacheService _jwtCacheService;
-
-    public JwtTokenGrpcService(IJwtCacheService jwtCacheService)
-    {
-        _jwtCacheService = jwtCacheService;
-    }
+    private readonly IJwtCacheService _jwtCacheService = jwtCacheService;
 
     public override async Task<GenerateJwtTokenResponse> GenerateJwtToken(GenerateJwtTokenRequest request, ServerCallContext context)
     {

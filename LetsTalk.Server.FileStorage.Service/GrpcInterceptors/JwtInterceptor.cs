@@ -5,18 +5,12 @@ using LetsTalk.Server.SignPackage.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
 
-public class JwtInterceptor : Interceptor
+public class JwtInterceptor(
+    IAuthenticationClient authenticationClient,
+    ISignPackageService signPackageService) : Interceptor
 {
-    private readonly IAuthenticationClient _authenticationClient;
-    private readonly ISignPackageService _signPackageService;
-
-    public JwtInterceptor(
-        IAuthenticationClient authenticationClient,
-        ISignPackageService signPackageService)
-    {
-        _authenticationClient = authenticationClient;
-        _signPackageService = signPackageService;
-    }
+    private readonly IAuthenticationClient _authenticationClient = authenticationClient;
+    private readonly ISignPackageService _signPackageService = signPackageService;
 
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
         TRequest request,

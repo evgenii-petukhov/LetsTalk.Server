@@ -20,31 +20,46 @@ public class CustomExceptionMiddleware(RequestDelegate next)
         }
     }
 
+    private static string GetExceptionText(Exception e)
+    {
+        return e.InnerException?.Message ?? e.Message;
+    }
+
     private Task HandleExceptionAsync(HttpContext ctx, Exception ex)
     {
         CustomProblemDetails problem;
         HttpStatusCode statusCode;
         switch (ex)
         {
-            case BadRequestException badRequestException:
+            case BadRequestException badRequest:
                 statusCode = HttpStatusCode.BadRequest;
                 problem = new CustomProblemDetails
                 {
-                    Title = badRequestException.Message,
+                    Title = badRequest.Message,
                     Status = (int)statusCode,
                     Type = nameof(BadRequestException),
-                    Detail = badRequestException.InnerException?.Message,
-                    Errors = badRequestException.ValidationErrors!
+                    Detail = GetExceptionText(badRequest),
+                    Errors = badRequest.ValidationErrors!
                 };
                 break;
-            case NotFoundException notFoundException:
+            case NotFoundException notFound:
                 statusCode = HttpStatusCode.NotFound;
                 problem = new CustomProblemDetails
                 {
-                    Title = notFoundException.Message,
+                    Title = notFound.Message,
                     Status = (int)statusCode,
                     Type = nameof(NotFoundException),
-                    Detail = notFoundException.InnerException?.Message
+                    Detail = GetExceptionText(notFound)
+                };
+                break;
+            case UnauthorizedAccessException unauthorized:
+                statusCode = HttpStatusCode.Unauthorized;
+                problem = new CustomProblemDetails
+                {
+                    Title = unauthorized.Message,
+                    Status = (int)statusCode,
+                    Type = nameof(UnauthorizedAccessException),
+                    Detail = GetExceptionText(unauthorized)
                 };
                 break;
             default:
@@ -54,6 +69,7 @@ public class CustomExceptionMiddleware(RequestDelegate next)
                     Title = ex.Message,
                     Status = (int)statusCode,
                     Type = nameof(HttpStatusCode.InternalServerError),
+                    Detail = GetExceptionText(ex),
                     StackTrace = ex.StackTrace
                 };
                 break;

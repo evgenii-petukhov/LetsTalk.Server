@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.API\LetsTalk.Server.API.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Core\LetsTalk.Server.Core.csproj" />
   </ItemGroup>
 

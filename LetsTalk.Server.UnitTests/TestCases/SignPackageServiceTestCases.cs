@@ -1,4 +1,7 @@
-﻿namespace LetsTalk.Server.UnitTests.Services.TestCases;
+﻿using LetsTalk.Server.UnitTests.Models;
+using LetsTalk.Server.UnitTests.Models.Signable;
+
+namespace LetsTalk.Server.UnitTests.TestCases;
 
 public static class SignPackageServiceTestCases
 {
@@ -47,7 +50,7 @@ public static class SignPackageServiceTestCases
 
     public static readonly object[] ObjectsToValidate =
     [
-        new ValidateTestData
+        new TestData<SimpleSignable, bool>
         {
             Value = new SimpleSignable
             {
@@ -57,18 +60,7 @@ public static class SignPackageServiceTestCases
             },
             Result = true
         },
-        new ValidateTestData
-        {
-            Value = new SimpleSignable
-            {
-                A = 1,
-                B = "B",
-                D = true,
-                Signature = "BBCD0166BC1AA9C0D18D875C740ECD35"
-            },
-            Result = true
-        },
-        new ValidateTestData
+        new TestData<SimpleSignable, bool>
         {
             Value = new SimpleSignable
             {
@@ -79,7 +71,18 @@ public static class SignPackageServiceTestCases
             },
             Result = true
         },
-        new ValidateTestData
+        new TestData<SimpleSignable, bool>
+        {
+            Value = new SimpleSignable
+            {
+                A = 1,
+                B = "B",
+                D = true,
+                Signature = "BBCD0166BC1AA9C0D18D875C740ECD35"
+            },
+            Result = true
+        },
+        new TestData<SimpleSignable, bool>
         {
             Value = new SimpleSignable
             {
@@ -90,7 +93,7 @@ public static class SignPackageServiceTestCases
             },
             Result = true
         },
-        new ValidateTestData
+        new TestData<SimpleSignable, bool>
         {
             Value = new SimpleSignable
             {
@@ -99,7 +102,7 @@ public static class SignPackageServiceTestCases
             },
             Result = false
         },
-        new ValidateTestData
+        new TestData<SimpleSignable, bool>
         {
             Value = new SimpleSignable
             {
@@ -110,7 +113,7 @@ public static class SignPackageServiceTestCases
             },
             Result = false
         },
-        new ValidateTestData
+        new TestData<SimpleSignable, bool>
         {
             Value = new SimpleSignable
             {
@@ -121,7 +124,7 @@ public static class SignPackageServiceTestCases
             },
             Result = false
         },
-        new ValidateTestData
+        new TestData<SimpleSignable, bool>
         {
             Value = new SimpleSignable
             {

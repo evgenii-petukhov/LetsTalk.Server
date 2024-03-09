@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.SignPackage;
-using LetsTalk.Server.UnitTests.Services.TestCases;
+using LetsTalk.Server.UnitTests.Models;
+using LetsTalk.Server.UnitTests.Models.Signable;
+using LetsTalk.Server.UnitTests.TestCases;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -75,7 +77,7 @@ public class SignPackageServiceTests
         typeof(SignPackageServiceTestCases),
         nameof(SignPackageServiceTestCases.ObjectsToValidate)
     )]
-    public void Validate_ShouldReturnExpectedResult(ValidateTestData testData)
+    public void Validate_ShouldReturnExpectedResult(TestData<SimpleSignable, bool> testData)
     {
         // Arrange
         // Act

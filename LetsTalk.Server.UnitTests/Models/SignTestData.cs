@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.SignPackage.Abstractions;
 
-namespace LetsTalk.Server.UnitTests.Services.TestCases;
+namespace LetsTalk.Server.UnitTests.Models;
 
 public class SignTestData
 {

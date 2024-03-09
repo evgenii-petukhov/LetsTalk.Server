@@ -5,7 +5,7 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 
-namespace LetsTalk.Server.UnitTests.Validators;
+namespace LetsTalk.Server.UnitTests.Tests.Validators;
 
 #pragma warning disable CA1861 // Avoid constant arrays as arguments
 

@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.UnitTests.Models;
+﻿using LetsTalk.Server.SignPackage.Abstractions;
+using LetsTalk.Server.UnitTests.Models;
 using LetsTalk.Server.UnitTests.Models.Signable;
 
 namespace LetsTalk.Server.UnitTests.TestCases;
@@ -7,7 +8,7 @@ public static class SignPackageServiceTestCases
 {
     public static readonly object[] ObjectsToSign =
     [
-        new SignTestData
+        new TestData<ISignable, string>
         {
             Value = new SimpleSignable
             {
@@ -16,7 +17,7 @@ public static class SignPackageServiceTestCases
             },
             Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
         },
-        new SignTestData
+        new TestData<ISignable, string>
         {
             Value = new SimpleSignable
             {
@@ -26,7 +27,7 @@ public static class SignPackageServiceTestCases
             },
             Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
         },
-        new SignTestData
+        new TestData<ISignable, string>
         {
             Value = new SimpleSignable
             {
@@ -36,7 +37,7 @@ public static class SignPackageServiceTestCases
             },
             Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
         },
-        new SignTestData
+        new TestData<ISignable, string>
         {
             Value = new SimpleSignable
             {

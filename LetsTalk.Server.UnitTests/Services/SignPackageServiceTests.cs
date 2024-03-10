@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.SignPackage;
+using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.UnitTests.Models;
 using LetsTalk.Server.UnitTests.Models.Signable;
 using LetsTalk.Server.UnitTests.TestCases;
@@ -60,7 +61,7 @@ public class SignPackageServiceTests
         typeof(SignPackageServiceTestCases),
         nameof(SignPackageServiceTestCases.ObjectsToSign)
     )]
-    public void Sign_When_ObjIsValid_ShouldReturnExpectedResult(SignTestData testData)
+    public void Sign_When_ObjIsValid_ShouldReturnExpectedResult(TestData<ISignable, string> testData)
     {
         // Arrange
         // Act

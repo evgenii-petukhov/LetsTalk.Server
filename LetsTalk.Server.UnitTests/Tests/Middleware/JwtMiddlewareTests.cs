@@ -57,10 +57,10 @@ public class JwtMiddlewareTests
         ctx.Request.Headers[AuthorizationHeaderKey] = AuthorizationHeaderValue;
 
         // Act
-        Func<Task> a = async () => await _jwtMiddleware.InvokeAsync(ctx, _mockAuthenticationClient.Object);
+        Func<Task> f = async () => await _jwtMiddleware.InvokeAsync(ctx, _mockAuthenticationClient.Object);
 
         // Assert
-        await a.Should().ThrowAsync<UnauthorizedAccessException>();
+        await f.Should().ThrowAsync<UnauthorizedAccessException>();
         _mockRequestDelegate.Verify(x => x.Invoke(ctx), Times.Never);
     }
 

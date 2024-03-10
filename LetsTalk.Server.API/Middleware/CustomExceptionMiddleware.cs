@@ -28,46 +28,46 @@ public class CustomExceptionMiddleware(RequestDelegate next)
     private Task HandleExceptionAsync(HttpContext ctx, Exception ex)
     {
         CustomProblemDetails problem;
-        HttpStatusCode statusCode;
+        int statusCode;
         switch (ex)
         {
             case BadRequestException badRequest:
-                statusCode = HttpStatusCode.BadRequest;
+                statusCode = (int)HttpStatusCode.BadRequest;
                 problem = new CustomProblemDetails
                 {
                     Title = badRequest.Message,
-                    Status = (int)statusCode,
+                    Status = statusCode,
                     Type = nameof(BadRequestException),
                     Detail = GetExceptionText(badRequest),
                     Errors = badRequest.ValidationErrors!
                 };
                 break;
             case NotFoundException notFound:
-                statusCode = HttpStatusCode.NotFound;
+                statusCode = (int)HttpStatusCode.NotFound;
                 problem = new CustomProblemDetails
                 {
                     Title = notFound.Message,
-                    Status = (int)statusCode,
+                    Status = statusCode,
                     Type = nameof(NotFoundException),
                     Detail = GetExceptionText(notFound)
                 };
                 break;
             case UnauthorizedAccessException unauthorized:
-                statusCode = HttpStatusCode.Unauthorized;
+                statusCode = (int)HttpStatusCode.Unauthorized;
                 problem = new CustomProblemDetails
                 {
                     Title = unauthorized.Message,
-                    Status = (int)statusCode,
+                    Status = statusCode,
                     Type = nameof(UnauthorizedAccessException),
                     Detail = GetExceptionText(unauthorized)
                 };
                 break;
             default:
-                statusCode = HttpStatusCode.InternalServerError;
+                statusCode = (int)HttpStatusCode.InternalServerError;
                 problem = new CustomProblemDetails
                 {
                     Title = ex.Message,
-                    Status = (int)statusCode,
+                    Status = statusCode,
                     Type = nameof(HttpStatusCode.InternalServerError),
                     Detail = GetExceptionText(ex),
                     StackTrace = ex.StackTrace
@@ -75,7 +75,7 @@ public class CustomExceptionMiddleware(RequestDelegate next)
                 break;
         }
 
-        ctx.Response.StatusCode = (int)statusCode;
+        ctx.Response.StatusCode = statusCode;
         return ctx.Response.WriteAsJsonAsync(problem);
     }
 }

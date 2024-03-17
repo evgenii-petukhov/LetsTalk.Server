@@ -34,6 +34,8 @@ public class Message : BaseEntity
 
     public string? ImagePreviewId { get; protected set; }
 
+    public Chat? Chat { get; protected set; }
+
     protected Message()
     {
     }

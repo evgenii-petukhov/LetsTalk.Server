@@ -19,5 +19,11 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
             .WithOne()
             .HasForeignKey<Message>(x => x.ImagePreviewId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasOne(e => e.LinkPreview)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull)
+            .IsRequired(false);
     }
 }

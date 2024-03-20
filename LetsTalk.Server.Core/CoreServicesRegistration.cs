@@ -89,11 +89,17 @@ public static class CoreServicesRegistration
                 break;
             default:
                 services.AddMemoryCache();
+
                 services.AddScoped<IMessageService, MessageService>();
                 services.DecorateScoped<IMessageService, MessageMemoryCacheService>();
                 services.AddScoped<IMessageCacheManager, MessageMemoryCacheService>();
+
                 services.AddScoped<IContactsService, ContactsService>();
                 services.DecorateScoped<IContactsService, ContactsMemoryCacheService>();
+
+                services.AddScoped<IProfileService, ProfileService>();
+                services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();
+                services.AddScoped<IProfileCacheManager, ProfileMemoryCacheService>();
                 break;
         }
 

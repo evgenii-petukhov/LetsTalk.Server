@@ -12,6 +12,8 @@ public class AccountDto
 
     public string? LastName { get; set; }
 
+    public string? ChatName { get; set; }
+
     public string? Email { get; set; }
 
     public int UnreadCount { get; set; }

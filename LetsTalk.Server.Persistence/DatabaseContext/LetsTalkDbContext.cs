@@ -20,7 +20,7 @@ public class LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : Db
 
     public DbSet<ChatMember> ChatMembers { get; set; }
 
-    public DbSet<ChatMessageStatus> ChatMemberMessages { get; set; }
+    public DbSet<ChatMessageStatus> ChatMessageStatuses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

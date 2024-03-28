@@ -9,7 +9,11 @@ public class ChatMessageStatus
 {
     public ChatMember? ChatMember { get; protected set; }
 
+    public int ChatMemberId { get; protected set; }
+
     public Message? Message { get; protected set; }
+
+    public int MessageId { get; protected set; }
 
     public bool IsRead { get; protected set; }
 

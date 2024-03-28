@@ -1,16 +1,14 @@
 ﻿namespace LetsTalk.Server.Domain;
 
-public class Contact
+public class ChatListItem
 {
     public int Id { get; set; }
 
-    public int AccountTypeId { get; set; }
+    public int? AccountTypeId { get; set; }
 
     public string? PhotoUrl { get; set; }
 
-    public string? FirstName { get; set; }
-
-    public string? LastName { get; set; }
+    public string? ChatName { get; set; }
 
     public int? UnreadCount { get; set; }
 

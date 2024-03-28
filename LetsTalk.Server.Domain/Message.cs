@@ -36,6 +36,8 @@ public class Message : BaseEntity
 
     public Chat? Chat { get; protected set; }
 
+    public int ChatId { get; protected set; }
+
     protected Message()
     {
     }

@@ -12,6 +12,8 @@ public class ContactServiceModel
 
     public string? LastName { get; set; }
 
+    public string? ChatName { get; set; }
+
     public int? UnreadCount { get; set; }
 
     public long? LastMessageDate { get; set; }

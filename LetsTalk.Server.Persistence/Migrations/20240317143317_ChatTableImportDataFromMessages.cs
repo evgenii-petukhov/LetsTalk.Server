@@ -31,6 +31,9 @@ FROM chats;");
 SELECT	cm.id, m.Id, m.IsRead, m.DateReadUnix
 FROM messages m
 INNER JOIN chatmembers cm ON cm.ChatId = m.ChatId AND cm.AccountId = m.RecipientId;");
+
+            migrationBuilder.Sql(@"DELETE FROM messages
+WHERE SenderId = RecipientId;");
         }
 
         /// <inheritdoc />

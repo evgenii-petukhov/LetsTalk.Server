@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.UpdateProfile;
 using LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
-using LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
 using LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
@@ -10,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LetsTalk.Server.API.Controllers;
 
 [Route("api/[controller]")]
-public class AccountController(
+public class ProfileController(
     IMediator mediator,
     IMapper mapper) : ApiController
 {
@@ -18,15 +17,6 @@ public class AccountController(
     private readonly IMapper _mapper = mapper;
 
     [HttpGet]
-    public async Task<ActionResult<List<AccountDto>>> GetContactsAsync(CancellationToken cancellationToken)
-    {
-        var accountId = GetAccountId();
-        var query = new GetContactsQuery(accountId);
-        var result = await _mediator.Send(query, cancellationToken);
-        return Ok(result);
-    }
-
-    [HttpGet("Profile")]
     public async Task<ActionResult<AccountDto>> GetProfileAsync(CancellationToken cancellationToken)
     {
         var accountId = GetAccountId();

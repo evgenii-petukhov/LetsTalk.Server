@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
@@ -29,7 +30,7 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
             .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken)!;
     }
 
-    public async Task<List<ChatListItem>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<List<ContactServiceModel>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
     {
         var chats = await _context.ChatMembers
             .Include(cm => cm.Chat)
@@ -100,14 +101,14 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
                 x.Accounts,
                 Metrics = y
             })
-            .Select(g => new ChatListItem
+            .Select(g => new ContactServiceModel
             {
-                Id = g.Chat!.Id,
+                Id = g.Chat!.Id.ToString(),
                 ChatName = GetChatName(g.Chat, g.Accounts),
                 PhotoUrl = g.Chat.IsIndividual ? g.Accounts.FirstOrDefault()?.PhotoUrl : null,
                 AccountTypeId = g.Accounts.FirstOrDefault()?.AccountTypeId,
                 LastMessageDate = g.Metrics.LastMessageDate,
-                LastMessageId = g.Metrics.LastMessageId,
+                LastMessageId = g.Metrics.LastMessageId.ToString(),
                 UnreadCount = g.Metrics.UnreadCount,
                 ImageId = g.Chat.IsIndividual ? g.Accounts.FirstOrDefault()?.ImageId : g.Chat.ImageId
             })

@@ -4,7 +4,7 @@ public class ContactServiceModel
 {
     public string? Id { get; set; }
 
-    public int AccountTypeId { get; set; }
+    public int? AccountTypeId { get; set; }
 
     public string? PhotoUrl { get; set; }
 

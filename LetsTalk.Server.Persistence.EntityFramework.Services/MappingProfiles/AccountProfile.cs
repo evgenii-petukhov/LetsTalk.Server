@@ -8,6 +8,5 @@ public class AccountProfile : Profile
     public AccountProfile()
     {
         CreateMap<Domain.Account, AccountServiceModel>();
-        CreateMap<Domain.ChatListItem, ContactServiceModel>();
     }
 }

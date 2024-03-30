@@ -80,8 +80,8 @@ public static class CoreServicesRegistration
                 services.DecorateScoped<IMessageService, MessageRedisCacheService>();
                 services.AddScoped<IMessageCacheManager, MessageRedisCacheService>();
 
-                services.AddScoped<IContactsService, ContactsService>();
-                services.DecorateScoped<IContactsService, ContactsRedisCacheService>();
+                services.AddScoped<IChatService, ContactsService>();
+                services.DecorateScoped<IChatService, ChatRedisCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
@@ -94,8 +94,8 @@ public static class CoreServicesRegistration
                 services.DecorateScoped<IMessageService, MessageMemoryCacheService>();
                 services.AddScoped<IMessageCacheManager, MessageMemoryCacheService>();
 
-                services.AddScoped<IContactsService, ContactsService>();
-                services.DecorateScoped<IContactsService, ContactsMemoryCacheService>();
+                services.AddScoped<IChatService, ContactsService>();
+                services.DecorateScoped<IChatService, ChatMemoryCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();

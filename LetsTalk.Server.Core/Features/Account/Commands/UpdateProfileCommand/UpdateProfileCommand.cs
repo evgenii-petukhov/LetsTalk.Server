@@ -4,7 +4,7 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommand : IRequest<AccountDto>
+public class UpdateProfileCommand : IRequest<ProfileDto>
 {
     public string? AccountId { get; set; }
 

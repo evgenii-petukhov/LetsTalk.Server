@@ -18,14 +18,14 @@ public class AccountMongoDBService(
         return _accountRepository.IsAccountIdValidAsync(id, cancellationToken);
     }
 
-    public async Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
 
-        return _mapper.Map<AccountServiceModel>(account);
+        return _mapper.Map<ProfileServiceModel>(account);
     }
 
-    public async Task<AccountServiceModel> UpdateProfileAsync(
+    public async Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
@@ -34,10 +34,10 @@ public class AccountMongoDBService(
     {
         var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, email, cancellationToken);
 
-        return _mapper.Map<AccountServiceModel>(account);
+        return _mapper.Map<ProfileServiceModel>(account);
     }
 
-    public async Task<AccountServiceModel> UpdateProfileAsync(
+    public async Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
@@ -59,7 +59,7 @@ public class AccountMongoDBService(
             imageFormat,
             cancellationToken);
 
-        return _mapper.Map<AccountServiceModel>(account);
+        return _mapper.Map<ProfileServiceModel>(account);
     }
 
     public async Task<string> CreateOrUpdateAsync(
@@ -107,10 +107,10 @@ public class AccountMongoDBService(
         return account.Id!;
     }
 
-    public async Task<List<ContactServiceModel>> GetContactsAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<List<ChatServiceModel>> GetChatsAsync(string id, CancellationToken cancellationToken = default)
     {
-        var contacts = await _accountRepository.GetContactsAsync(id, cancellationToken);
+        var contacts = await _accountRepository.GetChatsAsync(id, cancellationToken);
 
-        return _mapper.Map<List<ContactServiceModel>>(contacts);
+        return _mapper.Map<List<ChatServiceModel>>(contacts);
     }
 }

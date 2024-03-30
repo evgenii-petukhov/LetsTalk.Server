@@ -7,7 +7,7 @@ public interface IAccountAgnosticService
 {
     Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default);
 
-    Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+    Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
     Task<string> CreateOrUpdateAsync(
         string externalId,
@@ -18,14 +18,14 @@ public interface IAccountAgnosticService
         string photoUrl,
         CancellationToken cancellationToken = default);
 
-    Task<AccountServiceModel> UpdateProfileAsync(
+    Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
         string email,
         CancellationToken cancellationToken = default);
 
-    Task<AccountServiceModel> UpdateProfileAsync(
+    Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
@@ -36,5 +36,5 @@ public interface IAccountAgnosticService
         ImageFormats imageFormat,
         CancellationToken cancellationToken = default);
 
-    Task<List<ContactServiceModel>> GetContactsAsync(string id, CancellationToken cancellationToken = default);
+    Task<List<ChatServiceModel>> GetChatsAsync(string id, CancellationToken cancellationToken = default);
 }

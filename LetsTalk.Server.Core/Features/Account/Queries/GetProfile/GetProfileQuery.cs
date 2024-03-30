@@ -3,4 +3,4 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
 
-public record GetProfileQuery(string Id) : IRequest<AccountDto>;
+public record GetProfileQuery(string Id) : IRequest<ProfileDto>;

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Services.Cache.Contacts;
 
-public abstract class ContactsCacheServiceBase
+public abstract class ChatCacheServiceBase
 {
     protected readonly bool _isActive;
 
@@ -12,10 +12,10 @@ public abstract class ContactsCacheServiceBase
 
     protected readonly TimeSpan _cacheLifeTimeInSeconds;
 
-    protected readonly IContactsService _accountService;
+    protected readonly IChatService _accountService;
 
-    protected ContactsCacheServiceBase(
-        IContactsService accountService,
+    protected ChatCacheServiceBase(
+        IChatService accountService,
         IOptions<CachingSettings> cachingSettings)
     {
         _accountService = accountService;

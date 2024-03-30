@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, AccountDto>
+public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, ProfileDto>
 {
     private readonly IAccountAgnosticService _accountAgnosticService;
     private readonly IMapper _mapper;
@@ -39,7 +39,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         _producer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
     }
 
-    public async Task<AccountDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task<ProfileDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateProfileCommandValidator(_accountAgnosticService, _signPackageService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -85,6 +85,6 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
 
         await _profileCacheManager.RemoveAsync(request.AccountId!);
 
-        return _mapper.Map<AccountDto>(account);
+        return _mapper.Map<ProfileDto>(account);
     }
 }

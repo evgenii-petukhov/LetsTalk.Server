@@ -30,7 +30,7 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
             .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken)!;
     }
 
-    public async Task<List<ContactServiceModel>> GetContactsAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<List<ChatServiceModel>> GetChatsAsync(int id, CancellationToken cancellationToken = default)
     {
         var chats = await _context.ChatMembers
             .Include(cm => cm.Chat)
@@ -101,7 +101,7 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
                 x.Accounts,
                 Metrics = y
             })
-            .Select(g => new ContactServiceModel
+            .Select(g => new ChatServiceModel
             {
                 Id = g.Chat!.Id.ToString(),
                 ChatName = GetChatName(g.Chat, g.Accounts),

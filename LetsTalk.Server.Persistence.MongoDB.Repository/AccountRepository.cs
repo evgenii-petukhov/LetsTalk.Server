@@ -144,7 +144,7 @@ public class AccountRepository : IAccountRepository
             }, cancellationToken: cancellationToken);
     }
 
-    public async Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<List<Contact>> GetChatsAsync(string id, CancellationToken cancellationToken = default)
     {
         var accounts = await _accountCollection
             .Find(Builders<Account>.Filter.Where(x => x.Id != id))

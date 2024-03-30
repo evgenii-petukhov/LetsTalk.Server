@@ -7,14 +7,14 @@ namespace LetsTalk.Server.Core.Services;
 
 public class ContactsService(
     IAccountAgnosticService accountAgnosticService,
-    IMapper mapper) : IContactsService
+    IMapper mapper) : IChatService
 {
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<List<AccountDto>> GetContactsAsync(string accountId, CancellationToken cancellationToken)
+    public async Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
-        var messages = await _accountAgnosticService.GetContactsAsync(accountId, cancellationToken);
-        return _mapper.Map<List<AccountDto>>(messages);
+        var messages = await _accountAgnosticService.GetChatsAsync(accountId, cancellationToken);
+        return _mapper.Map<List<ChatDto>>(messages);
     }
 }

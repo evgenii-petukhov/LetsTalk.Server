@@ -17,7 +17,7 @@ public class ProfileController(
     private readonly IMapper _mapper = mapper;
 
     [HttpGet]
-    public async Task<ActionResult<AccountDto>> GetProfileAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<ProfileDto>> GetProfileAsync(CancellationToken cancellationToken)
     {
         var accountId = GetAccountId();
         var query = new GetProfileQuery(accountId);
@@ -26,7 +26,7 @@ public class ProfileController(
     }
 
     [HttpPut]
-    public async Task<ActionResult<AccountDto>> PutAsync(UpdateProfileRequest model, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProfileDto>> PutAsync(UpdateProfileRequest model, CancellationToken cancellationToken)
     {
         var cmd = _mapper.Map<UpdateProfileCommand>(model);
         cmd.AccountId = GetAccountId();

@@ -6,14 +6,14 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Services.Cache.Contacts;
 
-public class ContactsMemoryCacheService(
+public class ChatMemoryCacheService(
     IMemoryCache memoryCache,
     IOptions<CachingSettings> cachingSettings,
-    IContactsService accountService) : ContactsCacheServiceBase(accountService, cachingSettings), IContactsService
+    IChatService accountService) : ChatCacheServiceBase(accountService, cachingSettings), IChatService
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<List<AccountDto>> GetContactsAsync(string accountId, CancellationToken cancellationToken)
+    public Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
         return _isActive
             ? _memoryCache.GetOrCreateAsync(GetContactsKey(accountId), cacheEntry =>
@@ -23,8 +23,8 @@ public class ContactsMemoryCacheService(
                     cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
                 }
 
-                return _accountService.GetContactsAsync(accountId, cancellationToken);
+                return _accountService.GetChatsAsync(accountId, cancellationToken);
             })!
-            : _accountService.GetContactsAsync(accountId, cancellationToken);
+            : _accountService.GetChatsAsync(accountId, cancellationToken);
     }
 }

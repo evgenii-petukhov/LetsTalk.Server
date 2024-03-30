@@ -14,7 +14,7 @@ public class ProfileRedisCacheService(
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<AccountDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
+    public async Task<ProfileDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
@@ -41,7 +41,7 @@ public class ProfileRedisCacheService(
             return profile;
         }
 
-        return JsonSerializer.Deserialize<AccountDto>(cachedProfile!)!;
+        return JsonSerializer.Deserialize<ProfileDto>(cachedProfile!)!;
     }
 
     public async Task RemoveAsync(string accountId)

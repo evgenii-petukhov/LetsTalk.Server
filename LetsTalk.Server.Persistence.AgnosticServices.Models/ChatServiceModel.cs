@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
-public class ContactServiceModel
+public class ChatServiceModel
 {
     public string? Id { get; set; }
 

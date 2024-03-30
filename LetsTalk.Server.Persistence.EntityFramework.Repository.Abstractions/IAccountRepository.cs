@@ -10,7 +10,7 @@ public interface IAccountRepository : IGenericRepository<Account>
 
     Task<Account> GetByExternalIdAsTrackingAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default);
 
-    Task<List<ContactServiceModel>> GetContactsAsync(int id, CancellationToken cancellationToken = default);
+    Task<List<ChatServiceModel>> GetChatsAsync(int id, CancellationToken cancellationToken = default);
 
     Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default);
 }

@@ -12,10 +12,10 @@ public class ChatController(
     private readonly IMediator _mediator = mediator;
 
     [HttpGet]
-    public async Task<ActionResult<List<AccountDto>>> GetAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<List<ChatDto>>> GetAsync(CancellationToken cancellationToken)
     {
         var accountId = GetAccountId();
-        var query = new GetContactsQuery(accountId);
+        var query = new GetChatsQuery(accountId);
         var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }

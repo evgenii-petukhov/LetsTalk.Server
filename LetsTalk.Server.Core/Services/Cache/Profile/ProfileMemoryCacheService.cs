@@ -13,7 +13,7 @@ public class ProfileMemoryCacheService(
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<AccountDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
+    public Task<ProfileDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
         return _isActive
             ? _memoryCache.GetOrCreateAsync(GetProfileKey(accountId), cacheEntry =>

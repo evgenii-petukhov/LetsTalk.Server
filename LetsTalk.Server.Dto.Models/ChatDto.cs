@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.Dto.Models;
 
-public class AccountDto
+public class ChatDto
 {
     public string? Id { get; set; }
 
@@ -8,13 +8,7 @@ public class AccountDto
 
     public string? PhotoUrl { get; set; }
 
-    public string? FirstName { get; set; }
-
-    public string? LastName { get; set; }
-
     public string? ChatName { get; set; }
-
-    public string? Email { get; set; }
 
     public int UnreadCount { get; set; }
 

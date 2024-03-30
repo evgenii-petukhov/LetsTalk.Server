@@ -47,7 +47,7 @@ public interface IAccountRepository
         ImageFormats imageFormat,
         CancellationToken cancellationToken = default);
 
-    Task<List<Contact>> GetContactsAsync(string id, CancellationToken cancellationToken = default);
+    Task<List<Contact>> GetChatsAsync(string id, CancellationToken cancellationToken = default);
 
     Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default);
 

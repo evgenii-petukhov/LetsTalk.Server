@@ -3,11 +3,11 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
 
-public class GetContactsQueryValidator : AbstractValidator<GetContactsQuery>
+public class GetChatsQueryValidator : AbstractValidator<GetChatsQuery>
 {
     private readonly IAccountAgnosticService _accountAgnosticService;
 
-    public GetContactsQueryValidator(IAccountAgnosticService accountAgnosticService)
+    public GetChatsQueryValidator(IAccountAgnosticService accountAgnosticService)
     {
         RuleFor(model => model.Id)
             .NotNull()

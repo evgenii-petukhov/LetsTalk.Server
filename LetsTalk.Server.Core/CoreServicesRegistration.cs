@@ -11,7 +11,7 @@ using System.Reflection;
 using StackExchange.Redis;
 using LetsTalk.Server.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.Core.Services.Cache.Contacts;
+using LetsTalk.Server.Core.Services.Cache.Chats;
 using LetsTalk.Server.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.AgnosticServices;
 using LetsTalk.Server.SignPackage;
@@ -80,7 +80,7 @@ public static class CoreServicesRegistration
                 services.DecorateScoped<IMessageService, MessageRedisCacheService>();
                 services.AddScoped<IMessageCacheManager, MessageRedisCacheService>();
 
-                services.AddScoped<IChatService, ContactsService>();
+                services.AddScoped<IChatService, ChatService>();
                 services.DecorateScoped<IChatService, ChatRedisCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
@@ -94,7 +94,7 @@ public static class CoreServicesRegistration
                 services.DecorateScoped<IMessageService, MessageMemoryCacheService>();
                 services.AddScoped<IMessageCacheManager, MessageMemoryCacheService>();
 
-                services.AddScoped<IChatService, ContactsService>();
+                services.AddScoped<IChatService, ChatService>();
                 services.DecorateScoped<IChatService, ChatMemoryCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();

@@ -5,16 +5,16 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.Core.Services;
 
-public class ContactsService(
-    IAccountAgnosticService accountAgnosticService,
+public class ChatService(
+    IChatAgnosticService chatAgnosticService,
     IMapper mapper) : IChatService
 {
-    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
+    private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly IMapper _mapper = mapper;
 
     public async Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
-        var messages = await _accountAgnosticService.GetChatsAsync(accountId, cancellationToken);
+        var messages = await _chatAgnosticService.GetChatsAsync(accountId, cancellationToken);
         return _mapper.Map<List<ChatDto>>(messages);
     }
 }

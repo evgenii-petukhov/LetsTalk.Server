@@ -35,6 +35,4 @@ public interface IAccountAgnosticService
         int height,
         ImageFormats imageFormat,
         CancellationToken cancellationToken = default);
-
-    Task<List<ChatServiceModel>> GetChatsAsync(string id, CancellationToken cancellationToken = default);
 }

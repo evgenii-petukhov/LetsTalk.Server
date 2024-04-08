@@ -11,8 +11,7 @@ public class ReadMessageCommandHandler(IMessageAgnosticService messageAgnosticSe
     {
         await _messageAgnosticService.MarkAsReadAsync(
             request.MessageId!,
-            request.RecipientId!,
-            request.UpdatePreviousMessages,
+            request.AccountId!,
             cancellationToken);
 
         return Unit.Value;

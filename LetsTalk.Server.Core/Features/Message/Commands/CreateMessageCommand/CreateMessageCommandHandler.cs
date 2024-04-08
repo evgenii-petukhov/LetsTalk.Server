@@ -19,6 +19,7 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
     private readonly IAccountAgnosticService _accountAgnosticService;
+    private readonly IChatAgnosticService _chatAgnosticService;
     private readonly IHtmlGenerator _htmlGenerator;
     private readonly IMapper _mapper;
     private readonly IMessageCacheManager _messageCacheManager;
@@ -31,6 +32,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public CreateMessageCommandHandler(
         IAccountAgnosticService accountAgnosticService,
+        IChatAgnosticService chatAgnosticService,
         IHtmlGenerator htmlGenerator,
         IMapper mapper,
         IProducerAccessor producerAccessor,
@@ -40,6 +42,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         ISignPackageService signPackageService)
     {
         _accountAgnosticService = accountAgnosticService;
+        _chatAgnosticService = chatAgnosticService;
         _htmlGenerator = htmlGenerator;
         _mapper = mapper;
         _messageCacheManager = messageCacheManager;
@@ -66,13 +69,13 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         var message = request.Image == null
             ? await _messageAgnosticService.CreateMessageAsync(
                 request.SenderId!,
-                request.RecipientId!,
+                request.ChatId!,
                 request.Text!,
                 html!,
                 cancellationToken)
             : await _messageAgnosticService.CreateMessageAsync(
                 request.SenderId!,
-                request.RecipientId!,
+                request.ChatId!,
                 request.Text!,
                 html!,
                 request.Image.Id!,
@@ -83,34 +86,26 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
         var messageDto = _mapper.Map<MessageDto>(message);
 
+        var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!, cancellationToken);
+
         await Task.WhenAll(
             _messageNotificationProducer.ProduceAsync(
                 _kafkaSettings.MessageNotification!.Topic,
                 Guid.NewGuid().ToString(),
-                new Notification<MessageDto>[]
+                accountIds.Select(accountId => new Notification<MessageDto>
                 {
-                    new()
+                    RecipientId = accountId,
+                    Message = messageDto with
                     {
-                        RecipientId = request.RecipientId!,
-                        Message = messageDto! with
-                        {
-                            IsMine = false
-                        }
-                    },
-                    new()
-                    {
-                        RecipientId = request.SenderId!,
-                        Message = messageDto with
-                        {
-                            IsMine = true
-                        }
+                        IsMine = accountId == request.SenderId
                     }
-                }),
+                }).ToArray()),
             string.IsNullOrWhiteSpace(url) ? Task.CompletedTask : _linkPreviewRequestProducer.ProduceAsync(
                 _kafkaSettings.LinkPreviewRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new LinkPreviewRequest
                 {
+                    ChatId = request.ChatId,
                     MessageId = messageDto.Id,
                     Url = url
                 }),
@@ -119,11 +114,12 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
+                    ChatId = request.ChatId,
                     MessageId = messageDto.Id,
                     ImageId = request.Image.Id
                 }));
 
-        await _messageCacheManager.RemoveAsync(request.SenderId!, request.RecipientId!);
+        await _messageCacheManager.RemoveAsync(request.SenderId!, request.ChatId!);
 
         return new CreateMessageResponse
         {

@@ -4,17 +4,20 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
 public class MessageEntityFrameworkService(
     IMessageRepository messageRepository,
+    IChatMessageStatusRepository chatMessageStatusRepository,
     ILinkPreviewRepository linkPreviewRepository,
     IEntityFactory entityFactory,
     IUnitOfWork unitOfWork,
     IMapper mapper) : IMessageAgnosticService
 {
     private readonly IMessageRepository _messageRepository = messageRepository;
+    private readonly IChatMessageStatusRepository _chatMessageStatusRepository = chatMessageStatusRepository;
     private readonly ILinkPreviewRepository _linkPreviewRepository = linkPreviewRepository;
     private readonly IEntityFactory _entityFactory = entityFactory;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -22,14 +25,14 @@ public class MessageEntityFrameworkService(
 
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         CancellationToken cancellationToken)
     {
         var message = new Message(
             int.Parse(senderId),
-            int.Parse(recipientId),
+            int.Parse(chatId),
             text,
             textHtml);
         await _messageRepository.CreateAsync(message, cancellationToken);
@@ -40,7 +43,7 @@ public class MessageEntityFrameworkService(
 
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         string imageId,
@@ -53,7 +56,7 @@ public class MessageEntityFrameworkService(
 
         var message = new Message(
             int.Parse(senderId),
-            int.Parse(recipientId),
+            int.Parse(chatId),
             text,
             textHtml,
             image);
@@ -65,14 +68,14 @@ public class MessageEntityFrameworkService(
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default)
     {
         var messages = await _messageRepository.GetPagedAsync(
             int.Parse(senderId),
-            int.Parse(recipientId),
+            int.Parse(chatId),
             pageIndex,
             messagesPerPage,
             cancellationToken);
@@ -105,21 +108,12 @@ public class MessageEntityFrameworkService(
         return _mapper.Map<MessageServiceModel>(message);
     }
 
-    public async Task MarkAsReadAsync(
+    public Task MarkAsReadAsync(
         string messageId,
         string accountId,
-        bool updatePreviousMessages,
         CancellationToken cancellationToken)
     {
-        if (updatePreviousMessages)
-        {
-            await MarkAllAsReadAsync(int.Parse(accountId), int.Parse(messageId), cancellationToken);
-        }
-        else
-        {
-            MarkAsRead(int.Parse(messageId));
-        }
-        await _unitOfWork.SaveAsync(cancellationToken);
+        return MarkAsReadAsync(int.Parse(accountId), int.Parse(messageId), cancellationToken);
     }
 
     public async Task<MessageServiceModel> SaveImagePreviewAsync(
@@ -139,21 +133,22 @@ public class MessageEntityFrameworkService(
         return _mapper.Map<MessageServiceModel>(message);
     }
 
-    private void MarkAsRead(int messageId)
+    private async Task MarkAsReadAsync(int accountId, int messageId, CancellationToken cancellationToken = default)
     {
-        var message = _entityFactory.CreateMessage(messageId);
-        message.MarkAsRead();
-    }
+        var chatMemberId = await _messageRepository.GetChatMemberIdAsync(messageId, accountId);
 
-    private async Task MarkAllAsReadAsync(int recipientId, int messageId, CancellationToken cancellationToken)
-    {
-        var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
-
-        if (message == null || message.SenderId == recipientId || message.IsRead)
+        var chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatMemberId, messageId);
+        chatMessageStatus.MarkAsRead();
+        await _chatMessageStatusRepository.CreateAsync(chatMessageStatus, cancellationToken);
+        try
         {
-            return;
+            await _unitOfWork.SaveAsync(cancellationToken);
         }
-
-        await _messageRepository.MarkAllAsReadAsync(message.SenderId, recipientId, messageId);
+        catch (DbUpdateException)
+        {
+            chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatMemberId, messageId, true);
+            chatMessageStatus.MarkAsRead();
+            await _unitOfWork.SaveAsync(cancellationToken);
+        }
     }
 }

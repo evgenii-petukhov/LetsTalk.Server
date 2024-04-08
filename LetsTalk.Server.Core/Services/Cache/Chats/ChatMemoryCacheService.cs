@@ -4,12 +4,12 @@ using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Services.Cache.Contacts;
+namespace LetsTalk.Server.Core.Services.Cache.Chats;
 
 public class ChatMemoryCacheService(
     IMemoryCache memoryCache,
     IOptions<CachingSettings> cachingSettings,
-    IChatService accountService) : ChatCacheServiceBase(accountService, cachingSettings), IChatService
+    IChatService chatService) : ChatCacheServiceBase(chatService, cachingSettings), IChatService
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
@@ -23,8 +23,8 @@ public class ChatMemoryCacheService(
                     cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
                 }
 
-                return _accountService.GetChatsAsync(accountId, cancellationToken);
+                return _chatService.GetChatsAsync(accountId, cancellationToken);
             })!
-            : _accountService.GetChatsAsync(accountId, cancellationToken);
+            : _chatService.GetChatsAsync(accountId, cancellationToken);
     }
 }

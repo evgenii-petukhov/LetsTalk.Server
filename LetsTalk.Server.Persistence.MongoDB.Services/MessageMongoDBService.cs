@@ -15,14 +15,16 @@ public class MessageMongoDBService(
 
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         CancellationToken cancellationToken)
     {
-        var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, cancellationToken);
+        throw new NotImplementedException();
 
-        return _mapper.Map<MessageServiceModel>(message);
+        /*var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, cancellationToken);
+
+        return _mapper.Map<MessageServiceModel>(message);*/
     }
 
     public async Task<MessageServiceModel> CreateMessageAsync(
@@ -36,7 +38,9 @@ public class MessageMongoDBService(
         ImageFormats imageFormat,
         CancellationToken cancellationToken)
     {
-        var message = await _messageRepository.CreateAsync(
+        throw new NotImplementedException();
+
+        /*var message = await _messageRepository.CreateAsync(
             senderId,
             recipientId,
             text,
@@ -47,7 +51,7 @@ public class MessageMongoDBService(
             imageFormat,
             cancellationToken);
 
-        return _mapper.Map<MessageServiceModel>(message);
+        return _mapper.Map<MessageServiceModel>(message);*/
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
@@ -89,17 +93,18 @@ public class MessageMongoDBService(
     public async Task MarkAsReadAsync(
         string messageId,
         string accountId,
-        bool updatePreviousMessages,
         CancellationToken cancellationToken)
     {
-        if (updatePreviousMessages)
+        throw new NotImplementedException();
+
+        /*if (updatePreviousMessages)
         {
             await MarkAllAsReadAsync(accountId, messageId, cancellationToken);
         }
         else
         {
             await _messageRepository.MarkAsReadAsync(messageId, cancellationToken);
-        }
+        }*/
     }
 
     public async Task<MessageServiceModel> SaveImagePreviewAsync(

@@ -14,19 +14,19 @@ public class MessageMemoryCacheService(
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<List<MessageDto>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public Task<List<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
             return _messageService.GetPagedAsync(
                 senderId,
-                recipientId,
+                chatId,
                 pageIndex,
                 messagesPerPage,
                 cancellationToken);
         }
 
-        return _memoryCache.GetOrCreateAsync(GetMessagePageKey(senderId, recipientId), cacheEntry =>
+        return _memoryCache.GetOrCreateAsync(GetMessagePageKey(senderId, chatId), cacheEntry =>
         {
             if (_isVolotile && pageIndex > 0)
             {
@@ -35,21 +35,19 @@ public class MessageMemoryCacheService(
             var dict = new ConcurrentDictionary<int, Task<List<MessageDto>>>();
             return dict.GetOrAdd(pageIndex, _ => _messageService.GetPagedAsync(
                 senderId,
-                recipientId,
+                chatId,
                 pageIndex,
                 messagesPerPage,
                 cancellationToken));
         })!;
     }
 
-    public Task RemoveAsync(string senderId, string recipientId)
+    public Task RemoveAsync(string senderId, string chatId)
     {
         if (_isActive)
         {
-            _memoryCache.Remove(GetMessagePageKey(senderId, recipientId));
-            _memoryCache.Remove(GetMessagePageKey(recipientId, senderId));
-            _memoryCache.Remove(GetFirstMessagePageKey(senderId, recipientId));
-            _memoryCache.Remove(GetFirstMessagePageKey(recipientId, senderId));
+            _memoryCache.Remove(GetMessagePageKey(senderId, chatId));
+            _memoryCache.Remove(GetFirstMessagePageKey(senderId, chatId));
         }
 
         return Task.CompletedTask;

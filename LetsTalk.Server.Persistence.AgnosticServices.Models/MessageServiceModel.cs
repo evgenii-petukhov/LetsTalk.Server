@@ -10,13 +10,11 @@ public class MessageServiceModel
 
     public string? SenderId { get; set; }
 
-    public string? RecipientId { get; set; }
+    public string? ChatId { get; set; }
 
-    public bool IsRead { get; set; }
 
     public long? DateCreatedUnix { get; set; }
 
-    public long? DateReadUnix { get; set; }
 
     public string? ImageId { get; set; }
 

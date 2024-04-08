@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="KafkaFlow" Version="3.0.4" />
     <PackageReference Include="KafkaFlow.LogHandler.Console" Version="3.0.4" />
     <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="3.0.4" />

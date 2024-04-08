@@ -16,7 +16,7 @@ public class MessageRedisCacheService(
 
     public async Task<List<MessageDto>> GetPagedAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken)
@@ -25,15 +25,15 @@ public class MessageRedisCacheService(
         {
             return await _messageService.GetPagedAsync(
                 senderId,
-                recipientId,
+                chatId,
                 pageIndex,
                 messagesPerPage,
                 cancellationToken);
         }
 
         var key = new RedisKey(pageIndex == 0
-            ? GetFirstMessagePageKey(senderId, recipientId)
-            : GetMessagePageKey(senderId, recipientId));
+            ? GetFirstMessagePageKey(senderId, chatId)
+            : GetMessagePageKey(senderId, chatId));
 
         var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString()));
 
@@ -41,7 +41,7 @@ public class MessageRedisCacheService(
         {
             var messageDtos = await _messageService.GetPagedAsync(
                 senderId,
-                recipientId,
+                chatId,
                 pageIndex,
                 messagesPerPage,
                 cancellationToken);
@@ -63,14 +63,12 @@ public class MessageRedisCacheService(
         return JsonSerializer.Deserialize<List<MessageDto>>(cachedMessages!)!;
     }
 
-    public Task RemoveAsync(string senderId, string recipientId)
+    public Task RemoveAsync(string senderId, string chatId)
     {
         return _isActive
             ? Task.WhenAll(
-                _database.KeyDeleteAsync(GetMessagePageKey(senderId, recipientId), CommandFlags.FireAndForget),
-                _database.KeyDeleteAsync(GetMessagePageKey(recipientId, senderId), CommandFlags.FireAndForget),
-                _database.KeyDeleteAsync(GetFirstMessagePageKey(senderId, recipientId), CommandFlags.FireAndForget),
-                _database.KeyDeleteAsync(GetFirstMessagePageKey(recipientId, senderId), CommandFlags.FireAndForget))
+                _database.KeyDeleteAsync(GetMessagePageKey(senderId, chatId), CommandFlags.FireAndForget),
+                _database.KeyDeleteAsync(GetFirstMessagePageKey(senderId, chatId), CommandFlags.FireAndForget))
             : Task.CompletedTask;
     }
 }

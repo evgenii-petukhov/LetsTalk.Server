@@ -20,20 +20,13 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
 
         RuleFor(model => model.SenderId)
             .NotNull()
-            .WithMessage("{PropertyName} is required");
+            .WithMessage("{PropertyName} is required")
+            .MustAsync(IsAccountIdValidAsync!)
+            .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
 
-        RuleFor(model => model.RecipientId)
+        RuleFor(model => model.ChatId)
             .NotNull()
             .WithMessage("{PropertyName} is required");
-
-        When(model => !string.IsNullOrWhiteSpace(model.RecipientId), () =>
-        {
-            RuleFor(model => model.RecipientId)
-                .NotEqual(model => model.SenderId)
-                .WithMessage("{PropertyName} can't be equal to {ComparisonProperty}")
-                .MustAsync(IsAccountIdValidAsync)
-                .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
-        });
 
         When(model => model.Image != null, () =>
         {

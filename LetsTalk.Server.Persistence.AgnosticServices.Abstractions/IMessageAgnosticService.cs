@@ -7,14 +7,14 @@ public interface IMessageAgnosticService
 {
     Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         CancellationToken cancellationToken);
 
     Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         string imageId,
@@ -25,7 +25,7 @@ public interface IMessageAgnosticService
 
     Task<List<MessageServiceModel>> GetPagedAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default);
@@ -42,7 +42,6 @@ public interface IMessageAgnosticService
     Task MarkAsReadAsync(
         string messageId,
         string accountId,
-        bool updatePreviousMessages,
         CancellationToken cancellationToken);
 
     Task<MessageServiceModel> SaveImagePreviewAsync(

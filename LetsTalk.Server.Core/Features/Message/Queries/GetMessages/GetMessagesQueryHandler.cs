@@ -16,7 +16,7 @@ public class GetMessagesQueryHandler(
     {
         var messageDtos = await _messageService.GetPagedAsync(
             request.SenderId,
-            request.RecipientId,
+            request.ChatId,
             request.PageIndex,
             request.MessagesPerPage,
             cancellationToken);

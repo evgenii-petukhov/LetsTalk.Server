@@ -107,11 +107,4 @@ public class AccountEntityFrameworkService(
             return account.Id.ToString();
         }
     }
-
-    public async Task<List<ChatServiceModel>> GetChatsAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var contacts = await _accountRepository.GetChatsAsync(int.Parse(id), cancellationToken);
-
-        return _mapper.Map<List<ChatServiceModel>>(contacts);
-    }
 }

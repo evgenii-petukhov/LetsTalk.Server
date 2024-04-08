@@ -29,13 +29,13 @@ public abstract class MessageCacheServiceBase
         }
     }
 
-    protected static string GetMessagePageKey(string senderId, string recipientId)
+    protected static string GetMessagePageKey(string senderId, string chatId)
     {
-        return $"messages:{senderId}:{recipientId}";
+        return $"messages:chatId:{chatId}:senderId:{senderId}";
     }
 
-    protected static string GetFirstMessagePageKey(string senderId, string recipientId)
+    protected static string GetFirstMessagePageKey(string senderId, string chatId)
     {
-        return $"messages:{senderId}:{recipientId}:first-page";
+        return $"messages[1st]:chatId:{chatId}:senderId:{senderId}";
     }
 }

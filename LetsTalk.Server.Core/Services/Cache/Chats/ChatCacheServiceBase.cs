@@ -2,7 +2,7 @@
 using LetsTalk.Server.Core.Abstractions;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Services.Cache.Contacts;
+namespace LetsTalk.Server.Core.Services.Cache.Chats;
 
 public abstract class ChatCacheServiceBase
 {
@@ -12,13 +12,13 @@ public abstract class ChatCacheServiceBase
 
     protected readonly TimeSpan _cacheLifeTimeInSeconds;
 
-    protected readonly IChatService _accountService;
+    protected readonly IChatService _chatService;
 
     protected ChatCacheServiceBase(
-        IChatService accountService,
+        IChatService chatService,
         IOptions<CachingSettings> cachingSettings)
     {
-        _accountService = accountService;
+        _chatService = chatService;
 
         _isActive = cachingSettings.Value.ContactsCacheLifeTimeInSeconds != 0;
         _isVolotile = _isActive && cachingSettings.Value.ContactsCacheLifeTimeInSeconds > 0;
@@ -31,6 +31,6 @@ public abstract class ChatCacheServiceBase
 
     protected static string GetContactsKey(string accountId)
     {
-        return $"account:{accountId}:contacts";
+        return $"account:{accountId}:chats";
     }
 }

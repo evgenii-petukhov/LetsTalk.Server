@@ -5,12 +5,12 @@ using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace LetsTalk.Server.Core.Services.Cache.Contacts;
+namespace LetsTalk.Server.Core.Services.Cache.Chats;
 
 public class ChatRedisCacheService(
     IConnectionMultiplexer сonnectionMultiplexer,
     IOptions<CachingSettings> cachingSettings,
-    IChatService accountService) : ChatCacheServiceBase(accountService, cachingSettings), IChatService
+    IChatService chatService) : ChatCacheServiceBase(chatService, cachingSettings), IChatService
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
@@ -18,7 +18,7 @@ public class ChatRedisCacheService(
     {
         if (!_isActive)
         {
-            return await _accountService.GetChatsAsync(accountId, cancellationToken);
+            return await _chatService.GetChatsAsync(accountId, cancellationToken);
         }
 
         var key = new RedisKey(GetContactsKey(accountId));
@@ -27,7 +27,7 @@ public class ChatRedisCacheService(
 
         if (cachedAccounts == RedisValue.Null)
         {
-            var accountDtos = await _accountService.GetChatsAsync(accountId, cancellationToken);
+            var accountDtos = await _chatService.GetChatsAsync(accountId, cancellationToken);
             await _database.StringSetAsync(
                 key,
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),

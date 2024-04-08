@@ -77,7 +77,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "0"
+            ChatId = "0"
         };
         var cancellationToken = new CancellationToken();
         _mockAccountAgnosticService
@@ -105,7 +105,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "0",
+            ChatId = "0",
             SenderId = "0"
         };
         var cancellationToken = new CancellationToken();
@@ -134,7 +134,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2"
         };
         var cancellationToken = new CancellationToken();
@@ -162,7 +162,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2"
         };
         var cancellationToken = new CancellationToken();
@@ -189,7 +189,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2",
             Text = string.Empty
         };
@@ -217,7 +217,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2",
             Image = new ImageRequestModel
             {
@@ -248,7 +248,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2",
             Image = new ImageRequestModel
             {
@@ -343,7 +343,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2",
             Text = "text"
         };
@@ -367,7 +367,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2",
             Image = new ImageRequestModel
             {
@@ -397,7 +397,7 @@ public class CreateMessageCommandValidatorTests
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
+            ChatId = "1",
             SenderId = "2",
             Image = new ImageRequestModel
             {

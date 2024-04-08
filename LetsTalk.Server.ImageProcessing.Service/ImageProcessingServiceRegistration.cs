@@ -7,6 +7,7 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
 using LetsTalk.Server.Persistence.AgnosticServices;
+using System.Reflection;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
@@ -53,6 +54,7 @@ public static class ImageProcessingServiceRegistration
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
     }

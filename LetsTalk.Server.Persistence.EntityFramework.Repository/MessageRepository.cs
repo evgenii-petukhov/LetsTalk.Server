@@ -19,14 +19,4 @@ public class MessageRepository(LetsTalkDbContext context) : GenericRepository<Me
             .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync(cancellationToken);
     }
-
-    public Task<int> GetChatMemberIdAsync(int messageId, int accountId)
-    {
-        var chatIds = _context.Messages.Where(x => x.Id == messageId).Select(x => x.ChatId);
-
-        return _context.ChatMembers
-            .Where(x => x.AccountId == accountId && chatIds.Contains(x.ChatId))
-            .Select(x => x.Id)
-            .FirstOrDefaultAsync();
-    }
 }

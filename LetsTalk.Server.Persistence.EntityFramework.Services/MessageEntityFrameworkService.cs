@@ -10,6 +10,7 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
 public class MessageEntityFrameworkService(
     IMessageRepository messageRepository,
+    IChatMemberRepository chatMemberRepository,
     IChatMessageStatusRepository chatMessageStatusRepository,
     ILinkPreviewRepository linkPreviewRepository,
     IEntityFactory entityFactory,
@@ -17,6 +18,7 @@ public class MessageEntityFrameworkService(
     IMapper mapper) : IMessageAgnosticService
 {
     private readonly IMessageRepository _messageRepository = messageRepository;
+    private readonly IChatMemberRepository _chatMemberRepository = chatMemberRepository;
     private readonly IChatMessageStatusRepository _chatMessageStatusRepository = chatMessageStatusRepository;
     private readonly ILinkPreviewRepository _linkPreviewRepository = linkPreviewRepository;
     private readonly IEntityFactory _entityFactory = entityFactory;
@@ -135,7 +137,7 @@ public class MessageEntityFrameworkService(
 
     private async Task MarkAsReadAsync(int accountId, int messageId, CancellationToken cancellationToken = default)
     {
-        var chatMemberId = await _messageRepository.GetChatMemberIdAsync(messageId, accountId);
+        var chatMemberId = await _chatMemberRepository.GetChatMemberIdAsync(messageId, accountId, cancellationToken);
 
         var chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatMemberId, messageId);
         chatMessageStatus.MarkAsRead();

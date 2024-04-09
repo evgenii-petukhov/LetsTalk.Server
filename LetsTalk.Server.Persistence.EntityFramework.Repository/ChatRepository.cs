@@ -119,14 +119,6 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
             .ToList();
     }
 
-    public Task<int[]> GetChatMemberAccountIdsAsync(int chatId, CancellationToken cancellationToken = default)
-    {
-        return _context.ChatMembers
-            .Where(x => x.ChatId == chatId)
-            .Select(x => x.AccountId)
-            .ToArrayAsync(cancellationToken: cancellationToken);
-    }
-
     private static string? GetChatName(Chat chat, List<Account>? accounts)
     {
         var account = accounts?.FirstOrDefault();

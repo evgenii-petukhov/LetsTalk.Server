@@ -7,9 +7,11 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
 public class ChatEntityFrameworkService(
     IChatRepository chatRepository,
+    IChatMemberRepository chatMemberRepository,
     IMapper mapper) : IChatAgnosticService
 {
     private readonly IChatRepository _chatRepository = chatRepository;
+    private readonly IChatMemberRepository _chatMemberRepository = chatMemberRepository;
     private readonly IMapper _mapper = mapper;
 
     public async Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
@@ -21,7 +23,7 @@ public class ChatEntityFrameworkService(
 
     public async Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
     {
-        var ids = await _chatRepository.GetChatMemberAccountIdsAsync(int.Parse(chatId), cancellationToken);
+        var ids = await _chatMemberRepository.GetChatMemberAccountIdsAsync(int.Parse(chatId), cancellationToken);
 
         return ids.Select(x => x.ToString()).ToArray();
     }

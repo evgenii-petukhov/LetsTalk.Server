@@ -12,7 +12,7 @@ using LetsTalk.Server.SignPackage.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
+namespace LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 
 public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, ProfileDto>
 {

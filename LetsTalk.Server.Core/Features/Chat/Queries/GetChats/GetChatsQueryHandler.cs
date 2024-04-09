@@ -5,7 +5,7 @@ using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
+namespace LetsTalk.Server.Core.Features.Chat.Queries.GetChats;
 
 public class GetChatsQueryHandler(
     IMapper mapper,

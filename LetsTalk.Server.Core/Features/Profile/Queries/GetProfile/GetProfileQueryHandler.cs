@@ -5,7 +5,7 @@ using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
+namespace LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
 
 public class GetProfileQueryHandler(
     IMapper mapper,

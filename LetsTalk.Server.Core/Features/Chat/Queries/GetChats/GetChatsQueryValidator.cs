@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
-namespace LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
+namespace LetsTalk.Server.Core.Features.Chat.Queries.GetChats;
 
 public class GetChatsQueryValidator : AbstractValidator<GetChatsQuery>
 {

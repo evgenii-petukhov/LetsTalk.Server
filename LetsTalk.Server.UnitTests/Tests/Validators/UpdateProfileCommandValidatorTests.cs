@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.API.Models.Messages;
-using LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
+using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;

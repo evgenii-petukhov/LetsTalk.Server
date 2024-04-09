@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Core.Features.Account.Queries.GetContacts;
+﻿using LetsTalk.Server.Core.Features.Chat.Queries.GetChats;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

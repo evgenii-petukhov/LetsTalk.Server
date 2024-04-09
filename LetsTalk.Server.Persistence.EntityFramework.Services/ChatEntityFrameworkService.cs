@@ -18,7 +18,7 @@ public class ChatEntityFrameworkService(
 
         return _mapper.Map<List<ChatServiceModel>>(contacts);
     }
-    
+
     public async Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
     {
         var ids = await _chatRepository.GetChatMemberAccountIdsAsync(int.Parse(chatId), cancellationToken);

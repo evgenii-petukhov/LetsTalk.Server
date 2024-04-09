@@ -35,18 +35,16 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
                 Message = y
             })
             .GroupJoin(
-                _context.ChatMessageStatuses,
+                _context.ChatMessageStatuses.Where(x => x.DateReadUnix.HasValue),
                 x => new
                 {
                     MessageId = x.Message!.Id,
-                    x.ChatId,
-                    IsRead = true
+                    x.ChatId
                 },
                 x => new
                 {
                     x.MessageId,
-                    x.ChatMember!.ChatId,
-                    x.IsRead
+                    x.ChatMember!.ChatId
                 },
                 (x, y) => new
                 {
@@ -95,7 +93,6 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
             {
                 g.Key.ChatId,
                 g.Key.LastMessageId,
-                g.Key.LastReadMessageId,
                 g.Key.LastMessageDate,
                 UnreadCount = g.Count(x => x.Message!.Id > x.LastReadMessageId && x.Message.SenderId != accountId)
             })

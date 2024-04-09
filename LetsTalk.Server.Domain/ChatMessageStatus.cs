@@ -16,8 +16,6 @@ public class ChatMessageStatus
 
     public int MessageId { get; protected set; }
 
-    public bool IsRead { get; set; }
-
     public long? DateReadUnix { get; protected set; }
 
     protected ChatMessageStatus()
@@ -32,7 +30,6 @@ public class ChatMessageStatus
 
     public void MarkAsRead()
     {
-        IsRead = true;
         DateReadUnix = DateHelper.GetUnixTimestamp();
     }
 }

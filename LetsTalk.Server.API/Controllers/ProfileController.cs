@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.UpdateProfile;
-using LetsTalk.Server.Core.Features.Account.Commands.UpdateProfileCommand;
-using LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
+using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
+using LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
-namespace LetsTalk.Server.Core.Features.Account.Queries.GetProfile;
+namespace LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
 
 public class GetProfileQueryValidator : AbstractValidator<GetProfileQuery>
 {

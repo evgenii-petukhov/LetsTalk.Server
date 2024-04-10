@@ -20,7 +20,6 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
     private readonly IImageResizeService _imageResizeService;
 
     private readonly IMessageAgnosticService _messageAgnosticService;
-    private readonly IChatAgnosticService _chatAgnosticService;
     private readonly IMapper _mapper;
     private readonly IMessageProducer _producer;
     private readonly KafkaSettings _kafkaSettings;
@@ -31,7 +30,6 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         IFileService fileService,
         IImageResizeService imageResizeService,
         IMessageAgnosticService messageAgnosticService,
-        IChatAgnosticService chatAgnosticService,
         IMapper mapper,
         IOptions<KafkaSettings> kafkaSettings,
         IOptions<FileStorageSettings> fileStorageSettings,
@@ -41,7 +39,6 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         _fileService = fileService;
         _imageResizeService = imageResizeService;
         _messageAgnosticService = messageAgnosticService;
-        _chatAgnosticService = chatAgnosticService;
         _mapper = mapper;
         _kafkaSettings = kafkaSettings.Value;
         _fileStorageSettings = fileStorageSettings.Value;
@@ -74,12 +71,10 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
 
         var imagePreviewDto = _mapper.Map<ImagePreviewDto>(message);
 
-        var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!);
-
         await _producer.ProduceAsync(
             _kafkaSettings.ImagePreviewNotification!.Topic,
             Guid.NewGuid().ToString(),
-            accountIds.Select(accountId => new Notification<ImagePreviewDto>
+            request.AccountIds!.Select(accountId => new Notification<ImagePreviewDto>
             {
                 RecipientId = accountId,
                 Message = imagePreviewDto

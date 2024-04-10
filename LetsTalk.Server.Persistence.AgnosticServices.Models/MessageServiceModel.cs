@@ -12,9 +12,7 @@ public class MessageServiceModel
 
     public string? ChatId { get; set; }
 
-
     public long? DateCreatedUnix { get; set; }
-
 
     public string? ImageId { get; set; }
 

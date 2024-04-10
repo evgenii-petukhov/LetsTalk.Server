@@ -105,7 +105,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new LinkPreviewRequest
                 {
-                    ChatId = request.ChatId,
+                    AccountIds = accountIds,
                     MessageId = messageDto.Id,
                     Url = url
                 }),
@@ -114,7 +114,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
-                    ChatId = request.ChatId,
+                    AccountIds = accountIds,
                     MessageId = messageDto.Id,
                     ImageId = request.Image.Id
                 }));

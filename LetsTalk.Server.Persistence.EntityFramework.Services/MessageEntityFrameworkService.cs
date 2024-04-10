@@ -111,11 +111,12 @@ public class MessageEntityFrameworkService(
     }
 
     public Task MarkAsReadAsync(
-        string messageId,
+        string chatId,
         string accountId,
+        string messageId,
         CancellationToken cancellationToken)
     {
-        return MarkAsReadAsync(int.Parse(accountId), int.Parse(messageId), cancellationToken);
+        return MarkAsReadAsync(int.Parse(chatId), int.Parse(accountId), int.Parse(messageId), cancellationToken);
     }
 
     public async Task<MessageServiceModel> SaveImagePreviewAsync(
@@ -135,9 +136,9 @@ public class MessageEntityFrameworkService(
         return _mapper.Map<MessageServiceModel>(message);
     }
 
-    private async Task MarkAsReadAsync(int accountId, int messageId, CancellationToken cancellationToken = default)
+    private async Task MarkAsReadAsync(int chatId, int accountId, int messageId, CancellationToken cancellationToken = default)
     {
-        var chatMemberId = await _chatMemberRepository.GetChatMemberIdAsync(messageId, accountId, cancellationToken);
+        var chatMemberId = await _chatMemberRepository.GetChatMemberIdAsync(chatId, accountId, cancellationToken);
 
         var chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatMemberId, messageId);
         chatMessageStatus.MarkAsRead();

@@ -10,8 +10,9 @@ public class ReadMessageCommandHandler(IMessageAgnosticService messageAgnosticSe
     public async Task<Unit> Handle(ReadMessageCommand request, CancellationToken cancellationToken)
     {
         await _messageAgnosticService.MarkAsReadAsync(
-            request.MessageId!,
+            request.ChatId!,
             request.AccountId!,
+            request.MessageId!,
             cancellationToken);
 
         return Unit.Value;

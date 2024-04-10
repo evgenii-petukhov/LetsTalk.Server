@@ -40,12 +40,13 @@ public class MessageController(
     }
 
     [HttpPut("MarkAsRead")]
-    public async Task<ActionResult> MarkAsReadAsync(string messageId, CancellationToken cancellationToken)
+    public async Task<ActionResult> MarkAsReadAsync(string chatId, string messageId, CancellationToken cancellationToken)
     {
         var cmd = new ReadMessageCommand
         {
+            ChatId = chatId,
+            AccountId = GetAccountId(),
             MessageId = messageId,
-            AccountId = GetAccountId()
         };
         await _mediator.Send(cmd, cancellationToken);
         return Ok();

@@ -40,8 +40,9 @@ public interface IMessageAgnosticService
         CancellationToken cancellationToken = default);
 
     Task MarkAsReadAsync(
-        string messageId,
+        string chatId,
         string accountId,
+        string messageId,
         CancellationToken cancellationToken);
 
     Task<MessageServiceModel> SaveImagePreviewAsync(

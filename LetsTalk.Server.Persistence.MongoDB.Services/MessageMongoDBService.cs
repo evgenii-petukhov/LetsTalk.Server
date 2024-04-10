@@ -91,8 +91,9 @@ public class MessageMongoDBService(
     }
 
     public async Task MarkAsReadAsync(
-        string messageId,
+        string chatId,
         string accountId,
+        string messageId,
         CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

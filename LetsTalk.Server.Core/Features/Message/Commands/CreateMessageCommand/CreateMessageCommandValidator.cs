@@ -19,10 +19,15 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             .WithMessage("Text and ImageId both cannot be empty");
 
         RuleFor(model => model.SenderId)
-            .NotNull()
-            .WithMessage("{PropertyName} is required")
-            .MustAsync(IsAccountIdValidAsync!)
-            .WithMessage("Account with {PropertyName} = {PropertyValue} does not exist");
+            .NotEmpty()
+            .WithMessage("{PropertyName} is required");
+
+        When(model => !string.IsNullOrWhiteSpace(model.SenderId), () =>
+        {
+            RuleFor(model => model.SenderId)
+                .MustAsync(IsAccountIdValidAsync!)
+                .WithMessage("Account with Id = {PropertyValue} does not exist");
+        });
 
         RuleFor(model => model.ChatId)
             .NotNull()

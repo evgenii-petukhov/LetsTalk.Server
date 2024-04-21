@@ -23,8 +23,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
             .Select(x => new
             {
                 x.Chat,
-                x.Accounts,
-                FirstAccount = x.Accounts.FirstOrDefault()
+                x.Accounts
             })
             .ToListAsync(cancellationToken);
 
@@ -101,7 +100,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
             {
                 x.Chat,
                 x.Accounts,
-                x.FirstAccount,
+                FirstAccount = x.Accounts.FirstOrDefault(),
                 Metrics = y
             })
             .Select(g => new ChatServiceModel

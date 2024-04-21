@@ -5,12 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LetsTalk.Server.Domain;
 
 [Table("chatmessagestatuses")]
-[PrimaryKey("ChatMemberId", "MessageId")]
+[PrimaryKey("ChatId", "AccountId", "MessageId")]
 public class ChatMessageStatus
 {
-    public ChatMember? ChatMember { get; protected set; }
+    public Chat? Chat { get; protected set; }
 
-    public int ChatMemberId { get; protected set; }
+    public int ChatId { get; protected set; }
+
+    public Account? Account { get; protected set; }
+
+    public int AccountId { get; protected set; }
 
     public Message? Message { get; protected set; }
 
@@ -22,9 +26,10 @@ public class ChatMessageStatus
     {
     }
 
-    public ChatMessageStatus(int chatMemberId, int messageId)
+    public ChatMessageStatus(int chatId, int accountId, int messageId)
     {
-        ChatMemberId = chatMemberId;
+        ChatId = chatId;
+        AccountId = accountId;
         MessageId = messageId;
     }
 

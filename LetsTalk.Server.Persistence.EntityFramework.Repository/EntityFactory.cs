@@ -24,9 +24,9 @@ public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
         return new LinkPreview(url, title, imageUrl);
     }
 
-    public ChatMessageStatus CreateChatMessageStatus(int chatMemberId, int messageId, bool attachToContext = false)
+    public ChatMessageStatus CreateChatMessageStatus(int chatId, int accountId, int messageId, bool attachToContext = false)
     {
-        var chatMessageStatus = new ChatMessageStatus(chatMemberId, messageId);
+        var chatMessageStatus = new ChatMessageStatus(chatId, accountId, messageId);
 
         if (attachToContext)
         {

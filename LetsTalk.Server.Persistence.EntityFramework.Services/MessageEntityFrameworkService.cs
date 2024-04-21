@@ -136,9 +136,7 @@ public class MessageEntityFrameworkService(
 
     private async Task MarkAsReadAsync(int chatId, int accountId, int messageId, CancellationToken cancellationToken = default)
     {
-        var chatMemberId = await _chatMemberRepository.GetChatMemberIdAsync(chatId, accountId, cancellationToken);
-
-        var chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatMemberId, messageId);
+        var chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatId, accountId, messageId);
         chatMessageStatus.MarkAsRead();
         await _chatMessageStatusRepository.CreateAsync(chatMessageStatus, cancellationToken);
         try
@@ -147,7 +145,7 @@ public class MessageEntityFrameworkService(
         }
         catch (DbUpdateException)
         {
-            chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatMemberId, messageId, true);
+            chatMessageStatus = _entityFactory.CreateChatMessageStatus(chatId, accountId, messageId, true);
             chatMessageStatus.MarkAsRead();
             await _unitOfWork.SaveAsync(cancellationToken);
         }

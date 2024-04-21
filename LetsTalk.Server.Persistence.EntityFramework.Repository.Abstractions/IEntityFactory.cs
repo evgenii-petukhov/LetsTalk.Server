@@ -11,5 +11,5 @@ public interface IEntityFactory
 
     LinkPreview CreateLinkPreview(string url, string title, string imageUrl);
 
-    ChatMessageStatus CreateChatMessageStatus(int chatMemberId, int messageId, bool attachToContext = false);
+    ChatMessageStatus CreateChatMessageStatus(int chatId, int accountId, int messageId, bool attachToContext = false);
 }

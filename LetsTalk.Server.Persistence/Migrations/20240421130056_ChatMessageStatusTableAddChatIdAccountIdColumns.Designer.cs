@@ -4,6 +4,7 @@ using LetsTalk.Server.Persistence.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LetsTalk.Server.Persistence.Migrations
 {
     [DbContext(typeof(LetsTalkDbContext))]
-    partial class LetsTalkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240421130056_ChatMessageStatusTableAddChatIdAccountIdColumns")]
+    partial class ChatMessageStatusTableAddChatIdAccountIdColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,21 +144,26 @@ namespace LetsTalk.Server.Persistence.Migrations
 
             modelBuilder.Entity("LetsTalk.Server.Domain.ChatMessageStatus", b =>
                 {
-                    b.Property<int>("ChatId")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AccountId")
+                    b.Property<int?>("ChatId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MessageId")
+                    b.Property<int?>("ChatMemberId")
                         .HasColumnType("int");
 
                     b.Property<long?>("DateReadUnix")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ChatId", "AccountId", "MessageId");
+                    b.Property<int>("MessageId")
+                        .HasColumnType("int");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("ChatMemberId");
 
                     b.HasIndex("MessageId");
 
@@ -352,15 +360,15 @@ namespace LetsTalk.Server.Persistence.Migrations
                 {
                     b.HasOne("LetsTalk.Server.Domain.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AccountId");
 
                     b.HasOne("LetsTalk.Server.Domain.Chat", "Chat")
                         .WithMany()
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChatId");
+
+                    b.HasOne("LetsTalk.Server.Domain.ChatMember", "ChatMember")
+                        .WithMany()
+                        .HasForeignKey("ChatMemberId");
 
                     b.HasOne("LetsTalk.Server.Domain.Message", "Message")
                         .WithMany()
@@ -371,6 +379,8 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("Chat");
+
+                    b.Navigation("ChatMember");
 
                     b.Navigation("Message");
                 });

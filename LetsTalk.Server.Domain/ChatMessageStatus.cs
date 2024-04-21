@@ -20,7 +20,7 @@ public class ChatMessageStatus
 
     public int MessageId { get; protected set; }
 
-    public long? DateReadUnix { get; protected set; }
+    public long DateReadUnix { get; protected set; }
 
     protected ChatMessageStatus()
     {

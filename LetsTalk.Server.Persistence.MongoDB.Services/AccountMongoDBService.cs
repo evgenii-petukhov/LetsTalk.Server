@@ -107,13 +107,6 @@ public class AccountMongoDBService(
         return account.Id!;
     }
 
-    public async Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
-    {
-        var contacts = await _accountRepository.GetChatsAsync(accountId, cancellationToken);
-
-        return _mapper.Map<List<ChatServiceModel>>(contacts);
-    }
-
     public Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();

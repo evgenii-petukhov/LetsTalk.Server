@@ -24,7 +24,6 @@ public interface IMessageAgnosticService
         CancellationToken cancellationToken);
 
     Task<List<MessageServiceModel>> GetPagedAsync(
-        string senderId,
         string chatId,
         int pageIndex,
         int messagesPerPage,

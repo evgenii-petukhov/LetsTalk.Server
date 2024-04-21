@@ -18,6 +18,7 @@ public static class MongoDBServicesRegistration
 
         services.AddScoped<IMessageAgnosticService, MessageMongoDBService>();
         services.AddScoped<IAccountAgnosticService, AccountMongoDBService>();
+        services.AddScoped<IChatAgnosticService, ChatMongoDBService>();
         services.AddScoped<ILinkPreviewAgnosticService, LinkPreviewMongoDBService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -27,7 +28,7 @@ public static class MongoDBServicesRegistration
             .UseDatabase(configuration.GetConnectionString("MongoDB"), configuration.GetValue<string>("Database:mongoDatabaseName"))
             .UseAssembly(Assembly.GetExecutingAssembly())
             .UseSchemeValidation(false)
-            .Run("0.1.1");
+            .Run("0.1.2");
 
         return services;
     }

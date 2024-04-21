@@ -14,7 +14,7 @@ public class MessageService(
 
     public async Task<List<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
-        var messages = await _messageAgnosticService.GetPagedAsync(senderId, chatId, pageIndex, messagesPerPage, cancellationToken);
+        var messages = await _messageAgnosticService.GetPagedAsync(chatId, pageIndex, messagesPerPage, cancellationToken);
 
         return messages
             .ConvertAll(message =>

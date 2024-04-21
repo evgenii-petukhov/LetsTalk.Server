@@ -12,6 +12,7 @@ public static class MongoDBRepositoryRegistration
         IConfiguration configuration)
     {
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<ILinkPreviewRepository, LinkPreviewRepository>();
         services.Configure<DatabaseSettings>(configuration.GetSection("Database"));

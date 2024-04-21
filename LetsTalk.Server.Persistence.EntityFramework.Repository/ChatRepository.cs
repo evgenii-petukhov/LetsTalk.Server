@@ -20,6 +20,12 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
                 Chat = g.Key,
                 Accounts = g.Select(x => x.Account!).ToList()
             })
+            .Select(x => new
+            {
+                x.Chat,
+                x.Accounts,
+                FirstAccount = x.Accounts.FirstOrDefault()
+            })
             .ToListAsync(cancellationToken);
 
         var metrics = await _context.ChatMembers
@@ -35,17 +41,9 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
                 Message = y
             })
             .GroupJoin(
-                _context.ChatMessageStatuses.Where(x => x.DateReadUnix.HasValue),
-                x => new
-                {
-                    MessageId = x.Message!.Id,
-                    x.ChatId
-                },
-                x => new
-                {
-                    x.MessageId,
-                    x.ChatMember!.ChatId
-                },
+                _context.ChatMessageStatuses,
+                x => x.Message!.Id,
+                x => x.MessageId,
                 (x, y) => new
                 {
                     x.ChatId,
@@ -103,34 +101,35 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
             {
                 x.Chat,
                 x.Accounts,
+                x.FirstAccount,
                 Metrics = y
             })
             .Select(g => new ChatServiceModel
             {
                 Id = g.Chat!.Id.ToString(),
                 ChatName = GetChatName(g.Chat, g.Accounts),
-                PhotoUrl = g.Chat.IsIndividual ? g.Accounts.FirstOrDefault()?.PhotoUrl : null,
-                AccountTypeId = g.Accounts.FirstOrDefault()?.AccountTypeId,
+                PhotoUrl = g.Chat.IsIndividual ? g.FirstAccount?.PhotoUrl : null,
+                AccountTypeId = g.Chat.IsIndividual ? g.FirstAccount?.AccountTypeId : null,
+                ImageId = g.Chat.IsIndividual ? g.FirstAccount?.ImageId : g.Chat.ImageId,
                 LastMessageDate = g.Metrics.LastMessageDate,
                 LastMessageId = g.Metrics.LastMessageId.ToString(),
-                UnreadCount = g.Metrics.UnreadCount,
-                ImageId = g.Chat.IsIndividual ? g.Accounts.FirstOrDefault()?.ImageId : g.Chat.ImageId
+                UnreadCount = g.Metrics.UnreadCount
             })
             .ToList();
     }
 
     private static string? GetChatName(Chat chat, List<Account>? accounts)
     {
-        var account = accounts?.FirstOrDefault();
-
-        if (account == null && (chat.IsIndividual || string.IsNullOrEmpty(chat.Name)))
+        if ((accounts == null || accounts.Count == 0) && (chat.IsIndividual || string.IsNullOrEmpty(chat.Name)))
         {
             return null;
         }
 
         if (chat.IsIndividual)
         {
-            return $"{account!.FirstName} {account.LastName}";
+            return accounts?.Count > 0
+                ? $"{accounts[0].FirstName} {accounts[0].LastName}"
+                : null;
         }
         else
         {

@@ -69,14 +69,12 @@ public class MessageEntityFrameworkService(
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
-        string senderId,
         string chatId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default)
     {
         var messages = await _messageRepository.GetPagedAsync(
-            int.Parse(senderId),
             int.Parse(chatId),
             pageIndex,
             messagesPerPage,

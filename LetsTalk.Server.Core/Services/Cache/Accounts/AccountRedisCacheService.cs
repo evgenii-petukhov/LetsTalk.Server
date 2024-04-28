@@ -7,27 +7,27 @@ using StackExchange.Redis;
 
 namespace LetsTalk.Server.Core.Services.Cache.Chats;
 
-public class ChatRedisCacheService(
+public class AccountRedisCacheService(
     IConnectionMultiplexer сonnectionMultiplexer,
     IOptions<CachingSettings> cachingSettings,
-    IChatService chatService) : ChatCacheServiceBase(chatService, cachingSettings), IChatService
+    IAccountService accountService) : AccountCacheServiceBase(accountService, cachingSettings), IAccountService
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
+    public async Task<List<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
-            return await _chatService.GetChatsAsync(accountId, cancellationToken);
+            return await _accountService.GetAccountsAsync(id, cancellationToken);
         }
 
-        var key = new RedisKey(GetChatsKey(accountId));
+        var key = new RedisKey(GetAccountsKey(id));
 
         var cachedAccounts = await _database.StringGetAsync(key);
 
         if (cachedAccounts == RedisValue.Null)
         {
-            var accountDtos = await _chatService.GetChatsAsync(accountId, cancellationToken);
+            var accountDtos = await _accountService.GetAccountsAsync(id, cancellationToken);
             await _database.StringSetAsync(
                 key,
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),
@@ -41,6 +41,6 @@ public class ChatRedisCacheService(
             return accountDtos;
         }
 
-        return JsonSerializer.Deserialize<List<ChatDto>>(cachedAccounts!)!;
+        return JsonSerializer.Deserialize<List<AccountDto>>(cachedAccounts!)!;
     }
 }

@@ -8,7 +8,7 @@ public class AccountProfile : Profile
 {
     public AccountProfile()
     {
-        CreateMap<ProfileServiceModel, ProfileDto>();
-        CreateMap<ChatServiceModel, ChatDto> ();
+        CreateMap<ChatServiceModel, ChatDto>();
+        CreateMap<AccountServiceModel, AccountDto>();
     }
 }

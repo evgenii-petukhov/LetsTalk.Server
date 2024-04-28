@@ -6,25 +6,25 @@ using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Services.Cache.Chats;
 
-public class ChatMemoryCacheService(
+public class AccountMemoryCacheService(
     IMemoryCache memoryCache,
     IOptions<CachingSettings> cachingSettings,
-    IChatService chatService) : ChatCacheServiceBase(chatService, cachingSettings), IChatService
+    IAccountService accountService) : AccountCacheServiceBase(accountService, cachingSettings), IAccountService
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
+    public Task<List<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
     {
         return _isActive
-            ? _memoryCache.GetOrCreateAsync(GetChatsKey(accountId), cacheEntry =>
+            ? _memoryCache.GetOrCreateAsync(GetAccountsKey(id), cacheEntry =>
             {
                 if (_isVolotile)
                 {
                     cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
                 }
 
-                return _chatService.GetChatsAsync(accountId, cancellationToken);
+                return _accountService.GetAccountsAsync(id, cancellationToken);
             })!
-            : _chatService.GetChatsAsync(accountId, cancellationToken);
+            : _accountService.GetAccountsAsync(id, cancellationToken);
     }
 }

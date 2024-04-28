@@ -20,11 +20,6 @@ public class AccountEntityFrameworkService(
     private readonly IMapper _mapper = mapper;
     private readonly IEntityFactory _entityFactory = entityFactory;
 
-    public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return _accountRepository.IsAccountIdValidAsync(int.Parse(id), cancellationToken);
-    }
-
     public async Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsync(int.Parse(id), cancellationToken);
@@ -106,5 +101,12 @@ public class AccountEntityFrameworkService(
 
             return account.Id.ToString();
         }
+    }
+
+    public async Task<List<AccountServiceModel>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var accounts = await _accountRepository.GetAccountsAsync(int.Parse(id), cancellationToken);
+
+        return _mapper.Map<List<AccountServiceModel>>(accounts);
     }
 }

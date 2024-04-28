@@ -1,17 +1,14 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.API.Models.Messages;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.SignPackage.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {
-    private readonly IAccountAgnosticService _accountAgnosticService;
     private readonly ISignPackageService _signPackageService;
 
     public CreateMessageCommandValidator(
-        IAccountAgnosticService accountAgnosticService,
         ISignPackageService signPackageService)
     {
         RuleFor(model => model)
@@ -19,15 +16,9 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
             .WithMessage("Text and ImageId both cannot be empty");
 
         RuleFor(model => model.SenderId)
+            .NotNull()
             .NotEmpty()
             .WithMessage("{PropertyName} is required");
-
-        When(model => !string.IsNullOrWhiteSpace(model.SenderId), () =>
-        {
-            RuleFor(model => model.SenderId)
-                .MustAsync(IsAccountIdValidAsync!)
-                .WithMessage("Account with Id = {PropertyValue} does not exist");
-        });
 
         RuleFor(model => model.ChatId)
             .NotNull()
@@ -40,14 +31,7 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
                 .WithMessage("Image signature is invalid");
         });
 
-        _accountAgnosticService = accountAgnosticService;
         _signPackageService = signPackageService;
-    }
-
-    private async Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken)
-    {
-        return !string.IsNullOrWhiteSpace(id)
-            && await _accountAgnosticService.IsAccountIdValidAsync(id, cancellationToken);
     }
 
     private bool IsContentValid(CreateMessageCommand model)

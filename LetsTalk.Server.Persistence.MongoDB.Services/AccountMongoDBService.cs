@@ -13,11 +13,6 @@ public class AccountMongoDBService(
     private readonly IAccountRepository _accountRepository = accountRepository;
     private readonly IMapper _mapper = mapper;
 
-    public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return _accountRepository.IsAccountIdValidAsync(id, cancellationToken);
-    }
-
     public async Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
@@ -107,7 +102,7 @@ public class AccountMongoDBService(
         return account.Id!;
     }
 
-    public Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
+    public Task<List<AccountServiceModel>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

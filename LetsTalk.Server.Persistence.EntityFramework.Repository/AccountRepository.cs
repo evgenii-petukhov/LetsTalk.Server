@@ -29,9 +29,10 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
             .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken)!;
     }
 
-    public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
+    public Task<List<Account>> GetAccountsAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Accounts
-            .AnyAsync(account => account.Id == id, cancellationToken);
+            .Where(x => x.Id != id)
+            .ToListAsync(cancellationToken);
     }
 }

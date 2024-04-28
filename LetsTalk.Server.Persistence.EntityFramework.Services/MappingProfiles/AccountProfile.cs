@@ -8,5 +8,6 @@ public class AccountProfile : Profile
     public AccountProfile()
     {
         CreateMap<Domain.Account, ProfileServiceModel>();
+        CreateMap<Domain.Account, AccountServiceModel>();
     }
 }

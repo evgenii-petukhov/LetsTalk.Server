@@ -18,7 +18,6 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
-    private readonly IAccountAgnosticService _accountAgnosticService;
     private readonly IChatAgnosticService _chatAgnosticService;
     private readonly IHtmlGenerator _htmlGenerator;
     private readonly IMapper _mapper;
@@ -31,7 +30,6 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMessageProducer _imageResizeRequestProducer;
 
     public CreateMessageCommandHandler(
-        IAccountAgnosticService accountAgnosticService,
         IChatAgnosticService chatAgnosticService,
         IHtmlGenerator htmlGenerator,
         IMapper mapper,
@@ -41,7 +39,6 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IMessageAgnosticService messageDatabaseAgnosticService,
         ISignPackageService signPackageService)
     {
-        _accountAgnosticService = accountAgnosticService;
         _chatAgnosticService = chatAgnosticService;
         _htmlGenerator = htmlGenerator;
         _mapper = mapper;
@@ -56,7 +53,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateMessageCommandValidator(_accountAgnosticService, _signPackageService);
+        var validator = new CreateMessageCommandValidator(_signPackageService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)

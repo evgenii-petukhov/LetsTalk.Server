@@ -5,9 +5,8 @@ namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 public interface IAccountAgnosticService
 {
-    Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default);
-
     Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+    Task<List<AccountServiceModel>> GetAccountsAsync(string id, CancellationToken cancellationToken = default);
 
     Task<string> CreateOrUpdateAsync(
         string externalId,

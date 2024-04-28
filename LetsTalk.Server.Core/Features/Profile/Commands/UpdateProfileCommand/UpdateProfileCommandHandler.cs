@@ -41,7 +41,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
 
     public async Task<ProfileDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var validator = new UpdateProfileCommandValidator(_accountAgnosticService, _signPackageService);
+        var validator = new UpdateProfileCommandValidator(_signPackageService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)

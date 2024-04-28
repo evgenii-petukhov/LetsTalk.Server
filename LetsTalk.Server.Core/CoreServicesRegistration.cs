@@ -83,6 +83,9 @@ public static class CoreServicesRegistration
                 services.AddScoped<IChatService, ChatService>();
                 services.DecorateScoped<IChatService, ChatRedisCacheService>();
 
+                services.AddScoped<IAccountService, AccountService>();
+                services.DecorateScoped<IAccountService, AccountRedisCacheService>();
+
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
                 services.AddScoped<IProfileCacheManager, ProfileRedisCacheService>();
@@ -96,6 +99,9 @@ public static class CoreServicesRegistration
 
                 services.AddScoped<IChatService, ChatService>();
                 services.DecorateScoped<IChatService, ChatMemoryCacheService>();
+
+                services.AddScoped<IAccountService, AccountService>();
+                services.DecorateScoped<IAccountService, AccountMemoryCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();

@@ -12,7 +12,7 @@ public class AccountService(
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<List<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
     {
         var messages = await _accountAgnosticService.GetAccountsAsync(id, cancellationToken);
         return _mapper.Map<List<AccountDto>>(messages);

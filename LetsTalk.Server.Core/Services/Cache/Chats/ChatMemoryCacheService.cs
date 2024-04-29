@@ -13,7 +13,7 @@ public class ChatMemoryCacheService(
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
+    public Task<IReadOnlyList<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
         return _isActive
             ? _memoryCache.GetOrCreateAsync(GetChatsKey(accountId), cacheEntry =>

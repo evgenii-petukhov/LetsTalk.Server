@@ -13,7 +13,7 @@ public class AccountMemoryCacheService(
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<List<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
+    public Task<IReadOnlyList<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
     {
         return _isActive
             ? _memoryCache.GetOrCreateAsync(GetAccountsKey(id), cacheEntry =>

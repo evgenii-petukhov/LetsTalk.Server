@@ -12,7 +12,7 @@ public class MessageService(
     private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<List<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         var messages = await _messageAgnosticService.GetPagedAsync(chatId, pageIndex, messagesPerPage, cancellationToken);
 

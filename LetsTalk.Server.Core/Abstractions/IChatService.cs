@@ -4,5 +4,5 @@ namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IChatService
 {
-    Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken);
+    Task<IReadOnlyList<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken);
 }

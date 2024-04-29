@@ -14,7 +14,7 @@ public class ChatRedisCacheService(
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<List<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {

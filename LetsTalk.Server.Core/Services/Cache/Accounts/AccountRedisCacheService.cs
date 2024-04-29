@@ -14,7 +14,7 @@ public class AccountRedisCacheService(
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<List<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {

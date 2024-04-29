@@ -14,7 +14,7 @@ public class MessageRedisCacheService(
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<List<MessageDto>> GetPagedAsync(
+    public async Task<IReadOnlyList<MessageDto>> GetPagedAsync(
         string senderId,
         string chatId,
         int pageIndex,

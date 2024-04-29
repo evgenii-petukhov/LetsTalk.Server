@@ -14,7 +14,7 @@ public class MessageMemoryCacheService(
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<List<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public Task<IReadOnlyList<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
@@ -32,7 +32,7 @@ public class MessageMemoryCacheService(
             {
                 cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
             }
-            var dict = new ConcurrentDictionary<int, Task<List<MessageDto>>>();
+            var dict = new ConcurrentDictionary<int, Task<IReadOnlyList<MessageDto>>>();
             return dict.GetOrAdd(pageIndex, _ => _messageService.GetPagedAsync(
                 senderId,
                 chatId,

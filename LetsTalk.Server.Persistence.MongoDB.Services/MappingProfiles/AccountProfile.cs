@@ -9,5 +9,6 @@ public class AccountProfile: Profile
     public AccountProfile()
     {
         CreateMap<Account, ProfileServiceModel>();
+        CreateMap<Account, AccountServiceModel>();
     }
 }

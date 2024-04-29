@@ -48,4 +48,6 @@ public interface IAccountRepository
         CancellationToken cancellationToken = default);
 
     Task<Account> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<List<Account>> GetAccountsAsync(string id, CancellationToken cancellationToken = default);
 }

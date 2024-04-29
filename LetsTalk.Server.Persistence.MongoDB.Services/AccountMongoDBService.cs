@@ -102,8 +102,10 @@ public class AccountMongoDBService(
         return account.Id!;
     }
 
-    public Task<List<AccountServiceModel>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<List<AccountServiceModel>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var accounts = await _accountRepository.GetAccountsAsync(id, cancellationToken);
+
+        return _mapper.Map<List<AccountServiceModel>>(accounts);
     }
 }

@@ -17,4 +17,8 @@ public class ChatDto
     public string? LastMessageId { get; set; }
 
     public string? ImageId { get; set; }
+
+    public bool IsIndividual { get; set; }
+
+    public string? AccountId { get; set; }
 }

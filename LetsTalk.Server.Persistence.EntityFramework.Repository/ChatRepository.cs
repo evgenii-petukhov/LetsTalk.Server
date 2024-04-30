@@ -112,7 +112,9 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
                 ImageId = g.Chat.IsIndividual ? g.FirstAccount?.ImageId : g.Chat.ImageId,
                 LastMessageDate = g.Metrics.LastMessageDate,
                 LastMessageId = g.Metrics.LastMessageId.ToString(),
-                UnreadCount = g.Metrics.UnreadCount
+                UnreadCount = g.Metrics.UnreadCount,
+                IsIndividual = g.Chat!.IsIndividual,
+                AccountId = g.Chat!.IsIndividual ? g.FirstAccount?.Id.ToString() : null
             })
             .ToList();
     }

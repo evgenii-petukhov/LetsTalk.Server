@@ -139,7 +139,9 @@ public class ChatRepository : IChatRepository
                 ImageId = g.Chat.IsIndividual ? accountsByChat.GetValueOrDefault(g.Chat)?.FirstAccount?.Image?.Id : g.Chat.ImageId,
                 LastMessageDate = g.Metrics.LastMessageDate,
                 LastMessageId = g.Metrics.LastMessageId,
-                UnreadCount = g.Metrics.UnreadCount
+                UnreadCount = g.Metrics.UnreadCount,
+                IsIndividual = g.Chat.IsIndividual,
+                AccountId = g.Chat.IsIndividual ? accountsByChat.GetValueOrDefault(g.Chat)?.FirstAccount?.Id : null
             })
             .ToList();
     }

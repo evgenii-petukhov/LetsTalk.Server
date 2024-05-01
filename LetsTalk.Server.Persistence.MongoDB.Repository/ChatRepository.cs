@@ -36,23 +36,11 @@ public class ChatRepository : IChatRepository
             .SelectMany(x => x.AccountIds!)
             .Where(x => !string.Equals(x, accountId, StringComparison.Ordinal))
             .Distinct()
-            .ToList();
+            .ToHashSet();
 
         var accounts = await _accountCollection
             .Find(Builders<Account>.Filter.Where(x => accountIds.Contains(x.Id!)))
             .ToListAsync(cancellationToken);
-
-        var accountsByChat = chats
-            .Select(chat => new
-            {
-                Chat = chat,
-                Accounts = accounts.Where(x => chat.AccountIds!.Contains(x.Id)).ToList()
-            })
-            .ToDictionary(x => x.Chat, x => new
-            {
-                x.Accounts,
-                FirstAccount = x.Accounts.FirstOrDefault()
-            });
 
         var metrics = _chatCollection
             .AsQueryable()
@@ -124,24 +112,25 @@ public class ChatRepository : IChatRepository
             .ToList();
 
         return chats
-            .Join(metrics, x => x.Id, x => x.ChatId, (x, y) => new
+            .Join(metrics, chat => chat.Id, metric => metric.ChatId, (chat, metric) => new
             {
-                Chat = x,
-                x.AccountIds,
-                Metrics = y
+                Chat = chat,
+                Account = accounts.Find(x => chat.AccountIds!.Contains(x.Id)),
+                chat.AccountIds,
+                Metrics = metric
             })
             .Select(g => new ChatServiceModel
             {
                 Id = g.Chat.Id,
-                ChatName = GetChatName(g.Chat, accountsByChat.GetValueOrDefault(g.Chat)?.Accounts),
-                PhotoUrl = g.Chat.IsIndividual ? accountsByChat.GetValueOrDefault(g.Chat)?.FirstAccount?.PhotoUrl : null,
-                AccountTypeId = g.Chat.IsIndividual ? accountsByChat.GetValueOrDefault(g.Chat)?.FirstAccount?.AccountTypeId : null,
-                ImageId = g.Chat.IsIndividual ? accountsByChat.GetValueOrDefault(g.Chat)?.FirstAccount?.Image?.Id : g.Chat.ImageId,
+                ChatName = g.Chat!.IsIndividual ? $"{g.Account!.FirstName} {g.Account.LastName}" : g.Chat.Name,
+                PhotoUrl = g.Chat.IsIndividual ? g.Account!.PhotoUrl : null,
+                AccountTypeId = g.Chat.IsIndividual ? g.Account!.AccountTypeId : null,
+                ImageId = g.Chat.IsIndividual ? g.Account!.Image?.Id : g.Chat.ImageId,
                 LastMessageDate = g.Metrics.LastMessageDate,
                 LastMessageId = g.Metrics.LastMessageId,
                 UnreadCount = g.Metrics.UnreadCount,
                 IsIndividual = g.Chat.IsIndividual,
-                AccountId = g.Chat.IsIndividual ? accountsByChat.GetValueOrDefault(g.Chat)?.FirstAccount?.Id : null
+                AccountId = g.Chat.IsIndividual ? g.Account!.Id : null
             })
             .ToList();
     }
@@ -153,26 +142,5 @@ public class ChatRepository : IChatRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         return chat.AccountIds!;
-    }
-
-    private static string? GetChatName(Chat chat, List<Account>? accounts)
-    {
-        if ((accounts == null || accounts.Count == 0) && (chat.IsIndividual || string.IsNullOrEmpty(chat.Name)))
-        {
-            return null;
-        }
-
-        if (chat.IsIndividual)
-        {
-            return accounts?.Count > 0
-                ? $"{accounts[0].FirstName} {accounts[0].LastName}"
-                : null;
-        }
-        else
-        {
-            return string.IsNullOrEmpty(chat.Name)
-                ? string.Join(',', accounts!.Select(a => $"{a!.FirstName} {a.LastName}"))
-                : chat.Name;
-        }
     }
 }

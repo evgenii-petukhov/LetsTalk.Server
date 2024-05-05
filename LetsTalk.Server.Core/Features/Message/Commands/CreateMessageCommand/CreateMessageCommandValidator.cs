@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.API.Models.Messages;
+using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.SignPackage.Abstractions;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;

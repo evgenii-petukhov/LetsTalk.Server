@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Dto.Models;
 
-namespace LetsTalk.Server.API.Models.Messages;
+namespace LetsTalk.Server.API.Models.Message;
 
 public class CreateMessageResponse
 {

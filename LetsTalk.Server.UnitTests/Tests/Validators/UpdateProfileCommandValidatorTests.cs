@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.API.Models.Messages;
+using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;

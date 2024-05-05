@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.API.Models.Messages;
+﻿using LetsTalk.Server.API.Models.Message;
 
-namespace LetsTalk.Server.API.Models.UpdateProfile;
+namespace LetsTalk.Server.API.Models.Profile;
 
 public class UpdateProfileRequest
 {

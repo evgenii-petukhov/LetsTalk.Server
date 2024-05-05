@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models.Messages;
+using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;

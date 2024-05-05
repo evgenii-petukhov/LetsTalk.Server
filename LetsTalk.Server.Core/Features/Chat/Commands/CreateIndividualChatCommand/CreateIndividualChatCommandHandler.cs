@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.API.Models.Chat;
+﻿using AutoMapper;
+using LetsTalk.Server.API.Models.Chat;
 using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChatCommand;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
@@ -6,23 +7,20 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 
-public class CreateIndividualChatCommandHandler : IRequestHandler<CreateIndividualChatCommand, CreateIndividualChatResponse>
+public class CreateIndividualChatCommandHandler(
+    IChatAgnosticService chatAgnosticService,
+    IMapper mapper) : IRequestHandler<CreateIndividualChatCommand, CreateIndividualChatResponse>
 {
-    private readonly IChatAgnosticService _chatAgnosticService;
+    private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
+    private readonly IMapper _mapper = mapper;
 
-    public CreateIndividualChatCommandHandler(IChatAgnosticService chatAgnosticService)
+    public async Task<CreateIndividualChatResponse> Handle(CreateIndividualChatCommand request, CancellationToken cancellationToken)
     {
-        _chatAgnosticService = chatAgnosticService;
-    }
+        var chat = await _chatAgnosticService.CreateIndividualChatAsync([request.InvitingAccountId, request.InvitedAccountId], cancellationToken);
 
-    public Task<CreateIndividualChatResponse> Handle(CreateIndividualChatCommand request, CancellationToken cancellationToken)
-    {
-        return Task.FromResult(new CreateIndividualChatResponse
+        return new CreateIndividualChatResponse
         {
-            Dto = new ChatDto
-            {
-                Id = "100"
-            }
-        });
+            Dto = _mapper.Map<ChatDto>(chat)
+        };
     }
 }

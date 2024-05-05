@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Account>(context), IChatRepository
+public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>(context), IChatRepository
 {
     public async Task<List<ChatServiceModel>> GetChatsAsync(int accountId, CancellationToken cancellationToken = default)
     {

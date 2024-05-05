@@ -3,7 +3,7 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
-public interface IChatRepository : IGenericRepository<Account>
+public interface IChatRepository : IGenericRepository<Chat>
 {
     Task<List<ChatServiceModel>> GetChatsAsync(int accountId, CancellationToken cancellationToken = default);
 

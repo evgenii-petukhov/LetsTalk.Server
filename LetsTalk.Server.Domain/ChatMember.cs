@@ -16,4 +16,9 @@ public class ChatMember : BaseEntity
     protected ChatMember()
     {
     }
+
+    public ChatMember(int accountId)
+    {
+        AccountId = accountId;
+    }
 }

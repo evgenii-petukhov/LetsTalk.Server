@@ -23,4 +23,9 @@ public class ChatMongoDBService(
     {
         return _chatRepository.IsChatIdValidAsync(id, cancellationToken);
     }
+
+    public Task<ChatServiceModel> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }

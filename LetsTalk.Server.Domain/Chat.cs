@@ -13,7 +13,18 @@ public class Chat : BaseEntity
 
     public bool IsIndividual { get; protected set; }
 
+    public ICollection<ChatMember>? ChatMembers { get; protected set; }
+
     protected Chat()
     {
+    }
+
+    public Chat(IEnumerable<int> accountIds)
+    {
+        IsIndividual = true;
+
+        ChatMembers = accountIds
+            .Select(accountId => new ChatMember(accountId))
+            .ToList();
     }
 }

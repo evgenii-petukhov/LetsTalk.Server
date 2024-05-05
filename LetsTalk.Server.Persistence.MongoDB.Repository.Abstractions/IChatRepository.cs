@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.MongoDB.Models;
 namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
 public interface IChatRepository
@@ -8,4 +9,6 @@ public interface IChatRepository
     Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default);
 
     Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default);
 }

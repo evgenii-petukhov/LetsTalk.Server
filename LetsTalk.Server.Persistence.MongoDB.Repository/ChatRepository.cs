@@ -19,7 +19,6 @@ public class ChatRepository : IChatRepository
         IOptions<DatabaseSettings> mongoDBSettings)
     {
         var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.MongoDatabaseName);
-
         _chatCollection = mongoDatabase.GetCollection<Chat>(nameof(Chat));
         _accountCollection = mongoDatabase.GetCollection<Account>(nameof(Account));
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
@@ -150,5 +149,18 @@ public class ChatRepository : IChatRepository
         return _chatCollection
             .Find(Builders<Chat>.Filter.Eq(x => x.Id, id))
             .AnyAsync(cancellationToken);
+    }
+
+    public async Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    {
+        var chat = new Chat
+        {
+            IsIndividual = true,
+            AccountIds = accountIds
+        };
+
+        await _chatCollection.InsertOneAsync(chat, cancellationToken: cancellationToken);
+
+        return chat;
     }
 }

@@ -16,7 +16,7 @@ public class CreateIndividualChatCommandHandler(
 
     public async Task<CreateIndividualChatResponse> Handle(CreateIndividualChatCommand request, CancellationToken cancellationToken)
     {
-        var chat = await _chatAgnosticService.CreateIndividualChatAsync([request.InvitingAccountId, request.InvitedAccountId], cancellationToken);
+        var chat = await _chatAgnosticService.CreateIndividualChatAsync(request.InvitingAccountId, request.InvitedAccountId, cancellationToken);
 
         return new CreateIndividualChatResponse
         {

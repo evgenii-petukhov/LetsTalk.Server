@@ -34,13 +34,16 @@ public class ChatEntityFrameworkService(
         return _chatRepository.IsChatIdValidAsync(int.Parse(id), cancellationToken);
     }
 
-    public async Task<ChatServiceModel> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    public async Task<ChatServiceModel> CreateIndividualChatAsync(string invitingAccountId, string invitedAccountId, CancellationToken cancellationToken = default)
     {
-        var chat = new Chat(accountIds.Select(int.Parse));
+        var chat = new Chat([int.Parse(invitingAccountId), int.Parse(invitedAccountId)]);
 
         await _chatRepository.CreateAsync(chat, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 
-        return _mapper.Map<ChatServiceModel>(chat);
+        var chatServiceModel = _mapper.Map<ChatServiceModel>(chat);
+        chatServiceModel.AccountIds = [invitedAccountId];
+
+        return chatServiceModel;
     }
 }

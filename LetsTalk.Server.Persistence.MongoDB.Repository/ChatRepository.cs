@@ -116,7 +116,6 @@ public class ChatRepository : IChatRepository
             {
                 Chat = chat,
                 Account = accounts.Find(x => chat.AccountIds!.Contains(x.Id)),
-                AccountIds = chat.AccountIds!.Where(x => !string.Equals(x, accountId, StringComparison.Ordinal)),
                 Metrics = metric
             })
             .Select(g => new ChatServiceModel
@@ -130,7 +129,9 @@ public class ChatRepository : IChatRepository
                 LastMessageId = g.Metrics.LastMessageId,
                 UnreadCount = g.Metrics.UnreadCount,
                 IsIndividual = g.Chat.IsIndividual,
-                AccountIds = g.Chat.AccountIds
+                AccountIds = g.Chat.AccountIds!
+                    .Where(x => !string.Equals(x, accountId, StringComparison.Ordinal))
+                    .ToArray()
             })
             .ToList();
     }

@@ -20,10 +20,10 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 Chat = g.Key,
                 Accounts = g.Select(x => x.Account).ToList()
             })
-            .Select(x => new
+            .Select(g => new
             {
-                x.Chat,
-                Account = x.Accounts.FirstOrDefault()
+                g.Chat,
+                g.Accounts
             })
             .ToListAsync(cancellationToken);
 
@@ -99,7 +99,11 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             .Join(metrics, x => x.Chat!.Id, x => x.ChatId, (x, y) => new
             {
                 x.Chat,
-                x.Account,
+                AccountIds = x.Accounts.ConvertAll(x => x!.Id)
+                    .Where(x => x != accountId)
+                    .Select(x => x.ToString())
+                    .ToArray(),
+                Account = x.Accounts.FirstOrDefault(),
                 Metrics = y
             })
             .Select(g => new ChatServiceModel
@@ -113,7 +117,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 LastMessageId = g.Metrics.LastMessageId.ToString(),
                 UnreadCount = g.Metrics.UnreadCount,
                 IsIndividual = g.Chat!.IsIndividual,
-                AccountId = g.Chat!.IsIndividual ? g.Account!.Id.ToString() : null
+                AccountIds = g.AccountIds
             })
             .ToList();
     }

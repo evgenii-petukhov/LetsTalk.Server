@@ -20,5 +20,5 @@ public class ChatDto
 
     public bool IsIndividual { get; set; }
 
-    public string? AccountId { get; set; }
+    public string[]? AccountIds { get; set; }
 }

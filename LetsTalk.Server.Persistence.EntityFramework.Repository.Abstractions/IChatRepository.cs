@@ -6,4 +6,6 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 public interface IChatRepository : IGenericRepository<Account>
 {
     Task<List<ChatServiceModel>> GetChatsAsync(int accountId, CancellationToken cancellationToken = default);
+
+    Task<bool> IsChatIdValidAsync(int id, CancellationToken cancellationToken = default);
 }

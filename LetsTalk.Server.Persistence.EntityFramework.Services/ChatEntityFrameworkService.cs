@@ -22,4 +22,9 @@ public class ChatEntityFrameworkService(
 
         return ids.Select(x => x.ToString()).ToArray();
     }
+
+    public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _chatRepository.IsChatIdValidAsync(int.Parse(id), cancellationToken);
+    }
 }

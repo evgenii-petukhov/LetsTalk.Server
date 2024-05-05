@@ -53,7 +53,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateMessageCommandValidator(_signPackageService);
+        var validator = new CreateMessageCommandValidator(_signPackageService, _chatAgnosticService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)

@@ -143,4 +143,11 @@ public class ChatRepository : IChatRepository
 
         return chat.AccountIds!;
     }
+
+    public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _chatCollection
+            .Find(Builders<Chat>.Filter.Eq(x => x.Id, id))
+            .AnyAsync(cancellationToken);
+    }
 }

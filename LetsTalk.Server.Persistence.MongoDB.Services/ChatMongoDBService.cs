@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 
@@ -18,5 +17,10 @@ public class ChatMongoDBService(
     public Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
     {
         return _chatRepository.GetChatsAsync(accountId, cancellationToken);
+    }
+
+    public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _chatRepository.IsChatIdValidAsync(id, cancellationToken);
     }
 }

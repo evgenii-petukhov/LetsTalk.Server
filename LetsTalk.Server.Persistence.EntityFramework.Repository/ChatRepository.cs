@@ -117,4 +117,10 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Accou
             })
             .ToList();
     }
+
+    public Task<bool> IsChatIdValidAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Chats
+            .AnyAsync(chat => chat.Id == id, cancellationToken);
+    }
 }

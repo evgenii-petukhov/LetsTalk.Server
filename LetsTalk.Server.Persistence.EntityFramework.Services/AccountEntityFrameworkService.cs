@@ -109,4 +109,9 @@ public class AccountEntityFrameworkService(
 
         return _mapper.Map<List<AccountServiceModel>>(accounts);
     }
+
+    public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _accountRepository.IsAccountIdValidAsync(int.Parse(id), cancellationToken);
+    }
 }

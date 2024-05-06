@@ -79,7 +79,7 @@ public class CreateMessageCommandValidatorTests
     [Test]
     [TestCase("0")]
     [TestCase("-1")]
-    public async Task ValidateAsync_When_ChatIdIsZero_TextIsNull_ImageIsNull_ShouldContainValidationErrors(string chatId)
+    public async Task ValidateAsync_When_ChatIdIsInvalid_TextIsNull_ImageIsNull_ShouldContainValidationErrors(string chatId)
     {
         // Arrange
         var request = new CreateMessageCommand
@@ -153,7 +153,7 @@ public class CreateMessageCommandValidatorTests
         validationResult.IsValid.Should().BeFalse();
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            $"A chat with 'Chat Id' = '{SampleChatId}' must exist",
+            $"Chat with 'Chat Id' = '{SampleChatId}' must exist",
             "'Text' and 'ImageId' both cannot be empty"
         });
         _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);

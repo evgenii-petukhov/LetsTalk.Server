@@ -25,7 +25,7 @@ public class CreateMessageCommandValidator : AbstractValidator<CreateMessageComm
         {
             RuleFor(model => model.ChatId)
                 .MustAsync(IsChatIdValidAsync!)
-                .WithMessage("A chat with '{PropertyName}' = '{PropertyValue}' must exist");
+                .WithMessage("Chat with '{PropertyName}' = '{PropertyValue}' must exist");
         });
 
         RuleFor(model => model)

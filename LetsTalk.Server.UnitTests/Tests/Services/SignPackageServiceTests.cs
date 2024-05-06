@@ -8,7 +8,7 @@ using LetsTalk.Server.UnitTests.TestCases;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace LetsTalk.Server.UnitTests.Services;
+namespace LetsTalk.Server.UnitTests.Tests.Services;
 
 [TestFixture]
 public class SignPackageServiceTests

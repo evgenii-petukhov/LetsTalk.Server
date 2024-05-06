@@ -11,11 +11,6 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
     public UpdateProfileCommandValidator(
         ISignPackageService signPackageService)
     {
-        RuleFor(model => model.AccountId)
-            .NotNull()
-            .NotEmpty()
-            .WithMessage("{PropertyName} is required");
-
         RuleFor(model => model.FirstName)
             .NotNull()
             .WithMessage("{PropertyName} is required")

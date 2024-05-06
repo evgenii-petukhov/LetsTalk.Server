@@ -35,4 +35,10 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
             .Where(x => x.Id != id)
             .ToListAsync(cancellationToken);
     }
+
+    public Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Accounts
+            .AnyAsync(account => account.Id == id, cancellationToken);
+    }
 }

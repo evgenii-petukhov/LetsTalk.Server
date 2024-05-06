@@ -157,4 +157,11 @@ public class AccountRepository : IAccountRepository
             .Find(Builders<Account>.Filter.Ne(x => x.Id, id))
             .ToListAsync(cancellationToken);
     }
+
+    public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _accountCollection
+            .Find(Builders<Account>.Filter.Eq(x => x.Id, id))
+            .AnyAsync(cancellationToken);
+    }
 }

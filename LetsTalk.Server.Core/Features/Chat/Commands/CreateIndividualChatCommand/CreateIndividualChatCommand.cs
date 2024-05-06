@@ -3,4 +3,4 @@ using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChatCommand;
 
-public record CreateIndividualChatCommand(string InvitingAccountId, string InvitedAccountId) : IRequest<CreateIndividualChatResponse>;
+public record CreateIndividualChatCommand(string InvitingAccountId, string AccountId) : IRequest<CreateIndividualChatResponse>;

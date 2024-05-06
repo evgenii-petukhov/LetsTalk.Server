@@ -27,7 +27,7 @@ public class FacebookOpenAuthProvider(
     {
         // verify access token with facebook API to authenticate
         using var client = new RestClient(FACEBOOK_URL);
-        var request = new RestRequest($"{model.Id}?fields=id,email,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
+        var request = new RestRequest($"{model.Id}?fields=id,name,first_name,last_name,picture.type(large)&access_token={model.AuthToken}");
         try
         {
             var response = await client.GetAsync(request, cancellationToken);

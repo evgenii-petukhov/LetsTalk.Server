@@ -92,6 +92,76 @@ namespace LetsTalk.Server.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("LetsTalk.Server.Domain.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageId")
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<bool>("IsIndividual")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("chats");
+                });
+
+            modelBuilder.Entity("LetsTalk.Server.Domain.ChatMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("chatmembers");
+                });
+
+            modelBuilder.Entity("LetsTalk.Server.Domain.ChatMessageStatus", b =>
+                {
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("DateReadUnix")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ChatId", "AccountId", "MessageId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("chatmessagestatuses");
+                });
+
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>
                 {
                     b.Property<string>("Id")
@@ -191,10 +261,10 @@ namespace LetsTalk.Server.Persistence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long?>("DateCreatedUnix")
-                        .HasColumnType("bigint");
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("DateReadUnix")
+                    b.Property<long?>("DateCreatedUnix")
                         .HasColumnType("bigint");
 
                     b.Property<string>("ImageId")
@@ -203,13 +273,7 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Property<string>("ImagePreviewId")
                         .HasColumnType("varchar(36)");
 
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int?>("LinkPreviewId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipientId")
                         .HasColumnType("int");
 
                     b.Property<int>("SenderId")
@@ -223,6 +287,8 @@ namespace LetsTalk.Server.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChatId");
+
                     b.HasIndex("ImageId")
                         .IsUnique();
 
@@ -230,8 +296,6 @@ namespace LetsTalk.Server.Persistence.Migrations
                         .IsUnique();
 
                     b.HasIndex("LinkPreviewId");
-
-                    b.HasIndex("RecipientId");
 
                     b.HasIndex("SenderId");
 
@@ -256,6 +320,61 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Navigation("Image");
                 });
 
+            modelBuilder.Entity("LetsTalk.Server.Domain.Chat", b =>
+                {
+                    b.HasOne("LetsTalk.Server.Domain.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("LetsTalk.Server.Domain.ChatMember", b =>
+                {
+                    b.HasOne("LetsTalk.Server.Domain.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LetsTalk.Server.Domain.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Chat");
+                });
+
+            modelBuilder.Entity("LetsTalk.Server.Domain.ChatMessageStatus", b =>
+                {
+                    b.HasOne("LetsTalk.Server.Domain.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LetsTalk.Server.Domain.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LetsTalk.Server.Domain.Message", "Message")
+                        .WithMany()
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("Message");
+                });
+
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>
                 {
                     b.HasOne("LetsTalk.Server.Domain.ImageFormat", "ImageFormat")
@@ -269,6 +388,12 @@ namespace LetsTalk.Server.Persistence.Migrations
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Message", b =>
                 {
+                    b.HasOne("LetsTalk.Server.Domain.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LetsTalk.Server.Domain.Image", "Image")
                         .WithOne()
                         .HasForeignKey("LetsTalk.Server.Domain.Message", "ImageId")
@@ -284,25 +409,19 @@ namespace LetsTalk.Server.Persistence.Migrations
                         .HasForeignKey("LinkPreviewId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("LetsTalk.Server.Domain.Account", "Recipient")
-                        .WithMany()
-                        .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LetsTalk.Server.Domain.Account", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Chat");
+
                     b.Navigation("Image");
 
                     b.Navigation("ImagePreview");
 
                     b.Navigation("LinkPreview");
-
-                    b.Navigation("Recipient");
 
                     b.Navigation("Sender");
                 });

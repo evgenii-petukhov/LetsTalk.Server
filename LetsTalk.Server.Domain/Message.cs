@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Persistence.Utility;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
 
@@ -14,15 +13,7 @@ public class Message : BaseEntity
 
     public int SenderId { get; protected set; }
 
-    public Account? Recipient { get; protected set; }
-
-    public int RecipientId { get; protected set; }
-
-    public bool IsRead { get; protected set; }
-
     public long? DateCreatedUnix { get; protected set; }
-
-    public long? DateReadUnix { get; protected set; }
 
     public LinkPreview? LinkPreview { get; protected set; }
 
@@ -34,6 +25,10 @@ public class Message : BaseEntity
 
     public string? ImagePreviewId { get; protected set; }
 
+    public Chat? Chat { get; protected set; }
+
+    public int ChatId { get; protected set; }
+
     protected Message()
     {
     }
@@ -42,10 +37,10 @@ public class Message : BaseEntity
     {
     }
 
-    public Message(int senderId, int recipientId, string? text, string? textHtml, Image? image = null)
+    public Message(int senderId, int chatId, string? text, string? textHtml, Image? image = null)
     {
         SenderId = senderId;
-        RecipientId = recipientId;
+        ChatId = chatId;
         Text = text;
         TextHtml = textHtml;
         Image = image;
@@ -64,11 +59,5 @@ public class Message : BaseEntity
     public void SetDateCreatedUnix(long? dateCreatedUnix)
     {
         DateCreatedUnix = dateCreatedUnix;
-    }
-
-    public void MarkAsRead()
-    {
-        IsRead = true;
-        DateReadUnix = DateHelper.GetUnixTimestamp();
     }
 }

@@ -12,14 +12,15 @@ public class MessageService(
     private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<List<MessageDto>> GetPagedAsync(string senderId, string recipientId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
-        var messages = await _messageAgnosticService.GetPagedAsync(senderId, recipientId, pageIndex, messagesPerPage, cancellationToken);
+        var messages = await _messageAgnosticService.GetPagedAsync(chatId, pageIndex, messagesPerPage, cancellationToken);
 
-        return _mapper.Map<List<MessageDto>>(messages)
-            .ConvertAll(messageDto =>
+        return messages
+            .ConvertAll(message =>
             {
-                messageDto.IsMine = messageDto.SenderId == senderId;
+                var messageDto = _mapper.Map<MessageDto>(message);
+                messageDto.IsMine = message.SenderId == senderId;
                 return messageDto;
             });
     }

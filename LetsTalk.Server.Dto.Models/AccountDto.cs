@@ -12,13 +12,5 @@ public class AccountDto
 
     public string? LastName { get; set; }
 
-    public string? Email { get; set; }
-
-    public int UnreadCount { get; set; }
-
-    public long LastMessageDate { get; set; }
-
-    public string? LastMessageId { get; set; }
-
     public string? ImageId { get; set; }
 }

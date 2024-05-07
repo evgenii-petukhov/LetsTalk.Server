@@ -9,14 +9,6 @@ public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
 {
     private readonly LetsTalkDbContext _context = context;
 
-    public Message CreateMessage(int id)
-    {
-        var message = new Message(id);
-        _context.Messages.Attach(message);
-
-        return message;
-    }
-
     public Image CreateImage(string id, ImageFormats imageFormat, int width, int height)
     {
         return new Image(id, (int)imageFormat, width, height);
@@ -30,5 +22,17 @@ public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
     public LinkPreview CreateLinkPreview(string url, string title, string imageUrl)
     {
         return new LinkPreview(url, title, imageUrl);
+    }
+
+    public ChatMessageStatus CreateChatMessageStatus(int chatId, int accountId, int messageId, bool attachToContext = false)
+    {
+        var chatMessageStatus = new ChatMessageStatus(chatId, accountId, messageId);
+
+        if (attachToContext)
+        {
+            _context.ChatMessageStatuses.Attach(chatMessageStatus);
+        }
+
+        return chatMessageStatus;
     }
 }

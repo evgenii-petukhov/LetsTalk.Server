@@ -6,22 +6,21 @@ namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 public interface IMessageRepository
 {
     Task<List<Message>> GetPagedAsync(
-        string senderId,
-        string recipientId,
+        string chatId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default);
 
     Task<Message> CreateAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         CancellationToken cancellationToken = default);
 
     Task<Message> CreateAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         string imageId,
@@ -32,9 +31,7 @@ public interface IMessageRepository
 
     Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
-    Task MarkAsReadAsync(string messageId, CancellationToken cancellationToken = default);
-
-    Task MarkAllAsReadAsync(string senderId, string recipientId, long dateCreatedUnix, CancellationToken cancellationToken = default);
+    Task MarkAsReadAsync(string chatId, string accountId, string messageId, CancellationToken cancellationToken = default);
 
     Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default);
 

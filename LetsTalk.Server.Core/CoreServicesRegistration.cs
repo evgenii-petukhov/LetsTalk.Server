@@ -11,7 +11,7 @@ using System.Reflection;
 using StackExchange.Redis;
 using LetsTalk.Server.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.Core.Services.Cache.Contacts;
+using LetsTalk.Server.Core.Services.Cache.Chats;
 using LetsTalk.Server.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.AgnosticServices;
 using LetsTalk.Server.SignPackage;
@@ -80,8 +80,11 @@ public static class CoreServicesRegistration
                 services.DecorateScoped<IMessageService, MessageRedisCacheService>();
                 services.AddScoped<IMessageCacheManager, MessageRedisCacheService>();
 
-                services.AddScoped<IContactsService, ContactsService>();
-                services.DecorateScoped<IContactsService, ContactsRedisCacheService>();
+                services.AddScoped<IChatService, ChatService>();
+                services.DecorateScoped<IChatService, ChatRedisCacheService>();
+
+                services.AddScoped<IAccountService, AccountService>();
+                services.DecorateScoped<IAccountService, AccountRedisCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
@@ -94,8 +97,11 @@ public static class CoreServicesRegistration
                 services.DecorateScoped<IMessageService, MessageMemoryCacheService>();
                 services.AddScoped<IMessageCacheManager, MessageMemoryCacheService>();
 
-                services.AddScoped<IContactsService, ContactsService>();
-                services.DecorateScoped<IContactsService, ContactsMemoryCacheService>();
+                services.AddScoped<IChatService, ChatService>();
+                services.DecorateScoped<IChatService, ChatMemoryCacheService>();
+
+                services.AddScoped<IAccountService, AccountService>();
+                services.DecorateScoped<IAccountService, AccountMemoryCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();

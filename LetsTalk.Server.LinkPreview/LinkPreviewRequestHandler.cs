@@ -1,4 +1,5 @@
-﻿using KafkaFlow;
+﻿using AutoMapper;
+using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Dto.Models;
@@ -14,15 +15,18 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     private readonly ILinkPreviewGenerator _linkPreviewGenerator;
     private readonly IMessageProducer _producer;
     private readonly KafkaSettings _kafkaSettings;
+    private readonly IMapper _mapper;
 
     public LinkPreviewRequestHandler(
         ILinkPreviewGenerator linkPreviewGenerator,
         IOptions<KafkaSettings> kafkaSettings,
-        IProducerAccessor producerAccessor)
+        IProducerAccessor producerAccessor,
+        IMapper mapper)
     {
         _linkPreviewGenerator = linkPreviewGenerator;
         _kafkaSettings = kafkaSettings.Value;
         _producer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
+        _mapper = mapper;
     }
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
@@ -39,35 +43,15 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
             return;
         }
 
-        var linkPreviewDto = new LinkPreviewDto
-        {
-            MessageId = message.Id,
-            Title = message.LinkPreview!.Title,
-            ImageUrl = message.LinkPreview!.ImageUrl,
-            Url = message.LinkPreview!.Url
-        };
+        var linkPreviewDto = _mapper.Map<LinkPreviewDto>(message);
 
         await _producer.ProduceAsync(
             _kafkaSettings.LinkPreviewNotification!.Topic,
             Guid.NewGuid().ToString(),
-            new Notification<LinkPreviewDto>[]
+            request.AccountIds!.Select(accountId => new Notification<LinkPreviewDto>
             {
-                new()
-                {
-                    RecipientId = message.RecipientId,
-                    Message = linkPreviewDto with
-                    {
-                        AccountId = message.SenderId
-                    }
-                },
-                new()
-                {
-                    RecipientId = message.SenderId,
-                    Message = linkPreviewDto with
-                    {
-                        AccountId = message.RecipientId
-                    }
-                }
-            });
+                RecipientId = accountId,
+                Message = linkPreviewDto
+            }).ToArray());
     }
 }

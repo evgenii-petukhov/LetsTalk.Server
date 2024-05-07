@@ -6,7 +6,7 @@ public record ImagePreviewDto
 
     public string? Id { get; set; }
 
-    public string? AccountId { get; set; }
+    public string? ChatId { get; set; }
 
     public int? Width { get; set; }
 

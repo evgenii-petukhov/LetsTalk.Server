@@ -13,19 +13,14 @@ public class AccountMongoDBService(
     private readonly IAccountRepository _accountRepository = accountRepository;
     private readonly IMapper _mapper = mapper;
 
-    public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return _accountRepository.IsAccountIdValidAsync(id, cancellationToken);
-    }
-
-    public async Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
 
-        return _mapper.Map<AccountServiceModel>(account);
+        return _mapper.Map<ProfileServiceModel>(account);
     }
 
-    public async Task<AccountServiceModel> UpdateProfileAsync(
+    public async Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
@@ -34,10 +29,10 @@ public class AccountMongoDBService(
     {
         var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, email, cancellationToken);
 
-        return _mapper.Map<AccountServiceModel>(account);
+        return _mapper.Map<ProfileServiceModel>(account);
     }
 
-    public async Task<AccountServiceModel> UpdateProfileAsync(
+    public async Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
@@ -59,7 +54,7 @@ public class AccountMongoDBService(
             imageFormat,
             cancellationToken);
 
-        return _mapper.Map<AccountServiceModel>(account);
+        return _mapper.Map<ProfileServiceModel>(account);
     }
 
     public async Task<string> CreateOrUpdateAsync(
@@ -107,10 +102,15 @@ public class AccountMongoDBService(
         return account.Id!;
     }
 
-    public async Task<List<ContactServiceModel>> GetContactsAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<List<AccountServiceModel>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
     {
-        var contacts = await _accountRepository.GetContactsAsync(id, cancellationToken);
+        var accounts = await _accountRepository.GetAccountsAsync(id, cancellationToken);
 
-        return _mapper.Map<List<ContactServiceModel>>(contacts);
+        return _mapper.Map<List<AccountServiceModel>>(accounts);
+    }
+
+    public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return _accountRepository.IsAccountIdValidAsync(id, cancellationToken);
     }
 }

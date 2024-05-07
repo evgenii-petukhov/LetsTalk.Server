@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models;
-using LetsTalk.Server.API.Models.Messages;
+using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
@@ -22,11 +21,11 @@ public class MessageController(
     private readonly IMapper _mapper = mapper;
     private readonly MessagingSettings _messagingSettings = messagingSettings.Value;
 
-    [HttpGet("{accountId}")]
-    public async Task<ActionResult<List<MessageDto>>> GetAsync(string accountId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
+    [HttpGet("{chatId}")]
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(string chatId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
     {
         var senderId = GetAccountId();
-        var query = new GetMessagesQuery(senderId, accountId, pageIndex, _messagingSettings.MessagesPerPage);
+        var query = new GetMessagesQuery(senderId, chatId, pageIndex, _messagingSettings.MessagesPerPage);
         var messageDtos = await _mediator.Send(query, cancellationToken);
         return Ok(messageDtos);
     }
@@ -41,25 +40,13 @@ public class MessageController(
     }
 
     [HttpPut("MarkAsRead")]
-    public async Task<ActionResult> MarkAsReadAsync(string messageId, CancellationToken cancellationToken)
+    public async Task<ActionResult> MarkAsReadAsync(string chatId, string messageId, CancellationToken cancellationToken)
     {
         var cmd = new ReadMessageCommand
         {
+            ChatId = chatId,
+            AccountId = GetAccountId(),
             MessageId = messageId,
-            RecipientId = GetAccountId()
-        };
-        await _mediator.Send(cmd, cancellationToken);
-        return Ok();
-    }
-
-    [HttpPut("MarkAllAsRead")]
-    public async Task<ActionResult> MarkAllAsReadAsync(string messageId, CancellationToken cancellationToken)
-    {
-        var cmd = new ReadMessageCommand
-        {
-            MessageId = messageId,
-            RecipientId = GetAccountId(),
-            UpdatePreviousMessages = true
         };
         await _mediator.Send(cmd, cancellationToken);
         return Ok();

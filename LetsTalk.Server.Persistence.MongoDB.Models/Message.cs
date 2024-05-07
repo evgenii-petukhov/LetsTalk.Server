@@ -17,13 +17,9 @@ public class Message
     public string? SenderId { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? RecipientId { get; set; }
-
-    public bool IsRead { get; set; }
+    public string? ChatId { get; set; }
 
     public long? DateCreatedUnix { get; set; }
-
-    public long? DateReadUnix { get; set; }
 
     public Image? Image { get; set; }
 

@@ -8,9 +8,7 @@ public record MessageDto
 
     public string? TextHtml { get; set; }
 
-    public string? SenderId { get; set; }
-
-    public string? RecipientId { get; set; }
+    public string? ChatId { get; set; }
 
     public bool? IsMine { get; set; }
 

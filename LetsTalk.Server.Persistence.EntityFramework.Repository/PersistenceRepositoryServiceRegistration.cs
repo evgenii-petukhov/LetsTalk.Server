@@ -12,7 +12,10 @@ public static class PersistenceRepositoryServiceRegistration
     {
         services.AddPersistenceServices(configuration);
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IChatMemberRepository, ChatMemberRepository>();
+        services.AddScoped<IChatMessageStatusRepository, ChatMessageStatusRepository>();
         services.AddScoped<IImageRepository, ImageRepository>();
         services.AddScoped<ILinkPreviewRepository, LinkPreviewRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.API.Models.Messages;
+using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.SignPackage.Abstractions;
@@ -12,16 +12,21 @@ namespace LetsTalk.Server.UnitTests.Tests.Validators;
 [TestFixture]
 public class CreateMessageCommandValidatorTests
 {
+    private const string SampleChatId = "1";
+    private const string SampleChatIdString = "6622e049321a5c22e5d8bb8d";
+    private const string SampleImageId = "2";
+    private const string SampleText = "Text";
+
     private CreateMessageCommandValidator _validator;
-    private Mock<IAccountAgnosticService> _mockAccountAgnosticService;
     private Mock<ISignPackageService> _mockSignPackageService;
+    private Mock<IChatAgnosticService> _mockChatAgnosticService;
 
     [SetUp]
     public void SetUp()
     {
-        _mockAccountAgnosticService = new Mock<IAccountAgnosticService>();
         _mockSignPackageService = new Mock<ISignPackageService>();
-        _validator = new(_mockAccountAgnosticService.Object, _mockSignPackageService.Object);
+        _mockChatAgnosticService = new Mock<IChatAgnosticService>();
+        _validator = new(_mockSignPackageService.Object, _mockChatAgnosticService.Object);
     }
 
     [Test]
@@ -37,23 +42,23 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
 
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text and ImageId both cannot be empty",
-            "Recipient Id is required",
-            "Sender Id is required"
+            "'Chat Id' must not be empty.",
+            "'Chat Id' is required",
+            "'Text' and 'ImageId' both cannot be empty"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsNull_SenderIsZero_ImageIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_ChatIdIsEmptyString_TextIsNull_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            SenderId = "0"
+            ChatId = string.Empty
         };
         var cancellationToken = new CancellationToken();
 
@@ -63,26 +68,25 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(2);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text and ImageId both cannot be empty",
-            "Recipient Id is required"
+            "'Chat Id' is required",
+            "'Text' and 'ImageId' both cannot be empty"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsZero_SenderIsNull_ImageIsNull_ShouldContainValidationErrors()
+    [TestCase("0")]
+    [TestCase("-1")]
+    public async Task ValidateAsync_When_ChatIdIsInvalid_TextIsNull_ImageIsNull_ShouldContainValidationErrors(string chatId)
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "0"
+            ChatId = chatId
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
-            .Returns(Task.FromResult(false));
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -90,28 +94,29 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text and ImageId both cannot be empty",
-            "Sender Id is required",
-            "Account with Recipient Id = 0 does not exist"
+            "'Chat Id' must be greater than 0, when it is an integer",
+            "'Text' and 'ImageId' both cannot be empty"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsZero_SenderIsZero_ImageIsNull_ShouldContainValidationErrors()
+    [TestCase(SampleChatId)]
+    [TestCase(SampleChatIdString)]
+    public async Task ValidateAsync_When_ChatIdIsValid_TextIsNull_ImageIsNull_ShouldContainValidationErrors(string chatId)
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "0",
-            SenderId = "0"
+            ChatId = chatId
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("0", cancellationToken))
-            .Returns(Task.FromResult(false));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(chatId, cancellationToken))
+            .ReturnsAsync(true);
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -119,28 +124,26 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text and ImageId both cannot be empty",
-            "Recipient Id can't be equal to Sender Id",
-            "Account with Recipient Id = 0 does not exist"
+            "'Text' and 'ImageId' both cannot be empty"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(chatId, cancellationToken), Times.Once);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountDoesNotExist_ImageIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_ChatIdIsValidInteger_DoesNotExistInDb_TextIsNull_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
-            SenderId = "2"
+            ChatId = SampleChatId
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(false));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken))
+            .ReturnsAsync(false);
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -148,55 +151,28 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(2);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text and ImageId both cannot be empty",
-            "Account with Recipient Id = 1 does not exist"
+            $"Chat with 'Chat Id' = '{SampleChatId}' must exist",
+            "'Text' and 'ImageId' both cannot be empty"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_ChatIdIsValidInteger_TextIsEmpty_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
-            SenderId = "2"
-        };
-        var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(1);
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "Text and ImageId both cannot be empty"
-        });
-    }
-
-    [Test]
-    public async Task ValidateAsync_When_TextIsEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNull_ShouldContainValidationErrors()
-    {
-        // Arrange
-        var request = new CreateMessageCommand
-        {
-            RecipientId = "1",
-            SenderId = "2",
+            ChatId = SampleChatId,
             Text = string.Empty
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken))
+            .ReturnsAsync(true);
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -204,30 +180,30 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Text and ImageId both cannot be empty"
+            "'Text' and 'ImageId' both cannot be empty"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_ChatIdIsValidInteger_TextIsNull_ImageIsValid_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
-            SenderId = "2",
+            ChatId = SampleChatId,
             Image = new ImageRequestModel
             {
-                Id = "1"
+                Id = SampleImageId
             }
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken))
+            .ReturnsAsync(true);
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -235,31 +211,31 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Image signature is invalid"
+            "'Image' signature is invalid"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNotNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_ChatIdIsValidInteger_TextIsValid_ImageIsValid_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
-            SenderId = "2",
+            ChatId = SampleChatId,
             Image = new ImageRequestModel
             {
-                Id = "1"
+                Id = SampleImageId
             },
-            Text = "text"
+            Text = SampleText
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken))
+            .ReturnsAsync(true);
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -267,28 +243,25 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Image signature is invalid"
+            "'Image' signature is invalid"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsNull_SenderIsNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_ChatIdIsNull_TextIsNull_ImageIsValid_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
             Image = new ImageRequestModel
             {
-                Id = "1"
+                Id = SampleImageId
             }
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -296,31 +269,28 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Recipient Id is required",
-            "Sender Id is required",
-            "Image signature is invalid"
+            "'Chat Id' must not be empty.",
+            "'Chat Id' is required",
+            "'Image' signature is invalid"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNotNull_RecipientIsNull_SenderIsNull_AccountExists_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_ChatIdIsNull_TextIsValid_ImageIsValid_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
             Image = new ImageRequestModel
             {
-                Id = "1"
+                Id = SampleImageId
             },
-            Text = "text"
+            Text = SampleText
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -328,29 +298,29 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Should().HaveCount(3);
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
-            "Recipient Id is required",
-            "Sender Id is required",
-            "Image signature is invalid"
+            "'Chat Id' must not be empty.",
+            "'Chat Id' is required",
+            "'Image' signature is invalid"
         });
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNotEmpty_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNull_ShouldBeValid()
+    public async Task ValidateAsync_When_ChatIdIsValidInteger_TextIsNotEmpty_ImageIsNull_ShouldBeValid()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
-            SenderId = "2",
-            Text = "text"
+            ChatId = SampleChatId,
+            Text = SampleText
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken))
+            .ReturnsAsync(true);
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -359,25 +329,27 @@ public class CreateMessageCommandValidatorTests
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeTrue();
         validationResult.Errors.Should().BeEmpty();
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsValid_ShouldBeValid()
+    public async Task ValidateAsync_When_ChatIdIsValidInteger_TextIsNull_ImageIsValid_SignatureIsValid_ShouldBeValid()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
-            SenderId = "2",
+            ChatId = SampleChatId,
             Image = new ImageRequestModel
             {
-                Id = "1"
+                Id = SampleImageId
             }
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken))
+            .ReturnsAsync(true);
+
         _mockSignPackageService
             .Setup(x => x.Validate(request.Image))
             .Returns(true);
@@ -389,26 +361,28 @@ public class CreateMessageCommandValidatorTests
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeTrue();
         validationResult.Errors.Should().BeEmpty();
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 
     [Test]
-    public async Task ValidateAsync_When_TextIsNotNull_RecipientIsNotNull_SenderIsNotNull_AccountExists_ImageIsNotNull_SignatureIsValid_ShouldBeValid()
+    public async Task ValidateAsync_When_ChatIdIsValid_TextIsValid_ImageIsValid_SignatureIsValid_ShouldBeValid()
     {
         // Arrange
         var request = new CreateMessageCommand
         {
-            RecipientId = "1",
-            SenderId = "2",
+            ChatId = SampleChatId,
             Image = new ImageRequestModel
             {
-                Id = "1"
+                Id = SampleImageId
             },
-            Text = "text"
+            Text = SampleText
         };
         var cancellationToken = new CancellationToken();
-        _mockAccountAgnosticService
-            .Setup(m => m.IsAccountIdValidAsync("1", cancellationToken))
-            .Returns(Task.FromResult(true));
+
+        _mockChatAgnosticService
+            .Setup(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken))
+            .ReturnsAsync(true);
+
         _mockSignPackageService
             .Setup(x => x.Validate(request.Image))
             .Returns(true);
@@ -419,6 +393,7 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeTrue();
+        _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 }
 #pragma warning restore CA1861 // Avoid constant arrays as arguments

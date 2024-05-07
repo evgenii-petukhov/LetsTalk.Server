@@ -15,19 +15,19 @@ public class MessageMongoDBService(
 
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         CancellationToken cancellationToken)
     {
-        var message = await _messageRepository.CreateAsync(senderId, recipientId, text, textHtml, cancellationToken);
+        var message = await _messageRepository.CreateAsync(senderId, chatId, text, textHtml, cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(message);
     }
 
     public async Task<MessageServiceModel> CreateMessageAsync(
         string senderId,
-        string recipientId,
+        string chatId,
         string text,
         string textHtml,
         string imageId,
@@ -38,7 +38,7 @@ public class MessageMongoDBService(
     {
         var message = await _messageRepository.CreateAsync(
             senderId,
-            recipientId,
+            chatId,
             text,
             textHtml,
             imageId,
@@ -51,15 +51,13 @@ public class MessageMongoDBService(
     }
 
     public async Task<List<MessageServiceModel>> GetPagedAsync(
-        string senderId,
-        string recipientId,
+        string chatId,
         int pageIndex,
         int messagesPerPage,
         CancellationToken cancellationToken = default)
     {
         var messages = await _messageRepository.GetPagedAsync(
-            senderId,
-            recipientId,
+            chatId,
             pageIndex,
             messagesPerPage,
             cancellationToken);
@@ -86,20 +84,13 @@ public class MessageMongoDBService(
         return _mapper.Map<MessageServiceModel>(message);
     }
 
-    public async Task MarkAsReadAsync(
-        string messageId,
+    public Task MarkAsReadAsync(
+        string chatId,
         string accountId,
-        bool updatePreviousMessages,
+        string messageId,
         CancellationToken cancellationToken)
     {
-        if (updatePreviousMessages)
-        {
-            await MarkAllAsReadAsync(accountId, messageId, cancellationToken);
-        }
-        else
-        {
-            await _messageRepository.MarkAsReadAsync(messageId, cancellationToken);
-        }
+        return _messageRepository.MarkAsReadAsync(chatId, accountId, messageId, cancellationToken);
     }
 
     public async Task<MessageServiceModel> SaveImagePreviewAsync(
@@ -119,17 +110,5 @@ public class MessageMongoDBService(
             cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(message);
-    }
-
-    private async Task MarkAllAsReadAsync(string recipientId, string messageId, CancellationToken cancellationToken)
-    {
-        var message = await _messageRepository.GetByIdAsync(messageId, cancellationToken);
-
-        if (message == null || message.SenderId == recipientId || message.IsRead)
-        {
-            return;
-        }
-
-        await _messageRepository.MarkAllAsReadAsync(message.SenderId!, recipientId, message.DateCreatedUnix!.Value, cancellationToken);
     }
 }

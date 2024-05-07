@@ -16,6 +16,12 @@ public class LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : Db
 
     public DbSet<Image> Images { get; set; }
 
+    public DbSet<Chat> Chats { get; set; }
+
+    public DbSet<ChatMember> ChatMembers { get; set; }
+
+    public DbSet<ChatMessageStatus> ChatMessageStatuses { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LetsTalkDbContext).Assembly);

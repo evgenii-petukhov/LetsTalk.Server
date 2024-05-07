@@ -12,10 +12,10 @@ public class ProfileService(
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<AccountDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
+    public async Task<ProfileDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
         var accounts = await _accountAgnosticService.GetByIdAsync(accountId, cancellationToken);
 
-        return _mapper.Map<AccountDto>(accounts);
+        return _mapper.Map<ProfileDto>(accounts);
     }
 }

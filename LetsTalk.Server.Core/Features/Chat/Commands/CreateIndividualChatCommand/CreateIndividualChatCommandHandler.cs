@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Chat;
+using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChatCommand;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
@@ -11,11 +12,13 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
 public class CreateIndividualChatCommandHandler(
     IChatAgnosticService chatAgnosticService,
     IAccountAgnosticService accountAgnosticService,
-    IMapper mapper) : IRequestHandler<CreateIndividualChatCommand, CreateIndividualChatResponse>
+    IMapper mapper,
+    IChatCacheManager chatCacheManager) : IRequestHandler<CreateIndividualChatCommand, CreateIndividualChatResponse>
 {
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly IMapper _mapper = mapper;
+    private readonly IChatCacheManager _chatCacheManager = chatCacheManager;
 
     public async Task<CreateIndividualChatResponse> Handle(CreateIndividualChatCommand request, CancellationToken cancellationToken)
     {
@@ -28,6 +31,8 @@ public class CreateIndividualChatCommandHandler(
         }
 
         var chat = await _chatAgnosticService.CreateIndividualChatAsync([request.InvitingAccountId, request.AccountId], request.InvitingAccountId, cancellationToken);
+
+        await _chatCacheManager.RemoveAsync(request.InvitingAccountId);
 
         return new CreateIndividualChatResponse
         {

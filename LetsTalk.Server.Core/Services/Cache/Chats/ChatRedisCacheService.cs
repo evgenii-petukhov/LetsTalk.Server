@@ -10,7 +10,7 @@ namespace LetsTalk.Server.Core.Services.Cache.Chats;
 public class ChatRedisCacheService(
     IConnectionMultiplexer сonnectionMultiplexer,
     IOptions<CachingSettings> cachingSettings,
-    IChatService chatService) : ChatCacheServiceBase(chatService, cachingSettings), IChatService
+    IChatService chatService) : ChatCacheServiceBase(chatService, cachingSettings), IChatService, IChatCacheManager
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
@@ -42,5 +42,13 @@ public class ChatRedisCacheService(
         }
 
         return JsonSerializer.Deserialize<List<ChatDto>>(cachedAccounts!)!;
+    }
+
+    public async Task RemoveAsync(string accountId)
+    {
+        if (_isActive)
+        {
+            await _database.KeyDeleteAsync(GetChatsKey(accountId), CommandFlags.FireAndForget);
+        }
     }
 }

@@ -26,6 +26,7 @@ message UploadImageResponse {
 	int32 height = 3;
 	int32 image_format = 4;
 	string signature = 5;
+	int64 signature_date = 6;
 }
 
 message DownloadImageRequest {

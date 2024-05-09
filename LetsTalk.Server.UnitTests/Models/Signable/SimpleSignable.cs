@@ -15,4 +15,6 @@ public class SimpleSignable : ISignable
     public List<string>? E { get; set; }
 
     public string? Signature { get; set; }
+
+    public long SignatureDate { get; set; }
 }

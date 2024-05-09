@@ -6,6 +6,8 @@ namespace LetsTalk.Server.UnitTests.TestCases;
 
 public static class SignPackageServiceTestCases
 {
+    private const string SampleSignature = "58319BC4AEF8F536689876EF9D90FC0A";
+
     public static readonly object[] ObjectsToSign =
     [
         new TestData<ISignable, string>
@@ -15,7 +17,7 @@ public static class SignPackageServiceTestCases
                 A = 1,
                 B = "B"
             },
-            Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
+            Result = SampleSignature
         },
         new TestData<ISignable, string>
         {
@@ -25,7 +27,7 @@ public static class SignPackageServiceTestCases
                 B = "B",
                 D = true
             },
-            Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
+            Result = SampleSignature
         },
         new TestData<ISignable, string>
         {
@@ -35,7 +37,7 @@ public static class SignPackageServiceTestCases
                 B = "B",
                 D = true
             },
-            Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
+            Result = SampleSignature
         },
         new TestData<ISignable, string>
         {
@@ -45,7 +47,7 @@ public static class SignPackageServiceTestCases
                 B = "B",
                 E = []
             },
-            Result = "BBCD0166BC1AA9C0D18D875C740ECD35"
+            Result = SampleSignature
         }
     ];
 
@@ -57,7 +59,7 @@ public static class SignPackageServiceTestCases
             {
                 A = 1,
                 B = "B",
-                Signature = "BBCD0166BC1AA9C0D18D875C740ECD35"
+                Signature = SampleSignature
             },
             Result = true
         },
@@ -68,7 +70,7 @@ public static class SignPackageServiceTestCases
                 A = 1,
                 B = "B",
                 D = true,
-                Signature = "BBCD0166BC1AA9C0D18D875C740ECD35"
+                Signature = SampleSignature
             },
             Result = true
         },
@@ -79,7 +81,7 @@ public static class SignPackageServiceTestCases
                 A = 1,
                 B = "B",
                 D = true,
-                Signature = "BBCD0166BC1AA9C0D18D875C740ECD35"
+                Signature = SampleSignature
             },
             Result = true
         },
@@ -90,7 +92,7 @@ public static class SignPackageServiceTestCases
                 A = 1,
                 B = "B",
                 E = [],
-                Signature = "BBCD0166BC1AA9C0D18D875C740ECD35"
+                Signature = SampleSignature
             },
             Result = true
         },

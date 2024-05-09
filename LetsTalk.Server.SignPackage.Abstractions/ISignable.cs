@@ -3,4 +3,6 @@
 public interface ISignable
 {
     public string? Signature { get; set; }
+
+    public long SignatureDate { get; set; }
 }

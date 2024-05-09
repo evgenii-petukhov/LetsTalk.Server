@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.SignPackage.Abstractions;
+using LetsTalk.Server.Utility.Common;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +11,11 @@ public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPa
 {
     private const char Separator = ';';
     private readonly string _salt = options.Value?.Salt ?? string.Empty;
-    private readonly string[] _supportedTypes = ["System.Int32", "System.String"];
+    private readonly string[] _supportedTypes = [
+        "System.Int32",
+        "System.Int64",
+        "System.String"
+    ];
 
     public void Sign(object obj)
     {
@@ -24,11 +29,18 @@ public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPa
 
     public bool Validate(ISignable signable)
     {
-        return string.Equals(GetSignature(signable), signable.Signature, StringComparison.OrdinalIgnoreCase);
+        var dateDelta = DateHelper.GetUnixTimestamp() - signable.SignatureDate;
+
+        return string.Equals(GetSignature(signable), signable.Signature, StringComparison.OrdinalIgnoreCase)
+            && signable.SignatureDate > 0L
+            && dateDelta >= 0L
+            && dateDelta < 60L;
     }
 
     private string GetSignature(ISignable signable)
     {
+        signable.SignatureDate = signable.SignatureDate == default ? DateHelper.GetUnixTimestamp() : signable.SignatureDate;
+
         var stringPairs = signable
             .GetType()
             .GetProperties()
@@ -55,7 +67,7 @@ public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPa
         var s = new StringBuilder()
             .AppendJoin(Separator, stringPairs)
             .Append(stringPairs.Count != 0 ? Separator : string.Empty)
-            .Append("salt=")
+            .Append("_salt=")
             .Append(_salt)
             .ToString();
 

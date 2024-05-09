@@ -5,4 +5,6 @@ namespace LetsTalk.Server.UnitTests.Models.Signable;
 public class NoPropertiesSignable : ISignable
 {
     public string? Signature { get; set; }
+
+    public long SignatureDate { get; set; }
 }

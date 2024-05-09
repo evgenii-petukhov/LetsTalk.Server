@@ -13,4 +13,6 @@ public class ImageRequestModel: ISignable
     public int ImageFormat { get; set; }
 
     public string? Signature { get; set; }
+
+    public long SignatureDate { get; set; }
 }

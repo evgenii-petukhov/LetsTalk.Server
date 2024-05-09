@@ -2,7 +2,7 @@
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
-using LetsTalk.Server.Persistence.Utility;
+using LetsTalk.Server.Utility.Common;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;

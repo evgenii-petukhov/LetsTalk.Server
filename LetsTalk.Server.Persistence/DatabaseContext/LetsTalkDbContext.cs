@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.Utility;
+using LetsTalk.Server.Utility.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.DatabaseContext;

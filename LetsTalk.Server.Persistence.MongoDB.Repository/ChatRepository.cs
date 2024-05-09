@@ -153,13 +153,21 @@ public class ChatRepository : IChatRepository
 
     public async Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
     {
-        var chat = new Chat
-        {
-            IsIndividual = true,
-            AccountIds = accountIds
-        };
+        var chat = _chatCollection
+            .AsQueryable()
+            .Where(c => c.IsIndividual && c.AccountIds!.All(accountId => accountIds.Contains(accountId)))
+            .FirstOrDefault();
 
-        await _chatCollection.InsertOneAsync(chat, cancellationToken: cancellationToken);
+        if (chat == null)
+        {
+            chat = new Chat
+            {
+                IsIndividual = true,
+                AccountIds = accountIds
+            };
+
+            await _chatCollection.InsertOneAsync(chat, cancellationToken: cancellationToken);
+        }
 
         return chat;
     }

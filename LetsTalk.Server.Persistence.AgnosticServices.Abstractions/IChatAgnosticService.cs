@@ -10,5 +10,5 @@ public interface IChatAgnosticService
 
     Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default);
 
-    Task<ChatServiceModel> CreateIndividualChatAsync(string invitingAccountId, string accountId, CancellationToken cancellationToken = default);
+    Task<ChatServiceModel> CreateIndividualChatAsync(string[] accountIds, string accountId, CancellationToken cancellationToken = default);
 }

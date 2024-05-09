@@ -27,9 +27,9 @@ public class ChatMongoDBService(
         return _chatRepository.IsChatIdValidAsync(id, cancellationToken);
     }
 
-    public async Task<ChatServiceModel> CreateIndividualChatAsync(string invitingAccountId, string accountId, CancellationToken cancellationToken = default)
+    public async Task<ChatServiceModel> CreateIndividualChatAsync(string[] accountIds, string accountId, CancellationToken cancellationToken = default)
     {
-        var chat = await _chatRepository.CreateIndividualChatAsync([invitingAccountId, accountId], cancellationToken);
+        var chat = await _chatRepository.CreateIndividualChatAsync(accountIds, cancellationToken);
 
         return _mapper.Map<ChatServiceModel>(chat);
     }

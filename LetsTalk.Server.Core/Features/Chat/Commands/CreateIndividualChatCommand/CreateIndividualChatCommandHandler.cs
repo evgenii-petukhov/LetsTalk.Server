@@ -27,7 +27,7 @@ public class CreateIndividualChatCommandHandler(
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var chat = await _chatAgnosticService.CreateIndividualChatAsync(request.InvitingAccountId, request.AccountId, cancellationToken);
+        var chat = await _chatAgnosticService.CreateIndividualChatAsync([request.InvitingAccountId, request.AccountId], request.InvitingAccountId, cancellationToken);
 
         return new CreateIndividualChatResponse
         {

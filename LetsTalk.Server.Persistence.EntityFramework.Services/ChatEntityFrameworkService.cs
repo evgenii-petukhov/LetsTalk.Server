@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LetsTalk.Server.Domain;
+﻿using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
@@ -9,13 +8,11 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 public class ChatEntityFrameworkService(
     IChatRepository chatRepository,
     IChatMemberRepository chatMemberRepository,
-    IUnitOfWork unitOfWork,
-    IMapper mapper) : IChatAgnosticService
+    IUnitOfWork unitOfWork) : IChatAgnosticService
 {
     private readonly IChatRepository _chatRepository = chatRepository;
     private readonly IChatMemberRepository _chatMemberRepository = chatMemberRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IMapper _mapper = mapper;
 
     public Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
     {
@@ -34,16 +31,25 @@ public class ChatEntityFrameworkService(
         return _chatRepository.IsChatIdValidAsync(int.Parse(id), cancellationToken);
     }
 
-    public async Task<ChatServiceModel> CreateIndividualChatAsync(string invitingAccountId, string accountId, CancellationToken cancellationToken = default)
+    public async Task<ChatServiceModel> CreateIndividualChatAsync(
+        string[] accountIds,
+        string accountId,
+        CancellationToken cancellationToken = default)
     {
-        var chat = new Chat([int.Parse(invitingAccountId), int.Parse(accountId)]);
+        var accountIdsAsInt = accountIds
+            .Select(int.Parse)
+            .ToArray();
 
-        await _chatRepository.CreateAsync(chat, cancellationToken);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        var chat = await _chatRepository.GetIndividualChatByAccountIdsAsync(accountIdsAsInt, cancellationToken);
 
-        var chatServiceModel = _mapper.Map<ChatServiceModel>(chat);
-        chatServiceModel.AccountIds = [accountId];
+        if (chat == null)
+        {
+            chat = new Chat(accountIdsAsInt);
 
-        return chatServiceModel;
+            await _chatRepository.CreateAsync(chat, cancellationToken);
+            await _unitOfWork.SaveAsync(cancellationToken);
+        }
+
+        return await _chatRepository.GetChatServiceModelAsync(chat.Id, int.Parse(accountId), cancellationToken);
     }
 }

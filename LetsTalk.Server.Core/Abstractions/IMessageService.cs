@@ -1,8 +1,9 @@
 ﻿using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
 namespace LetsTalk.Server.Core.Abstractions;
 
 public interface IMessageService
 {
-    Task<IReadOnlyList<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken);
+    Task<IReadOnlyList<MessageServiceModel>> GetPagedAsync(string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken);
 }

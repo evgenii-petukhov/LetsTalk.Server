@@ -2,5 +2,5 @@
 
 public interface IMessageCacheManager
 {
-    Task RemoveAsync(string senderId, string recipientId);
+    Task RemoveAsync(string chatId);
 }

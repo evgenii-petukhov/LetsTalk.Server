@@ -23,8 +23,8 @@ public class GetAccountsQueryHandler(
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var accountCacheEntries = await _accountService.GetAccountsAsync(request.Id, cancellationToken);
+        var accountCacheEntries = await _accountService.GetAccountsAsync(cancellationToken);
 
-        return _mapper.Map<List<AccountDto>>(accountCacheEntries);
+        return _mapper.Map<List<AccountDto>>(accountCacheEntries.Select(account => account.Id != request.Id));
     }
 }

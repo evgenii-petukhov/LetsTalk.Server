@@ -151,10 +151,10 @@ public class AccountRepository : IAccountRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<List<Account>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
+    public Task<List<Account>> GetAccountsAsync(CancellationToken cancellationToken = default)
     {
         return _accountCollection
-            .Find(Builders<Account>.Filter.Ne(x => x.Id, id))
+            .Find(Builders<Account>.Filter.Empty)
             .ToListAsync(cancellationToken);
     }
 

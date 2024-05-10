@@ -6,6 +6,8 @@ namespace LetsTalk.Server.Core.Services.Cache.Chats;
 
 public abstract class AccountCacheServiceBase
 {
+    protected const string AccountCacheKey = "accounts";
+
     protected readonly bool _isActive;
 
     protected readonly bool _isVolotile;
@@ -27,10 +29,5 @@ public abstract class AccountCacheServiceBase
         {
             _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.AccountCacheLifeTimeInSeconds);
         }
-    }
-
-    protected static string GetAccountsKey(string accountId)
-    {
-        return $"account:{accountId}:accounts";
     }
 }

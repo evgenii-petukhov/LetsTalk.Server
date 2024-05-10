@@ -14,20 +14,20 @@ public class AccountRedisCacheService(
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<IReadOnlyList<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<AccountDto>> GetAccountsAsync(CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
-            return await _accountService.GetAccountsAsync(id, cancellationToken);
+            return await _accountService.GetAccountsAsync(cancellationToken);
         }
 
-        var key = new RedisKey(GetAccountsKey(id));
+        var key = new RedisKey(AccountCacheKey);
 
         var cachedAccounts = await _database.StringGetAsync(key);
 
         if (cachedAccounts == RedisValue.Null)
         {
-            var accountDtos = await _accountService.GetAccountsAsync(id, cancellationToken);
+            var accountDtos = await _accountService.GetAccountsAsync(cancellationToken);
             await _database.StringSetAsync(
                 key,
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),

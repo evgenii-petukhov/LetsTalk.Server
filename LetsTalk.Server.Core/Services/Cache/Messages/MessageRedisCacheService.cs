@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
@@ -14,17 +14,11 @@ public class MessageRedisCacheService(
 {
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<IReadOnlyList<MessageDto>> GetPagedAsync(
-        string senderId,
-        string chatId,
-        int pageIndex,
-        int messagesPerPage,
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<MessageServiceModel>> GetPagedAsync(string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
             return await _messageService.GetPagedAsync(
-                senderId,
                 chatId,
                 pageIndex,
                 messagesPerPage,
@@ -32,15 +26,14 @@ public class MessageRedisCacheService(
         }
 
         var key = new RedisKey(pageIndex == 0
-            ? GetFirstMessagePageKey(senderId, chatId)
-            : GetMessagePageKey(senderId, chatId));
+            ? GetFirstMessagePageKey(chatId)
+            : GetMessagePageKey(chatId));
 
         var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString()));
 
         if (cachedMessages == RedisValue.Null)
         {
             var messageDtos = await _messageService.GetPagedAsync(
-                senderId,
                 chatId,
                 pageIndex,
                 messagesPerPage,
@@ -60,15 +53,15 @@ public class MessageRedisCacheService(
             return messageDtos;
         }
 
-        return JsonSerializer.Deserialize<List<MessageDto>>(cachedMessages!)!;
+        return JsonSerializer.Deserialize<List<MessageServiceModel>>(cachedMessages!)!;
     }
 
-    public Task RemoveAsync(string senderId, string chatId)
+    public Task RemoveAsync(string chatId)
     {
         return _isActive
             ? Task.WhenAll(
-                _database.KeyDeleteAsync(GetMessagePageKey(senderId, chatId), CommandFlags.FireAndForget),
-                _database.KeyDeleteAsync(GetFirstMessagePageKey(senderId, chatId), CommandFlags.FireAndForget))
+                _database.KeyDeleteAsync(GetMessagePageKey(chatId), CommandFlags.FireAndForget),
+                _database.KeyDeleteAsync(GetFirstMessagePageKey(chatId), CommandFlags.FireAndForget))
             : Task.CompletedTask;
     }
 }

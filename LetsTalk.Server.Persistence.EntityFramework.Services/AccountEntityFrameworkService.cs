@@ -103,9 +103,9 @@ public class AccountEntityFrameworkService(
         }
     }
 
-    public async Task<List<AccountServiceModel>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<List<AccountServiceModel>> GetAccountsAsync(CancellationToken cancellationToken = default)
     {
-        var accounts = await _accountRepository.GetAccountsAsync(int.Parse(id), cancellationToken);
+        var accounts = await _accountRepository.GetAccountsAsync(cancellationToken);
 
         return _mapper.Map<List<AccountServiceModel>>(accounts);
     }

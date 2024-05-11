@@ -66,7 +66,7 @@ public class AccountRepository : IAccountRepository
         bool updateAvatar,
         CancellationToken cancellationToken)
     {
-        var filterdefinition = Builders<Account>.Filter
+        var filter = Builders<Account>.Filter
             .Where(x => x.ExternalId == externalId && x.AccountTypeId == (int)accountType);
 
         var updateDefinition = Builders<Account>.Update
@@ -79,7 +79,7 @@ public class AccountRepository : IAccountRepository
             : updateDefinition.Set(x => x.PhotoUrl, photoUrl);
 
         return _accountCollection
-            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
+            .FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
             {
                 ReturnDocument = ReturnDocument.After
             }, cancellationToken: cancellationToken);
@@ -92,7 +92,7 @@ public class AccountRepository : IAccountRepository
         string email,
         CancellationToken cancellationToken = default)
     {
-        var filterdefinition = Builders<Account>.Filter
+        var filter = Builders<Account>.Filter
             .Eq(x => x.Id, id);
 
         var updateDefinition = Builders<Account>.Update
@@ -101,7 +101,7 @@ public class AccountRepository : IAccountRepository
             .Set(x => x.Email, email);
 
         return _accountCollection
-            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
+            .FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
             {
                 ReturnDocument = ReturnDocument.After
             }, cancellationToken: cancellationToken);
@@ -118,7 +118,7 @@ public class AccountRepository : IAccountRepository
         ImageFormats imageFormat,
         CancellationToken cancellationToken = default)
     {
-        var filterdefinition = Builders<Account>.Filter
+        var filter = Builders<Account>.Filter
             .Eq(x => x.Id, id);
 
         var updateDefinition = Builders<Account>.Update
@@ -138,7 +138,7 @@ public class AccountRepository : IAccountRepository
         }
 
         return _accountCollection
-            .FindOneAndUpdateAsync(filterdefinition, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
+            .FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
             {
                 ReturnDocument = ReturnDocument.After
             }, cancellationToken: cancellationToken);
@@ -151,10 +151,10 @@ public class AccountRepository : IAccountRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<List<Account>> GetAccountsAsync(string id, CancellationToken cancellationToken = default)
+    public Task<List<Account>> GetAccountsAsync(CancellationToken cancellationToken = default)
     {
         return _accountCollection
-            .Find(Builders<Account>.Filter.Ne(x => x.Id, id))
+            .Find(Builders<Account>.Filter.Empty)
             .ToListAsync(cancellationToken);
     }
 

@@ -116,7 +116,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     ImageId = request.Image.Id
                 }));
 
-        await _messageCacheManager.RemoveAsync(request.SenderId!, request.ChatId!);
+        await _messageCacheManager.RemoveAsync(request.ChatId!);
 
         return new CreateMessageResponse
         {

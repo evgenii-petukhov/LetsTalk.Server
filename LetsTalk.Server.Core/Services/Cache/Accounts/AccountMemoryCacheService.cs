@@ -13,18 +13,18 @@ public class AccountMemoryCacheService(
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<IReadOnlyList<AccountDto>> GetAccountsAsync(string id, CancellationToken cancellationToken)
+    public Task<IReadOnlyList<AccountDto>> GetAccountsAsync(CancellationToken cancellationToken)
     {
         return _isActive
-            ? _memoryCache.GetOrCreateAsync(GetAccountsKey(id), cacheEntry =>
+            ? _memoryCache.GetOrCreateAsync(AccountCacheKey, cacheEntry =>
             {
                 if (_isVolotile)
                 {
                     cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
                 }
 
-                return _accountService.GetAccountsAsync(id, cancellationToken);
+                return _accountService.GetAccountsAsync(cancellationToken);
             })!
-            : _accountService.GetAccountsAsync(id, cancellationToken);
+            : _accountService.GetAccountsAsync(cancellationToken);
     }
 }

@@ -14,13 +14,19 @@ public class GetMessagesQueryHandler(
 
     public async Task<List<MessageDto>> Handle(GetMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messageDtos = await _messageService.GetPagedAsync(
-            request.SenderId,
+        var messages = await _messageService.GetPagedAsync(
             request.ChatId,
             request.PageIndex,
             request.MessagesPerPage,
             cancellationToken);
 
-        return _mapper.Map<List<MessageDto>>(messageDtos);
+        return messages
+            .Select(message =>
+            {
+                var messageDto = _mapper.Map<MessageDto>(message);
+                messageDto.IsMine = message.SenderId == request.SenderId;
+                return messageDto;
+            })
+            .ToList();
     }
 }

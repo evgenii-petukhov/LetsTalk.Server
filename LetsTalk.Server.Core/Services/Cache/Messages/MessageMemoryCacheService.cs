@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
@@ -14,27 +14,25 @@ public class MessageMemoryCacheService(
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
-    public Task<IReadOnlyList<MessageDto>> GetPagedAsync(string senderId, string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
+    public Task<IReadOnlyList<MessageServiceModel>> GetPagedAsync(string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
         if (!_isActive)
         {
             return _messageService.GetPagedAsync(
-                senderId,
                 chatId,
                 pageIndex,
                 messagesPerPage,
                 cancellationToken);
         }
 
-        return _memoryCache.GetOrCreateAsync(GetMessagePageKey(senderId, chatId), cacheEntry =>
+        return _memoryCache.GetOrCreateAsync(GetMessagePageKey(chatId), cacheEntry =>
         {
             if (_isVolotile && pageIndex > 0)
             {
                 cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
             }
-            var dict = new ConcurrentDictionary<int, Task<IReadOnlyList<MessageDto>>>();
+            var dict = new ConcurrentDictionary<int, Task<IReadOnlyList<MessageServiceModel>>>();
             return dict.GetOrAdd(pageIndex, _ => _messageService.GetPagedAsync(
-                senderId,
                 chatId,
                 pageIndex,
                 messagesPerPage,
@@ -42,12 +40,12 @@ public class MessageMemoryCacheService(
         })!;
     }
 
-    public Task RemoveAsync(string senderId, string chatId)
+    public Task RemoveAsync(string chatId)
     {
         if (_isActive)
         {
-            _memoryCache.Remove(GetMessagePageKey(senderId, chatId));
-            _memoryCache.Remove(GetFirstMessagePageKey(senderId, chatId));
+            _memoryCache.Remove(GetMessagePageKey(chatId));
+            _memoryCache.Remove(GetFirstMessagePageKey(chatId));
         }
 
         return Task.CompletedTask;

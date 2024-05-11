@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LetsTalk.Server.Core.Abstractions;
+﻿using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using MediatR;
@@ -7,10 +6,8 @@ using MediatR;
 namespace LetsTalk.Server.Core.Features.Account.Queries.GetAccounts;
 
 public class GetAccountsQueryHandler(
-    IMapper mapper,
     IAccountService accountService) : IRequestHandler<GetAccountsQuery, List<AccountDto>>
 {
-    private readonly IMapper _mapper = mapper;
     private readonly IAccountService _accountService = accountService;
 
     public async Task<List<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
@@ -23,8 +20,10 @@ public class GetAccountsQueryHandler(
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var accountCacheEntries = await _accountService.GetAccountsAsync(request.Id, cancellationToken);
+        var accountCacheEntries = await _accountService.GetAccountsAsync(cancellationToken);
 
-        return _mapper.Map<List<AccountDto>>(accountCacheEntries);
+        return accountCacheEntries
+            .Where(account => account.Id != request.Id)
+            .ToList();
     }
 }

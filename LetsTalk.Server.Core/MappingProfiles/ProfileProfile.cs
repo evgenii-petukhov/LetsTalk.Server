@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Profile;
-using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfileCommand;
+using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;

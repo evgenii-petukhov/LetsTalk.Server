@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Message;
-using LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+using LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;

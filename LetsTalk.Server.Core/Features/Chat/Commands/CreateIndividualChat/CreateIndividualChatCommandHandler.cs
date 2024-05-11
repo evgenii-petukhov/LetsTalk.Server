@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Chat;
 using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChatCommand;
+using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChat;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
 
 public class CreateIndividualChatCommandHandler(
     IChatAgnosticService chatAgnosticService,

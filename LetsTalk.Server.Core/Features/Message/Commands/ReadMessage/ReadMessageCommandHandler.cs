@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Message.Commands.ReadMessageCommand;
+namespace LetsTalk.Server.Core.Features.Message.Commands.ReadMessage;
 
 public class ReadMessageCommandHandler(IMessageAgnosticService messageAgnosticService) : IRequestHandler<ReadMessageCommand, Unit>
 {

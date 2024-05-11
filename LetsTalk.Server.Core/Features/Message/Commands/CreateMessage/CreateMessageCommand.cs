@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.API.Models.Message;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
 
 public class CreateMessageCommand : IRequest<CreateMessageResponse>
 {

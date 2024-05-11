@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChatCommand;
+using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChat;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using Moq;
 

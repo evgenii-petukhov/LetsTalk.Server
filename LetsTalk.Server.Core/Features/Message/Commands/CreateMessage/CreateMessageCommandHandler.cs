@@ -14,7 +14,7 @@ using LetsTalk.Server.SignPackage.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessageCommand;
+namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
 
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {

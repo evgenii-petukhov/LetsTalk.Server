@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Login;
+using LetsTalk.Server.API.Models.LoginByEmail;
 using LetsTalk.Server.Core.Features.Authentication.Commands.Login;
+using LetsTalk.Server.Core.Features.Authentication.Commands.LoginByEmail;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +22,14 @@ public class AuthenticationController(
     public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest model, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(_mapper.Map<LoginCommand>(model), cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPost("login-by-email")]
+    public async Task<ActionResult<LoginResponseDto>> LoginByEmailAsync(LoginByEmailRequest model, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(_mapper.Map<LoginByEmailCommand>(model), cancellationToken);
 
         return Ok(result);
     }

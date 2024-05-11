@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Dto.Models;
 
-namespace LetsTalk.Server.Core.Features.Authentication.Commands;
+namespace LetsTalk.Server.Core.Features.Authentication.Commands.Login;
 
 public class LoginCommand : MediatR.IRequest<LoginResponseDto>
 {

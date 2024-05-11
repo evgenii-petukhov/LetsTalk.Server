@@ -4,7 +4,7 @@ using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Authentication.Commands;
+namespace LetsTalk.Server.Core.Features.Authentication.Commands.Login;
 
 public class LoginCommandHandler(
     IOpenAuthProviderResolver<string> openAuthProviderResolver,

@@ -31,6 +31,6 @@ public abstract class ProfileCacheServiceBase
 
     protected static string GetProfileKey(string accountId)
     {
-        return $"account:{accountId}:profile";
+        return $"profile:{accountId}";
     }
 }

@@ -31,11 +31,11 @@ public abstract class MessageCacheServiceBase
 
     protected static string GetMessagePageKey(string chatId)
     {
-        return $"messages:chatId:{chatId}";
+        return $"messages:{chatId}";
     }
 
     protected static string GetFirstMessagePageKey(string chatId)
     {
-        return $"messages[1st]:chatId:{chatId}";
+        return $"messages[1st]:{chatId}";
     }
 }

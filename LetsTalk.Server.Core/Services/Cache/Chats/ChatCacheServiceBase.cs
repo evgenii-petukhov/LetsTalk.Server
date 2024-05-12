@@ -31,6 +31,6 @@ public abstract class ChatCacheServiceBase
 
     protected static string GetChatsKey(string accountId)
     {
-        return $"account:{accountId}:chats";
+        return $"chats:{accountId}";
     }
 }

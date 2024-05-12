@@ -66,13 +66,13 @@ public class AccountMongoDBService(
         string photoUrl,
         CancellationToken cancellationToken = default)
     {
-        var acccount = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
+        var account = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
 
-        if (acccount == null)
+        if (account == null)
         {
             try
             {
-                acccount = await _accountRepository.CreateAccountAsync(
+                account = await _accountRepository.CreateAccountAsync(
                     externalId,
                     accountType,
                     firstName,
@@ -81,7 +81,7 @@ public class AccountMongoDBService(
                     photoUrl,
                     cancellationToken);
 
-                return acccount.Id!;
+                return account.Id!;
             }
             catch
             {
@@ -89,15 +89,42 @@ public class AccountMongoDBService(
             }
         }
 
-        var account = await _accountRepository.SetupProfileAsync(
+        await _accountRepository.SetupProfileAsync(
             externalId,
             accountType,
             firstName,
             lastName,
             email,
             photoUrl,
-            acccount.Image == null,
+            account.Image == null,
             cancellationToken);
+
+        return account.Id!;
+    }
+
+    public async Task<string> GetOrCreateAsync(
+        AccountTypes accountType,
+        string email,
+        CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.GetByEmailAsync(email, cancellationToken);
+
+        if (account == null)
+        {
+            try
+            {
+                account = await _accountRepository.CreateAccountAsync(
+                    accountType,
+                    email,
+                    cancellationToken);
+
+                return account.Id!;
+            }
+            catch
+            {
+                return (await _accountRepository.GetByEmailAsync(email, cancellationToken)).Id!;
+            }
+        }
 
         return account.Id!;
     }

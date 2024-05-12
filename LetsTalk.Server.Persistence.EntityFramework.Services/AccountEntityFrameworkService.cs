@@ -114,4 +114,9 @@ public class AccountEntityFrameworkService(
     {
         return _accountRepository.IsAccountIdValidAsync(int.Parse(id), cancellationToken);
     }
+
+    public Task<string> GetOrCreateAsync(AccountTypes accountType, string email, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }

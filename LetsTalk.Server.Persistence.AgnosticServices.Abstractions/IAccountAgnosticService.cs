@@ -18,6 +18,11 @@ public interface IAccountAgnosticService
         string photoUrl,
         CancellationToken cancellationToken = default);
 
+    Task<string> GetOrCreateAsync(
+        AccountTypes accountType,
+        string email,
+        CancellationToken cancellationToken = default);
+
     Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,

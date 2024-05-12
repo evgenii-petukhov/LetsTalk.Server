@@ -32,6 +32,8 @@ public static class CoreServicesRegistration
         services.AddScoped<IHtmlGenerator, HtmlGenerator>();
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
+        services.AddScoped<ILoginCodeGenerator, LoginCodeGenerator>();
+        services.AddScoped<IEmailLoginService, EmailLoginService>();
 
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
 
@@ -90,6 +92,7 @@ public static class CoreServicesRegistration
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
                 services.AddScoped<IProfileCacheManager, ProfileRedisCacheService>();
+                services.AddScoped<ILoginCodeCacheService, LoginCodeRedisCacheService>();
                 break;
             default:
                 services.AddMemoryCache();
@@ -108,6 +111,7 @@ public static class CoreServicesRegistration
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();
                 services.AddScoped<IProfileCacheManager, ProfileMemoryCacheService>();
+                services.AddScoped<ILoginCodeCacheService, LoginCodeMemoryCacheService>();
                 break;
         }
 

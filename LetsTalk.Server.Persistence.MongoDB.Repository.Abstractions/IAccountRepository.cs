@@ -10,6 +10,10 @@ public interface IAccountRepository
         AccountTypes accountType,
         CancellationToken cancellationToken = default);
 
+    Task<Account> GetByEmailAsync(
+        string email,
+        CancellationToken cancellationToken = default);
+
     Task<Account> CreateAccountAsync(
         string externalId,
         AccountTypes accountType,
@@ -19,7 +23,12 @@ public interface IAccountRepository
         string photoUrl,
         CancellationToken cancellationToken);
 
-    Task<Account> SetupProfileAsync(
+    Task<Account> CreateAccountAsync(
+        AccountTypes accountType,
+        string email,
+        CancellationToken cancellationToken);
+
+    Task SetupProfileAsync(
         string externalId,
         AccountTypes accountType,
         string firstName,

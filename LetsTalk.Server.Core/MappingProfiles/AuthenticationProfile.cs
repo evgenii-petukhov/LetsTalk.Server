@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Login;
-using LetsTalk.Server.API.Models.LoginByEmail;
 using LetsTalk.Server.Core.Features.Authentication.Commands.Login;
-using LetsTalk.Server.Core.Features.Authentication.Commands.LoginByEmail;
+using LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 
@@ -11,7 +10,8 @@ public class AuthenticationProfile : Profile
     public AuthenticationProfile()
     {
         CreateMap<LoginRequest, LoginCommand>();
-        CreateMap<LoginByEmailRequest, LoginByEmailCommand>();
+        CreateMap<EmailLoginRequest, EmailLoginCommand>();
+        CreateMap<EmailLoginCommand, EmailLoginServiceModel>();
         CreateMap<LoginCommand, LoginServiceInput>();
     }
 }

@@ -31,11 +31,14 @@ public class ChatMongoDBService(
     {
         var chat = await _chatRepository.GetIndividualChatByAccountIdsAsync(accountIds, cancellationToken);
 
-        if (chat == null)
-        {
-            await _chatRepository.CreateIndividualChatAsync(accountIds, cancellationToken);
-        }
+        chat ??= await _chatRepository.CreateIndividualChatAsync(accountIds, cancellationToken);
 
-        return _mapper.Map<ChatServiceModel>(chat);
+        var chatServiceModel = _mapper.Map<ChatServiceModel>(chat);
+
+        chatServiceModel.AccountIds = chatServiceModel.AccountIds?
+            .Where(x => x != accountId)
+            .ToArray();
+
+        return chatServiceModel;
     }
 }

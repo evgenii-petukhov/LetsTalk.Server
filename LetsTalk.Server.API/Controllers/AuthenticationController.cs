@@ -34,10 +34,10 @@ public class AuthenticationController(
     }
 
     [HttpPost("generate-login-code")]
-    public async Task<ActionResult> GenerateLoginCodeAsync(string email, CancellationToken cancellationToken)
+    public async Task<ActionResult<GenerateLoginCodeResponseDto>> GenerateLoginCodeAsync(string email, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new GenerateLoginCodeCommand(email), cancellationToken);
+        var result = await _mediator.Send(new GenerateLoginCodeCommand(email), cancellationToken);
 
-        return Ok();
+        return Ok(result);
     }
 }

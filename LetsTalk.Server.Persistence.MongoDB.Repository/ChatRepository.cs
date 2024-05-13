@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
-using LetsTalk.Server.Configuration.Models;
+﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
@@ -152,23 +151,23 @@ public class ChatRepository : IChatRepository
             .AnyAsync(cancellationToken);
     }
 
-    public async Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    public Task<Chat> GetIndividualChatByAccountIdsAsync(string[] accountIds, CancellationToken cancellationToken = default)
     {
-        var chat = await _chatCollection
+        return _chatCollection
             .Aggregate()
             .Match(c => c.IsIndividual && c.AccountIds!.All(accountId => accountIds.Contains(accountId)))
             .FirstOrDefaultAsync(cancellationToken);
+    }
 
-        if (chat == null)
+    public async Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    {
+        var chat = new Chat
         {
-            chat = new Chat
-            {
-                IsIndividual = true,
-                AccountIds = accountIds
-            };
+            IsIndividual = true,
+            AccountIds = accountIds
+        };
 
-            await _chatCollection.InsertOneAsync(chat, cancellationToken: cancellationToken);
-        }
+        await _chatCollection.InsertOneAsync(chat, cancellationToken: cancellationToken);
 
         return chat;
     }

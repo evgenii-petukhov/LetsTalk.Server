@@ -29,7 +29,12 @@ public class ChatMongoDBService(
 
     public async Task<ChatServiceModel> CreateIndividualChatAsync(string[] accountIds, string accountId, CancellationToken cancellationToken = default)
     {
-        var chat = await _chatRepository.CreateIndividualChatAsync(accountIds, cancellationToken);
+        var chat = await _chatRepository.GetIndividualChatByAccountIdsAsync(accountIds, cancellationToken);
+
+        if (chat == null)
+        {
+            await _chatRepository.CreateIndividualChatAsync(accountIds, cancellationToken);
+        }
 
         return _mapper.Map<ChatServiceModel>(chat);
     }

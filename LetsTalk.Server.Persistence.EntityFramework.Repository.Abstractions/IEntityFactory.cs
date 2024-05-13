@@ -9,6 +9,8 @@ public interface IEntityFactory
 
     Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl);
 
+    Account CreateAccount(int accountTypeId, string email);
+
     LinkPreview CreateLinkPreview(string url, string title, string imageUrl);
 
     ChatMessageStatus CreateChatMessageStatus(int chatId, int accountId, int messageId, bool attachToContext = false);

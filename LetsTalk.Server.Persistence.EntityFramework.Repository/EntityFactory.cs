@@ -19,6 +19,11 @@ public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
         return new Account(externalId, accountTypeId, firstName, lastName, email, photoUrl);
     }
 
+    public Account CreateAccount(int accountTypeId, string email)
+    {
+        return new Account(accountTypeId, email);
+    }
+
     public LinkPreview CreateLinkPreview(string url, string title, string imageUrl)
     {
         return new LinkPreview(url, title, imageUrl);

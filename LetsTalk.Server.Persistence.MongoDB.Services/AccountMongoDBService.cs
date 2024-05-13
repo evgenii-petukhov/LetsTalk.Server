@@ -107,26 +107,26 @@ public class AccountMongoDBService(
         string email,
         CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.GetByEmailAsync(email, cancellationToken);
+        var account = await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken);
 
-        if (account == null)
+        if (account != null)
         {
-            try
-            {
-                account = await _accountRepository.CreateAccountAsync(
-                    accountType,
-                    email,
-                    cancellationToken);
-
-                return account.Id!;
-            }
-            catch
-            {
-                return (await _accountRepository.GetByEmailAsync(email, cancellationToken)).Id!;
-            }
+            return account.Id!;
         }
 
-        return account.Id!;
+        try
+        {
+            account = await _accountRepository.CreateAccountAsync(
+                accountType,
+                email,
+                cancellationToken);
+
+            return account.Id!;
+        }
+        catch
+        {
+            return (await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken)).Id!;
+        }
     }
 
     public async Task<List<AccountServiceModel>> GetAccountsAsync(CancellationToken cancellationToken = default)

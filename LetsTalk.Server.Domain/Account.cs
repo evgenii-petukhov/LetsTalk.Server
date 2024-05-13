@@ -36,6 +36,12 @@ public class Account : BaseEntity
         PhotoUrl = photoUrl;
     }
 
+    public Account(int accountTypeId, string email)
+    {
+        AccountTypeId = accountTypeId;
+        Email = email;
+    }
+
     protected Account()
     {
     }

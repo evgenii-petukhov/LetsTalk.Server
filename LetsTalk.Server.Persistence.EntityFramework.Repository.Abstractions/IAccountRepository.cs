@@ -11,5 +11,7 @@ public interface IAccountRepository : IGenericRepository<Account>
 
     Task<List<Account>> GetAccountsAsync(CancellationToken cancellationToken = default);
 
+    Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default);
+
     Task<bool> IsAccountIdValidAsync(int id, CancellationToken cancellationToken = default);
 }

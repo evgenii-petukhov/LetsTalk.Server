@@ -162,10 +162,10 @@ public class AccountRepository : IAccountRepository
             .AnyAsync(cancellationToken);
     }
 
-    public Task<Account> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    public Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default)
     {
         return _accountCollection
-            .Find(Builders<Account>.Filter.Where(x => x.AccountTypeId == (int)AccountTypes.Email && x.Email == email.ToLower()))
+            .Find(Builders<Account>.Filter.Where(x => x.AccountTypeId == (int)accountType && x.Email!.Equals(email, StringComparison.CurrentCultureIgnoreCase)))
             .FirstOrDefaultAsync(cancellationToken);
     }
 

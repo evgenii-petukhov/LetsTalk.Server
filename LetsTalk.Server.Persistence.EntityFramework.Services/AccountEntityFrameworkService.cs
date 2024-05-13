@@ -103,6 +103,29 @@ public class AccountEntityFrameworkService(
         }
     }
 
+    public async Task<string> GetOrCreateAsync(AccountTypes accountType, string email, CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken);
+
+        if (account != null)
+        {
+            return account.Id.ToString();
+        }
+
+        try
+        {
+            account = _entityFactory.CreateAccount((int)accountType, email!);
+            await _accountRepository.CreateAsync(account, cancellationToken);
+            await _unitOfWork.SaveAsync(cancellationToken);
+
+            return account.Id.ToString();
+        }
+        catch (DbUpdateException)
+        {
+            return (await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken)).Id.ToString();
+        }
+    }
+
     public async Task<List<AccountServiceModel>> GetAccountsAsync(CancellationToken cancellationToken = default)
     {
         var accounts = await _accountRepository.GetAccountsAsync(cancellationToken);
@@ -113,10 +136,5 @@ public class AccountEntityFrameworkService(
     public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
     {
         return _accountRepository.IsAccountIdValidAsync(int.Parse(id), cancellationToken);
-    }
-
-    public Task<string> GetOrCreateAsync(AccountTypes accountType, string email, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -72,6 +72,8 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
                 (ImageFormats)request.Image.ImageFormat,
                 cancellationToken);
 
+        await _profileCacheManager.RemoveAsync(request.AccountId!);
+
         if (deletePreviousImage)
         {
             await _producer.ProduceAsync(
@@ -82,8 +84,6 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
                     ImageId = previousImageId
                 });
         }
-
-        await _profileCacheManager.RemoveAsync(request.AccountId!);
 
         return _mapper.Map<ProfileDto>(account);
     }

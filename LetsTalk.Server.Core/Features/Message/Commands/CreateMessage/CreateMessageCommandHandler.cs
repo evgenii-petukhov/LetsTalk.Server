@@ -81,6 +81,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 (ImageFormats)request.Image.ImageFormat,
                 cancellationToken);
 
+        await _messageCacheManager.RemoveAsync(request.ChatId!);
+
         var messageDto = _mapper.Map<MessageDto>(message);
 
         var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!, cancellationToken);
@@ -115,8 +117,6 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     ImageId = request.Image.Id
                 }));
-
-        await _messageCacheManager.RemoveAsync(request.ChatId!);
 
         return new CreateMessageResponse
         {

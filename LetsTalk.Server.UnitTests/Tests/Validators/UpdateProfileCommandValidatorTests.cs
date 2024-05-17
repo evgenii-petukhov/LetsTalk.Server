@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfile;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 
@@ -11,22 +14,35 @@ namespace LetsTalk.Server.UnitTests.Tests.Validators;
 [TestFixture]
 public class UpdateProfileCommandValidatorTests
 {
+    private const string SampleAccountId = "1";
+
     private UpdateProfileCommandValidator _validator;
     private Mock<ISignPackageService> _mockSignPackageService;
+    private Mock<IAccountAgnosticService> _mockAccountAgnosticService;
 
     [SetUp]
     public void SetUp()
     {
         _mockSignPackageService = new Mock<ISignPackageService>();
-        _validator = new(_mockSignPackageService.Object);
+        _mockAccountAgnosticService = new Mock<IAccountAgnosticService>();
+        _validator = new(_mockSignPackageService.Object, _mockAccountAgnosticService.Object);
     }
 
     [Test]
     public async Task ValidateAsync_When_ModelIsEmpty_ShouldContainValidationErrors()
     {
         // Arrange
-        var request = new UpdateProfileCommand();
+        var request = new UpdateProfileCommand
+        {
+            AccountId = SampleAccountId
+        };
         var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(x => x.GetByIdAsync(SampleAccountId, cancellationToken))
+            .ReturnsAsync(new ProfileServiceModel
+            {
+                AccountTypeId = (int)AccountTypes.Facebook
+            });
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -49,10 +65,17 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
+            AccountId = SampleAccountId,
             FirstName = string.Empty,
             LastName = string.Empty
         };
         var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(x => x.GetByIdAsync(SampleAccountId, cancellationToken))
+            .ReturnsAsync(new ProfileServiceModel
+            {
+                AccountTypeId = (int)AccountTypes.Facebook
+            });
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -68,16 +91,23 @@ public class UpdateProfileCommandValidatorTests
     }
 
     [Test]
-    public async Task ValidateAsync_When_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty_ImageIsNull_ShouldContainValidationErrors()
+    public async Task ValidateAsync_When_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty_RegisteredViaFB_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
         var request = new UpdateProfileCommand
         {
+            AccountId = SampleAccountId,
             FirstName = "test",
             LastName = "test",
             Email = string.Empty
         };
         var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(x => x.GetByIdAsync(SampleAccountId, cancellationToken))
+            .ReturnsAsync(new ProfileServiceModel
+            {
+                AccountTypeId = (int)AccountTypes.Facebook
+            });
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -88,6 +118,38 @@ public class UpdateProfileCommandValidatorTests
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
             "Email is invalid"
+        });
+    }
+
+    [Test]
+    public async Task ValidateAsync_When_FirstNameIsNotEmpty_LastNameIsNotEmpty_EmailIsEmpty_RegisteredByEmail_ImageIsNull_ShouldContainValidationErrors()
+    {
+        // Arrange
+        var request = new UpdateProfileCommand
+        {
+            AccountId = SampleAccountId,
+            FirstName = "test",
+            LastName = "test",
+            Email = string.Empty
+        };
+        var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(x => x.GetByIdAsync(SampleAccountId, cancellationToken))
+            .ReturnsAsync(new ProfileServiceModel
+            {
+                AccountTypeId = (int)AccountTypes.Email
+            });
+
+        // Act
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        // Assert
+        validationResult.Should().NotBeNull();
+        validationResult.IsValid.Should().BeFalse();
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
+        {
+            "Email is invalid",
+            "Email cannot be empty for this account type"
         });
     }
 
@@ -153,10 +215,17 @@ public class UpdateProfileCommandValidatorTests
         // Arrange
         var request = new UpdateProfileCommand
         {
+            AccountId = SampleAccountId,
             FirstName = "test",
             LastName = "test"
         };
         var cancellationToken = new CancellationToken();
+        _mockAccountAgnosticService
+            .Setup(x => x.GetByIdAsync(SampleAccountId, cancellationToken))
+            .ReturnsAsync(new ProfileServiceModel
+            {
+                AccountTypeId = (int)AccountTypes.Facebook
+            });
 
         // Act
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);

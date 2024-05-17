@@ -24,10 +24,9 @@ public class AccountMongoDBService(
         string accountId,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, email, cancellationToken);
+        var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, cancellationToken);
 
         return _mapper.Map<ProfileServiceModel>(account);
     }
@@ -36,7 +35,6 @@ public class AccountMongoDBService(
         string accountId,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,
@@ -47,7 +45,6 @@ public class AccountMongoDBService(
             accountId,
             firstName,
             lastName,
-            email,
             imageId,
             width,
             height,
@@ -62,7 +59,6 @@ public class AccountMongoDBService(
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken = default)
     {
@@ -77,7 +73,6 @@ public class AccountMongoDBService(
                     accountType,
                     firstName,
                     lastName,
-                    email,
                     photoUrl,
                     cancellationToken);
 
@@ -94,7 +89,6 @@ public class AccountMongoDBService(
             accountType,
             firstName,
             lastName,
-            email,
             photoUrl,
             account.Image == null,
             cancellationToken);

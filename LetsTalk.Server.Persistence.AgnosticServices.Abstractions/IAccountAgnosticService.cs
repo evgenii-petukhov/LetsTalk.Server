@@ -14,7 +14,6 @@ public interface IAccountAgnosticService
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken = default);
 
@@ -27,14 +26,12 @@ public interface IAccountAgnosticService
         string accountId,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default);
 
     Task<ProfileServiceModel> UpdateProfileAsync(
         string accountId,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,

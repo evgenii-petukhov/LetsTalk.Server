@@ -37,7 +37,6 @@ public class AccountRepository : IAccountRepository
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken)
     {
@@ -47,7 +46,6 @@ public class AccountRepository : IAccountRepository
             ExternalId = externalId,
             FirstName = firstName,
             LastName = lastName,
-            Email = email,
             PhotoUrl = photoUrl
         };
 
@@ -61,7 +59,6 @@ public class AccountRepository : IAccountRepository
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         bool updateAvatar,
         CancellationToken cancellationToken)
@@ -71,8 +68,7 @@ public class AccountRepository : IAccountRepository
 
         var updateDefinition = Builders<Account>.Update
             .Set(x => x.FirstName, firstName)
-            .Set(x => x.LastName, lastName)
-            .Set(x => x.Email, email);
+            .Set(x => x.LastName, lastName);
 
         updateDefinition = updateAvatar
             ? updateDefinition
@@ -82,22 +78,12 @@ public class AccountRepository : IAccountRepository
             .UpdateOneAsync(filter, updateDefinition, cancellationToken: cancellationToken);
     }
 
-    public async Task<Account> UpdateProfileAsync(
+    public Task<Account> UpdateProfileAsync(
         string id,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default)
     {
-        var account = await _accountCollection
-            .Find(Builders<Account>.Filter.Eq(x => x.Id, id))
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (account == null)
-        {
-            return null!;
-        }
-
         var filter = Builders<Account>.Filter
             .Eq(x => x.Id, id);
 
@@ -105,49 +91,29 @@ public class AccountRepository : IAccountRepository
             .Set(x => x.FirstName, firstName)
             .Set(x => x.LastName, lastName);
 
-        if (account.AccountTypeId != (int)AccountTypes.Email)
-        {
-            updateDefinition = updateDefinition.Set(x => x.Email, email);
-        }
-
-        return await _accountCollection
+        return _accountCollection
             .FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
             {
                 ReturnDocument = ReturnDocument.After
             }, cancellationToken: cancellationToken);
     }
 
-    public async Task<Account> UpdateProfileAsync(
+    public Task<Account> UpdateProfileAsync(
         string id,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,
         ImageFormats imageFormat,
         CancellationToken cancellationToken = default)
     {
-        var account = await _accountCollection
-            .Find(Builders<Account>.Filter.Eq(x => x.Id, id))
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (account == null)
-        {
-            return null!;
-        }
-
         var filter = Builders<Account>.Filter
             .Eq(x => x.Id, id);
 
         var updateDefinition = Builders<Account>.Update
             .Set(x => x.FirstName, firstName)
             .Set(x => x.LastName, lastName);
-
-        if (account.AccountTypeId != (int)AccountTypes.Email)
-        {
-            updateDefinition = updateDefinition.Set(x => x.Email, email);
-        }
 
         if (!string.IsNullOrEmpty(imageId))
         {
@@ -160,7 +126,7 @@ public class AccountRepository : IAccountRepository
             });
         }
 
-        return await _accountCollection
+        return _accountCollection
             .FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
             {
                 ReturnDocument = ReturnDocument.After

@@ -10,7 +10,5 @@ public class ProfileDto
 
     public string? LastName { get; set; }
 
-    public string? Email { get; set; }
-
     public string? ImageId { get; set; }
 }

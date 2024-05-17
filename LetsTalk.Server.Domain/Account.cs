@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Persistence.Enums;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
@@ -27,13 +26,12 @@ public class Account : BaseEntity
 
     public string? ImageId { get; protected set; }
 
-    public Account(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)
+    public Account(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl)
     {
         ExternalId = externalId;
         AccountTypeId = accountTypeId;
         FirstName = firstName;
         LastName = lastName;
-        Email = email;
         PhotoUrl = photoUrl;
     }
 
@@ -47,11 +45,10 @@ public class Account : BaseEntity
     {
     }
 
-    public void SetupProfile(string firstName, string lastName, string email, string photoUrl, bool hasImageId)
+    public void SetupProfile(string firstName, string lastName, string photoUrl, bool hasImageId)
     {
         FirstName = firstName;
         LastName = lastName;
-        Email = email;
 
         if (!hasImageId)
         {
@@ -59,15 +56,10 @@ public class Account : BaseEntity
         }
     }
 
-    public void UpdateProfile(string firstName, string lastName, string email, Image? image = null)
+    public void UpdateProfile(string firstName, string lastName, Image? image = null)
     {
         FirstName = firstName;
         LastName = lastName;
-
-        if (AccountTypeId != (int)AccountTypes.Email)
-        {
-            Email = email;
-        }
 
         if (image != null)
         {

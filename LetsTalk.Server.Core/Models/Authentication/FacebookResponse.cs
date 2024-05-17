@@ -6,8 +6,6 @@ public class FacebookResponse
 {
     public string? Id { get; set; }
 
-    public string? Email { get; set; }
-
     [JsonProperty("first_name")]
     public string? FirstName { get; set; }
 

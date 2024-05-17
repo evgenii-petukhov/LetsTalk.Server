@@ -15,7 +15,6 @@ public interface IAccountRepository
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken);
 
@@ -29,7 +28,6 @@ public interface IAccountRepository
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         bool updateAvatar,
         CancellationToken cancellationToken);
@@ -38,14 +36,12 @@ public interface IAccountRepository
         string id,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default);
 
     Task<Account> UpdateProfileAsync(
         string id,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,

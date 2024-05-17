@@ -89,7 +89,7 @@ public class AccountMongoDBService(
             }
         }
 
-        await _accountRepository.SetupProfileAsync(
+        await _accountRepository.UpdateProfileAsync(
             externalId,
             accountType,
             firstName,

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LetsTalk.Server.Persistence.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LetsTalk.Server.Domain;
@@ -62,7 +63,11 @@ public class Account : BaseEntity
     {
         FirstName = firstName;
         LastName = lastName;
-        Email = email;
+
+        if (AccountTypeId != (int)AccountTypes.Email)
+        {
+            Email = email;
+        }
 
         if (image != null)
         {

@@ -24,7 +24,7 @@ public interface IAccountRepository
         string email,
         CancellationToken cancellationToken);
 
-    Task SetupProfileAsync(
+    Task UpdateProfileAsync(
         string externalId,
         AccountTypes accountType,
         string firstName,

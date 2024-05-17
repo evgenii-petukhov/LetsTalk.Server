@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Utility.Common\LetsTalk.Server.Utility.Common.csproj" />
   </ItemGroup>
 

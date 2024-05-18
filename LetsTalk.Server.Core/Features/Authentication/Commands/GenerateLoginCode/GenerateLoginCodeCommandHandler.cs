@@ -8,14 +8,21 @@ namespace LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
 
 public class GenerateLoginCodeCommandHandler(
     ILoginCodeCacheService loginCodeCacheService,
+    IEmailService emailService,
     IOptions<CachingSettings> options) : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {
     private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
+    private readonly IEmailService _emailService = emailService;
     private readonly CachingSettings _cachingSettings = options.Value;
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand command, CancellationToken cancellationToken)
     {
-        await _loginCodeCacheService.GenerateCodeAsync(command.Email!);
+        var isCodeCreated = await _loginCodeCacheService.GenerateCodeAsync(command.Email!);
+
+        if (isCodeCreated)
+        {
+            await _emailService.SendAsync(null!, null!, null!, null!, cancellationToken);
+        }
 
         return new GenerateLoginCodeResponseDto
         {

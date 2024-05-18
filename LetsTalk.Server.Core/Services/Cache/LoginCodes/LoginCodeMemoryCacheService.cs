@@ -13,13 +13,19 @@ public class LoginCodeMemoryCacheService(
     private readonly IMemoryCache _memoryCache = memoryCache;
     private readonly ILoginCodeGenerator _generator = generator;
 
-    public Task GenerateCodeAsync(string email)
+    public Task<bool> GenerateCodeAsync(string email)
     {
-        return _memoryCache.GetOrCreateAsync(GetLoginCodeKey(email), cacheEntry =>
+        var isCreated = false;
+
+        _memoryCache.GetOrCreate(GetLoginCodeKey(email), cacheEntry =>
         {
             cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
-            return Task.FromResult(_generator.GenerateCode());
+            isCreated = true;
+            var code = _generator.GenerateCode();
+            return code;
         });
+
+        return Task.FromResult(isCreated);
     }
 
     public Task<bool> ValidateCodeAsync(string email, int code)

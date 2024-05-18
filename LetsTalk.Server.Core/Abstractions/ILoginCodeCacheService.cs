@@ -2,7 +2,7 @@
 
 public interface ILoginCodeCacheService
 {
-    Task GenerateCodeAsync(string email);
+    Task<bool> GenerateCodeAsync(string email);
 
     Task<bool> ValidateCodeAsync(string email, int code);
 }

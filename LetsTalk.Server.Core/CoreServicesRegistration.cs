@@ -33,7 +33,7 @@ public static class CoreServicesRegistration
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddScoped<ILoginCodeGenerator, LoginCodeGenerator>();
-        services.AddScoped<IEmailLoginService, EmailLoginService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
 

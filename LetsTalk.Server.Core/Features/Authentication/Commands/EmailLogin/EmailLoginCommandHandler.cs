@@ -1,21 +1,51 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Login;
+using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.Enums;
 using MediatR;
 
 namespace LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
 
 public class EmailLoginCommandHandler(
-    IEmailLoginService emailLoginService,
-    IMapper mapper) : IRequestHandler<EmailLoginCommand, LoginResponseDto>
+    IAuthenticationClient authenticationClient,
+    IAccountAgnosticService accountAgnosticService,
+    IMapper mapper,
+    ILoginCodeCacheService loginCodeCacheService) : IRequestHandler<EmailLoginCommand, LoginResponseDto>
 {
-    private readonly IEmailLoginService _emailLoginService = emailLoginService;
+    private readonly IAuthenticationClient _authenticationClient = authenticationClient;
+    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly IMapper _mapper = mapper;
+    private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
 
-    public Task<LoginResponseDto> Handle(EmailLoginCommand command, CancellationToken cancellationToken)
+    public async Task<LoginResponseDto> Handle(EmailLoginCommand command, CancellationToken cancellationToken)
     {
+        var validator = new EmailLoginCommandValidator(_loginCodeCacheService);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
+
         var model = _mapper.Map<EmailLoginServiceModel>(command);
-        return _emailLoginService.LoginAsync(model, cancellationToken);
+
+        var accountId = await _accountAgnosticService.GetOrCreateAsync(
+            AccountTypes.Email,
+            model.Email!,
+            cancellationToken);
+
+        // generate jwt token to access secure routes on this API
+        var token = await _authenticationClient.GenerateJwtTokenAsync(accountId);
+
+        return new LoginResponseDto
+        {
+            Success = true,
+            Token = token
+        };
     }
 }

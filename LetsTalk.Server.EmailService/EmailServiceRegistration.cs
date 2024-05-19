@@ -2,6 +2,8 @@
 using KafkaFlow.Serializer;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.EmailService.Abstractions;
+using LetsTalk.Server.EmailService.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,6 +34,8 @@ public static class EmailServiceRegistration
                         .AddTypedHandlers(h => h.AddHandler<SendLoginCodeRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))))));
 
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.Configure<EmailServiceSettings>(configuration.GetSection("EmailService"));
+        services.AddScoped<IEmailService, DefaultEmailService>();
 
         return services;
     }

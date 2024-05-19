@@ -14,7 +14,7 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
     private readonly ILoginCodeCacheService _loginCodeCacheService;
     private readonly CachingSettings _cacheSettings;
     private readonly KafkaSettings _kafkaSettings;
-    private readonly IMessageProducer _imageResizeRequestProducer;
+    private readonly IMessageProducer _sendLoginCodeProducer;
 
     public GenerateLoginCodeCommandHandler(
         ILoginCodeCacheService loginCodeCacheService,
@@ -25,7 +25,7 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
         _loginCodeCacheService = loginCodeCacheService;
         _cacheSettings = cacheSettings.Value;
         _kafkaSettings = kafkaSettings.Value;
-        _imageResizeRequestProducer = producerAccessor.GetProducer(_kafkaSettings.SendLoginCodeRequest!.Producer);
+        _sendLoginCodeProducer = producerAccessor.GetProducer(_kafkaSettings.SendLoginCodeRequest!.Producer);
     }
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand command, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
 
         if (isCodeCreated)
         {
-            await _imageResizeRequestProducer.ProduceAsync(
+            await _sendLoginCodeProducer.ProduceAsync(
                 _kafkaSettings.SendLoginCodeRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new SendLoginCodeRequest

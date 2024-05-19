@@ -6,9 +6,7 @@ namespace LetsTalk.Server.EmailService;
 
 public class SendLoginCodeRequestHandler(IEmailService emailService) : IMessageHandler<SendLoginCodeRequest>
 {
-    private const string MessageTemplate = "Hi!\r\n" +
-        "\r\n" +
-        "Your login code is {0}\r\n" +
+    private const string MessageTemplate = "{0} is your new login code\r\n" +
         "\r\n" +
         "All the best,\r\n" +
         "LetsTalk team.";

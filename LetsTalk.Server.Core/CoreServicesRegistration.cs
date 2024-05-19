@@ -48,6 +48,7 @@ public static class CoreServicesRegistration
                 .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.RemoveImageRequest!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.SendLoginCodeRequest!.Topic, 1, 1)
                 .AddProducer(
                     kafkaSettings.MessageNotification.Producer,
                     producer => producer
@@ -67,6 +68,11 @@ public static class CoreServicesRegistration
                     kafkaSettings.RemoveImageRequest.Producer,
                     producer => producer
                         .DefaultTopic(kafkaSettings.RemoveImageRequest.Topic)
+                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
+                .AddProducer(
+                    kafkaSettings.SendLoginCodeRequest.Producer,
+                    producer => producer
+                        .DefaultTopic(kafkaSettings.SendLoginCodeRequest.Topic)
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));

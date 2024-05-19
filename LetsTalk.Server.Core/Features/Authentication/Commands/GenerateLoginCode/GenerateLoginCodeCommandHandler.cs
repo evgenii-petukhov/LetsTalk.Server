@@ -1,32 +1,52 @@
-﻿using LetsTalk.Server.Configuration.Models;
+﻿using KafkaFlow;
+using KafkaFlow.Producers;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Kafka.Models;
 using MediatR;
 using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
 
-public class GenerateLoginCodeCommandHandler(
-    ILoginCodeCacheService loginCodeCacheService,
-    IEmailService emailService,
-    IOptions<CachingSettings> options) : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
+public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {
-    private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
-    private readonly IEmailService _emailService = emailService;
-    private readonly CachingSettings _cachingSettings = options.Value;
+    private readonly ILoginCodeCacheService _loginCodeCacheService;
+    private readonly CachingSettings _cacheSettings;
+    private readonly KafkaSettings _kafkaSettings;
+    private readonly IMessageProducer _imageResizeRequestProducer;
+
+    public GenerateLoginCodeCommandHandler(
+        ILoginCodeCacheService loginCodeCacheService,
+        IProducerAccessor producerAccessor,
+        IOptions<CachingSettings> cacheSettings,
+        IOptions<KafkaSettings> kafkaSettings)
+    {
+        _loginCodeCacheService = loginCodeCacheService;
+        _cacheSettings = cacheSettings.Value;
+        _kafkaSettings = kafkaSettings.Value;
+        _imageResizeRequestProducer = producerAccessor.GetProducer(_kafkaSettings.SendLoginCodeRequest!.Producer);
+    }
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand command, CancellationToken cancellationToken)
     {
-        var isCodeCreated = await _loginCodeCacheService.GenerateCodeAsync(command.Email!);
+        var (code, isCodeCreated) = await _loginCodeCacheService.GenerateCodeAsync(command.Email!);
 
         if (isCodeCreated)
         {
-            await _emailService.SendAsync(null!, null!, null!, null!, cancellationToken);
+            await _imageResizeRequestProducer.ProduceAsync(
+                _kafkaSettings.SendLoginCodeRequest!.Topic,
+                Guid.NewGuid().ToString(),
+                new SendLoginCodeRequest
+                {
+                    Email = command.Email,
+                    Code = code
+                });
         }
 
         return new GenerateLoginCodeResponseDto
         {
-            CodeValidInSeconds = _cachingSettings.LoginCodeCacheLifeTimeInSeconds
+            CodeValidInSeconds = _cacheSettings.LoginCodeCacheLifeTimeInSeconds
         };
     }
 }

@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Authentication.Abstractions;
+﻿using Grpc.Core;
+using LetsTalk.Server.Authentication.Abstractions;
 
 namespace LetsTalk.Server.API.Middleware;
 
@@ -16,14 +17,14 @@ public class JwtMiddleware(RequestDelegate next)
 
         if (!string.IsNullOrEmpty(token))
         {
-            var accountId = await authenticationClient.ValidateJwtTokenAsync(token!);
-            if (accountId == null)
+            try
+            {
+                context.Items["AccountId"] = await authenticationClient.ValidateJwtTokenAsync(token!)
+                    ?? throw new UnauthorizedAccessException("Invalid token");
+            }
+            catch(RpcException)
             {
                 throw new UnauthorizedAccessException("Invalid token");
-            }
-            else
-            {
-                context.Items["AccountId"] = accountId;
             }
         }
 

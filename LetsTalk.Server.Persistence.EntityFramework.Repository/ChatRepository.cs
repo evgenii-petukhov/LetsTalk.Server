@@ -53,7 +53,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             {
                 x.ChatId,
                 x.Message,
-                ReadMessageId = y!.MessageId
+                ReadMessageId = y == null ? 0 : y.MessageId
             })
             .GroupBy(x => x.ChatId)
             .Select(g => new

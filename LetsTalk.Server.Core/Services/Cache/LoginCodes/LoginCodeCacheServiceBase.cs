@@ -15,6 +15,6 @@ public abstract class LoginCodeCacheServiceBase
 
     protected static string GetLoginCodeKey(string email)
     {
-        return $"login-code:{email.ToLower()}";
+        return $"login-code:{email.Trim().ToLower()}";
     }
 }

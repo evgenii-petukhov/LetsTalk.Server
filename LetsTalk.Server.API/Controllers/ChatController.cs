@@ -23,7 +23,7 @@ public class ChatController(
     }
 
     [HttpPost]
-    public async Task<ActionResult<ChatDto>> PostAsync(CreateIndividualChatRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<ChatDtoBase>> PostAsync(CreateIndividualChatRequest request, CancellationToken cancellationToken)
     {
         var cmd = new CreateIndividualChatCommand(GetAccountId(), request.AccountId!);
         var response = await _mediator.Send(cmd, cancellationToken);

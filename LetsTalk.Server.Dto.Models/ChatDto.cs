@@ -1,9 +1,7 @@
 ﻿namespace LetsTalk.Server.Dto.Models;
 
-public class ChatDto
+public class ChatDto : ChatDtoBase
 {
-    public string? Id { get; set; }
-
     public int AccountTypeId { get; set; }
 
     public string? PhotoUrl { get; set; }

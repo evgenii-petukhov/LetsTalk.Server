@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LetsTalk.Server.API.Models.Chat;
+﻿using LetsTalk.Server.API.Models.Chat;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChat;
 using LetsTalk.Server.Dto.Models;
@@ -12,12 +11,10 @@ namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
 public class CreateIndividualChatCommandHandler(
     IChatAgnosticService chatAgnosticService,
     IAccountAgnosticService accountAgnosticService,
-    IMapper mapper,
     IChatCacheManager chatCacheManager) : IRequestHandler<CreateIndividualChatCommand, CreateIndividualChatResponse>
 {
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
-    private readonly IMapper _mapper = mapper;
     private readonly IChatCacheManager _chatCacheManager = chatCacheManager;
 
     public async Task<CreateIndividualChatResponse> Handle(CreateIndividualChatCommand request, CancellationToken cancellationToken)
@@ -30,14 +27,17 @@ public class CreateIndividualChatCommandHandler(
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var chat = await _chatAgnosticService.CreateIndividualChatAsync([request.InvitingAccountId, request.AccountId], request.InvitingAccountId, cancellationToken);
+        var chatId = await _chatAgnosticService.CreateIndividualChatAsync([request.InvitingAccountId, request.AccountId], cancellationToken);
 
         await _chatCacheManager.RemoveAsync(request.InvitingAccountId);
         await _chatCacheManager.RemoveAsync(request.AccountId);
 
         return new CreateIndividualChatResponse
         {
-            Dto = _mapper.Map<ChatDto>(chat)
+            Dto = new ChatDtoBase
+            {
+                Id = chatId
+            }
         };
     }
 }

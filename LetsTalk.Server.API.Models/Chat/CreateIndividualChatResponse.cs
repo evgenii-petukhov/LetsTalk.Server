@@ -4,5 +4,5 @@ namespace LetsTalk.Server.API.Models.Chat;
 
 public class CreateIndividualChatResponse
 {
-    public ChatDto? Dto { get; set; }
+    public ChatDtoBase? Dto { get; set; }
 }

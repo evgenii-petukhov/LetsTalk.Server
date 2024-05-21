@@ -136,43 +136,4 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             .Select(g => g.Key)
             .FirstOrDefaultAsync(cancellationToken)!;
     }
-
-    public async Task<ChatServiceModel> GetChatServiceModelAsync(int chatId, int accountId, CancellationToken cancellationToken = default)
-    {
-        var chat = await _context.Chats
-            .Include(x => x.ChatMembers)!
-            .ThenInclude(x => x.Account)
-            .Where(x => x.Id == chatId)
-            .Select(chat => new
-            {
-                Chat = chat,
-                Accounts = chat.ChatMembers!
-                    .Select(x => x.Account)
-                    .ToList()
-            })
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (chat == null)
-        {
-            return null!;
-        }
-
-        var accountIds = chat.Accounts
-            .Where(x => x!.Id != accountId)
-            .Select(x => x!.Id.ToString())
-            .ToArray();
-
-        var opponent = chat.Accounts.Find(x => x!.Id != accountId);
-
-        return new ChatServiceModel
-        {
-            Id = chat.Chat.Id.ToString(),
-            ChatName = chat.Chat.IsIndividual ? $"{opponent!.FirstName} {opponent.LastName}" : chat.Chat.Name,
-            PhotoUrl = chat.Chat.IsIndividual ? opponent!.PhotoUrl : null,
-            AccountTypeId = chat.Chat.IsIndividual ? opponent!.AccountTypeId : null,
-            ImageId = chat.Chat.IsIndividual ? opponent!.ImageId : chat.Chat.ImageId,
-            IsIndividual = chat.Chat!.IsIndividual,
-            AccountIds = accountIds!
-        };
-    }
 }

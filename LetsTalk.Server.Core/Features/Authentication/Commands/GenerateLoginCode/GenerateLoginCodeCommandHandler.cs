@@ -30,7 +30,9 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand command, CancellationToken cancellationToken)
     {
-        var (code, isCodeCreated) = await _loginCodeCacheService.GenerateCodeAsync(command.Email!);
+        var email = command.Email.Trim().ToLower();
+
+        var (code, isCodeCreated) = await _loginCodeCacheService.GenerateCodeAsync(email);
 
         if (isCodeCreated)
         {
@@ -39,7 +41,7 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
                 Guid.NewGuid().ToString(),
                 new SendLoginCodeRequest
                 {
-                    Email = command.Email,
+                    Email = email,
                     Code = code
                 });
         }

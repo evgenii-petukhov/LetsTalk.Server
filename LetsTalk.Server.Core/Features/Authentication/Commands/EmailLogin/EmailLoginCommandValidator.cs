@@ -31,6 +31,6 @@ public class EmailLoginCommandValidator : AbstractValidator<EmailLoginCommand>
 
     private Task<bool> IsLoginCodeValidAsync(EmailLoginCommand model, CancellationToken cancellationToken)
     {
-        return _loginCodeCacheService.ValidateCodeAsync(model.Email!, model.Code);
+        return _loginCodeCacheService.ValidateCodeAsync(model.Email?.Trim().ToLower()!, model.Code);
     }
 }

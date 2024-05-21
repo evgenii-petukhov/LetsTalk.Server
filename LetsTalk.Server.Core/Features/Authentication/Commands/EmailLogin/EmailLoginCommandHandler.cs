@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfile;
@@ -14,12 +13,10 @@ namespace LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
 public class EmailLoginCommandHandler(
     IAuthenticationClient authenticationClient,
     IAccountAgnosticService accountAgnosticService,
-    IMapper mapper,
     ILoginCodeCacheService loginCodeCacheService) : IRequestHandler<EmailLoginCommand, LoginResponseDto>
 {
     private readonly IAuthenticationClient _authenticationClient = authenticationClient;
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
-    private readonly IMapper _mapper = mapper;
     private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
 
     public async Task<LoginResponseDto> Handle(EmailLoginCommand command, CancellationToken cancellationToken)
@@ -32,11 +29,9 @@ public class EmailLoginCommandHandler(
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var model = _mapper.Map<EmailLoginServiceModel>(command);
-
         var accountId = await _accountAgnosticService.GetOrCreateAsync(
             AccountTypes.Email,
-            model.Email!,
+            command.Email?.Trim().ToLower()!,
             cancellationToken);
 
         // generate jwt token to access secure routes on this API

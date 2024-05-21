@@ -11,7 +11,6 @@ public class AuthenticationProfile : Profile
     {
         CreateMap<LoginRequest, LoginCommand>();
         CreateMap<EmailLoginRequest, EmailLoginCommand>();
-        CreateMap<EmailLoginCommand, EmailLoginServiceModel>();
         CreateMap<LoginCommand, LoginServiceInput>();
     }
 }

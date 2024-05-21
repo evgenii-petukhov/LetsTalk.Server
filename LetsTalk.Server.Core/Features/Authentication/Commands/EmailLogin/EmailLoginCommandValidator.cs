@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
 
@@ -13,17 +12,19 @@ public class EmailLoginCommandValidator : AbstractValidator<EmailLoginCommand>
     {
         RuleFor(model => model.Email)
             .NotNull()
-            .WithMessage("{PropertyName} is required")
+            .WithMessage("'{PropertyName}' is required")
             .NotEmpty()
-            .WithMessage("{PropertyName} cannot be empty");
+            .WithMessage("'{PropertyName}' cannot be empty")
+            .EmailAddress()
+            .WithMessage("'{PropertyName}' must be a valid email");
 
         RuleFor(model => model.Code)
             .InclusiveBetween(1000, 9999)
-            .WithMessage("{PropertyName} should contain 4 digits");
+            .WithMessage("'Code' should contain 4 digits");
 
         RuleFor(model => model)
             .MustAsync(IsLoginCodeValidAsync)
-            .WithMessage("{PropertyName} is invalid");
+            .WithMessage("'Code' has expired");
 
         _loginCodeCacheService = loginCodeCacheService;
     }

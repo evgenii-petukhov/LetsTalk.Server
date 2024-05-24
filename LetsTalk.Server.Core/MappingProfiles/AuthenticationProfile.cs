@@ -10,7 +10,6 @@ public class AuthenticationProfile : Profile
     public AuthenticationProfile()
     {
         CreateMap<LoginRequest, LoginCommand>();
-        CreateMap<EmailLoginRequest, EmailLoginCommand>();
-        CreateMap<LoginCommand, LoginServiceInput>();
+        CreateMap<EmailLoginRequest, EmailLoginCommand>();        
     }
 }

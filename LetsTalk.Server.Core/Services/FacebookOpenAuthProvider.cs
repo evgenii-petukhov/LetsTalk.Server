@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.API.Models.Login;
-using LetsTalk.Server.Authentication.Abstractions;
+﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Core.Abstractions;
 using LetsTalk.Server.Core.Attributes;
 using LetsTalk.Server.Core.Constants;
+using LetsTalk.Server.Core.Features.Authentication.Commands.Login;
 using LetsTalk.Server.Core.Models.Authentication;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
@@ -23,7 +23,7 @@ public class FacebookOpenAuthProvider(
     private readonly IAuthenticationClient _authenticationClient = authenticationClient;
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
 
-    public async Task<LoginResponseDto> LoginAsync(LoginServiceInput model, CancellationToken cancellationToken)
+    public async Task<LoginResponseDto> LoginAsync(LoginCommand model, CancellationToken cancellationToken)
     {
         // verify access token with facebook API to authenticate
         using var client = new RestClient(FACEBOOK_URL);

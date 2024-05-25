@@ -33,8 +33,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.API.Core\LetsTalk.Server.API.Core.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Core\LetsTalk.Server.Core.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
   </ItemGroup>
 

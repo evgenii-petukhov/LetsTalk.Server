@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
-using LetsTalk.Server.Core.Features.Message.Commands.ReadMessage;
-using LetsTalk.Server.Core.Features.Message.Queries.GetMessages;
+using LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
+using LetsTalk.Server.API.Core.Features.Message.Commands.ReadMessage;
+using LetsTalk.Server.API.Core.Features.Message.Queries.GetMessages;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

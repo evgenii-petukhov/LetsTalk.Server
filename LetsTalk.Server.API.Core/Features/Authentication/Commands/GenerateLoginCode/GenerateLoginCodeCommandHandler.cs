@@ -1,13 +1,13 @@
 ﻿using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
+namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
 public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {

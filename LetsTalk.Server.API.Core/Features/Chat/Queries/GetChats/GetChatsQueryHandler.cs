@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Chat.Queries.GetChats;
+namespace LetsTalk.Server.API.Core.Features.Chat.Queries.GetChats;
 
 public class GetChatsQueryHandler(
     IMapper mapper,

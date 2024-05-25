@@ -2,7 +2,7 @@
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
-namespace LetsTalk.Server.Core.MappingProfiles;
+namespace LetsTalk.Server.API.Core.MappingProfiles;
 
 public class LinkPreviewProfile : Profile
 {

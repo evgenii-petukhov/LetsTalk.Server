@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Attributes;
+﻿namespace LetsTalk.Server.API.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public abstract class BaseStringIdAttribute<T> : Attribute

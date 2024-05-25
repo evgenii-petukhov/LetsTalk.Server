@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.Core.Models.HtmlGenerator;
+﻿using LetsTalk.Server.API.Core.Models.HtmlGenerator;
 
-namespace LetsTalk.Server.Core.Abstractions;
+namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface IRegexService
 {

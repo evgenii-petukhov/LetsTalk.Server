@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Dto.Models;
 
-namespace LetsTalk.Server.Core.Abstractions;
+namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface IProfileService
 {

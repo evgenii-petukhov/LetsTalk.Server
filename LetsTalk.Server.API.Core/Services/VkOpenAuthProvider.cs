@@ -1,9 +1,9 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Attributes;
-using LetsTalk.Server.Core.Constants;
-using LetsTalk.Server.Core.Features.Authentication.Commands.Login;
-using LetsTalk.Server.Core.Models.Authentication;
+using LetsTalk.Server.API.Core.Abstractions;
+using LetsTalk.Server.API.Core.Attributes;
+using LetsTalk.Server.API.Core.Constants;
+using LetsTalk.Server.API.Core.Features.Authentication.Commands.Login;
+using LetsTalk.Server.API.Core.Models.Authentication;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Logging.Abstractions;
@@ -12,7 +12,7 @@ using LetsTalk.Server.Persistence.Enums;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.API.Core.Services;
 
 [OpenAuthProviderId(OpenAuthProviderIdentifiers.VK)]
 public class VkOpenAuthProvider(

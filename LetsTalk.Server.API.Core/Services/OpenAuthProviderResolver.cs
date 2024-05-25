@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Attributes;
+﻿using LetsTalk.Server.API.Core.Abstractions;
+using LetsTalk.Server.API.Core.Attributes;
 using System.Reflection;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.API.Core.Services;
 
 public class OpenAuthProviderResolver<TKey, TAttribute>(
     IEnumerable<IOpenAuthProvider> openAuthProviders) : IOpenAuthProviderResolver<TKey>

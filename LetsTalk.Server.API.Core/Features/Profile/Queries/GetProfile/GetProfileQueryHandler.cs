@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Profile.Queries.GetProfile;
+namespace LetsTalk.Server.API.Core.Features.Profile.Queries.GetProfile;
 
 public class GetProfileQueryHandler(
     IMapper mapper,

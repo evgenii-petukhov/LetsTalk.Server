@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Models.HtmlGenerator;
+﻿using LetsTalk.Server.API.Core.Abstractions;
+using LetsTalk.Server.API.Core.Models.HtmlGenerator;
 using System.Text.RegularExpressions;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.API.Core.Services;
 
 public partial class RegexService : IRegexService
 {

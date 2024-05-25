@@ -1,10 +1,10 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Services.Cache.Profile;
+namespace LetsTalk.Server.API.Core.Services.Cache.Profile;
 
 public class ProfileMemoryCacheService(
     IMemoryCache memoryCache,

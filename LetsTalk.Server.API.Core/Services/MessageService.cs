@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.Core.Abstractions;
+﻿using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
-namespace LetsTalk.Server.Core.Services;
+namespace LetsTalk.Server.API.Core.Services;
 
 public class MessageService(
     IMessageAgnosticService messageAgnosticService) : IMessageService

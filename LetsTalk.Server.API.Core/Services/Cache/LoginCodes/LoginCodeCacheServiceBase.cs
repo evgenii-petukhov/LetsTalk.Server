@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Services.Cache.Messages;
+namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 
 public abstract class LoginCodeCacheServiceBase
 {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Login;
-using LetsTalk.Server.Core.Features.Authentication.Commands.Login;
-using LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
+using LetsTalk.Server.API.Core.Features.Authentication.Commands.Login;
+using LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
 namespace LetsTalk.Server.Core.MappingProfiles;
 

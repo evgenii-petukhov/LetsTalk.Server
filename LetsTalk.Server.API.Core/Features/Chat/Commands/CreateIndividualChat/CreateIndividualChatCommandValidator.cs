@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
-namespace LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChat;
+namespace LetsTalk.Server.API.Core.Features.Chat.Commands.CreateIndividualChat;
 
 public class CreateIndividualChatCommandValidator : AbstractValidator<CreateIndividualChatCommand>
 {

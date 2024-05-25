@@ -2,21 +2,21 @@
 using KafkaFlow.Serializer;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Attributes;
-using LetsTalk.Server.Core.Services;
+using LetsTalk.Server.API.Core.Abstractions;
+using LetsTalk.Server.API.Core.Attributes;
+using LetsTalk.Server.API.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using StackExchange.Redis;
-using LetsTalk.Server.Core.Services.Cache.Messages;
+using LetsTalk.Server.API.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.Core.Services.Cache.Chats;
-using LetsTalk.Server.Core.Services.Cache.Profile;
+using LetsTalk.Server.API.Core.Services.Cache.Chats;
+using LetsTalk.Server.API.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.AgnosticServices;
 using LetsTalk.Server.SignPackage;
 
-namespace LetsTalk.Server.Core;
+namespace LetsTalk.Server.API.Core;
 
 public static class CoreServicesRegistration
 {

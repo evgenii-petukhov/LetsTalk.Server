@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Constants;
+﻿namespace LetsTalk.Server.API.Core.Constants;
 
 public static class OpenAuthProviderIdentifiers
 {

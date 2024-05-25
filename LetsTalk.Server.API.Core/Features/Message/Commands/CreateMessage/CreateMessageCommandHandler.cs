@@ -3,7 +3,7 @@ using KafkaFlow;
 using KafkaFlow.Producers;
 using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
@@ -14,7 +14,7 @@ using LetsTalk.Server.SignPackage.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
+namespace LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
 
 public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {

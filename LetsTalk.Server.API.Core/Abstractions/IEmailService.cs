@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Core.Abstractions;
+﻿namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface IEmailService
 {

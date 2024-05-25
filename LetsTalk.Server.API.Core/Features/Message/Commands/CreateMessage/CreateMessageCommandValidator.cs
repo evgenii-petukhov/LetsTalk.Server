@@ -3,7 +3,7 @@ using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.SignPackage.Abstractions;
 
-namespace LetsTalk.Server.Core.Features.Message.Commands.CreateMessage;
+namespace LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
 
 public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
 {

@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Core.Abstractions;
-using LetsTalk.Server.Core.Features.Profile.Commands.UpdateProfile;
+using LetsTalk.Server.API.Core.Abstractions;
+using LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;
 
-namespace LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
+namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
 public class EmailLoginCommandHandler(
     IAuthenticationClient authenticationClient,

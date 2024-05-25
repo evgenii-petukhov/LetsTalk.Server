@@ -1,8 +1,8 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core.Abstractions;
+using LetsTalk.Server.API.Core.Abstractions;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.Core.Services.Cache.Profile;
+namespace LetsTalk.Server.API.Core.Services.Cache.Profile;
 
 public abstract class ProfileCacheServiceBase
 {

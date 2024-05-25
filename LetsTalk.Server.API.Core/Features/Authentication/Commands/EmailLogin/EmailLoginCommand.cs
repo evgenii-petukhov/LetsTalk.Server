@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Dto.Models;
 
-namespace LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
+namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
 public class EmailLoginCommand : MediatR.IRequest<LoginResponseDto>
 {

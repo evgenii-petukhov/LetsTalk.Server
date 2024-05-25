@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Core.Features.Account.Queries.GetAccounts;
+﻿using LetsTalk.Server.API.Core.Features.Account.Queries.GetAccounts;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.API.Models.Chat;
-using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChat;
-using LetsTalk.Server.Core.Features.Chat.Queries.GetChats;
+using LetsTalk.Server.API.Core.Features.Chat.Commands.CreateIndividualChat;
+using LetsTalk.Server.API.Core.Features.Chat.Queries.GetChats;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

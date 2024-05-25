@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core;
+using LetsTalk.Server.API.Core;
 using LetsTalk.Server.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;

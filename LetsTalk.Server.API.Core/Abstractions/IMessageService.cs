@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 
-namespace LetsTalk.Server.Core.Abstractions;
+namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface IMessageService
 {

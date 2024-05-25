@@ -5,6 +5,7 @@ using LetsTalk.Server.Core.Features.Authentication.Commands.EmailLogin;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using LetsTalk.Server.Utility.Common;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -34,9 +35,11 @@ public class AuthenticationController(
     }
 
     [HttpPost("generate-login-code")]
-    public async Task<ActionResult<GenerateLoginCodeResponseDto>> GenerateLoginCodeAsync(string email, CancellationToken cancellationToken)
+    public async Task<ActionResult<GenerateLoginCodeResponseDto>> GenerateLoginCodeAsync(GenerateLoginCodeRequest model, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GenerateLoginCodeCommand(email), cancellationToken);
+        var dt = DateHelper.GetUnixTimestamp();
+
+        var result = await _mediator.Send(new GenerateLoginCodeCommand(model.Email!), cancellationToken);
 
         return Ok(result);
     }

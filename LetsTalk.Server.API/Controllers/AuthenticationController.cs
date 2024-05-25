@@ -5,7 +5,8 @@ using LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using LetsTalk.Server.Utility.Common;
+using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.API.Validators;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -29,6 +30,14 @@ public class AuthenticationController(
     [HttpPost("email-login")]
     public async Task<ActionResult<LoginResponseDto>> EmailLoginAsync(EmailLoginRequest model, CancellationToken cancellationToken)
     {
+        var validator = new EmailLoginRequestValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
+
         var result = await _mediator.Send(_mapper.Map<EmailLoginCommand>(model), cancellationToken);
 
         return Ok(result);
@@ -37,7 +46,13 @@ public class AuthenticationController(
     [HttpPost("generate-login-code")]
     public async Task<ActionResult<GenerateLoginCodeResponseDto>> GenerateLoginCodeAsync(GenerateLoginCodeRequest model, CancellationToken cancellationToken)
     {
-        var dt = DateHelper.GetUnixTimestamp();
+        var validator = new GenerateLoginCodeRequestValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
 
         var result = await _mediator.Send(new GenerateLoginCodeCommand(model.Email!), cancellationToken);
 

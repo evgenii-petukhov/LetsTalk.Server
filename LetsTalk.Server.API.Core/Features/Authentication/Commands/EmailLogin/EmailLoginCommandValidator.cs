@@ -10,21 +10,9 @@ public class EmailLoginCommandValidator : AbstractValidator<EmailLoginCommand>
 
     public EmailLoginCommandValidator(ILoginCodeCacheService loginCodeCacheService)
     {
-        RuleFor(model => model.Email)
-            .NotNull()
-            .WithMessage("'{PropertyName}' is required")
-            .NotEmpty()
-            .WithMessage("'{PropertyName}' cannot be empty")
-            .EmailAddress()
-            .WithMessage("'{PropertyName}' must be a valid email");
-
-        RuleFor(model => model.Code)
-            .InclusiveBetween(1000, 9999)
-            .WithMessage("'Code' should contain 4 digits");
-
         RuleFor(model => model)
             .MustAsync(IsLoginCodeValidAsync)
-            .WithMessage("'Code' has expired");
+            .WithMessage("Code has expired");
 
         _loginCodeCacheService = loginCodeCacheService;
     }

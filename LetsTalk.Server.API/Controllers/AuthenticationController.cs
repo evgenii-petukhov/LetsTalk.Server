@@ -34,7 +34,7 @@ public class AuthenticationController(
     [HttpPost("email-login")]
     public async Task<ActionResult<LoginResponseDto>> EmailLoginAsync(EmailLoginRequest model, CancellationToken cancellationToken)
     {
-        var validator = new EmailLoginRequestValidator();
+        var validator = new EmailLoginRequestValidator(_securitySettings);
         var validationResult = await validator.ValidateAsync(model, cancellationToken);
 
         if (!validationResult.IsValid)

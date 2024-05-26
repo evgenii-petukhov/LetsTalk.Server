@@ -55,6 +55,7 @@ public static class ApiServiceRegistration
             });
         });
         services.Configure<MessagingSettings>(configuration.GetSection("Messaging"));
+        services.Configure<SecuritySettings>(configuration.GetSection("Security"));
 
         return services;
     }

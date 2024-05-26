@@ -4,7 +4,7 @@ using LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 
-namespace LetsTalk.Server.UnitTests.Tests.Validators;
+namespace LetsTalk.Server.UnitTests.Tests.Validators.CommandValidators;
 
 #pragma warning disable CA1861 // Avoid constant arrays as arguments
 

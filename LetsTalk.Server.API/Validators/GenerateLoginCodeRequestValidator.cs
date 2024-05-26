@@ -1,12 +1,15 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.API.Models.Login;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Utility.Common;
 
 namespace LetsTalk.Server.API.Validators;
 
 public class GenerateLoginCodeRequestValidator : AbstractValidator<GenerateLoginCodeRequest>
 {
-    public GenerateLoginCodeRequestValidator()
+    private readonly SecuritySettings _securitySettings;
+
+    public GenerateLoginCodeRequestValidator(SecuritySettings securitySettings)
     {
         RuleFor(model => model.Email)
             .NotNull()
@@ -20,12 +23,14 @@ public class GenerateLoginCodeRequestValidator : AbstractValidator<GenerateLogin
             .NotEmpty()
             .WithMessage("{PropertyName} cannot be empty")
             .Must(IsUnixTimeValid)
-            .WithMessage("Failed the anti-spam check");
+            .WithMessage("Anti-spam check failed");
+
+        _securitySettings = securitySettings;
     }
 
-    private static bool IsUnixTimeValid(long unixTime)
+    private bool IsUnixTimeValid(long unixTime)
     {
         var dt = DateHelper.GetUnixTimestamp();
-        return Math.Abs(dt - unixTime) < 60;
+        return Math.Abs(dt - unixTime) < _securitySettings.AntiSpamTokenLifeTimeInSeconds;
     }
 }

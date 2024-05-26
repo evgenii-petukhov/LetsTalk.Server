@@ -7,6 +7,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.API.Validators;
+using Microsoft.Extensions.Options;
+using LetsTalk.Server.Configuration.Models;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -14,10 +16,12 @@ namespace LetsTalk.Server.API.Controllers;
 [ApiController]
 public class AuthenticationController(
     IMediator mediator,
-    IMapper mapper) : ControllerBase
+    IMapper mapper,
+    IOptions<SecuritySettings> options) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
     private readonly IMapper _mapper = mapper;
+    private readonly SecuritySettings _securitySettings = options.Value;
 
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest model, CancellationToken cancellationToken)
@@ -46,7 +50,7 @@ public class AuthenticationController(
     [HttpPost("generate-login-code")]
     public async Task<ActionResult<GenerateLoginCodeResponseDto>> GenerateLoginCodeAsync(GenerateLoginCodeRequest model, CancellationToken cancellationToken)
     {
-        var validator = new GenerateLoginCodeRequestValidator();
+        var validator = new GenerateLoginCodeRequestValidator(_securitySettings);
         var validationResult = await validator.ValidateAsync(model, cancellationToken);
 
         if (!validationResult.IsValid)

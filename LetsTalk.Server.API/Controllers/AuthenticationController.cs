@@ -24,41 +24,41 @@ public class AuthenticationController(
     private readonly SecuritySettings _securitySettings = options.Value;
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest model, CancellationToken cancellationToken)
+    public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(_mapper.Map<LoginCommand>(model), cancellationToken);
+        var result = await _mediator.Send(_mapper.Map<LoginCommand>(request), cancellationToken);
 
         return Ok(result);
     }
 
     [HttpPost("email-login")]
-    public async Task<ActionResult<LoginResponseDto>> EmailLoginAsync(EmailLoginRequest model, CancellationToken cancellationToken)
+    public async Task<ActionResult<LoginResponseDto>> EmailLoginAsync(EmailLoginRequest request, CancellationToken cancellationToken)
     {
         var validator = new EmailLoginRequestValidator(_securitySettings);
-        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var result = await _mediator.Send(_mapper.Map<EmailLoginCommand>(model), cancellationToken);
+        var result = await _mediator.Send(_mapper.Map<EmailLoginCommand>(request), cancellationToken);
 
         return Ok(result);
     }
 
     [HttpPost("generate-login-code")]
-    public async Task<ActionResult<GenerateLoginCodeResponseDto>> GenerateLoginCodeAsync(GenerateLoginCodeRequest model, CancellationToken cancellationToken)
+    public async Task<ActionResult<GenerateLoginCodeResponseDto>> GenerateLoginCodeAsync(GenerateLoginCodeRequest request, CancellationToken cancellationToken)
     {
         var validator = new GenerateLoginCodeRequestValidator(_securitySettings);
-        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var result = await _mediator.Send(new GenerateLoginCodeCommand(model.Email!), cancellationToken);
+        var result = await _mediator.Send(new GenerateLoginCodeCommand(request.Email!), cancellationToken);
 
         return Ok(result);
     }

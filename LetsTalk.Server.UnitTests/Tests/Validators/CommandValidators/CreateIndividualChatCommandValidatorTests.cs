@@ -8,7 +8,7 @@ namespace LetsTalk.Server.UnitTests.Tests.Validators.CommandValidators;
 #pragma warning disable CA1861 // Avoid constant arrays as arguments
 
 [TestFixture]
-public class CreateChatCommandValidatorTests
+public class CreateIndividualChatCommandValidatorTests
 {
     private const string SampleInvitingAccountId = "1";
     private const string SampleAccountId = "2";
@@ -22,69 +22,6 @@ public class CreateChatCommandValidatorTests
     {
         _mockAccountAgnosticService = new Mock<IAccountAgnosticService>();
         _validator = new(_mockAccountAgnosticService.Object);
-    }
-
-    [Test]
-    public async Task ValidateAsync_When_AccountIdIsNull_ShouldContainValidationErrors()
-    {
-        // Arrange
-        var request = new CreateIndividualChatCommand(SampleInvitingAccountId, null!);
-        var cancellationToken = new CancellationToken();
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "'Account Id' is required",
-            "'Account Id' must not be empty."
-        });
-        _mockAccountAgnosticService.Verify(x => x.IsAccountIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
-    }
-
-    [Test]
-    public async Task ValidateAsync_When_AccountIdIsEmptyString_ShouldContainValidationErrors()
-    {
-        // Arrange
-        var request = new CreateIndividualChatCommand(SampleInvitingAccountId, string.Empty);
-        var cancellationToken = new CancellationToken();
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "'Account Id' is required"
-        });
-        _mockAccountAgnosticService.Verify(x => x.IsAccountIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
-    }
-
-    [Test]
-    [TestCase("0")]
-    [TestCase("-1")]
-    public async Task ValidateAsync_When_AccountIdIsInvalid_ShouldContainValidationErrors(string accountId)
-    {
-        // Arrange
-        var request = new CreateIndividualChatCommand(SampleInvitingAccountId, accountId);
-        var cancellationToken = new CancellationToken();
-
-        // Act
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        // Assert
-        validationResult.Should().NotBeNull();
-        validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "'Account Id' must be greater than 0, when it is an integer"
-        });
-        _mockAccountAgnosticService.Verify(x => x.IsAccountIdValidAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Test]

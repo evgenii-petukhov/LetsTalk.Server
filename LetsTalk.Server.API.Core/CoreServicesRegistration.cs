@@ -14,7 +14,6 @@ using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.API.Core.Services.Cache.Chats;
 using LetsTalk.Server.API.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.AgnosticServices;
-using LetsTalk.Server.SignPackage;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -122,7 +121,6 @@ public static class CoreServicesRegistration
         }
 
         services.AddAgnosticServices(configuration);
-        services.AddSignPackageServices(configuration);
 
         return services;
     }

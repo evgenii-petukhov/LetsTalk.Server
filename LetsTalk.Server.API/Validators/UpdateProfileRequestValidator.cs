@@ -1,14 +1,15 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.API.Models.Message;
+using LetsTalk.Server.API.Models.Profile;
 using LetsTalk.Server.SignPackage.Abstractions;
 
 namespace LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 
-public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
+public class UpdateProfileRequestValidator : AbstractValidator<UpdateProfileRequest>
 {
     private readonly ISignPackageService _signPackageService;
 
-    public UpdateProfileCommandValidator(ISignPackageService signPackageService)
+    public UpdateProfileRequestValidator(ISignPackageService signPackageService)
     {
         RuleFor(model => model.FirstName)
             .NotNull()

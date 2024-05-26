@@ -4,11 +4,9 @@ using KafkaFlow.Producers;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.SignPackage.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -19,7 +17,6 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
     private readonly IAccountAgnosticService _accountAgnosticService;
     private readonly IMapper _mapper;
     private readonly IProfileCacheManager _profileCacheManager;
-    private readonly ISignPackageService _signPackageService;
     private readonly IMessageProducer _producer;
     private readonly KafkaSettings _kafkaSettings;
 
@@ -28,27 +25,17 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         IMapper mapper,
         IProfileCacheManager profileCacheManager,
         IOptions<KafkaSettings> kafkaSettings,
-        IProducerAccessor producerAccessor,
-        ISignPackageService signPackageService)
+        IProducerAccessor producerAccessor)
     {
         _accountAgnosticService = accountAgnosticService;
         _mapper = mapper;
         _profileCacheManager = profileCacheManager;
-        _signPackageService = signPackageService;
         _kafkaSettings = kafkaSettings.Value;
         _producer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
     }
 
     public async Task<ProfileDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var validator = new UpdateProfileCommandValidator(_signPackageService);
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            throw new BadRequestException("Invalid request", validationResult);
-        }
-
         var account = await _accountAgnosticService.GetByIdAsync(request.AccountId!, cancellationToken);
 
         var previousImageId = account.ImageId;

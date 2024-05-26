@@ -3,15 +3,16 @@ using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
+using LetsTalk.Server.API.Models.Profile;
 
-namespace LetsTalk.Server.UnitTests.Tests.Validators.CommandValidators;
+namespace LetsTalk.Server.UnitTests.Tests.Validators.ControllerValidators;
 
 #pragma warning disable CA1861 // Avoid constant arrays as arguments
 
 [TestFixture]
-public class UpdateProfileCommandValidatorTests
+public class UpdateProfileRequestValidatorTests
 {
-    private UpdateProfileCommandValidator _validator;
+    private UpdateProfileRequestValidator _validator;
     private Mock<ISignPackageService> _mockSignPackageService;
 
     [SetUp]
@@ -25,7 +26,7 @@ public class UpdateProfileCommandValidatorTests
     public async Task ValidateAsync_When_ModelIsEmpty_ShouldContainValidationErrors()
     {
         // Arrange
-        var request = new UpdateProfileCommand();
+        var request = new UpdateProfileRequest();
         var cancellationToken = new CancellationToken();
 
         // Act
@@ -47,7 +48,7 @@ public class UpdateProfileCommandValidatorTests
     public async Task ValidateAsync_When_FirstNameIsEmpty_LastNameIsEmpty_ImageIsNull_ShouldContainValidationErrors()
     {
         // Arrange
-        var request = new UpdateProfileCommand
+        var request = new UpdateProfileRequest
         {
             FirstName = string.Empty,
             LastName = string.Empty
@@ -71,7 +72,7 @@ public class UpdateProfileCommandValidatorTests
     public async Task ValidateAsync_When_FirstNameIsNotEmpty_LastNameIsNotEmpty_ImageIsNotNull_SignatureIsInvalid_ShouldContainValidationErrors()
     {
         // Arrange
-        var request = new UpdateProfileCommand
+        var request = new UpdateProfileRequest
         {
             FirstName = "test",
             LastName = "test",
@@ -98,7 +99,7 @@ public class UpdateProfileCommandValidatorTests
     public async Task ValidateAsync_When_FirstNameIsNotEmpty_LastNameIsNotEmpty_ImageIsNull_ShouldBeValid()
     {
         // Arrange
-        var request = new UpdateProfileCommand
+        var request = new UpdateProfileRequest
         {
             FirstName = "test",
             LastName = "test",
@@ -118,7 +119,7 @@ public class UpdateProfileCommandValidatorTests
     public async Task ValidateAsync_When_FirstNameIsNotEmpty_LastNameIsNotEmpty_ImageIsNotNull_SignatureIsValid_ShouldBeValid()
     {
         // Arrange
-        var request = new UpdateProfileCommand
+        var request = new UpdateProfileRequest
         {
             FirstName = "test",
             LastName = "test",

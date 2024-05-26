@@ -73,7 +73,7 @@ public static class FileStorageServiceRegistration
         services.AddFileStorageUtilityServices();
         services.AddSignPackageServices(configuration);
 
-        switch (configuration.GetValue<string>("Caching:cachingMode"))
+        switch (configuration.GetValue<string>("Features:cachingMode"))
         {
             case "redis":
                 services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));

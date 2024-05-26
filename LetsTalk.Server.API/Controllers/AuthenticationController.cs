@@ -17,15 +17,22 @@ namespace LetsTalk.Server.API.Controllers;
 public class AuthenticationController(
     IMediator mediator,
     IMapper mapper,
-    IOptions<SecuritySettings> options) : ControllerBase
+    IOptions<SecuritySettings> securitySettingsOptions,
+    IOptions<FeaturesSettings> featureSettingsOptions) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
     private readonly IMapper _mapper = mapper;
-    private readonly SecuritySettings _securitySettings = options.Value;
+    private readonly FeaturesSettings _featureSettings = featureSettingsOptions.Value;
+    private readonly SecuritySettings _securitySettings = securitySettingsOptions.Value;
 
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
     {
+        if (!_featureSettings.IsSocialMediaLoginEnabled)
+        {
+            throw new BadRequestException("Social media login is disabled");
+        }
+
         var result = await _mediator.Send(_mapper.Map<LoginCommand>(request), cancellationToken);
 
         return Ok(result);

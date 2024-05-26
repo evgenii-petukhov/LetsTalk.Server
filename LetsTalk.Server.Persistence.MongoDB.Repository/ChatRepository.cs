@@ -16,9 +16,9 @@ public class ChatRepository : IChatRepository
 
     public ChatRepository(
         IMongoClient mongoClient,
-        IOptions<DatabaseSettings> mongoDBSettings)
+        IOptions<MongoDBSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.MongoDatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
         _chatCollection = mongoDatabase.GetCollection<Chat>(nameof(Chat));
         _accountCollection = mongoDatabase.GetCollection<Account>(nameof(Account));
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));

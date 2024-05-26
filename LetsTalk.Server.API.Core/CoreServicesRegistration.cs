@@ -77,7 +77,7 @@ public static class CoreServicesRegistration
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 
-        switch (configuration.GetValue<string>("Caching:cachingMode"))
+        switch (configuration.GetValue<string>("Features:cachingMode"))
         {
             case "redis":
                 services.AddSingleton<IConnectionMultiplexer>(

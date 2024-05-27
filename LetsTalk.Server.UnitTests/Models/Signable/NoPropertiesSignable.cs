@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.SignPackage.Abstractions;
+﻿using LetsTalk.Server.SignPackage.Models;
 
 namespace LetsTalk.Server.UnitTests.Models.Signable;
 

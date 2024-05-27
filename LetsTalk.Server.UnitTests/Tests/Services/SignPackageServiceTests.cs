@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.SignPackage;
-using LetsTalk.Server.SignPackage.Abstractions;
+using LetsTalk.Server.SignPackage.Models;
 using LetsTalk.Server.UnitTests.Models;
 using LetsTalk.Server.UnitTests.Models.Signable;
 using LetsTalk.Server.UnitTests.TestCases;

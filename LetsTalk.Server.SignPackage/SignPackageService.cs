@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.SignPackage.Abstractions;
+using LetsTalk.Server.SignPackage.Models;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;

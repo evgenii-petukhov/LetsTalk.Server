@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.SignPackage.Abstractions\LetsTalk.Server.SignPackage.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.SignPackage.Models\LetsTalk.Server.SignPackage.Models.csproj" />
   </ItemGroup>
 
 </Project>

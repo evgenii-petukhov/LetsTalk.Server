@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.SignPackage.Abstractions;
+﻿namespace LetsTalk.Server.SignPackage.Models;
 
 public interface ISignable
 {

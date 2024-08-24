@@ -89,6 +89,11 @@ namespace LetsTalk.Server.Persistence.Migrations
                         {
                             Id = 2,
                             Name = "VK"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Email"
                         });
                 });
 
@@ -338,7 +343,7 @@ namespace LetsTalk.Server.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("LetsTalk.Server.Domain.Chat", "Chat")
-                        .WithMany()
+                        .WithMany("ChatMembers")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -424,6 +429,11 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.Navigation("LinkPreview");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("LetsTalk.Server.Domain.Chat", b =>
+                {
+                    b.Navigation("ChatMembers");
                 });
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>

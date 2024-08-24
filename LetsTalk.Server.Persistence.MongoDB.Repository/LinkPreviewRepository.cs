@@ -12,9 +12,9 @@ public class LinkPreviewRepository : ILinkPreviewRepository
 
     public LinkPreviewRepository(
         IMongoClient mongoClient,
-        IOptions<DatabaseSettings> mongoDBSettings)
+        IOptions<MongoDBSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.MongoDatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
         _linkPreviewCollection = mongoDatabase.GetCollection<LinkPreview>(nameof(LinkPreview));
     }

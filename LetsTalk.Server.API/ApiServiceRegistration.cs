@@ -1,8 +1,9 @@
 ﻿using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Core;
+using LetsTalk.Server.API.Core;
 using LetsTalk.Server.Logging;
+using LetsTalk.Server.SignPackage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -21,6 +22,7 @@ public static class ApiServiceRegistration
         services.AddCoreServices(configuration);
         services.AddLoggingServices();
         services.AddAuthenticationClientServices(configuration);
+        services.AddSignPackageServices(configuration);
         services.AddControllers();
         services.AddCors(options =>
         {
@@ -55,6 +57,8 @@ public static class ApiServiceRegistration
             });
         });
         services.Configure<MessagingSettings>(configuration.GetSection("Messaging"));
+        services.Configure<SecuritySettings>(configuration.GetSection("Security"));
+        services.Configure<FeaturesSettings>(configuration.GetSection("Features"));
 
         return services;
     }

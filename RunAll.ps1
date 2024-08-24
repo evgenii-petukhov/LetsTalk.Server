@@ -6,3 +6,4 @@ start LetsTalk.Server.FileStorage.Service\bin\Debug\net8.0\win-x64\publish\LetsT
 start LetsTalk.Server.ImageProcessing.Service\bin\Debug\net8.0\win-x64\publish\LetsTalk.Server.ImageProcessing.Service.exe
 start LetsTalk.Server.LinkPreview\bin\Debug\net8.0\win-x64\publish\LetsTalk.Server.LinkPreview.exe
 start LetsTalk.Server.Notifications\bin\Debug\net8.0\win-x64\publish\LetsTalk.Server.Notifications.exe
+start LetsTalk.Server.EmailService\bin\Debug\net8.0\win-x64\publish\LetsTalk.Server.EmailService.exe

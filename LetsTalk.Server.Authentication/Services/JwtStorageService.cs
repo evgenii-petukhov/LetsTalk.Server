@@ -45,7 +45,8 @@ public class JwtStorageService: IJwtStorageService
             ClockSkew = TimeSpan.Zero
         });
 
-        var jwtToken = (JwtSecurityToken)validationResult.SecurityToken;
+        var jwtToken = (JwtSecurityToken)validationResult.SecurityToken
+            ?? throw new AppException("Invalid token");
         var accountId = jwtToken.Claims.First(x => x.Type.Equals(CLAIM_ID, StringComparison.Ordinal)).Value;
 
         return new StoredToken

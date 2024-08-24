@@ -17,9 +17,9 @@ public class MessageRepository : IMessageRepository
 
     public MessageRepository(
         IMongoClient mongoClient,
-        IOptions<DatabaseSettings> mongoDBSettings)
+        IOptions<MongoDBSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.MongoDatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
         _chatMessageStatusCollection = mongoDatabase.GetCollection<ChatMessageStatus>(nameof(ChatMessageStatus));

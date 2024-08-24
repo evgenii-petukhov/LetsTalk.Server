@@ -24,10 +24,9 @@ public class AccountMongoDBService(
         string accountId,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, email, cancellationToken);
+        var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, cancellationToken);
 
         return _mapper.Map<ProfileServiceModel>(account);
     }
@@ -36,7 +35,6 @@ public class AccountMongoDBService(
         string accountId,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,
@@ -47,7 +45,6 @@ public class AccountMongoDBService(
             accountId,
             firstName,
             lastName,
-            email,
             imageId,
             width,
             height,
@@ -62,26 +59,24 @@ public class AccountMongoDBService(
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken = default)
     {
-        var acccount = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
+        var account = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
 
-        if (acccount == null)
+        if (account == null)
         {
             try
             {
-                acccount = await _accountRepository.CreateAccountAsync(
+                account = await _accountRepository.CreateAccountAsync(
                     externalId,
                     accountType,
                     firstName,
                     lastName,
-                    email,
                     photoUrl,
                     cancellationToken);
 
-                return acccount.Id!;
+                return account.Id!;
             }
             catch
             {
@@ -89,17 +84,43 @@ public class AccountMongoDBService(
             }
         }
 
-        var account = await _accountRepository.SetupProfileAsync(
+        await _accountRepository.UpdateProfileAsync(
             externalId,
             accountType,
             firstName,
             lastName,
-            email,
             photoUrl,
-            acccount.Image == null,
+            account.Image == null,
             cancellationToken);
 
         return account.Id!;
+    }
+
+    public async Task<string> GetOrCreateAsync(
+        AccountTypes accountType,
+        string email,
+        CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken);
+
+        if (account != null)
+        {
+            return account.Id!;
+        }
+
+        try
+        {
+            account = await _accountRepository.CreateAccountAsync(
+                accountType,
+                email,
+                cancellationToken);
+
+            return account.Id!;
+        }
+        catch
+        {
+            return (await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken)).Id!;
+        }
     }
 
     public async Task<List<AccountServiceModel>> GetAccountsAsync(CancellationToken cancellationToken = default)

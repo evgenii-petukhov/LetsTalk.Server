@@ -25,10 +25,10 @@ public static class MongoDBServicesRegistration
         services.AddMongoDBRepository(configuration);
 
         new MigrationEngine()
-            .UseDatabase(configuration.GetConnectionString("MongoDB"), configuration.GetValue<string>("Database:mongoDatabaseName"))
+            .UseDatabase(configuration.GetConnectionString("MongoDB"), configuration.GetValue<string>("MongoDB:databaseName"))
             .UseAssembly(Assembly.GetExecutingAssembly())
             .UseSchemeValidation(false)
-            .Run("0.1.2");
+            .Run("0.1.3");
 
         return services;
     }

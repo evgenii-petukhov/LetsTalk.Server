@@ -7,7 +7,9 @@ public interface IEntityFactory
 {
     Image CreateImage(string id, ImageFormats imageFormat, int width, int height);
 
-    Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl);
+    Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl);
+
+    Account CreateAccount(int accountTypeId, string email);
 
     LinkPreview CreateLinkPreview(string url, string title, string imageUrl);
 

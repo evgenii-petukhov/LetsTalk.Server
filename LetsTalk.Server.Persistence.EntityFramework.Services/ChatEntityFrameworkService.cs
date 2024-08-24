@@ -31,9 +31,8 @@ public class ChatEntityFrameworkService(
         return _chatRepository.IsChatIdValidAsync(int.Parse(id), cancellationToken);
     }
 
-    public async Task<ChatServiceModel> CreateIndividualChatAsync(
+    public async Task<string> CreateIndividualChatAsync(
         string[] accountIds,
-        string accountId,
         CancellationToken cancellationToken = default)
     {
         var accountIdsAsInt = accountIds
@@ -50,6 +49,6 @@ public class ChatEntityFrameworkService(
             await _unitOfWork.SaveAsync(cancellationToken);
         }
 
-        return await _chatRepository.GetChatServiceModelAsync(chat.Id, int.Parse(accountId), cancellationToken);
+        return chat.Id.ToString();
     }
 }

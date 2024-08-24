@@ -8,6 +8,8 @@ public interface IChatRepository
 
     Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default);
 
+    Task<Chat> GetIndividualChatByAccountIdsAsync(string[] accountIds, CancellationToken cancellationToken = default);
+
     Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default);
 
     Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default);

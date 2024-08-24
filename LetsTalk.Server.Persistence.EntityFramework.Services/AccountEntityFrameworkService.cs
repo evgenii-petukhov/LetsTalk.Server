@@ -31,11 +31,10 @@ public class AccountEntityFrameworkService(
         string accountId,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
-        account.UpdateProfile(firstName, lastName, email);
+        account.UpdateProfile(firstName, lastName);
 
         await _unitOfWork.SaveAsync(cancellationToken);
 
@@ -46,7 +45,6 @@ public class AccountEntityFrameworkService(
         string accountId,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,
@@ -61,7 +59,7 @@ public class AccountEntityFrameworkService(
             _imageRepository.Delete(account.Image);
         }
 
-        account.UpdateProfile(firstName, lastName, email, image);
+        account.UpdateProfile(firstName, lastName, image);
 
         await _unitOfWork.SaveAsync(cancellationToken);
 
@@ -73,7 +71,6 @@ public class AccountEntityFrameworkService(
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken = default)
     {
@@ -83,7 +80,7 @@ public class AccountEntityFrameworkService(
         {
             try
             {
-                account = _entityFactory.CreateAccount(externalId, (int)accountType, firstName!, lastName!, email!, photoUrl!);
+                account = _entityFactory.CreateAccount(externalId, (int)accountType, firstName!, lastName!, photoUrl!);
                 await _accountRepository.CreateAsync(account, cancellationToken);
                 await _unitOfWork.SaveAsync(cancellationToken);
 
@@ -96,10 +93,33 @@ public class AccountEntityFrameworkService(
         }
         else
         {
-            account.SetupProfile(firstName!, lastName!, email!, photoUrl!, !string.IsNullOrEmpty(account.ImageId));
+            account.SetupProfile(firstName!, lastName!, photoUrl!, !string.IsNullOrEmpty(account.ImageId));
             await _unitOfWork.SaveAsync(cancellationToken);
 
             return account.Id.ToString();
+        }
+    }
+
+    public async Task<string> GetOrCreateAsync(AccountTypes accountType, string email, CancellationToken cancellationToken = default)
+    {
+        var account = await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken);
+
+        if (account != null)
+        {
+            return account.Id.ToString();
+        }
+
+        try
+        {
+            account = _entityFactory.CreateAccount((int)accountType, email!);
+            await _accountRepository.CreateAsync(account, cancellationToken);
+            await _unitOfWork.SaveAsync(cancellationToken);
+
+            return account.Id.ToString();
+        }
+        catch (DbUpdateException)
+        {
+            return (await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken)).Id.ToString();
         }
     }
 

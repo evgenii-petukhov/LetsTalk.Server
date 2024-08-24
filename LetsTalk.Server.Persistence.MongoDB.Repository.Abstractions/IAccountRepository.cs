@@ -15,16 +15,19 @@ public interface IAccountRepository
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken);
 
-    Task<Account> SetupProfileAsync(
+    Task<Account> CreateAccountAsync(
+        AccountTypes accountType,
+        string email,
+        CancellationToken cancellationToken);
+
+    Task UpdateProfileAsync(
         string externalId,
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         bool updateAvatar,
         CancellationToken cancellationToken);
@@ -33,19 +36,19 @@ public interface IAccountRepository
         string id,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default);
 
     Task<Account> UpdateProfileAsync(
         string id,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,
         ImageFormats imageFormat,
         CancellationToken cancellationToken = default);
+
+    Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default);
 
     Task<Account> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 

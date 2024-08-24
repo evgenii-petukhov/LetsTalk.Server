@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.SignPackage.Models\LetsTalk.Server.SignPackage.Models.csproj" />
+  </ItemGroup>
+
 </Project>

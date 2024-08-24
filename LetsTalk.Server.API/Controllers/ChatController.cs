@@ -1,9 +1,11 @@
 ﻿using LetsTalk.Server.API.Models.Chat;
-using LetsTalk.Server.Core.Features.Chat.Commands.CreateIndividualChatCommand;
-using LetsTalk.Server.Core.Features.Chat.Queries.GetChats;
+using LetsTalk.Server.API.Core.Features.Chat.Commands.CreateIndividualChat;
+using LetsTalk.Server.API.Core.Features.Chat.Queries.GetChats;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using LetsTalk.Server.API.Validators;
+using LetsTalk.Server.Exceptions;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -23,8 +25,16 @@ public class ChatController(
     }
 
     [HttpPost]
-    public async Task<ActionResult<ChatDto>> PostAsync(CreateIndividualChatRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<ChatDtoBase>> PostAsync(CreateIndividualChatRequest request, CancellationToken cancellationToken)
     {
+        var validator = new CreateIndividualChatRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
+
         var cmd = new CreateIndividualChatCommand(GetAccountId(), request.AccountId!);
         var response = await _mediator.Send(cmd, cancellationToken);
         return Ok(response.Dto);

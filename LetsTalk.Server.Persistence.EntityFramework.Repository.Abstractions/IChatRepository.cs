@@ -10,6 +10,4 @@ public interface IChatRepository : IGenericRepository<Chat>
     Task<bool> IsChatIdValidAsync(int id, CancellationToken cancellationToken = default);
 
     Task<Chat> GetIndividualChatByAccountIdsAsync(int[] accountIds, CancellationToken cancellationToken = default);
-
-    Task<ChatServiceModel> GetChatServiceModelAsync(int chatId, int accountId, CancellationToken cancellationToken = default);
 }

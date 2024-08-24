@@ -13,4 +13,6 @@ public class CachingSettings
     public int ImagesCacheLifeTimeInSeconds { get; set; }
 
     public int ImageSizeThresholdInBytes { get; set; }
+
+    public int LoginCodeCacheLifeTimeInSeconds { get; set; }
 }

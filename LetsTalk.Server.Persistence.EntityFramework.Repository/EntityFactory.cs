@@ -14,9 +14,14 @@ public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
         return new Image(id, (int)imageFormat, width, height);
     }
 
-    public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string email, string photoUrl)
+    public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl)
     {
-        return new Account(externalId, accountTypeId, firstName, lastName, email, photoUrl);
+        return new Account(externalId, accountTypeId, firstName, lastName, photoUrl);
+    }
+
+    public Account CreateAccount(int accountTypeId, string email)
+    {
+        return new Account(accountTypeId, email);
     }
 
     public LinkPreview CreateLinkPreview(string url, string title, string imageUrl)

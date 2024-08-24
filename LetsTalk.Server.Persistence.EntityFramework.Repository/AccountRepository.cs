@@ -39,4 +39,10 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
         return _context.Accounts
             .AnyAsync(account => account.Id == id, cancellationToken);
     }
+
+    public Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default)
+    {
+        return _context.Accounts
+            .FirstOrDefaultAsync(account => account.Email == email && account.AccountTypeId == (int)accountType, cancellationToken)!;
+    }
 }

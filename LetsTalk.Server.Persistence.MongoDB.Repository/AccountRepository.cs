@@ -14,9 +14,9 @@ public class AccountRepository : IAccountRepository
 
     public AccountRepository(
         IMongoClient mongoClient,
-        IOptions<DatabaseSettings> mongoDBSettings)
+        IOptions<MongoDBSettings> mongoDBSettings)
     {
-        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.MongoDatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
         _accountCollection = mongoDatabase.GetCollection<Account>(nameof(Account));
         _messageCollection = mongoDatabase.GetCollection<Message>(nameof(Message));
@@ -37,7 +37,6 @@ public class AccountRepository : IAccountRepository
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         CancellationToken cancellationToken)
     {
@@ -47,7 +46,6 @@ public class AccountRepository : IAccountRepository
             ExternalId = externalId,
             FirstName = firstName,
             LastName = lastName,
-            Email = email,
             PhotoUrl = photoUrl
         };
 
@@ -56,12 +54,11 @@ public class AccountRepository : IAccountRepository
         return account;
     }
 
-    public Task<Account> SetupProfileAsync(
+    public Task UpdateProfileAsync(
         string externalId,
         AccountTypes accountType,
         string firstName,
         string lastName,
-        string email,
         string photoUrl,
         bool updateAvatar,
         CancellationToken cancellationToken)
@@ -71,25 +68,20 @@ public class AccountRepository : IAccountRepository
 
         var updateDefinition = Builders<Account>.Update
             .Set(x => x.FirstName, firstName)
-            .Set(x => x.LastName, lastName)
-            .Set(x => x.Email, email);
+            .Set(x => x.LastName, lastName);
 
         updateDefinition = updateAvatar
             ? updateDefinition
             : updateDefinition.Set(x => x.PhotoUrl, photoUrl);
 
         return _accountCollection
-            .FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
-            {
-                ReturnDocument = ReturnDocument.After
-            }, cancellationToken: cancellationToken);
+            .UpdateOneAsync(filter, updateDefinition, cancellationToken: cancellationToken);
     }
 
     public Task<Account> UpdateProfileAsync(
         string id,
         string firstName,
         string lastName,
-        string email,
         CancellationToken cancellationToken = default)
     {
         var filter = Builders<Account>.Filter
@@ -97,8 +89,7 @@ public class AccountRepository : IAccountRepository
 
         var updateDefinition = Builders<Account>.Update
             .Set(x => x.FirstName, firstName)
-            .Set(x => x.LastName, lastName)
-            .Set(x => x.Email, email);
+            .Set(x => x.LastName, lastName);
 
         return _accountCollection
             .FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Account, Account>
@@ -111,7 +102,6 @@ public class AccountRepository : IAccountRepository
         string id,
         string firstName,
         string lastName,
-        string email,
         string imageId,
         int width,
         int height,
@@ -123,8 +113,7 @@ public class AccountRepository : IAccountRepository
 
         var updateDefinition = Builders<Account>.Update
             .Set(x => x.FirstName, firstName)
-            .Set(x => x.LastName, lastName)
-            .Set(x => x.Email, email);
+            .Set(x => x.LastName, lastName);
 
         if (!string.IsNullOrEmpty(imageId))
         {
@@ -163,5 +152,25 @@ public class AccountRepository : IAccountRepository
         return _accountCollection
             .Find(Builders<Account>.Filter.Eq(x => x.Id, id))
             .AnyAsync(cancellationToken);
+    }
+
+    public Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default)
+    {
+        return _accountCollection
+            .Find(Builders<Account>.Filter.Where(x => x.AccountTypeId == (int)accountType && x.Email!.Equals(email, StringComparison.CurrentCultureIgnoreCase)))
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<Account> CreateAccountAsync(AccountTypes accountType, string email, CancellationToken cancellationToken)
+    {
+        var account = new Account
+        {
+            AccountTypeId = (int)accountType,
+            Email = email
+        };
+
+        await _accountCollection.InsertOneAsync(account, cancellationToken: cancellationToken);
+
+        return account;
     }
 }

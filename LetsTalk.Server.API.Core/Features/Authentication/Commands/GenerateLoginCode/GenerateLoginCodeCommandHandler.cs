@@ -12,18 +12,15 @@ namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {
     private readonly ILoginCodeCacheService _loginCodeCacheService;
-    private readonly CachingSettings _cacheSettings;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _sendLoginCodeProducer;
 
     public GenerateLoginCodeCommandHandler(
         ILoginCodeCacheService loginCodeCacheService,
         IProducerAccessor producerAccessor,
-        IOptions<CachingSettings> cacheSettings,
         IOptions<KafkaSettings> kafkaSettings)
     {
         _loginCodeCacheService = loginCodeCacheService;
-        _cacheSettings = cacheSettings.Value;
         _kafkaSettings = kafkaSettings.Value;
         _sendLoginCodeProducer = producerAccessor.GetProducer(_kafkaSettings.SendLoginCodeRequest!.Producer);
     }
@@ -32,7 +29,7 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
     {
         var email = command.Email.Trim().ToLower();
 
-        var (code, isCodeCreated) = await _loginCodeCacheService.GenerateCodeAsync(email);
+        var (code, isCodeCreated, ttl) = await _loginCodeCacheService.GenerateCodeAsync(email);
 
         if (isCodeCreated)
         {
@@ -48,7 +45,7 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
 
         return new GenerateLoginCodeResponseDto
         {
-            CodeValidInSeconds = _cacheSettings.LoginCodeCacheLifeTimeInSeconds
+            CodeValidInSeconds = (int)ttl.TotalSeconds
         };
     }
 }

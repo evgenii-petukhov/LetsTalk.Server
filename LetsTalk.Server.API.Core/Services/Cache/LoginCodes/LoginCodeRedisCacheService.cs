@@ -13,14 +13,14 @@ public class LoginCodeRedisCacheService(
     private readonly ILoginCodeGenerator _generator = loginCodeGenerator;
     private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
 
-    public async Task<(int, bool)> GenerateCodeAsync(string email)
+    public async Task<(int, bool, TimeSpan)> GenerateCodeAsync(string email)
     {
         var key = new RedisKey(GetLoginCodeKey(email));
         var code = _generator.GenerateCode();
 
         var isCreated = await _database.StringSetAsync(key, new RedisValue(code.ToString()), _cacheLifeTimeInSeconds, when: When.NotExists);
-
-        return (code, isCreated);
+        var ttl = await _database.KeyTimeToLiveAsync(key);
+        return (code, isCreated, ttl ?? _cacheLifeTimeInSeconds);
     }
 
     public async Task<bool> ValidateCodeAsync(string email, int code)

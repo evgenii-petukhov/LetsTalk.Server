@@ -3,7 +3,6 @@ using KafkaFlow.Serializer;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Core.Attributes;
 using LetsTalk.Server.API.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,12 +24,9 @@ public static class CoreServicesRegistration
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(options => options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        services.AddScoped<IOpenAuthProvider, FacebookOpenAuthProvider>();
-        services.AddScoped<IOpenAuthProvider, VkOpenAuthProvider>();
         services.AddScoped<IRegexService, RegexService>();
         services.AddScoped<IHtmlGenerator, HtmlGenerator>();
         services.AddScoped<IMessageService, MessageService>();
-        services.AddScoped<IOpenAuthProviderResolver<string>, OpenAuthProviderResolver<string, OpenAuthProviderIdAttribute>>();
         services.AddScoped<ILoginCodeGenerator, LoginCodeGenerator>();
         services.AddScoped<IEmailService, EmailService>();
 

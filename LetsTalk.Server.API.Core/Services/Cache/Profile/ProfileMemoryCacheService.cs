@@ -24,7 +24,7 @@ public class ProfileMemoryCacheService(
             : _profileService.GetProfileAsync(accountId, cancellationToken);
     }
 
-    public Task RemoveAsync(string accountId)
+    public Task ClearAsync(string accountId)
     {
         if (_isActive)
         {

@@ -32,6 +32,7 @@ public static class ImageProcessingServiceRegistration
                         })
                         .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
                         .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
+                        .CreateTopicIfNotExists(kafkaSettings.ClearMessageCacheRequest!.Topic, 1, 1)
                         .AddConsumer(consumer => consumer
                             .Topic(kafkaSettings.ImageResizeRequest.Topic)
                             .WithGroupId(kafkaSettings.ImageResizeRequest.GroupId)
@@ -46,6 +47,14 @@ public static class ImageProcessingServiceRegistration
                             kafkaSettings.ImagePreviewNotification.Producer,
                             producer => producer
                                 .DefaultTopic(kafkaSettings.ImagePreviewNotification.Topic)
+                                .AddMiddlewares(m =>
+                                    m.AddSerializer<JsonCoreSerializer>()
+                                )
+                        )
+                        .AddProducer(
+                            kafkaSettings.ClearMessageCacheRequest.Producer,
+                            producer => producer
+                                .DefaultTopic(kafkaSettings.ClearMessageCacheRequest.Topic)
                                 .AddMiddlewares(m =>
                                     m.AddSerializer<JsonCoreSerializer>()
                                 )

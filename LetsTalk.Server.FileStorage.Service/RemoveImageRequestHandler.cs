@@ -17,6 +17,6 @@ public class RemoveImageRequestHandler(
         _iOService.DeleteFile(message.ImageId!, FileTypes.Image);
         _iOService.DeleteFile(message.ImageId! + ".info", FileTypes.Image);
 
-        return _imageCacheManager.RemoveAsync(message.ImageId!);
+        return _imageCacheManager.ClearAsync(message.ImageId!);
     }
 }

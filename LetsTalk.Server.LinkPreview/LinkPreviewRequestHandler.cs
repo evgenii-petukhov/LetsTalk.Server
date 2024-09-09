@@ -13,7 +13,8 @@ namespace LetsTalk.Server.LinkPreview;
 public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 {
     private readonly ILinkPreviewGenerator _linkPreviewGenerator;
-    private readonly IMessageProducer _producer;
+    private readonly IMessageProducer _linkPreviewNotificationProducer;
+    private readonly IMessageProducer _clearMessageCacheRequestProducer;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMapper _mapper;
 
@@ -25,7 +26,8 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
     {
         _linkPreviewGenerator = linkPreviewGenerator;
         _kafkaSettings = kafkaSettings.Value;
-        _producer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
+        _linkPreviewNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
+        _clearMessageCacheRequestProducer = producerAccessor.GetProducer(_kafkaSettings.ClearMessageCacheRequest!.Producer);
         _mapper = mapper;
     }
 
@@ -45,13 +47,21 @@ public class LinkPreviewRequestHandler : IMessageHandler<LinkPreviewRequest>
 
         var linkPreviewDto = _mapper.Map<LinkPreviewDto>(message);
 
-        await _producer.ProduceAsync(
-            _kafkaSettings.LinkPreviewNotification!.Topic,
-            Guid.NewGuid().ToString(),
-            request.AccountIds!.Select(accountId => new Notification<LinkPreviewDto>
-            {
-                RecipientId = accountId,
-                Message = linkPreviewDto
-            }).ToArray());
+        await Task.WhenAll([
+            _linkPreviewNotificationProducer.ProduceAsync(
+                _kafkaSettings.LinkPreviewNotification!.Topic,
+                Guid.NewGuid().ToString(),
+                request.AccountIds!.Select(accountId => new Notification<LinkPreviewDto>
+                {
+                    RecipientId = accountId,
+                    Message = linkPreviewDto
+                }).ToArray()),
+            _clearMessageCacheRequestProducer.ProduceAsync(_kafkaSettings.ClearMessageCacheRequest!.Topic,
+                Guid.NewGuid().ToString(),
+                new ClearMessageCacheRequest
+                {
+                    ChatId = request.ChatId
+                })
+        ]);
     }
 }

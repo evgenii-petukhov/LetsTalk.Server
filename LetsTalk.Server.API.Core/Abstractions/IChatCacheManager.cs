@@ -2,5 +2,5 @@
 
 public interface IChatCacheManager
 {
-    Task RemoveAsync(string accountId);
+    Task ClearAsync(string accountId);
 }

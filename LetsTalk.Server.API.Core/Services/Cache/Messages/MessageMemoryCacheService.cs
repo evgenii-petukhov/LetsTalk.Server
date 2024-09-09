@@ -40,7 +40,7 @@ public class MessageMemoryCacheService(
         })!;
     }
 
-    public Task RemoveAsync(string chatId)
+    public Task ClearAsync(string chatId)
     {
         if (_isActive)
         {

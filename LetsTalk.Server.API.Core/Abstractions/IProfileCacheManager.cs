@@ -2,5 +2,5 @@
 
 public interface IProfileCacheManager
 {
-    Task RemoveAsync(string accountId);
+    Task ClearAsync(string accountId);
 }

@@ -44,6 +44,7 @@ public static class CoreServicesRegistration
                 .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.RemoveImageRequest!.Topic, 1, 1)
                 .CreateTopicIfNotExists(kafkaSettings.SendLoginCodeRequest!.Topic, 1, 1)
+                .CreateTopicIfNotExists(kafkaSettings.ClearMessageCacheRequest!.Topic, 1, 1)
                 .AddProducer(
                     kafkaSettings.MessageNotification.Producer,
                     producer => producer
@@ -69,6 +70,14 @@ public static class CoreServicesRegistration
                     producer => producer
                         .DefaultTopic(kafkaSettings.SendLoginCodeRequest.Topic)
                         .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
+                .AddConsumer(consumer => consumer
+                    .Topic(kafkaSettings.ClearMessageCacheRequest.Topic)
+                    .WithGroupId(kafkaSettings.ClearMessageCacheRequest.GroupId)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(10)
+                    .AddMiddlewares(middlewares => middlewares
+                        .AddDeserializer<JsonCoreDeserializer>()
+                        .AddTypedHandlers(h => h.AddHandler<ClearMessageCacheRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))))
         ));
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));

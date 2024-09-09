@@ -57,7 +57,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
                 (ImageFormats)request.Image.ImageFormat,
                 cancellationToken);
 
-        await _profileCacheManager.RemoveAsync(request.AccountId!);
+        await _profileCacheManager.ClearAsync(request.AccountId!);
 
         if (deletePreviousImage)
         {

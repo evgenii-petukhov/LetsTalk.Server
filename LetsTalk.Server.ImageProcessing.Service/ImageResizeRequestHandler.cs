@@ -21,7 +21,8 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
 
     private readonly IMessageAgnosticService _messageAgnosticService;
     private readonly IMapper _mapper;
-    private readonly IMessageProducer _producer;
+    private readonly IMessageProducer _imagePreviewNotificationProducer;
+    private readonly IMessageProducer _clearMessageCacheRequestProducer;
     private readonly KafkaSettings _kafkaSettings;
     private readonly FileStorageSettings _fileStorageSettings;
 
@@ -42,7 +43,8 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
         _mapper = mapper;
         _kafkaSettings = kafkaSettings.Value;
         _fileStorageSettings = fileStorageSettings.Value;
-        _producer = producerAccessor.GetProducer(_kafkaSettings.ImagePreviewNotification!.Producer);
+        _imagePreviewNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.ImagePreviewNotification!.Producer);
+        _clearMessageCacheRequestProducer = producerAccessor.GetProducer(_kafkaSettings.ClearMessageCacheRequest!.Producer);
     }
 
     public async Task Handle(IMessageContext context, ImageResizeRequest request)
@@ -71,13 +73,21 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>
 
         var imagePreviewDto = _mapper.Map<ImagePreviewDto>(message);
 
-        await _producer.ProduceAsync(
-            _kafkaSettings.ImagePreviewNotification!.Topic,
-            Guid.NewGuid().ToString(),
-            request.AccountIds!.Select(accountId => new Notification<ImagePreviewDto>
-            {
-                RecipientId = accountId,
-                Message = imagePreviewDto
-            }).ToArray());
+        await Task.WhenAll([
+            _imagePreviewNotificationProducer.ProduceAsync(
+                _kafkaSettings.ImagePreviewNotification!.Topic,
+                Guid.NewGuid().ToString(),
+                request.AccountIds!.Select(accountId => new Notification<ImagePreviewDto>
+                {
+                    RecipientId = accountId,
+                    Message = imagePreviewDto
+                }).ToArray()),
+            _clearMessageCacheRequestProducer.ProduceAsync(_kafkaSettings.ClearMessageCacheRequest!.Topic,
+                Guid.NewGuid().ToString(),
+                new ClearMessageCacheRequest
+                {
+                    ChatId = request.ChatId
+                })
+        ]);
     }
 }

@@ -77,7 +77,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 (ImageFormats)request.Image.ImageFormat,
                 cancellationToken);
 
-        await _messageCacheManager.RemoveAsync(request.ChatId!);
+        await _messageCacheManager.ClearAsync(request.ChatId!);
 
         var messageDto = _mapper.Map<MessageDto>(message);
 
@@ -102,7 +102,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 {
                     AccountIds = accountIds,
                     MessageId = messageDto.Id,
-                    Url = url
+                    Url = url,
+                    ChatId = request.ChatId
                 }),
             request.Image == null ? Task.CompletedTask : _imageResizeRequestProducer.ProduceAsync(
                 _kafkaSettings.ImageResizeRequest!.Topic,
@@ -111,7 +112,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                 {
                     AccountIds = accountIds,
                     MessageId = messageDto.Id,
-                    ImageId = request.Image.Id
+                    ImageId = request.Image.Id,
+                    ChatId = request.ChatId
                 }));
 
         return new CreateMessageResponse

@@ -44,7 +44,7 @@ public class ChatRedisCacheService(
         return JsonSerializer.Deserialize<List<ChatDto>>(cachedAccounts!)!;
     }
 
-    public async Task RemoveAsync(string accountId)
+    public async Task ClearAsync(string accountId)
     {
         if (_isActive)
         {

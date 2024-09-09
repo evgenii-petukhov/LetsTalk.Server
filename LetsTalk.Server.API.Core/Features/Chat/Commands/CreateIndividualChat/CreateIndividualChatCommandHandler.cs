@@ -29,8 +29,8 @@ public class CreateIndividualChatCommandHandler(
 
         var chatId = await _chatAgnosticService.CreateIndividualChatAsync([request.InvitingAccountId, request.AccountId], cancellationToken);
 
-        await _chatCacheManager.RemoveAsync(request.InvitingAccountId);
-        await _chatCacheManager.RemoveAsync(request.AccountId);
+        await _chatCacheManager.ClearAsync(request.InvitingAccountId);
+        await _chatCacheManager.ClearAsync(request.AccountId);
 
         return new CreateIndividualChatResponse
         {

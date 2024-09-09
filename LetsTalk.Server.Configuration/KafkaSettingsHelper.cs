@@ -17,6 +17,7 @@ public static class KafkaSettingsHelper
             ImagePreviewNotification = GetKafkaEventSettings(configuration, "Kafka:ImagePreviewNotification"),
             RemoveImageRequest = GetKafkaEventSettings(configuration, "Kafka:RemoveImageRequest"),
             SendLoginCodeRequest = GetKafkaEventSettings(configuration, "Kafka:SendLoginCodeRequest"),
+            ClearMessageCacheRequest = GetKafkaEventSettings(configuration, "Kafka:ClearMessageCacheRequest"),
         };
     }
 

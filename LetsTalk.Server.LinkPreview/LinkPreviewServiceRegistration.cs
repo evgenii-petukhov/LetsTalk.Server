@@ -33,6 +33,7 @@ public static class LinkPreviewServiceRegistration
                         })
                         .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
                         .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
+                        .CreateTopicIfNotExists(kafkaSettings.ClearMessageCacheRequest!.Topic, 1, 1)
                         .AddConsumer(consumer => consumer
                             .Topic(kafkaSettings.LinkPreviewRequest.Topic)
                             .WithGroupId(kafkaSettings.LinkPreviewRequest.GroupId)
@@ -47,6 +48,14 @@ public static class LinkPreviewServiceRegistration
                             kafkaSettings.LinkPreviewNotification.Producer,
                             producer => producer
                                 .DefaultTopic(kafkaSettings.LinkPreviewNotification.Topic)
+                                .AddMiddlewares(m =>
+                                    m.AddSerializer<JsonCoreSerializer>()
+                                )
+                        )
+                        .AddProducer(
+                            kafkaSettings.ClearMessageCacheRequest.Producer,
+                            producer => producer
+                                .DefaultTopic(kafkaSettings.ClearMessageCacheRequest.Topic)
                                 .AddMiddlewares(m =>
                                     m.AddSerializer<JsonCoreSerializer>()
                                 )

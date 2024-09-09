@@ -19,4 +19,6 @@ public class KafkaSettings
     public KafkaEventSettings? RemoveImageRequest { get; set; }
 
     public KafkaEventSettings? SendLoginCodeRequest { get; set; }
+
+    public KafkaEventSettings? ClearMessageCacheRequest { get; set; }
 }

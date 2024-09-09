@@ -44,7 +44,7 @@ public class ProfileRedisCacheService(
         return JsonSerializer.Deserialize<ProfileDto>(cachedProfile!)!;
     }
 
-    public async Task RemoveAsync(string accountId)
+    public async Task ClearAsync(string accountId)
     {
         if (_isActive)
         {

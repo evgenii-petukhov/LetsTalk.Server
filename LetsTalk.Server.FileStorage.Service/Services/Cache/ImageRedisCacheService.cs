@@ -71,7 +71,7 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
         return JsonSerializer.Deserialize<FetchImageResponse>(cached!)!;
     }
 
-    public Task RemoveAsync(string imageId)
+    public Task ClearAsync(string imageId)
     {
         return _isActive
             ? _database.KeyDeleteAsync(GetImageKey(imageId), CommandFlags.FireAndForget)

@@ -2,5 +2,5 @@
 
 public interface IImageCacheManager
 {
-    Task RemoveAsync(string imageId);
+    Task ClearAsync(string imageId);
 }

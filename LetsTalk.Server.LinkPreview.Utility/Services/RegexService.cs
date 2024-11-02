@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.LinkPreview.Abstractions;
-using LetsTalk.Server.LinkPreview.Models;
+﻿using LetsTalk.Server.LinkPreview.Utility.Abstractions;
+using LetsTalk.Server.LinkPreview.Utility.Abstractions.Models;
 using System.Text.RegularExpressions;
 
-namespace LetsTalk.Server.LinkPreview.Services;
+namespace LetsTalk.Server.LinkPreview.Utility.Services;
 
 public partial class RegexService : IRegexService
 {
@@ -42,17 +42,24 @@ public partial class RegexService : IRegexService
             }
         }
 
-        string? imageUrl = null;
-        var matchImageUrl = MatchOpenGraphImageUrl().Match(input);
-        if (matchImageUrl.Groups.Count > 1)
+        if (string.IsNullOrWhiteSpace(title))
         {
-            imageUrl = matchImageUrl.Groups[1].Value;
+            return null!;
         }
-
-        return new OpenGraphModel
+        else
         {
-            Title = title,
-            ImageUrl = imageUrl
-        };
+            string? imageUrl = null;
+            var matchImageUrl = MatchOpenGraphImageUrl().Match(input);
+            if (matchImageUrl.Groups.Count > 1)
+            {
+                imageUrl = matchImageUrl.Groups[1].Value;
+            }
+
+            return new OpenGraphModel
+            {
+                Title = title,
+                ImageUrl = imageUrl
+            };
+        }
     }
 }

@@ -4,14 +4,9 @@ using LetsTalk.Server.Kafka.Models;
 
 namespace LetsTalk.Server.API.Core;
 
-public class ClearMessageCacheRequestHandler : IMessageHandler<ClearMessageCacheRequest>
+public class ClearMessageCacheRequestHandler(IMessageCacheManager messageCacheManager) : IMessageHandler<ClearMessageCacheRequest>
 {
-    private readonly IMessageCacheManager _messageCacheManager;
-
-    public ClearMessageCacheRequestHandler(IMessageCacheManager messageCacheManager)
-    {
-        _messageCacheManager = messageCacheManager;
-    }
+    private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
 
     public Task Handle(IMessageContext context, ClearMessageCacheRequest message)
     {

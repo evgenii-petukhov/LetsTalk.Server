@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.Persistence.AgnosticServices;
 using System.Reflection;
+using LetsTalk.Server.LinkPreview.Utility;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -18,9 +19,7 @@ public static class LinkPreviewServiceRegistration
         IConfiguration configuration)
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-        services.AddHttpClient(nameof(DownloadService));
-        services.AddScoped<IDownloadService, DownloadService>();
-        services.AddScoped<IRegexService, RegexService>();
+        services.AddLinkPreviewUtility();
         services.AddScoped<ILinkPreviewGenerator, LinkPreviewGenerator>();
         services.AddKafka(
             kafka => kafka

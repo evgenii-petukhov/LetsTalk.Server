@@ -1,57 +1,54 @@
 ﻿using LetsTalk.Server.LinkPreview.Abstractions;
+using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Logging;
-using System.Web;
 
 namespace LetsTalk.Server.LinkPreview.Services;
 
 public class LinkPreviewGenerator(
     ILinkPreviewAgnosticService linkPreviewAgnosticService,
     IMessageAgnosticService messageAgnosticService,
-    IDownloadService downloadService,
-    IRegexService regexService,
+    ILinkPreviewService linkPreviewService,
     ILogger<LinkPreviewGenerator> logger) : ILinkPreviewGenerator
 {
     private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
     private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
-    private readonly IDownloadService _downloadService = downloadService;
-    private readonly IRegexService _regexService = regexService;
+    private readonly ILinkPreviewService _linkPreviewService = linkPreviewService;
     private readonly ILogger<LinkPreviewGenerator> _logger = logger;
 
     public async Task<MessageServiceModel?> ProcessMessageAsync(string messageId, string url)
     {
-        try
+        var model = await _linkPreviewService.GenerateLinkPreviewAsync(url);
+
+        if (model == null)
         {
-            var pageString = await _downloadService.DownloadAsStringAsync(url);
-
-            var (title, imageUrl) = _regexService.GetOpenGraphModel(pageString);
-
-            if (string.IsNullOrWhiteSpace(title))
+            _logger.LogInformation("Title is empty: {url}", url);
+            return null;
+        }
+        else
+        {
+            if (model.Exception == null)
             {
-                _logger.LogInformation("Title is empty: {url}", url);
+                try
+                {
+                    var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, url, model.OpenGraphModel!.Title!, model.OpenGraphModel!.ImageUrl!);
+                    _logger.LogInformation("New LinkPreview added: {url}", url);
+                    return message;
+                }
+                catch
+                {
+                    var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
+                    var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId!);
+                    _logger.LogInformation("Fetched from DB: {url}", url);
+                    return message;
+                }
+            }
+            else
+            {
+                _logger.LogError(model.Exception, "Unable to download: {url}", url);
                 return null;
             }
-
-            title = HttpUtility.HtmlDecode(title);
-            try
-            {
-                var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, url, title, imageUrl!);
-                _logger.LogInformation("New LinkPreview added: {url}", url);
-                return message;
-            }
-            catch
-            {
-                var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
-                var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId!);
-                _logger.LogInformation("Fetched from DB: {url}", url);
-                return message;
-            }
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Unable to download: {url}", url);
-            return null;
         }
     }
 }

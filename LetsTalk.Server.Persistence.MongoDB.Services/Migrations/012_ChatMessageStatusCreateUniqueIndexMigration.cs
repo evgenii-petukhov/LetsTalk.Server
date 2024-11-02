@@ -18,7 +18,10 @@ public class ChatMessageStatusCreateUniqueIndexMigration : IMigration
     public void Up(IMongoDatabase database)
     {
         database.GetCollection<ChatMessageStatus>(nameof(ChatMessageStatus)).Indexes.CreateOne(new CreateIndexModel<ChatMessageStatus>(
-            Builders<ChatMessageStatus>.IndexKeys.Ascending(x => x.ChatId).Ascending(x => x.AccountId).Ascending(x => x.MessageId),
+            Builders<ChatMessageStatus>.IndexKeys
+                .Ascending(x => x.ChatId)
+                .Ascending(x => x.AccountId)
+                .Ascending(x => x.MessageId),
             new CreateIndexOptions
             {
                 Unique = true,

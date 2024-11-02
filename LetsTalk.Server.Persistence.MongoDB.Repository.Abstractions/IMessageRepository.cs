@@ -16,6 +16,7 @@ public interface IMessageRepository
         string chatId,
         string text,
         string textHtml,
+        string linkPreviewId,
         CancellationToken cancellationToken = default);
 
     Task<Message> CreateAsync(

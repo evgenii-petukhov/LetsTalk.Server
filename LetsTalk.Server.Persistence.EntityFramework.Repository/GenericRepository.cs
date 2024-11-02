@@ -24,7 +24,7 @@ public abstract class GenericRepository<T> : Repository, IGenericRepository<T>
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
     }
 
-    public Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public virtual Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return _context.Set<T>()
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;

@@ -19,4 +19,11 @@ public class MessageRepository(LetsTalkDbContext context) : GenericRepository<Me
             .OrderBy(mesage => mesage.DateCreatedUnix)
             .ToListAsync(cancellationToken);
     }
+
+    public override Task<Message> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Messages
+            .Include(x => x.LinkPreview)
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
+    }
 }

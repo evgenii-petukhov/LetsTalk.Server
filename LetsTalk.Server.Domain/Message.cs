@@ -17,6 +17,8 @@ public class Message : BaseEntity
 
     public LinkPreview? LinkPreview { get; protected set; }
 
+    public int? LinkPreviewId { get; protected set; }
+
     public Image? Image { get; protected set; }
 
     public string? ImageId { get; protected set; }
@@ -37,13 +39,14 @@ public class Message : BaseEntity
     {
     }
 
-    public Message(int senderId, int chatId, string? text, string? textHtml, Image? image = null)
+    public Message(int senderId, int chatId, string? text, string? textHtml, int? linkPreviewId = null, Image? image = null)
     {
         SenderId = senderId;
         ChatId = chatId;
         Text = text;
         TextHtml = textHtml;
         Image = image;
+        LinkPreviewId = linkPreviewId;
     }
 
     public void SetImagePreview(Image image)

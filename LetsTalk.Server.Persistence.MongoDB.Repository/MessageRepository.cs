@@ -59,14 +59,16 @@ public class MessageRepository : IMessageRepository
         string chatId,
         string text,
         string textHtml,
+        string linkPreviewId,
         CancellationToken cancellationToken = default)
     {
         var message = new Message
         {
-            SenderId =  senderId,
+            SenderId = senderId,
             ChatId = chatId,
             Text = text,
             TextHtml = textHtml,
+            LinkPreviewId = linkPreviewId,
             DateCreatedUnix = DateHelper.GetUnixTimestamp()
         };
 
@@ -109,8 +111,17 @@ public class MessageRepository : IMessageRepository
 
     public Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        return _messageCollection
-            .Find(Builders<Message>.Filter.Eq(x => x.Id, id))
+        return _messageCollection.Aggregate()
+            .Match(Builders<Message>.Filter.Eq(x => x.Id, id))
+            .Lookup<Message, LinkPreview, Message>(
+                foreignCollection: _linkPreviewCollection,
+                localField: m => m.LinkPreviewId,
+                foreignField: lp => lp.Id,
+                @as: m => m.LinkPreview)
+            .Unwind(m => m.LinkPreview, new AggregateUnwindOptions<Message>
+            {
+                PreserveNullAndEmptyArrays = true
+            })
             .FirstOrDefaultAsync(cancellationToken);
     }
 

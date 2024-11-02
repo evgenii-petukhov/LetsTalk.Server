@@ -28,7 +28,7 @@ public static class MongoDBServicesRegistration
             .UseDatabase(configuration.GetConnectionString("MongoDB"), configuration.GetValue<string>("MongoDB:databaseName"))
             .UseAssembly(Assembly.GetExecutingAssembly())
             .UseSchemeValidation(false)
-            .Run("0.1.3");
+            .Run("0.1.2");
 
         return services;
     }

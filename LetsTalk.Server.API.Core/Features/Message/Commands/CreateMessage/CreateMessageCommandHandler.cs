@@ -22,6 +22,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
     private readonly IMapper _mapper;
     private readonly IMessageCacheManager _messageCacheManager;
     private readonly IMessageAgnosticService _messageAgnosticService;
+    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService;
     private readonly KafkaSettings _kafkaSettings;
     private readonly IMessageProducer _messageNotificationProducer;
     private readonly IMessageProducer _linkPreviewRequestProducer;
@@ -34,13 +35,15 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
         IMessageCacheManager messageCacheManager,
-        IMessageAgnosticService messageDatabaseAgnosticService)
+        IMessageAgnosticService messageDatabaseAgnosticService,
+        ILinkPreviewAgnosticService linkPreviewAgnosticService)
     {
         _chatAgnosticService = chatAgnosticService;
         _htmlGenerator = htmlGenerator;
         _mapper = mapper;
         _messageCacheManager = messageCacheManager;
         _messageAgnosticService = messageDatabaseAgnosticService;
+        _linkPreviewAgnosticService = linkPreviewAgnosticService;
         _kafkaSettings = kafkaSettings.Value;
         _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
         _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
@@ -59,12 +62,17 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 
         var (html, url) = _htmlGenerator.GetHtml(request.Text!);
 
+        var linkPreviewId = string.IsNullOrWhiteSpace(url)
+            ? null
+            : await _linkPreviewAgnosticService.GetIdByUrlAsync(url, cancellationToken);
+
         var message = request.Image == null
             ? await _messageAgnosticService.CreateMessageAsync(
                 request.SenderId!,
                 request.ChatId!,
                 request.Text!,
                 html!,
+                linkPreviewId!,
                 cancellationToken)
             : await _messageAgnosticService.CreateMessageAsync(
                 request.SenderId!,
@@ -95,7 +103,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                         IsMine = accountId == request.SenderId
                     }
                 }).ToArray()),
-            string.IsNullOrWhiteSpace(url) ? Task.CompletedTask : _linkPreviewRequestProducer.ProduceAsync(
+            (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId)) ? Task.CompletedTask : _linkPreviewRequestProducer.ProduceAsync(
                 _kafkaSettings.LinkPreviewRequest!.Topic,
                 Guid.NewGuid().ToString(),
                 new LinkPreviewRequest

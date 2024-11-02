@@ -28,17 +28,18 @@ public class MessageEntityFrameworkService(
         string chatId,
         string text,
         string textHtml,
+        string linkPreviewId,
         CancellationToken cancellationToken)
     {
         var message = new Message(
             int.Parse(senderId),
             int.Parse(chatId),
             text,
-            textHtml);
+            textHtml,
+            int.TryParse(linkPreviewId, out int linkPreviewIdInt) ? linkPreviewIdInt : null);
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
-
-        return _mapper.Map<MessageServiceModel>(message);
+        return _mapper.Map<MessageServiceModel>(await _messageRepository.GetByIdAsync(message.Id, cancellationToken));
     }
 
     public async Task<MessageServiceModel> CreateMessageAsync(
@@ -59,7 +60,7 @@ public class MessageEntityFrameworkService(
             int.Parse(chatId),
             text,
             textHtml,
-            image);
+            image: image);
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 

@@ -21,45 +21,37 @@ public class LinkPreviewGenerator(
 
     public async Task<MessageServiceModel?> ProcessMessageAsync(string messageId, string url)
     {
-        var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
-        if (linkPreviewId == null)
+        try
         {
-            try
+            var pageString = await _downloadService.DownloadAsStringAsync(url);
+
+            var (title, imageUrl) = _regexService.GetOpenGraphModel(pageString);
+
+            if (string.IsNullOrWhiteSpace(title))
             {
-                var pageString = await _downloadService.DownloadAsStringAsync(url);
-
-                var (title, imageUrl) = _regexService.GetOpenGraphModel(pageString);
-
-                if (string.IsNullOrWhiteSpace(title))
-                {
-                    _logger.LogInformation("Title is empty: {url}", url);
-                    return null;
-                }
-
-                title = HttpUtility.HtmlDecode(title);
-                try
-                {
-                    var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, url, title, imageUrl!);
-                    _logger.LogInformation("New LinkPreview added: {url}", url);
-                    return message;
-                }
-                catch
-                {
-                    linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
-                    _logger.LogInformation("Fetched from DB: {url}", url);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to download: {url}", url);
+                _logger.LogInformation("Title is empty: {url}", url);
                 return null;
             }
-        }
-        else
-        {
-            _logger.LogInformation("Fetched from DB: {url}", url);
-        }
 
-        return await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId!);
+            title = HttpUtility.HtmlDecode(title);
+            try
+            {
+                var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, url, title, imageUrl!);
+                _logger.LogInformation("New LinkPreview added: {url}", url);
+                return message;
+            }
+            catch
+            {
+                var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(url);
+                var message = await _messageAgnosticService.SetLinkPreviewAsync(messageId, linkPreviewId!);
+                _logger.LogInformation("Fetched from DB: {url}", url);
+                return message;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Unable to download: {url}", url);
+            return null;
+        }
     }
 }

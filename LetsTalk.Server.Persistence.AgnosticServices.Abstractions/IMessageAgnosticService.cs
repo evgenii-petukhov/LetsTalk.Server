@@ -10,6 +10,7 @@ public interface IMessageAgnosticService
         string chatId,
         string text,
         string textHtml,
+        string linkPreviewId,
         CancellationToken cancellationToken);
 
     Task<MessageServiceModel> CreateMessageAsync(

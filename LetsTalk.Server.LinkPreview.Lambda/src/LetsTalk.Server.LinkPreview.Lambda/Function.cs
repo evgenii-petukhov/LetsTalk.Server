@@ -10,7 +10,9 @@ namespace LetsTalk.Server.LinkPreview.Lambda
     {
         public static Task<LinkPreviewResponse> GenerateLinkPreviewAsync(string input)
         {
-            var linkPreviewService = new LinkPreviewService(new LambdaDownloadService(), new RegexService());
+            var linkPreviewService = new LinkPreviewService(
+                new DownloadService(new FakeHttpClientService()),
+                new RegexService());
             return linkPreviewService.GenerateLinkPreviewAsync(input);
         }
     }

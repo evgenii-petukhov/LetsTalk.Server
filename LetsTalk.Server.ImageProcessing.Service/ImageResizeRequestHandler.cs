@@ -12,38 +12,24 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
-public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>, IDisposable
+public class ImageResizeRequestHandler(
+    IImageService imageService,
+    IFileService fileService,
+    IImageResizeService imageResizeService,
+    IOptions<FileStorageSettings> fileStorageSettings,
+    IHttpClientFactory httpClientFactory,
+    ISignPackageService signPackageService,
+    IOptions<ApplicationUrlSettings> options) : IMessageHandler<ImageResizeRequest>, IDisposable
 {
-    private readonly IImageService _imageService;
-    private readonly IFileService _fileService;
-    private readonly IImageResizeService _imageResizeService;
+    private readonly IImageService _imageService = imageService;
+    private readonly IFileService _fileService = fileService;
+    private readonly IImageResizeService _imageResizeService = imageResizeService;
 
-    private readonly ISignPackageService _signPackageService;
-    private readonly KafkaSettings _kafkaSettings;
-    private readonly FileStorageSettings _fileStorageSettings;
-    private readonly HttpClient _httpClient;
-    private readonly ApplicationUrlSettings _applicationUrlSettings;
+    private readonly ISignPackageService _signPackageService = signPackageService;
+    private readonly FileStorageSettings _fileStorageSettings = fileStorageSettings.Value;
+    private readonly HttpClient _httpClient = httpClientFactory.CreateClient(nameof(ImageResizeRequestHandler));
+    private readonly ApplicationUrlSettings _applicationUrlSettings = options.Value;
     private bool _disposedValue;
-
-    public ImageResizeRequestHandler(
-        IImageService imageService,
-        IFileService fileService,
-        IImageResizeService imageResizeService,
-        IOptions<KafkaSettings> kafkaSettings,
-        IOptions<FileStorageSettings> fileStorageSettings,
-        IHttpClientFactory httpClientFactory,
-        ISignPackageService signPackageService,
-        IOptions<ApplicationUrlSettings> options)
-    {
-        _imageService = imageService;
-        _fileService = fileService;
-        _imageResizeService = imageResizeService;
-        _kafkaSettings = kafkaSettings.Value;
-        _fileStorageSettings = fileStorageSettings.Value;
-        _signPackageService = signPackageService;
-        _httpClient = httpClientFactory.CreateClient(nameof(ImageResizeRequestHandler));
-        _applicationUrlSettings = options.Value;
-    }
 
     public async Task Handle(IMessageContext context, ImageResizeRequest imageResizeRequest)
     {
@@ -73,16 +59,11 @@ public class ImageResizeRequestHandler : IMessageHandler<ImageResizeRequest>, ID
             ImageFormat = ImageFormats.Webp
         };
         _signPackageService.Sign(setImagePreviewRequest);
-        using var content = GetHttpContent(setImagePreviewRequest);
-        await _httpClient.PutAsync($"{_applicationUrlSettings.Api}/api/message/setimagepreview", content);
-    }
-
-    private HttpContent GetHttpContent(object payload)
-    {
-        return new StringContent(
-            JsonSerializer.Serialize(payload),
+        using var content = new StringContent(
+            JsonSerializer.Serialize(setImagePreviewRequest),
             Encoding.UTF8,
             "application/json");
+        await _httpClient.PutAsync($"{_applicationUrlSettings.Api}/api/message/setimagepreview", content);
     }
 
     private void Dispose(bool disposing)

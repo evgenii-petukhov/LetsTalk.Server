@@ -6,8 +6,9 @@ using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LetsTalk.Server.LinkPreview.Utility;
 using LetsTalk.Server.SignPackage;
+using LetsTalk.Server.LinkPreview.Utility.Abstractions;
+using LetsTalk.Server.LinkPreview.Utility.Services;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -18,7 +19,6 @@ public static class LinkPreviewServiceRegistration
         IConfiguration configuration)
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-        services.AddLinkPreviewUtility();
         services.AddKafka(
             kafka => kafka
                 .UseConsoleLog()
@@ -45,6 +45,11 @@ public static class LinkPreviewServiceRegistration
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
         services.Configure<AwsSettings>(configuration.GetSection("Aws"));
         services.AddSignPackageServices(configuration);
+        services.AddHttpClient(nameof(HttpClientService));
+        services.AddScoped<IHttpClientService, HttpClientService>();
+        services.AddScoped<IDownloadService, DownloadService>();
+        services.AddScoped<IRegexService, RegexService>();
+        services.AddScoped<ILinkPreviewService, LinkPreviewService>();
         services.AddHttpClient(nameof(LinkPreviewGeneratorBase)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
 #if DEBUG

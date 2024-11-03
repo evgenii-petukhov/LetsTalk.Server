@@ -6,8 +6,7 @@ using KafkaFlow.Serializer;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
-using LetsTalk.Server.Persistence.AgnosticServices;
-using System.Reflection;
+using LetsTalk.Server.SignPackage;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
@@ -19,7 +18,6 @@ public static class ImageProcessingServiceRegistration
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddFileStorageUtilityServices();
-        services.AddAgnosticServices(configuration);
         services.AddImageProcessingUtilityServices();
         services.AddKafka(
             kafka => kafka
@@ -31,8 +29,6 @@ public static class ImageProcessingServiceRegistration
                                 kafkaSettings.Url
                         })
                         .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
-                        .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
-                        .CreateTopicIfNotExists(kafkaSettings.ClearMessageCacheRequest!.Topic, 1, 1)
                         .AddConsumer(consumer => consumer
                             .Topic(kafkaSettings.ImageResizeRequest.Topic)
                             .WithGroupId(kafkaSettings.ImageResizeRequest.GroupId)
@@ -43,27 +39,18 @@ public static class ImageProcessingServiceRegistration
                                 .AddTypedHandlers(h => h.AddHandler<ImageResizeRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
-                        .AddProducer(
-                            kafkaSettings.ImagePreviewNotification.Producer,
-                            producer => producer
-                                .DefaultTopic(kafkaSettings.ImagePreviewNotification.Topic)
-                                .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
-                                )
-                        )
-                        .AddProducer(
-                            kafkaSettings.ClearMessageCacheRequest.Producer,
-                            producer => producer
-                                .DefaultTopic(kafkaSettings.ClearMessageCacheRequest.Topic)
-                                .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
-                                )
-                        )
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
+        services.AddSignPackageServices(configuration);
+        services.AddHttpClient(nameof(ImageResizeRequestHandler)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+#if DEBUG
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+#endif
+        });
 
         return services;
     }

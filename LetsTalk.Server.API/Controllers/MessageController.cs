@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.SignPackage.Abstractions;
+using LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
+using LetsTalk.Server.API.Core.Features.Message.Commands.SetExistingLinkPreview;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -26,7 +29,10 @@ public class MessageController(
     private readonly MessagingSettings _messagingSettings = messagingSettings.Value;
 
     [HttpGet("{chatId}")]
-    public async Task<ActionResult<List<MessageDto>>> GetAsync(string chatId, [FromQuery(Name="page")] int pageIndex = 0, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<List<MessageDto>>> GetAsync(
+        string chatId,
+        [FromQuery(Name="page")] int pageIndex = 0,
+        CancellationToken cancellationToken = default)
     {
         var senderId = GetAccountId();
         var query = new GetMessagesQuery(senderId, chatId, pageIndex, _messagingSettings.MessagesPerPage);
@@ -35,7 +41,9 @@ public class MessageController(
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageDto>> PostAsync(CreateMessageRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageDto>> PostAsync(
+        CreateMessageRequest request,
+        CancellationToken cancellationToken)
     {
         var validator = new CreateMessageRequestValidator(_signPackageService);
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -52,7 +60,10 @@ public class MessageController(
     }
 
     [HttpPut("MarkAsRead")]
-    public async Task<ActionResult> MarkAsReadAsync(string chatId, string messageId, CancellationToken cancellationToken)
+    public async Task<ActionResult> MarkAsReadAsync(
+        string chatId,
+        string messageId,
+        CancellationToken cancellationToken)
     {
         var cmd = new ReadMessageCommand
         {
@@ -60,6 +71,63 @@ public class MessageController(
             AccountId = GetAccountId(),
             MessageId = messageId,
         };
+        await _mediator.Send(cmd, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPut("SetLinkPreview")]
+    [AllowAnonymous]
+    public async Task<ActionResult> SetLinkPreviewAsync(
+        SetLinkPreviewRequest request,
+        CancellationToken cancellationToken)
+    {
+        var validator = new SetLinkPreviewRequestValidator(_signPackageService);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
+
+        var cmd = _mapper.Map<SetLinkPreviewCommand>(request);
+        await _mediator.Send(cmd, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPut("SetExistingLinkPreview")]
+    [AllowAnonymous]
+    public async Task<ActionResult> SetExistingLinkPreviewAsync(
+        SetExistingLinkPreviewRequest request,
+        CancellationToken cancellationToken)
+    {
+        var validator = new SetExistingLinkPreviewRequestValidator(_signPackageService);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
+
+        var cmd = _mapper.Map<SetExistingLinkPreviewCommand>(request);
+        await _mediator.Send(cmd, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPut("SetImagePreview")]
+    [AllowAnonymous]
+    public async Task<ActionResult> SetImagePreviewAsync(
+        SetImagePreviewRequest request,
+        CancellationToken cancellationToken)
+    {
+        var validator = new SetImagePreviewRequestValidator(_signPackageService);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new BadRequestException("Invalid request", validationResult);
+        }
+
+        var cmd = _mapper.Map<SetImagePreviewCommand>(request);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

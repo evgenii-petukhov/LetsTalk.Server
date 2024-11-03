@@ -12,7 +12,7 @@ public static class AuthenticationClientServicesRegistration
         IConfiguration configuration)
     {
         services.AddSingleton<IAuthenticationClient, AuthenticationClient>();
-        services.AddGrpcClient<JwtTokenGrpcServiceClient>(options => options.Address = new Uri(configuration.GetValue<string>("AuthenticationSettings:Url")!)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        services.AddGrpcClient<JwtTokenGrpcServiceClient>(options => options.Address = new Uri(configuration.GetValue<string>("ApplicationUrls:Authentication")!)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
 #if DEBUG
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator

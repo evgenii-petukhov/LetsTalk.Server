@@ -6,9 +6,9 @@ using LetsTalk.Server.LinkPreview.Abstractions;
 using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LetsTalk.Server.Persistence.AgnosticServices;
-using System.Reflection;
 using LetsTalk.Server.LinkPreview.Utility;
+using LetsTalk.Server.LinkPreview.Utility.Services;
+using LetsTalk.Server.SignPackage;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -31,8 +31,6 @@ public static class LinkPreviewServiceRegistration
                                 kafkaSettings.Url
                         })
                         .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
-                        .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
-                        .CreateTopicIfNotExists(kafkaSettings.ClearMessageCacheRequest!.Topic, 1, 1)
                         .AddConsumer(consumer => consumer
                             .Topic(kafkaSettings.LinkPreviewRequest.Topic)
                             .WithGroupId(kafkaSettings.LinkPreviewRequest.GroupId)
@@ -43,27 +41,17 @@ public static class LinkPreviewServiceRegistration
                                 .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
                             )
                         )
-                        .AddProducer(
-                            kafkaSettings.LinkPreviewNotification.Producer,
-                            producer => producer
-                                .DefaultTopic(kafkaSettings.LinkPreviewNotification.Topic)
-                                .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
-                                )
-                        )
-                        .AddProducer(
-                            kafkaSettings.ClearMessageCacheRequest.Producer,
-                            producer => producer
-                                .DefaultTopic(kafkaSettings.ClearMessageCacheRequest.Topic)
-                                .AddMiddlewares(m =>
-                                    m.AddSerializer<JsonCoreSerializer>()
-                                )
-                        )
                 )
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.AddAgnosticServices(configuration);
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
+        services.AddSignPackageServices(configuration);
+        services.AddHttpClient(nameof(LinkPreviewService)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+#if DEBUG
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+#endif
+        });
 
         return services;
     }

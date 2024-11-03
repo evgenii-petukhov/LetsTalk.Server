@@ -11,7 +11,7 @@ public class LinkPreviewService(
     private readonly IDownloadService _downloadService = downloadService;
     private readonly IRegexService _regexService = regexService;
 
-    public async Task<LinkPreviewResponse> GenerateLinkPreviewAsync(string url, CancellationToken cancellationToken)
+    public async Task<LinkPreviewResponse> GenerateLinkPreviewAsync(string url, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -34,7 +34,7 @@ public class LinkPreviewService(
         {
             return new LinkPreviewResponse
             {
-                Exception = e
+                Error = e
             };
         }
     }

@@ -7,7 +7,6 @@ using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.LinkPreview.Utility;
-using LetsTalk.Server.LinkPreview.Utility.Services;
 using LetsTalk.Server.SignPackage;
 
 namespace LetsTalk.Server.LinkPreview;
@@ -20,7 +19,6 @@ public static class LinkPreviewServiceRegistration
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddLinkPreviewUtility();
-        services.AddScoped<ILinkPreviewGenerator, LinkPreviewGenerator>();
         services.AddKafka(
             kafka => kafka
                 .UseConsoleLog()
@@ -45,13 +43,23 @@ public static class LinkPreviewServiceRegistration
         );
         services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
+        services.Configure<AwsSettings>(configuration.GetSection("Aws"));
         services.AddSignPackageServices(configuration);
-        services.AddHttpClient(nameof(LinkPreviewService)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        services.AddHttpClient(nameof(LinkPreviewGeneratorBase)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
 #if DEBUG
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 #endif
         });
+        switch (configuration.GetValue<string>("Features:linkPreview"))
+        {
+            case "aws":
+                services.AddScoped<ILinkPreviewGenerator, LambdaLinkPreviewGenerator>();
+                break;
+            default:
+                services.AddScoped<ILinkPreviewGenerator, LinkPreviewGenerator>();
+                break;
+        }
 
         return services;
     }

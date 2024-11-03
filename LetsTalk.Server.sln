@@ -105,9 +105,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.API.Core", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.SignPackage.Models", "LetsTalk.Server.SignPackage.Models\LetsTalk.Server.SignPackage.Models.csproj", "{75B54039-D9E0-482D-93C2-6B12A6202920}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview.Utility", "LetsTalk.Server.LinkPreview.Utility\LetsTalk.Server.LinkPreview.Utility.csproj", "{1F11AB33-1B2F-4505-93BB-14FCEF745877}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview.Utility", "LetsTalk.Server.LinkPreview.Utility\LetsTalk.Server.LinkPreview.Utility.csproj", "{1F11AB33-1B2F-4505-93BB-14FCEF745877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview.Utility.Abstractions", "LetsTalk.Server.LinkPreview.Utility.Abstractions\LetsTalk.Server.LinkPreview.Utility.Abstractions.csproj", "{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview.Utility.Abstractions", "LetsTalk.Server.LinkPreview.Utility.Abstractions\LetsTalk.Server.LinkPreview.Utility.Abstractions.csproj", "{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lambda", "Lambda", "{BBB3AE6C-136B-445C-99F2-DA60C4D7724D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview.Lambda", "LetsTalk.Server.LinkPreview.Lambda\src\LetsTalk.Server.LinkPreview.Lambda\LetsTalk.Server.LinkPreview.Lambda.csproj", "{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -291,6 +295,10 @@ Global
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -347,6 +355,8 @@ Global
 		{75B54039-D9E0-482D-93C2-6B12A6202920} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{1F11AB33-1B2F-4505-93BB-14FCEF745877} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{BBB3AE6C-136B-445C-99F2-DA60C4D7724D} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
+		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2} = {BBB3AE6C-136B-445C-99F2-DA60C4D7724D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

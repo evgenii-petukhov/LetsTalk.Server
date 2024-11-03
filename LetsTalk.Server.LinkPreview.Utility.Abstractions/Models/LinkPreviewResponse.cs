@@ -4,5 +4,5 @@ public class LinkPreviewResponse
 {
     public OpenGraphModel? OpenGraphModel { get; set; }
 
-    public Exception? Exception { get; set; }
+    public Exception? Error { get; set; }
 }

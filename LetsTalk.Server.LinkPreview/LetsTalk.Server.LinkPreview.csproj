@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Lambda" Version="3.7.406.5" />
     <PackageReference Include="KafkaFlow" Version="3.0.4" />
     <PackageReference Include="KafkaFlow.LogHandler.Console" Version="3.0.4" />
     <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="3.0.4" />

@@ -6,6 +6,7 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -14,6 +15,7 @@ namespace LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
 public class SetLinkPreviewCommandHandler : IRequestHandler<SetLinkPreviewCommand, Unit>
 {
     private readonly IMessageAgnosticService _messageAgnosticService;
+    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService;
     private readonly IChatAgnosticService _chatAgnosticService;
     private readonly IMapper _mapper;
     private readonly IMessageProducer _linkPreviewNotificationProducer;
@@ -22,6 +24,7 @@ public class SetLinkPreviewCommandHandler : IRequestHandler<SetLinkPreviewComman
 
     public SetLinkPreviewCommandHandler(
         IMessageAgnosticService messageAgnosticService,
+        ILinkPreviewAgnosticService linkPreviewAgnosticService,
         IChatAgnosticService chatAgnosticService,
         IProducerAccessor producerAccessor,
         IOptions<KafkaSettings> kafkaSettings,
@@ -29,6 +32,7 @@ public class SetLinkPreviewCommandHandler : IRequestHandler<SetLinkPreviewComman
         IMessageCacheManager messageCacheManager)
     {
         _messageAgnosticService = messageAgnosticService;
+        _linkPreviewAgnosticService = linkPreviewAgnosticService;
         _chatAgnosticService = chatAgnosticService;
         _mapper = mapper;
         _messageCacheManager = messageCacheManager;
@@ -38,12 +42,25 @@ public class SetLinkPreviewCommandHandler : IRequestHandler<SetLinkPreviewComman
 
     public async Task<Unit> Handle(SetLinkPreviewCommand request, CancellationToken cancellationToken)
     {
-        var message = await _messageAgnosticService.SetLinkPreviewAsync(
-            request.MessageId!,
-            request.Url!,
-            request.Title!,
-            request.ImageUrl!,
-            cancellationToken);
+        MessageServiceModel message;
+        try
+        {
+            message = await _messageAgnosticService.SetLinkPreviewAsync(
+                request.MessageId!,
+                request.Url!,
+                request.Title!,
+                request.ImageUrl!,
+                cancellationToken);
+        }
+        catch
+        {
+            var linkPreviewId = await _linkPreviewAgnosticService.GetIdByUrlAsync(request.Url!, cancellationToken);
+
+            message = await _messageAgnosticService.SetLinkPreviewAsync(
+                request.MessageId!,
+                linkPreviewId!,
+                cancellationToken);
+        }
 
         var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!, cancellationToken);
         var linkPreviewDto = _mapper.Map<LinkPreviewDto>(message);

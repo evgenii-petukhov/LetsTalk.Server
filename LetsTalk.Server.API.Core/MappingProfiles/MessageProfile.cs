@@ -5,7 +5,6 @@ using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
-using LetsTalk.Server.API.Core.Features.Message.Commands.SetExistingLinkPreview;
 
 namespace LetsTalk.Server.API.Core.MappingProfiles;
 
@@ -19,7 +18,6 @@ public class MessageProfile : Profile
         CreateMap<MessageServiceModel, MessageDto>()
             .ForMember(x => x.Created, x => x.MapFrom(source => source.DateCreatedUnix));
         CreateMap<SetLinkPreviewRequest, SetLinkPreviewCommand>();
-        CreateMap<SetExistingLinkPreviewRequest, SetExistingLinkPreviewCommand>();
         CreateMap<SetImagePreviewRequest, SetImagePreviewCommand>();
         CreateMap<MessageServiceModel, LinkPreviewDto>()
             .ForMember(x => x.MessageId, x => x.MapFrom(m => m.Id))

@@ -1,5 +1,4 @@
-﻿using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.SignPackage.Models;
+﻿using LetsTalk.Server.SignPackage.Models;
 
 namespace LetsTalk.Server.API.Models.Message;
 
@@ -11,7 +10,7 @@ public class SetImagePreviewRequest : ISignable
 
     public string? Filename { get; set; }
 
-    public ImageFormats ImageFormat { get; set; }
+    public int ImageFormat { get; set; }
 
     public int Width { get; set; }
 

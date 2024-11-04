@@ -19,21 +19,19 @@ public class ImageResizeRequestHandler(
     IOptions<FileStorageSettings> fileStorageSettings,
     IHttpClientFactory httpClientFactory,
     ISignPackageService signPackageService,
-    IOptions<ApplicationUrlSettings> options) : IMessageHandler<ImageResizeRequest>, IDisposable
+    IOptions<ApplicationUrlSettings> options) : IMessageHandler<ImageResizeRequest>
 {
     private readonly IImageService _imageService = imageService;
     private readonly IFileService _fileService = fileService;
     private readonly IImageResizeService _imageResizeService = imageResizeService;
-
     private readonly ISignPackageService _signPackageService = signPackageService;
     private readonly FileStorageSettings _fileStorageSettings = fileStorageSettings.Value;
-    private readonly HttpClient _httpClient = httpClientFactory.CreateClient(nameof(ImageResizeRequestHandler));
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
     private readonly ApplicationUrlSettings _applicationUrlSettings = options.Value;
-    private bool _disposedValue;
 
-    public async Task Handle(IMessageContext context, ImageResizeRequest imageResizeRequest)
+    public async Task Handle(IMessageContext context, ImageResizeRequest request)
     {
-        var fetchImageResponse = await _imageService.FetchImageAsync(imageResizeRequest.ImageId!);
+        var fetchImageResponse = await _imageService.FetchImageAsync(request.ImageId!);
 
         if (fetchImageResponse == null)
         {
@@ -48,40 +46,20 @@ public class ImageResizeRequestHandler(
         var filename = await _fileService.SaveDataAsync(data!, FileTypes.Image, width, height);
         await _fileService.SaveImageInfoAsync(filename, width, height);
 
-
-        var setImagePreviewRequest = new SetImagePreviewRequest
+        var payload = new SetImagePreviewRequest
         {
-            MessageId = imageResizeRequest.MessageId,
-            ChatId = imageResizeRequest.ChatId,
+            MessageId = request.MessageId,
+            ChatId = request.ChatId,
             Filename = filename,
             Width = width,
             Height = height,
-            ImageFormat = ImageFormats.Webp
+            ImageFormat = (int)ImageFormats.Webp
         };
-        _signPackageService.Sign(setImagePreviewRequest);
+        _signPackageService.Sign(payload);
         using var content = new StringContent(
-            JsonSerializer.Serialize(setImagePreviewRequest),
+            JsonSerializer.Serialize(payload),
             Encoding.UTF8,
             "application/json");
-        await _httpClient.PutAsync($"{_applicationUrlSettings.Api}/api/message/setimagepreview", content);
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (!_disposedValue)
-        {
-            if (disposing)
-            {
-                _httpClient.Dispose();
-            }
-
-            _disposedValue = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        await _httpClientFactory.CreateClient(nameof(ImageResizeRequestHandler)).PutAsync($"{_applicationUrlSettings.Api}/api/message/setimagepreview", content);
     }
 }

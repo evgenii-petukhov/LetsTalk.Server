@@ -1,12 +1,28 @@
 ﻿using KafkaFlow;
+using LetsTalk.Server.API.Models.Message;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Kafka.Models;
-using LetsTalk.Server.LinkPreview.Abstractions;
+using System.Text.Json;
+using System.Text;
+using LetsTalk.Server.SignPackage.Abstractions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 
 namespace LetsTalk.Server.LinkPreview;
 
-public class LinkPreviewRequestHandler(ILinkPreviewGenerator linkPreviewGenerator) : IMessageHandler<LinkPreviewRequest>
+public class LinkPreviewRequestHandler(
+    ILinkPreviewService linkPreviewService,
+    ILogger<LinkPreviewRequestHandler> logger,
+    IHttpClientService httpClientService,
+    ISignPackageService signPackageService,
+    IOptions<ApplicationUrlSettings> options) : IMessageHandler<LinkPreviewRequest>
 {
-    private readonly ILinkPreviewGenerator _linkPreviewGenerator = linkPreviewGenerator;
+    private readonly ILinkPreviewService _linkPreviewService = linkPreviewService;
+    private readonly ILogger<LinkPreviewRequestHandler> _logger = logger;
+    private readonly ISignPackageService _signPackageService = signPackageService;
+    private readonly IHttpClientService _httpClientService = httpClientService;
+    private readonly ApplicationUrlSettings _applicationUrlSettings = options.Value;
 
     public async Task Handle(IMessageContext context, LinkPreviewRequest request)
     {
@@ -15,6 +31,35 @@ public class LinkPreviewRequestHandler(ILinkPreviewGenerator linkPreviewGenerato
             return;
         }
 
-        await _linkPreviewGenerator.ProcessMessageAsync(request.MessageId!, request.ChatId!, request.Url);
+        var model = await _linkPreviewService.GenerateLinkPreviewAsync(request.Url);
+
+        if (model == null)
+        {
+            _logger.LogInformation("Title is empty: {url}", request.Url);
+            return;
+        }
+
+        if (model.Error != null)
+        {
+            _logger.LogError(model.Error, "Unable to download: {url}", request.Url);
+        }
+
+        var payload = new SetLinkPreviewRequest
+        {
+            MessageId = request.MessageId,
+            ChatId = request.ChatId,
+            Url = request.Url,
+            Title = model.OpenGraphModel!.Title,
+            ImageUrl = model.OpenGraphModel!.ImageUrl
+        };
+        _signPackageService.Sign(payload);
+        using var content = new StringContent(
+            JsonSerializer.Serialize(payload),
+            Encoding.UTF8,
+            "application/json");
+
+        using var client = _httpClientService.GetHttpClient();
+        await client.PutAsync($"{_applicationUrlSettings.Api}/api/message/setlinkpreview", content);
+        _logger.LogInformation("New LinkPreview added: {url}", request.Url);
     }
 }

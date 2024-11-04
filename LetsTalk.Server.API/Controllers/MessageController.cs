@@ -11,7 +11,6 @@ using Microsoft.Extensions.Options;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
-using LetsTalk.Server.API.Core.Features.Message.Commands.SetExistingLinkPreview;
 using Microsoft.AspNetCore.Authorization;
 
 namespace LetsTalk.Server.API.Controllers;
@@ -90,25 +89,6 @@ public class MessageController(
         }
 
         var cmd = _mapper.Map<SetLinkPreviewCommand>(request);
-        await _mediator.Send(cmd, cancellationToken);
-        return Ok();
-    }
-
-    [HttpPut("SetExistingLinkPreview")]
-    [AllowAnonymous]
-    public async Task<ActionResult> SetExistingLinkPreviewAsync(
-        SetExistingLinkPreviewRequest request,
-        CancellationToken cancellationToken)
-    {
-        var validator = new SetExistingLinkPreviewRequestValidator(_signPackageService);
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            throw new BadRequestException("Invalid request", validationResult);
-        }
-
-        var cmd = _mapper.Map<SetExistingLinkPreviewCommand>(request);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

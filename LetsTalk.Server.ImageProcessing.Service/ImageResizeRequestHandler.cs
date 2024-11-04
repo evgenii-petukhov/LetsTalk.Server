@@ -1,14 +1,12 @@
 ﻿using KafkaFlow;
-using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.ImageProcessing.Abstractions;
+using LetsTalk.Server.Infrastructure.ApiClient;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Microsoft.Extensions.Options;
-using System.Text;
-using System.Text.Json;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
@@ -56,10 +54,8 @@ public class ImageResizeRequestHandler(
             ImageFormat = (int)ImageFormats.Webp
         };
         _signPackageService.Sign(payload);
-        using var content = new StringContent(
-            JsonSerializer.Serialize(payload),
-            Encoding.UTF8,
-            "application/json");
-        await _httpClientFactory.CreateClient(nameof(ImageResizeRequestHandler)).PutAsync($"{_applicationUrlSettings.Api}/api/message/setimagepreview", content);
+        using var client = _httpClientFactory.CreateClient(nameof(ImageResizeRequestHandler));
+        var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
+        await apiClient.SetImagePreviewAsync(payload);
     }
 }

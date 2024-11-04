@@ -23,12 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility.Abstractions\LetsTalk.Server.FileStorage.Utility.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Utility\LetsTalk.Server.FileStorage.Utility.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Abstractions\LetsTalk.Server.ImageProcessing.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Infrastructure.ApiClient\LetsTalk.Server.Infrastructure.ApiClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj" />

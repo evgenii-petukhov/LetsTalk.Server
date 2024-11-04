@@ -1,13 +1,11 @@
 ﻿using KafkaFlow;
-using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Kafka.Models;
-using System.Text.Json;
-using System.Text;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
+using LetsTalk.Server.Infrastructure.ApiClient;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -53,13 +51,9 @@ public class LinkPreviewRequestHandler(
             ImageUrl = model.OpenGraphModel!.ImageUrl
         };
         _signPackageService.Sign(payload);
-        using var content = new StringContent(
-            JsonSerializer.Serialize(payload),
-            Encoding.UTF8,
-            "application/json");
-
         using var client = _httpClientService.GetHttpClient();
-        await client.PutAsync($"{_applicationUrlSettings.Api}/api/message/setlinkpreview", content);
+        var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
+        await apiClient.SetLinkPreviewAsync(payload);
         _logger.LogInformation("New LinkPreview added: {url}", request.Url);
     }
 }

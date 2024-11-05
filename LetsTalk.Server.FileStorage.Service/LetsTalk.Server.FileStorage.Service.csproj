@@ -27,7 +27,6 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="StackExchange.Redis" Version="2.7.27" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +41,7 @@
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.SignPackage\LetsTalk.Server.SignPackage.csproj" />
   </ItemGroup>
 

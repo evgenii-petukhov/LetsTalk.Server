@@ -1,17 +1,18 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
 using Microsoft.Extensions.Options;
+using LetsTalk.Server.Persistence.Redis;
 using StackExchange.Redis;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 
 public class LoginCodeRedisCacheService(
-    IConnectionMultiplexer сonnectionMultiplexer,
+    RedisConnection redisConnection,
     ILoginCodeGenerator loginCodeGenerator,
     IOptions<CachingSettings> cachingSettings) : LoginCodeCacheServiceBase(cachingSettings), ILoginCodeCacheService
 {
     private readonly ILoginCodeGenerator _generator = loginCodeGenerator;
-    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
+    private readonly IDatabase _database = redisConnection.Connection.GetDatabase();
 
     public async Task<(int, bool, TimeSpan)> GenerateCodeAsync(string email)
     {

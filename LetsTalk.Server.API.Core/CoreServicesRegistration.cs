@@ -7,12 +7,12 @@ using LetsTalk.Server.API.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using StackExchange.Redis;
 using LetsTalk.Server.API.Core.Services.Cache.Messages;
 using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.API.Core.Services.Cache.Chats;
 using LetsTalk.Server.API.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.AgnosticServices;
+using LetsTalk.Server.Persistence.Redis;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -94,8 +94,7 @@ public static class CoreServicesRegistration
         switch (configuration.GetValue<string>("Features:cachingMode"))
         {
             case "redis":
-                services.AddSingleton<IConnectionMultiplexer>(
-                    ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
+                services.AddRedisCache();
 
                 services.AddScoped<IMessageService, MessageService>();
                 services.DecorateScoped<IMessageService, MessageRedisCacheService>();

@@ -4,15 +4,16 @@ using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using LetsTalk.Server.Persistence.Redis;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Profile;
 
 public class ProfileRedisCacheService(
-    IConnectionMultiplexer сonnectionMultiplexer,
+    RedisConnection redisConnection,
     IOptions<CachingSettings> cachingSettings,
     IProfileService profileService) : ProfileCacheServiceBase(profileService, cachingSettings), IProfileService, IProfileCacheManager
 {
-    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
+    private readonly IDatabase _database = redisConnection.Connection.GetDatabase();
 
     public async Task<ProfileDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {

@@ -3,7 +3,7 @@ using LetsTalk.Server.Authentication.Services;
 using LetsTalk.Server.Authentication.Services.Cache;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Logging;
-using StackExchange.Redis;
+using LetsTalk.Server.Persistence.Redis;
 
 namespace LetsTalk.Server.Authentication
 {
@@ -36,7 +36,7 @@ namespace LetsTalk.Server.Authentication
             switch (configuration.GetValue<string>("Features:cachingMode"))
             {
                 case "redis":
-                    services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
+                    services.AddRedisCache();
                     services.AddScoped<IJwtCacheService, RedisCacheTokenService>();
                     break;
                 default:

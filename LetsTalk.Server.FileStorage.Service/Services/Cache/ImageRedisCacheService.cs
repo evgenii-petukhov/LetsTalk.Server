@@ -3,6 +3,7 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+using LetsTalk.Server.Persistence.Redis;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
@@ -20,11 +21,11 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
     private readonly IImageService _imageService;
 
     public ImageRedisCacheService(
-        IConnectionMultiplexer сonnectionMultiplexer,
+        RedisConnection redisConnection,
         IOptions<CachingSettings> cachingSettings,
         IImageService imageService)
     {
-        _database = сonnectionMultiplexer.GetDatabase();
+        _database = redisConnection.Connection.GetDatabase();
         _imageSizeThresholdInBytes = cachingSettings.Value.ImageSizeThresholdInBytes;
         _imageService = imageService;
 

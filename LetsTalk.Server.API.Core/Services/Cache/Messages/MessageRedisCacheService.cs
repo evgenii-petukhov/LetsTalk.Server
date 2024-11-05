@@ -4,15 +4,16 @@ using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using LetsTalk.Server.Persistence.Redis;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 
 public class MessageRedisCacheService(
-    IConnectionMultiplexer сonnectionMultiplexer,
+    RedisConnection redisConnection,
     IOptions<CachingSettings> cachingSettings,
     IMessageService messageService) : MessageCacheServiceBase(messageService, cachingSettings), IMessageService, IMessageCacheManager
 {
-    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
+    private readonly IDatabase _database = redisConnection.Connection.GetDatabase();
 
     public async Task<IReadOnlyList<MessageServiceModel>> GetPagedAsync(string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {

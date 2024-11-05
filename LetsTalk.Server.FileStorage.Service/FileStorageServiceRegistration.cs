@@ -10,11 +10,11 @@ using LetsTalk.Server.ImageProcessing.Utility;
 using System.Reflection;
 using KafkaFlow;
 using KafkaFlow.Serializer;
-using StackExchange.Redis;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Services.Cache;
 using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.SignPackage;
+using LetsTalk.Server.Persistence.Redis;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -76,7 +76,7 @@ public static class FileStorageServiceRegistration
         switch (configuration.GetValue<string>("Features:cachingMode"))
         {
             case "redis":
-                services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
+                services.AddRedisCache();
                 services.AddScoped<IImageCacheManager, ImageRedisCacheService>();
                 services.DecorateScoped<IImageService, ImageRedisCacheService>();
                 break;

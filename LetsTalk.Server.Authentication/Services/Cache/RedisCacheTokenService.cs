@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
+using LetsTalk.Server.Persistence.Redis;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -6,10 +7,10 @@ namespace LetsTalk.Server.Authentication.Services.Cache;
 
 public class RedisCacheTokenService(
     IJwtStorageService jwtStorageService,
-    IConnectionMultiplexer сonnectionMultiplexer) : CacheTokenServiceBase, IJwtCacheService
+    RedisConnection redisConnection) : CacheTokenServiceBase, IJwtCacheService
 {
     private readonly IJwtStorageService _jwtStorageService = jwtStorageService;
-    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
+    private readonly IDatabase _database = redisConnection.Connection.GetDatabase();
 
     public async Task<string?> GetAccountIdAsync(string? token)
     {

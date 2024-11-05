@@ -4,15 +4,16 @@ using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using LetsTalk.Server.Persistence.Redis;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Chats;
 
 public class ChatRedisCacheService(
-    IConnectionMultiplexer сonnectionMultiplexer,
+    RedisConnection redisConnection,
     IOptions<CachingSettings> cachingSettings,
     IChatService chatService) : ChatCacheServiceBase(chatService, cachingSettings), IChatService, IChatCacheManager
 {
-    private readonly IDatabase _database = сonnectionMultiplexer.GetDatabase();
+    private readonly IDatabase _database = redisConnection.Connection.GetDatabase();
 
     public async Task<IReadOnlyList<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {

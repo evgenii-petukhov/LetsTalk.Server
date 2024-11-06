@@ -1,6 +1,4 @@
-﻿using KafkaFlow;
-using KafkaFlow.Serializer;
-using LetsTalk.Server.Configuration;
+﻿using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +7,8 @@ using LetsTalk.Server.SignPackage;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 using LetsTalk.Server.LinkPreview.Utility.Services;
 using LetsTalk.Server.DependencyInjection;
+using MassTransit;
+using LetsTalk.Server.Kafka.Models;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -19,29 +19,30 @@ public static class LinkPreviewServiceRegistration
         IConfiguration configuration)
     {
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-        services.AddKafka(
-            kafka => kafka
-                .UseConsoleLog()
-                .AddCluster(
-                    cluster => cluster
-                        .WithBrokers(new[]
+        services.AddMassTransit(x =>
+        {
+            x.UsingInMemory();
+
+            x.AddRider(rider =>
+            {
+                rider.AddConsumer<LinkPreviewRequestConsumer>();
+
+                rider.UsingKafka((context, k) =>
+                {
+                    k.Host(kafkaSettings.Url);
+
+                    k.TopicEndpoint<LinkPreviewRequest>(
+                        kafkaSettings.LinkPreviewRequest!.Topic,
+                        kafkaSettings.LinkPreviewRequest.GroupId,
+                        e =>
                         {
-                                kafkaSettings.Url
-                        })
-                        .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
-                        .AddConsumer(consumer => consumer
-                            .Topic(kafkaSettings.LinkPreviewRequest.Topic)
-                            .WithGroupId(kafkaSettings.LinkPreviewRequest.GroupId)
-                            .WithBufferSize(100)
-                            .WithWorkersCount(10)
-                            .AddMiddlewares(middlewares => middlewares
-                                .AddDeserializer<JsonCoreDeserializer>()
-                                .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
-                            )
-                        )
-                )
-        );
-        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+                            e.ConfigureConsumer<LinkPreviewRequestConsumer>(context);
+                            e.CreateIfMissing();
+                        });
+                });
+            });
+        });
+
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
         services.AddSignPackageServices(configuration);
         services.AddScoped<IHttpClientService, HttpClientService>();

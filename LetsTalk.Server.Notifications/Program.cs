@@ -1,4 +1,3 @@
-using KafkaFlow;
 using LetsTalk.Server.Notifications;
 using LetsTalk.Server.Notifications.Hubs;
 using Serilog;
@@ -24,8 +23,5 @@ app.UseCors("all");
 app.UseSerilogRequestLogging();
 
 app.MapHub<NotificationHub>("/messagehub");
-
-var kafkaBus = app.Services.CreateKafkaBus();
-await kafkaBus.StartAsync();
 
 app.Run();

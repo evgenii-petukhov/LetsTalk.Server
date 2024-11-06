@@ -1,52 +1,52 @@
-﻿using KafkaFlow;
-using LetsTalk.Server.Configuration.Models;
+﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 using LetsTalk.Server.Infrastructure.ApiClient;
+using MassTransit;
 
 namespace LetsTalk.Server.LinkPreview;
 
-public class LinkPreviewRequestHandler(
+public class LinkPreviewRequestConsumer(
     ILinkPreviewService linkPreviewService,
-    ILogger<LinkPreviewRequestHandler> logger,
+    ILogger<LinkPreviewRequestConsumer> logger,
     IHttpClientService httpClientService,
     ISignPackageService signPackageService,
-    IOptions<ApplicationUrlSettings> options) : IMessageHandler<LinkPreviewRequest>
+    IOptions<ApplicationUrlSettings> options) : IConsumer<LinkPreviewRequest>
 {
     private readonly ILinkPreviewService _linkPreviewService = linkPreviewService;
-    private readonly ILogger<LinkPreviewRequestHandler> _logger = logger;
+    private readonly ILogger<LinkPreviewRequestConsumer> _logger = logger;
     private readonly ISignPackageService _signPackageService = signPackageService;
     private readonly IHttpClientService _httpClientService = httpClientService;
     private readonly ApplicationUrlSettings _applicationUrlSettings = options.Value;
 
-    public async Task Handle(IMessageContext context, LinkPreviewRequest request)
+    public async Task Consume(ConsumeContext<LinkPreviewRequest> context)
     {
-        if (string.IsNullOrWhiteSpace(request.Url))
+        if (string.IsNullOrWhiteSpace(context.Message.Url))
         {
             return;
         }
 
-        var model = await _linkPreviewService.GenerateLinkPreviewAsync(request.Url);
+        var model = await _linkPreviewService.GenerateLinkPreviewAsync(context.Message.Url);
 
         if (model == null)
         {
-            _logger.LogInformation("Title is empty: {url}", request.Url);
+            _logger.LogInformation("Title is empty: {url}", context.Message.Url);
             return;
         }
 
         if (model.Error != null)
         {
-            _logger.LogError(model.Error, "Unable to download: {url}", request.Url);
+            _logger.LogError(model.Error, "Unable to download: {url}", context.Message.Url);
         }
 
         var payload = new SetLinkPreviewRequest
         {
-            MessageId = request.MessageId,
-            ChatId = request.ChatId,
-            Url = request.Url,
+            MessageId = context.Message.MessageId,
+            ChatId = context.Message.ChatId,
+            Url = context.Message.Url,
             Title = model.OpenGraphModel!.Title,
             ImageUrl = model.OpenGraphModel!.ImageUrl
         };
@@ -54,6 +54,6 @@ public class LinkPreviewRequestHandler(
         using var client = _httpClientService.GetHttpClient();
         var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
         await apiClient.SetLinkPreviewAsync(payload);
-        _logger.LogInformation("New LinkPreview added: {url}", request.Url);
+        _logger.LogInformation("New LinkPreview added: {url}", context.Message.Url);
     }
 }

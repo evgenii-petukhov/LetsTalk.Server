@@ -8,13 +8,13 @@ using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.Utility;
 using LetsTalk.Server.ImageProcessing.Utility;
 using System.Reflection;
-using KafkaFlow;
-using KafkaFlow.Serializer;
 using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Services.Cache;
 using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.SignPackage;
 using LetsTalk.Server.Persistence.Redis;
+using MassTransit;
+using LetsTalk.Server.Kafka.Models;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -45,31 +45,31 @@ public static class FileStorageServiceRegistration
         services.AddImageProcessingUtilityServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddKafka(
-            kafka => kafka
-                .UseConsoleLog()
-                .AddCluster(
-                    cluster => cluster
-                        .WithBrokers(new[]
-                        {
-                                kafkaSettings.Url
-                        })
-                        .CreateTopicIfNotExists(kafkaSettings.RemoveImageRequest!.Topic, 1, 1)
-                        .AddConsumer(consumer => consumer
-                            .Topic(kafkaSettings.RemoveImageRequest.Topic)
-                            .WithGroupId(kafkaSettings.RemoveImageRequest.GroupId)
-                            .WithBufferSize(100)
-                            .WithWorkersCount(10)
-                            .AddMiddlewares(middlewares => middlewares
-                                .AddDeserializer<JsonCoreDeserializer>()
-                                .AddTypedHandlers(h => h.AddHandler<RemoveImageRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
-                            )
-                        )
-                )
-        );
-        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-        services.Configure<CachingSettings>(configuration.GetSection("Caching"));
+        services.AddMassTransit(x =>
+        {
+            x.UsingInMemory();
 
+            x.AddRider(rider =>
+            {
+                rider.AddConsumer<RemoveImageRequestConsumer>();
+
+                rider.UsingKafka((context, k) =>
+                {
+                    k.Host(kafkaSettings.Url);
+
+                    k.TopicEndpoint<RemoveImageRequest>(
+                        kafkaSettings.RemoveImageRequest!.Topic,
+                        kafkaSettings.RemoveImageRequest.GroupId,
+                        e =>
+                        {
+                            e.ConfigureConsumer<RemoveImageRequestConsumer>(context);
+                            e.CreateIfMissing();
+                        });
+                });
+            });
+        });
+
+        services.Configure<CachingSettings>(configuration.GetSection("Caching"));
         services.AddFileStorageUtilityServices();
         services.AddSignPackageServices(configuration);
 

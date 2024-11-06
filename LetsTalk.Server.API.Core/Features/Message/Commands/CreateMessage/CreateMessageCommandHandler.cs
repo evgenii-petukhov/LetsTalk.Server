@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using KafkaFlow;
-using KafkaFlow.Producers;
 using LetsTalk.Server.API.Models.Message;
-using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
@@ -11,44 +8,31 @@ using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;
-using Microsoft.Extensions.Options;
+using MassTransit;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
 
-public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
+public class CreateMessageCommandHandler(
+    IChatAgnosticService chatAgnosticService,
+    IHtmlGenerator htmlGenerator,
+    IMapper mapper,
+    IMessageCacheManager messageCacheManager,
+    IMessageAgnosticService messageAgnosticService,
+    ILinkPreviewAgnosticService linkPreviewAgnosticService,
+    ITopicProducer<string, Notification<MessageDto>> notificationProducer,
+    ITopicProducer<string, LinkPreviewRequest> linkPreviewProducer,
+    ITopicProducer<string, ImageResizeRequest> imageResizeProducer
+) : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
-    private readonly IChatAgnosticService _chatAgnosticService;
-    private readonly IHtmlGenerator _htmlGenerator;
-    private readonly IMapper _mapper;
-    private readonly IMessageCacheManager _messageCacheManager;
-    private readonly IMessageAgnosticService _messageAgnosticService;
-    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService;
-    private readonly KafkaSettings _kafkaSettings;
-    private readonly IMessageProducer _messageNotificationProducer;
-    private readonly IMessageProducer _linkPreviewRequestProducer;
-    private readonly IMessageProducer _imageResizeRequestProducer;
-
-    public CreateMessageCommandHandler(
-        IChatAgnosticService chatAgnosticService,
-        IHtmlGenerator htmlGenerator,
-        IMapper mapper,
-        IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings,
-        IMessageCacheManager messageCacheManager,
-        IMessageAgnosticService messageDatabaseAgnosticService,
-        ILinkPreviewAgnosticService linkPreviewAgnosticService)
-    {
-        _chatAgnosticService = chatAgnosticService;
-        _htmlGenerator = htmlGenerator;
-        _mapper = mapper;
-        _messageCacheManager = messageCacheManager;
-        _messageAgnosticService = messageDatabaseAgnosticService;
-        _linkPreviewAgnosticService = linkPreviewAgnosticService;
-        _kafkaSettings = kafkaSettings.Value;
-        _messageNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
-        _linkPreviewRequestProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewRequest!.Producer);
-        _imageResizeRequestProducer = producerAccessor.GetProducer(_kafkaSettings.ImageResizeRequest!.Producer);
-    }
+    private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
+    private readonly IHtmlGenerator _htmlGenerator = htmlGenerator;
+    private readonly IMapper _mapper = mapper;
+    private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
+    private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
+    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
+    private readonly ITopicProducer<string, Notification<MessageDto>> _notificationProducer = notificationProducer;
+    private readonly ITopicProducer<string, LinkPreviewRequest> _linkPreviewProducer = linkPreviewProducer;
+    private readonly ITopicProducer<string, ImageResizeRequest> _imageResizeProducer = imageResizeProducer;
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
@@ -92,19 +76,17 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!, cancellationToken);
 
         await Task.WhenAll(
-            _messageNotificationProducer.ProduceAsync(
-                _kafkaSettings.MessageNotification!.Topic,
+            Task.WhenAll(accountIds.Select(accountId => _notificationProducer.Produce(
                 Guid.NewGuid().ToString(),
-                accountIds.Select(accountId => new Notification<MessageDto>
+                new Notification<MessageDto>
                 {
                     RecipientId = accountId,
                     Message = messageDto with
                     {
                         IsMine = accountId == request.SenderId
                     }
-                }).ToArray()),
-            (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId)) ? Task.CompletedTask : _linkPreviewRequestProducer.ProduceAsync(
-                _kafkaSettings.LinkPreviewRequest!.Topic,
+                }, cancellationToken))),
+            (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId)) ? Task.CompletedTask : _linkPreviewProducer.Produce(
                 Guid.NewGuid().ToString(),
                 new LinkPreviewRequest
                 {
@@ -112,9 +94,8 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     Url = url,
                     ChatId = request.ChatId
-                }),
-            request.Image == null ? Task.CompletedTask : _imageResizeRequestProducer.ProduceAsync(
-                _kafkaSettings.ImageResizeRequest!.Topic,
+                }, cancellationToken),
+            request.Image == null ? Task.CompletedTask : _imageResizeProducer.Produce(
                 Guid.NewGuid().ToString(),
                 new ImageResizeRequest
                 {
@@ -122,7 +103,7 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
                     MessageId = messageDto.Id,
                     ImageId = request.Image.Id,
                     ChatId = request.ChatId
-                }));
+                }, cancellationToken));
 
         return new CreateMessageResponse
         {

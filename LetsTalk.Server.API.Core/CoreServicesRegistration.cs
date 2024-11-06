@@ -1,6 +1,4 @@
-﻿using KafkaFlow;
-using KafkaFlow.Serializer;
-using LetsTalk.Server.Configuration;
+﻿using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Services;
@@ -13,6 +11,11 @@ using LetsTalk.Server.API.Core.Services.Cache.Chats;
 using LetsTalk.Server.API.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.AgnosticServices;
 using LetsTalk.Server.Persistence.Redis;
+using MassTransit;
+using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Notifications.Models;
+using Confluent.Kafka;
+using LetsTalk.Server.Kafka.Models;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -31,64 +34,28 @@ public static class CoreServicesRegistration
         services.AddScoped<IEmailService, EmailService>();
 
         var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
+        services.AddMassTransit(x =>
+        {
+            x.UsingInMemory();
 
-        services.AddKafka(kafka => kafka
-            .UseConsoleLog()
-            .AddCluster(cluster => cluster
-                .WithBrokers(new[]
+            x.AddRider(rider =>
+            {
+                rider.UsingKafka((_, k) => k.Host(kafkaSettings.Url));
+
+                var defaultProducerConfig = new ProducerConfig
                 {
-                    kafkaSettings.Url
-                })
-                .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.ImageResizeRequest!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.RemoveImageRequest!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.SendLoginCodeRequest!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
-                .AddProducer(
-                    kafkaSettings.MessageNotification.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.MessageNotification.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-                .AddProducer(
-                    kafkaSettings.LinkPreviewRequest.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.LinkPreviewRequest.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-                .AddProducer(
-                    kafkaSettings.ImageResizeRequest.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.ImageResizeRequest.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-                .AddProducer(
-                    kafkaSettings.RemoveImageRequest.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.RemoveImageRequest.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-                .AddProducer(
-                    kafkaSettings.SendLoginCodeRequest.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.SendLoginCodeRequest.Topic)
-                        .AddMiddlewares(m => m.AddSerializer<JsonCoreSerializer>()))
-                .AddProducer(
-                    kafkaSettings.ImagePreviewNotification.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.ImagePreviewNotification.Topic)
-                        .AddMiddlewares(m =>
-                            m.AddSerializer<JsonCoreSerializer>()
-                        )
-                )
-                .AddProducer(
-                    kafkaSettings.LinkPreviewNotification.Producer,
-                    producer => producer
-                        .DefaultTopic(kafkaSettings.LinkPreviewNotification.Topic)
-                        .AddMiddlewares(m =>
-                            m.AddSerializer<JsonCoreSerializer>()
-                        )
-                )
-        ));
-        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+                    AllowAutoCreateTopics = true,
+                };
+
+                rider.AddProducer<string, Notification<MessageDto>>(kafkaSettings.MessageNotification!.Topic, defaultProducerConfig);
+                rider.AddProducer<string, Notification<LinkPreviewDto>>(kafkaSettings.LinkPreviewNotification!.Topic, defaultProducerConfig);
+                rider.AddProducer<string, Notification<ImagePreviewDto>>(kafkaSettings.ImagePreviewNotification!.Topic, defaultProducerConfig);
+                rider.AddProducer<string, LinkPreviewRequest>(kafkaSettings.LinkPreviewRequest!.Topic, defaultProducerConfig);
+                rider.AddProducer<string, ImageResizeRequest>(kafkaSettings.ImageResizeRequest!.Topic, defaultProducerConfig);
+                rider.AddProducer<string, RemoveImageRequest>(kafkaSettings.RemoveImageRequest!.Topic, defaultProducerConfig);
+                rider.AddProducer<string, SendLoginCodeRequest>(kafkaSettings.SendLoginCodeRequest!.Topic, defaultProducerConfig);
+            });
+        });
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 
         switch (configuration.GetValue<string>("Features:cachingMode"))

@@ -1,38 +1,25 @@
 ﻿using AutoMapper;
-using KafkaFlow;
-using KafkaFlow.Producers;
-using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;
-using Microsoft.Extensions.Options;
+using MassTransit;
 
 namespace LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, ProfileDto>
+public class UpdateProfileCommandHandler(
+    IAccountAgnosticService accountAgnosticService,
+    IMapper mapper,
+    IProfileCacheManager profileCacheManager,
+    ITopicProducer<string, RemoveImageRequest> producer
+) : IRequestHandler<UpdateProfileCommand, ProfileDto>
 {
-    private readonly IAccountAgnosticService _accountAgnosticService;
-    private readonly IMapper _mapper;
-    private readonly IProfileCacheManager _profileCacheManager;
-    private readonly IMessageProducer _producer;
-    private readonly KafkaSettings _kafkaSettings;
-
-    public UpdateProfileCommandHandler(
-        IAccountAgnosticService accountAgnosticService,
-        IMapper mapper,
-        IProfileCacheManager profileCacheManager,
-        IOptions<KafkaSettings> kafkaSettings,
-        IProducerAccessor producerAccessor)
-    {
-        _accountAgnosticService = accountAgnosticService;
-        _mapper = mapper;
-        _profileCacheManager = profileCacheManager;
-        _kafkaSettings = kafkaSettings.Value;
-        _producer = producerAccessor.GetProducer(_kafkaSettings.MessageNotification!.Producer);
-    }
+    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
+    private readonly IMapper _mapper = mapper;
+    private readonly IProfileCacheManager _profileCacheManager = profileCacheManager;
+    private readonly ITopicProducer<string, RemoveImageRequest> _producer = producer;
 
     public async Task<ProfileDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
@@ -61,13 +48,12 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
 
         if (deletePreviousImage)
         {
-            await _producer.ProduceAsync(
-                _kafkaSettings.RemoveImageRequest!.Topic,
+            await _producer.Produce(
                 Guid.NewGuid().ToString(),
                 new RemoveImageRequest
                 {
                     ImageId = previousImageId
-                });
+                }, cancellationToken);
         }
 
         return _mapper.Map<ProfileDto>(account);

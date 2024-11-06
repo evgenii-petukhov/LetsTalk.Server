@@ -1,29 +1,18 @@
-﻿using KafkaFlow;
-using KafkaFlow.Producers;
-using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.API.Core.Abstractions;
+﻿using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using MediatR;
-using Microsoft.Extensions.Options;
+using MassTransit;
 
 namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
-public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
+public class GenerateLoginCodeCommandHandler(
+    ILoginCodeCacheService loginCodeCacheService,
+    ITopicProducer<string, SendLoginCodeRequest> producer
+) : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {
-    private readonly ILoginCodeCacheService _loginCodeCacheService;
-    private readonly KafkaSettings _kafkaSettings;
-    private readonly IMessageProducer _sendLoginCodeProducer;
-
-    public GenerateLoginCodeCommandHandler(
-        ILoginCodeCacheService loginCodeCacheService,
-        IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings)
-    {
-        _loginCodeCacheService = loginCodeCacheService;
-        _kafkaSettings = kafkaSettings.Value;
-        _sendLoginCodeProducer = producerAccessor.GetProducer(_kafkaSettings.SendLoginCodeRequest!.Producer);
-    }
+    private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
+    private readonly ITopicProducer<string, SendLoginCodeRequest> _producer = producer;
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand command, CancellationToken cancellationToken)
     {
@@ -33,14 +22,13 @@ public class GenerateLoginCodeCommandHandler : IRequestHandler<GenerateLoginCode
 
         if (isCodeCreated)
         {
-            await _sendLoginCodeProducer.ProduceAsync(
-                _kafkaSettings.SendLoginCodeRequest!.Topic,
+            await _producer.Produce(
                 Guid.NewGuid().ToString(),
                 new SendLoginCodeRequest
                 {
                     Email = email,
                     Code = code
-                });
+                }, cancellationToken);
         }
 
         return new GenerateLoginCodeResponseDto

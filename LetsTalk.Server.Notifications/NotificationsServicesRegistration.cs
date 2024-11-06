@@ -1,12 +1,12 @@
-﻿using KafkaFlow;
-using KafkaFlow.Serializer;
-using LetsTalk.Server.AuthenticationClient;
+﻿using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;
+using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Notifications.Services;
+using MassTransit;
 
 namespace LetsTalk.Server.Notifications;
 
@@ -33,40 +33,49 @@ public static class NotificationsServicesRegistration
             });
         });
         services.AddLoggingServices();
-        services.AddKafka(kafka => kafka
-            .UseConsoleLog()
-            .AddCluster(cluster => cluster
-                .WithBrokers(new[]
+        services.AddMassTransit(x =>
+        {
+            x.UsingInMemory();
+
+            x.AddRider(rider =>
+            {
+                rider.AddConsumer<NotificationConsumer<MessageDto>>();
+                rider.AddConsumer<NotificationConsumer<LinkPreviewDto>>();
+                rider.AddConsumer<NotificationConsumer<ImagePreviewDto>>();
+
+                rider.UsingKafka((context, k) =>
                 {
-                    kafkaSettings.Url
-                })
-                .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
-                .AddConsumer(consumer => consumer
-                    .Topic(kafkaSettings.MessageNotification.Topic)
-                    .WithGroupId(kafkaSettings.MessageNotification.GroupId)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(10)
-                    .AddMiddlewares(middlewares => middlewares
-                        .AddDeserializer<JsonCoreDeserializer>()
-                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<MessageDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
-                .AddConsumer(consumer => consumer
-                    .Topic(kafkaSettings.LinkPreviewNotification.Topic)
-                    .WithGroupId(kafkaSettings.LinkPreviewNotification.GroupId)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(10)
-                    .AddMiddlewares(middlewares => middlewares
-                        .AddDeserializer<JsonCoreDeserializer>()
-                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<LinkPreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
-                .AddConsumer(consumer => consumer
-                    .Topic(kafkaSettings.ImagePreviewNotification.Topic)
-                    .WithGroupId(kafkaSettings.ImagePreviewNotification.GroupId)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(10)
-                    .AddMiddlewares(middlewares => middlewares
-                        .AddDeserializer<JsonCoreDeserializer>()
-                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<ImagePreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))));
+                    k.Host(kafkaSettings.Url);
+
+                    k.TopicEndpoint<Notification<MessageDto>>(
+                        kafkaSettings.MessageNotification!.Topic,
+                        kafkaSettings.MessageNotification.GroupId,
+                        e =>
+                        {
+                            e.ConfigureConsumer<NotificationConsumer<MessageDto>>(context);
+                            e.CreateIfMissing();
+                        });
+
+                    k.TopicEndpoint<Notification<LinkPreviewDto>>(
+                        kafkaSettings.LinkPreviewNotification!.Topic,
+                        kafkaSettings.LinkPreviewNotification.GroupId,
+                        e =>
+                        {
+                            e.ConfigureConsumer<NotificationConsumer<LinkPreviewDto>>(context);
+                            e.CreateIfMissing();
+                        });
+
+                    k.TopicEndpoint<Notification<ImagePreviewDto>>(
+                        kafkaSettings.ImagePreviewNotification!.Topic,
+                        kafkaSettings.ImagePreviewNotification.GroupId,
+                        e =>
+                        {
+                            e.ConfigureConsumer<NotificationConsumer<ImagePreviewDto>>(context);
+                            e.CreateIfMissing();
+                        });
+                });
+            });
+        });
 
         return services;
     }

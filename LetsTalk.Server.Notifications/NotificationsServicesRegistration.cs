@@ -35,7 +35,7 @@ public static class NotificationsServicesRegistration
         services.AddLoggingServices();
         services.AddMassTransit(x =>
         {
-            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
             {
                 x.AddConsumer<NotificationConsumer<MessageDto>>();
                 x.AddConsumer<NotificationConsumer<LinkPreviewDto>>();

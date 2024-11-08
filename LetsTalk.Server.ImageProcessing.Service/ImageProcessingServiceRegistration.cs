@@ -21,7 +21,7 @@ public static class ImageProcessingServiceRegistration
         services.AddImageProcessingUtilityServices();
         services.AddMassTransit(x =>
         {
-            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
             {
                 x.AddConsumer<ImageResizeRequestConsumer>();
 

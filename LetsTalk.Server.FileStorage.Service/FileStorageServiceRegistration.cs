@@ -46,7 +46,7 @@ public static class FileStorageServiceRegistration
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMassTransit(x =>
         {
-            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
             {
                 x.AddConsumer<RemoveImageRequestConsumer>();
 
@@ -99,7 +99,7 @@ public static class FileStorageServiceRegistration
         services.AddFileStorageUtilityServices();
         services.AddSignPackageServices(configuration);
 
-        switch (configuration.GetValue<string>("Features:cachingMode"))
+        switch (configuration.GetValue<string>("Features:CachingMode"))
         {
             case "redis":
                 services.AddRedisCache();

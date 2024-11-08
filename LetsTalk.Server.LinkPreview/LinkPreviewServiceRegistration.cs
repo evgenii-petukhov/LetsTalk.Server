@@ -21,7 +21,7 @@ public static class LinkPreviewServiceRegistration
     {
         services.AddMassTransit(x =>
         {
-            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
             {
                 x.AddConsumer<LinkPreviewRequestConsumer>();
 
@@ -77,7 +77,7 @@ public static class LinkPreviewServiceRegistration
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 #endif
         });
-        switch (configuration.GetValue<string>("Features:linkPreview"))
+        switch (configuration.GetValue<string>("Features:LinkPreviewMode"))
         {
             case "aws":
                 services.Configure<AwsSettings>(configuration.GetSection("Aws"));

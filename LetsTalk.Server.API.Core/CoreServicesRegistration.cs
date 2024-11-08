@@ -35,7 +35,7 @@ public static class CoreServicesRegistration
         services.AddMassTransit(x =>
         {
             var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
-            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
             {
                 x.UsingAmazonSqs((_, configure) =>
                 {
@@ -78,7 +78,7 @@ public static class CoreServicesRegistration
         });
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 
-        switch (configuration.GetValue<string>("Features:cachingMode"))
+        switch (configuration.GetValue<string>("Features:CachingMode"))
         {
             case "redis":
                 services.AddRedisCache();

@@ -4,7 +4,6 @@ using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
-using MassTransit;
 using MediatR;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
@@ -13,7 +12,7 @@ public class SetLinkPreviewCommandHandler(
     IMessageAgnosticService messageAgnosticService,
     ILinkPreviewAgnosticService linkPreviewAgnosticService,
     IChatAgnosticService chatAgnosticService,
-    ITopicProducer<string, Notification<LinkPreviewDto>> producer,
+    IProducer<Notification<LinkPreviewDto>> producer,
     IMapper mapper,
     IMessageCacheManager messageCacheManager) : IRequestHandler<SetLinkPreviewCommand, Unit>
 {
@@ -21,7 +20,7 @@ public class SetLinkPreviewCommandHandler(
     private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly IMapper _mapper = mapper;
-    private readonly ITopicProducer<string, Notification<LinkPreviewDto>> _producer = producer;
+    private readonly IProducer<Notification<LinkPreviewDto>> _producer = producer;
     private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
 
     public async Task<Unit> Handle(SetLinkPreviewCommand request, CancellationToken cancellationToken)
@@ -50,8 +49,7 @@ public class SetLinkPreviewCommandHandler(
         var linkPreviewDto = _mapper.Map<LinkPreviewDto>(message);
 
         await Task.WhenAll([
-            Task.WhenAll(accountIds.Select(accountId => _producer.Produce(
-                Guid.NewGuid().ToString(),
+            Task.WhenAll(accountIds.Select(accountId => _producer.PublishAsync(
                 new Notification<LinkPreviewDto>
                 {
                     RecipientId = accountId,

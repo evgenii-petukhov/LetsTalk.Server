@@ -5,7 +5,6 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;
-using MassTransit;
 
 namespace LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 
@@ -13,13 +12,13 @@ public class UpdateProfileCommandHandler(
     IAccountAgnosticService accountAgnosticService,
     IMapper mapper,
     IProfileCacheManager profileCacheManager,
-    ITopicProducer<string, RemoveImageRequest> producer
+    IProducer<RemoveImageRequest> producer
 ) : IRequestHandler<UpdateProfileCommand, ProfileDto>
 {
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly IMapper _mapper = mapper;
     private readonly IProfileCacheManager _profileCacheManager = profileCacheManager;
-    private readonly ITopicProducer<string, RemoveImageRequest> _producer = producer;
+    private readonly IProducer<RemoveImageRequest> _producer = producer;
 
     public async Task<ProfileDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
@@ -48,8 +47,7 @@ public class UpdateProfileCommandHandler(
 
         if (deletePreviousImage)
         {
-            await _producer.Produce(
-                Guid.NewGuid().ToString(),
+            await _producer.PublishAsync(
                 new RemoveImageRequest
                 {
                     ImageId = previousImageId

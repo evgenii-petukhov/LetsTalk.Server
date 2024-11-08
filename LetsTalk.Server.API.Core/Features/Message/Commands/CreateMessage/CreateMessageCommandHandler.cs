@@ -8,7 +8,6 @@ using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;
-using MassTransit;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
 
@@ -19,9 +18,9 @@ public class CreateMessageCommandHandler(
     IMessageCacheManager messageCacheManager,
     IMessageAgnosticService messageAgnosticService,
     ILinkPreviewAgnosticService linkPreviewAgnosticService,
-    ITopicProducer<string, Notification<MessageDto>> notificationProducer,
-    ITopicProducer<string, LinkPreviewRequest> linkPreviewProducer,
-    ITopicProducer<string, ImageResizeRequest> imageResizeProducer
+    IProducer<Notification<MessageDto>> notificationProducer,
+    IProducer<LinkPreviewRequest> linkPreviewProducer,
+    IProducer<ImageResizeRequest> imageResizeProducer
 ) : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
@@ -30,9 +29,9 @@ public class CreateMessageCommandHandler(
     private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
     private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
     private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
-    private readonly ITopicProducer<string, Notification<MessageDto>> _notificationProducer = notificationProducer;
-    private readonly ITopicProducer<string, LinkPreviewRequest> _linkPreviewProducer = linkPreviewProducer;
-    private readonly ITopicProducer<string, ImageResizeRequest> _imageResizeProducer = imageResizeProducer;
+    private readonly IProducer<Notification<MessageDto>> _notificationProducer = notificationProducer;
+    private readonly IProducer<LinkPreviewRequest> _linkPreviewProducer = linkPreviewProducer;
+    private readonly IProducer<ImageResizeRequest> _imageResizeProducer = imageResizeProducer;
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
@@ -76,28 +75,26 @@ public class CreateMessageCommandHandler(
         var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!, cancellationToken);
 
         await Task.WhenAll(
-            Task.WhenAll(accountIds.Select(accountId => _notificationProducer.Produce(
-                Guid.NewGuid().ToString(),
-                new Notification<MessageDto>
+            Task.WhenAll(accountIds.Select(accountId => _notificationProducer.PublishAsync(new Notification<MessageDto>
+            {
+                RecipientId = accountId,
+                Message = messageDto with
                 {
-                    RecipientId = accountId,
-                    Message = messageDto with
-                    {
-                        IsMine = accountId == request.SenderId
-                    }
-                }, cancellationToken))),
-            (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId)) ? Task.CompletedTask : _linkPreviewProducer.Produce(
-                Guid.NewGuid().ToString(),
-                new LinkPreviewRequest
+                    IsMine = accountId == request.SenderId
+                }
+            }, cancellationToken))),
+            (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId))
+                ? Task.CompletedTask
+                : _linkPreviewProducer.PublishAsync(new LinkPreviewRequest
                 {
                     AccountIds = accountIds,
                     MessageId = messageDto.Id,
                     Url = url,
                     ChatId = request.ChatId
                 }, cancellationToken),
-            request.Image == null ? Task.CompletedTask : _imageResizeProducer.Produce(
-                Guid.NewGuid().ToString(),
-                new ImageResizeRequest
+            request.Image == null
+                ? Task.CompletedTask
+                : _imageResizeProducer.PublishAsync(new ImageResizeRequest
                 {
                     AccountIds = accountIds,
                     MessageId = messageDto.Id,

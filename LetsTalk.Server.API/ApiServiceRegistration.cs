@@ -1,5 +1,4 @@
 ﻿using LetsTalk.Server.AuthenticationClient;
-using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core;
 using LetsTalk.Server.Logging;
@@ -16,8 +15,6 @@ public static class ApiServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddCoreServices(configuration);
         services.AddLoggingServices();

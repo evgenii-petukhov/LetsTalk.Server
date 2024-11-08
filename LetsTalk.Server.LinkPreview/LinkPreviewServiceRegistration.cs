@@ -9,6 +9,7 @@ using LetsTalk.Server.LinkPreview.Utility.Services;
 using LetsTalk.Server.DependencyInjection;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
+using System.Net.Mime;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -18,31 +19,55 @@ public static class LinkPreviewServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddMassTransit(x =>
         {
-            x.UsingInMemory();
-
-            x.AddRider(rider =>
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
             {
-                rider.AddConsumer<LinkPreviewRequestConsumer>();
+                x.AddConsumer<LinkPreviewRequestConsumer>();
 
-                rider.UsingKafka((context, k) =>
+                x.UsingAmazonSqs((context, configure) =>
                 {
-                    k.Host(kafkaSettings.Url);
-
-                    k.TopicEndpoint<LinkPreviewRequest>(
-                        kafkaSettings.LinkPreviewRequest!.Topic,
-                        kafkaSettings.LinkPreviewRequest.GroupId,
-                        e =>
-                        {
-                            e.ConfigureConsumer<LinkPreviewRequestConsumer>(context);
-                            e.CreateIfMissing();
-                        });
+                    var awsSettings = ConfigurationHelper.GetAwsSettings(configuration);
+                    configure.Host(awsSettings.Region, h =>
+                    {
+                        h.AccessKey(awsSettings.AccessKey);
+                        h.SecretKey(awsSettings.SecretKey);
+                    });
+                    configure.WaitTimeSeconds = 20;
+                    configure.ReceiveEndpoint("letstalk-link-preview-request-queue", e =>
+                    {
+                        e.WaitTimeSeconds = 20;
+                        e.DefaultContentType = new ContentType("application/json");
+                        e.UseRawJsonDeserializer();
+                        e.ConfigureConsumeTopology = false;
+                        e.ConfigureConsumer<LinkPreviewRequestConsumer>(context);
+                    });
                 });
-            });
-        });
+            }
+            else
+            {
+                x.UsingInMemory();
 
+                x.AddRider(rider =>
+                {
+                    rider.AddConsumer<LinkPreviewRequestConsumer>();
+                    rider.UsingKafka((context, k) =>
+                    {
+                        var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
+						var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
+                        k.Host(kafkaSettings.Url);
+                        k.TopicEndpoint<LinkPreviewRequest>(
+                            topicSettings.LinkPreviewRequest,
+                            kafkaSettings.GroupId,
+                            e =>
+                            {
+                                e.ConfigureConsumer<LinkPreviewRequestConsumer>(context);
+                                e.CreateIfMissing();
+                            });
+                    });
+                });
+            }
+        });
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
         services.AddSignPackageServices(configuration);
         services.AddScoped<IHttpClientService, HttpClientService>();

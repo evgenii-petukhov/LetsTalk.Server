@@ -15,6 +15,7 @@ using LetsTalk.Server.SignPackage;
 using LetsTalk.Server.Persistence.Redis;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
+using System.Net.Mime;
 
 namespace LetsTalk.Server.FileStorage.Service;
 
@@ -24,8 +25,6 @@ public static class FileStorageServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-
         services.AddCors(options =>
         {
             options.AddPolicy("all", builder =>
@@ -47,26 +46,53 @@ public static class FileStorageServiceRegistration
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMassTransit(x =>
         {
-            x.UsingInMemory();
-
-            x.AddRider(rider =>
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
             {
-                rider.AddConsumer<RemoveImageRequestConsumer>();
+                x.AddConsumer<RemoveImageRequestConsumer>();
 
-                rider.UsingKafka((context, k) =>
+                x.UsingAmazonSqs((context, configure) =>
                 {
-                    k.Host(kafkaSettings.Url);
-
-                    k.TopicEndpoint<RemoveImageRequest>(
-                        kafkaSettings.RemoveImageRequest!.Topic,
-                        kafkaSettings.RemoveImageRequest.GroupId,
-                        e =>
-                        {
-                            e.ConfigureConsumer<RemoveImageRequestConsumer>(context);
-                            e.CreateIfMissing();
-                        });
+                    var awsSettings = ConfigurationHelper.GetAwsSettings(configuration);
+                    var queueSettings = ConfigurationHelper.GetQueueSettings(configuration);
+                    configure.Host(awsSettings.Region, h =>
+                    {
+                        h.AccessKey(awsSettings.AccessKey);
+                        h.SecretKey(awsSettings.SecretKey);
+                    });
+                    configure.WaitTimeSeconds = 20;
+                    configure.ReceiveEndpoint(queueSettings.RemoveImageRequest!, e =>
+                    {
+                        e.WaitTimeSeconds = 20;
+                        e.DefaultContentType = new ContentType("application/json");
+                        e.UseRawJsonDeserializer();
+                        e.ConfigureConsumeTopology = false;
+                        e.ConfigureConsumer<RemoveImageRequestConsumer>(context);
+                    });
                 });
-            });
+            }
+            else
+            {
+                x.UsingInMemory();
+                x.AddRider(rider =>
+                {
+                    rider.AddConsumer<RemoveImageRequestConsumer>();
+
+                    rider.UsingKafka((context, k) =>
+                    {
+                        var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
+                        var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
+                        k.Host(kafkaSettings.Url);
+                        k.TopicEndpoint<RemoveImageRequest>(
+                            topicSettings.RemoveImageRequest,
+                            kafkaSettings.GroupId,
+                            e =>
+                            {
+                                e.ConfigureConsumer<RemoveImageRequestConsumer>(context);
+                                e.CreateIfMissing();
+                            });
+                    });
+                });
+            }
         });
 
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));

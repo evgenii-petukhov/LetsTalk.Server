@@ -2,17 +2,16 @@
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using MediatR;
-using MassTransit;
 
 namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
 public class GenerateLoginCodeCommandHandler(
     ILoginCodeCacheService loginCodeCacheService,
-    ITopicProducer<string, SendLoginCodeRequest> producer
+    IProducer<SendLoginCodeRequest> producer
 ) : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {
     private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
-    private readonly ITopicProducer<string, SendLoginCodeRequest> _producer = producer;
+    private readonly IProducer<SendLoginCodeRequest> _producer = producer;
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand command, CancellationToken cancellationToken)
     {
@@ -22,8 +21,7 @@ public class GenerateLoginCodeCommandHandler(
 
         if (isCodeCreated)
         {
-            await _producer.Produce(
-                Guid.NewGuid().ToString(),
+            await _producer.PublishAsync(
                 new SendLoginCodeRequest
                 {
                     Email = email,

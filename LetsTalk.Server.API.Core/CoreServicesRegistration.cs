@@ -32,29 +32,49 @@ public static class CoreServicesRegistration
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<ILoginCodeGenerator, LoginCodeGenerator>();
         services.AddScoped<IEmailService, EmailService>();
-
-        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddMassTransit(x =>
         {
-            x.UsingInMemory();
-
-            x.AddRider(rider =>
+            var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
             {
-                rider.UsingKafka((_, k) => k.Host(kafkaSettings.Url));
-
-                var defaultProducerConfig = new ProducerConfig
+                x.UsingAmazonSqs((_, configure) =>
                 {
-                    AllowAutoCreateTopics = true,
-                };
+                    var awsSettings = ConfigurationHelper.GetAwsSettings(configuration);
+                    configure.Host(awsSettings.Region, h =>
+                    {
+                        h.AccessKey(awsSettings.AccessKey);
+                        h.SecretKey(awsSettings.SecretKey);
+                    });
 
-                rider.AddProducer<string, Notification<MessageDto>>(kafkaSettings.MessageNotification!.Topic, defaultProducerConfig);
-                rider.AddProducer<string, Notification<LinkPreviewDto>>(kafkaSettings.LinkPreviewNotification!.Topic, defaultProducerConfig);
-                rider.AddProducer<string, Notification<ImagePreviewDto>>(kafkaSettings.ImagePreviewNotification!.Topic, defaultProducerConfig);
-                rider.AddProducer<string, LinkPreviewRequest>(kafkaSettings.LinkPreviewRequest!.Topic, defaultProducerConfig);
-                rider.AddProducer<string, ImageResizeRequest>(kafkaSettings.ImageResizeRequest!.Topic, defaultProducerConfig);
-                rider.AddProducer<string, RemoveImageRequest>(kafkaSettings.RemoveImageRequest!.Topic, defaultProducerConfig);
-                rider.AddProducer<string, SendLoginCodeRequest>(kafkaSettings.SendLoginCodeRequest!.Topic, defaultProducerConfig);
-            });
+                    configure.Message<Notification<MessageDto>>(x => x.SetEntityName(topicSettings.MessageNotification!));
+                    configure.Message<Notification<LinkPreviewDto>>(x => x.SetEntityName(topicSettings.LinkPreviewNotification!));
+                    configure.Message<Notification<ImagePreviewDto>>(x => x.SetEntityName(topicSettings.ImagePreviewNotification!));
+                    configure.Message<LinkPreviewRequest>(x => x.SetEntityName(topicSettings.LinkPreviewRequest!));
+                    configure.Message<ImageResizeRequest>(x => x.SetEntityName(topicSettings.ImageResizeRequest!));
+                });
+                services.AddScoped(typeof(IProducer<>), typeof(SqsProducer<>));
+            }
+            else
+            {
+                x.UsingInMemory();
+                services.AddScoped(typeof(IProducer<>), typeof(KafkaProducer<>));
+                x.AddRider(rider =>
+                {
+                    var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
+                    var defaultProducerConfig = new ProducerConfig
+                    {
+                        AllowAutoCreateTopics = true,
+                    };
+                    rider.UsingKafka((_, configure) => configure.Host(kafkaSettings.Url));
+                    rider.AddProducer<string, Notification<MessageDto>>(topicSettings.MessageNotification, defaultProducerConfig);
+                    rider.AddProducer<string, Notification<LinkPreviewDto>>(topicSettings.LinkPreviewNotification, defaultProducerConfig);
+                    rider.AddProducer<string, Notification<ImagePreviewDto>>(topicSettings.ImagePreviewNotification, defaultProducerConfig);
+                    rider.AddProducer<string, LinkPreviewRequest>(topicSettings.LinkPreviewRequest, defaultProducerConfig);
+                    rider.AddProducer<string, ImageResizeRequest>(topicSettings.ImageResizeRequest, defaultProducerConfig);
+                    rider.AddProducer<string, RemoveImageRequest>(topicSettings.RemoveImageRequest, defaultProducerConfig);
+                    rider.AddProducer<string, SendLoginCodeRequest>(topicSettings.SendLoginCodeRequest, defaultProducerConfig);
+                });
+            }
         });
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
 

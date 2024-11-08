@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.3.0" />
+    <PackageReference Include="MassTransit.AmazonSQS" Version="8.3.0" />
     <PackageReference Include="MassTransit.Kafka" Version="8.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />

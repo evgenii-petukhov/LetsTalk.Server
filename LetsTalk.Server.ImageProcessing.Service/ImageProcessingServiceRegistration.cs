@@ -7,6 +7,7 @@ using LetsTalk.Server.ImageProcessing.Utility;
 using LetsTalk.Server.SignPackage;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
+using System.Net.Mime;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
@@ -16,32 +17,56 @@ public static class ImageProcessingServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddFileStorageUtilityServices();
         services.AddImageProcessingUtilityServices();
-
         services.AddMassTransit(x =>
         {
-            x.UsingInMemory();
-
-            x.AddRider(rider =>
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "Aws")
             {
-                rider.AddConsumer<ImageResizeRequestConsumer>();
+                x.AddConsumer<ImageResizeRequestConsumer>();
 
-                rider.UsingKafka((context, k) =>
+                x.UsingAmazonSqs((context, configure) =>
                 {
-                    k.Host(kafkaSettings.Url);
-
-                    k.TopicEndpoint<ImageResizeRequest>(
-                        kafkaSettings.ImageResizeRequest!.Topic,
-                        kafkaSettings.ImageResizeRequest.GroupId,
-                        e =>
-                        {
-                            e.ConfigureConsumer<ImageResizeRequestConsumer>(context);
-                            e.CreateIfMissing();
-                        });
+                    var awsSettings = ConfigurationHelper.GetAwsSettings(configuration);
+                    var queueSettings = ConfigurationHelper.GetQueueSettings(configuration);
+                    configure.Host(awsSettings.Region, h =>
+                    {
+                        h.AccessKey(awsSettings.AccessKey);
+                        h.SecretKey(awsSettings.SecretKey);
+                    });
+                    configure.WaitTimeSeconds = 20;
+                    configure.ReceiveEndpoint(queueSettings.ImageResizeRequest!, e =>
+                    {
+                        e.WaitTimeSeconds = 20;
+                        e.DefaultContentType = new ContentType("application/json");
+                        e.UseRawJsonDeserializer();
+                        e.ConfigureConsumeTopology = false;
+                        e.ConfigureConsumer<ImageResizeRequestConsumer>(context);
+                    });
                 });
-            });
+            }
+            else
+            {
+                x.UsingInMemory();
+                x.AddRider(rider =>
+                {
+                    rider.AddConsumer<ImageResizeRequestConsumer>();
+                    rider.UsingKafka((context, k) =>
+                    {
+                        var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
+                        var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
+                        k.Host(kafkaSettings.Url);
+                        k.TopicEndpoint<ImageResizeRequest>(
+                            topicSettings.ImageResizeRequest,
+                            kafkaSettings.GroupId,
+                            e =>
+                            {
+                                e.ConfigureConsumer<ImageResizeRequestConsumer>(context);
+                                e.CreateIfMissing();
+                            });
+                    });
+                });
+            }
         });
 
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));

@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.Lambda" Version="3.7.406.5" />
     <PackageReference Include="MassTransit" Version="8.3.0" />
+    <PackageReference Include="MassTransit.AmazonSQS" Version="8.3.0" />
     <PackageReference Include="MassTransit.Kafka" Version="8.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />

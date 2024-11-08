@@ -51,6 +51,8 @@ public static class CoreServicesRegistration
                     configure.Message<Notification<ImagePreviewDto>>(x => x.SetEntityName(topicSettings.ImagePreviewNotification!));
                     configure.Message<LinkPreviewRequest>(x => x.SetEntityName(topicSettings.LinkPreviewRequest!));
                     configure.Message<ImageResizeRequest>(x => x.SetEntityName(topicSettings.ImageResizeRequest!));
+                    configure.Message<RemoveImageRequest>(x => x.SetEntityName(topicSettings.RemoveImageRequest!));
+                    configure.Message<SendLoginCodeRequest>(x => x.SetEntityName(topicSettings.SendLoginCodeRequest!));
                 });
                 services.AddScoped(typeof(IProducer<>), typeof(SqsProducer<>));
             }

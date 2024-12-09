@@ -10,14 +10,14 @@ namespace LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
 public class SetImagePreviewCommandHandler(
     IMessageAgnosticService messageAgnosticService,
     IChatAgnosticService chatAgnosticService,
-    IProducer<Notification<ImagePreviewDto>> producer,
+    IProducer<Notification> producer,
     IMapper mapper,
     IMessageCacheManager messageCacheManager) : IRequestHandler<SetImagePreviewCommand, Unit>
 {
     private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly IMapper _mapper = mapper;
-    private readonly IProducer<Notification<ImagePreviewDto>> _producer = producer;
+    private readonly IProducer<Notification> _producer = producer;
     private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
 
     public async Task<Unit> Handle(SetImagePreviewCommand request, CancellationToken cancellationToken)
@@ -35,10 +35,10 @@ public class SetImagePreviewCommandHandler(
 
         await Task.WhenAll([
             Task.WhenAll(accountIds.Select(accountId => _producer.PublishAsync(
-                new Notification<ImagePreviewDto>
+                new Notification
                 {
                     RecipientId = accountId,
-                    Message = imagePreviewDto
+                    ImagePreview = imagePreviewDto
                 }, cancellationToken))),
             _messageCacheManager.ClearAsync(message.ChatId!)
         ]);

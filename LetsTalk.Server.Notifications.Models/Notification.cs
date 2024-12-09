@@ -1,8 +1,14 @@
-﻿namespace LetsTalk.Server.Notifications.Models;
+﻿using LetsTalk.Server.Dto.Models;
 
-public class Notification<T> where T : class
+namespace LetsTalk.Server.Notifications.Models;
+
+public class Notification
 {
     public string? RecipientId { get; set; }
 
-    public T? Message { get; set; }
+    public MessageDto? Message { get; set; }
+
+    public LinkPreviewDto? LinkPreview { get; set; }
+
+    public ImagePreviewDto? ImagePreview { get; set; }
 }

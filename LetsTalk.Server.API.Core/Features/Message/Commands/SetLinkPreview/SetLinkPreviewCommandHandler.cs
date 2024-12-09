@@ -12,7 +12,7 @@ public class SetLinkPreviewCommandHandler(
     IMessageAgnosticService messageAgnosticService,
     ILinkPreviewAgnosticService linkPreviewAgnosticService,
     IChatAgnosticService chatAgnosticService,
-    IProducer<Notification<LinkPreviewDto>> producer,
+    IProducer<Notification> producer,
     IMapper mapper,
     IMessageCacheManager messageCacheManager) : IRequestHandler<SetLinkPreviewCommand, Unit>
 {
@@ -20,7 +20,7 @@ public class SetLinkPreviewCommandHandler(
     private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly IMapper _mapper = mapper;
-    private readonly IProducer<Notification<LinkPreviewDto>> _producer = producer;
+    private readonly IProducer<Notification> _producer = producer;
     private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
 
     public async Task<Unit> Handle(SetLinkPreviewCommand request, CancellationToken cancellationToken)
@@ -50,10 +50,10 @@ public class SetLinkPreviewCommandHandler(
 
         await Task.WhenAll([
             Task.WhenAll(accountIds.Select(accountId => _producer.PublishAsync(
-                new Notification<LinkPreviewDto>
+                new Notification
                 {
                     RecipientId = accountId,
-                    Message = linkPreviewDto
+                    LinkPreview = linkPreviewDto
                 }, cancellationToken))),
             _messageCacheManager.ClearAsync(message.ChatId!)
         ]);

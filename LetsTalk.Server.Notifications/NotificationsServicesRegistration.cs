@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
-using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;
@@ -37,9 +36,7 @@ public static class NotificationsServicesRegistration
         {
             if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
             {
-                x.AddConsumer<NotificationConsumer<MessageDto>>();
-                x.AddConsumer<NotificationConsumer<LinkPreviewDto>>();
-                x.AddConsumer<NotificationConsumer<ImagePreviewDto>>();
+                x.AddConsumer<NotificationConsumer>();
 
                 x.UsingAmazonSqs((context, configure) =>
                 {
@@ -57,23 +54,7 @@ public static class NotificationsServicesRegistration
                         e.DefaultContentType = new ContentType("application/json");
                         e.UseRawJsonDeserializer();
                         e.ConfigureConsumeTopology = false;
-                        e.ConfigureConsumer<NotificationConsumer<MessageDto>>(context);
-                    });
-                    configure.ReceiveEndpoint(queueSettings.LinkPreviewNotification!, e =>
-                    {
-                        e.WaitTimeSeconds = 20;
-                        e.DefaultContentType = new ContentType("application/json");
-                        e.UseRawJsonDeserializer();
-                        e.ConfigureConsumeTopology = false;
-                        e.ConfigureConsumer<NotificationConsumer<LinkPreviewDto>>(context);
-                    });
-                    configure.ReceiveEndpoint(queueSettings.ImagePreviewNotification!, e =>
-                    {
-                        e.WaitTimeSeconds = 20;
-                        e.DefaultContentType = new ContentType("application/json");
-                        e.UseRawJsonDeserializer();
-                        e.ConfigureConsumeTopology = false;
-                        e.ConfigureConsumer<NotificationConsumer<ImagePreviewDto>>(context);
+                        e.ConfigureConsumer<NotificationConsumer>(context);
                     });
                 });
             }
@@ -82,36 +63,18 @@ public static class NotificationsServicesRegistration
                 x.UsingInMemory();
                 x.AddRider(rider =>
                 {
-                    rider.AddConsumer<NotificationConsumer<MessageDto>>();
-                    rider.AddConsumer<NotificationConsumer<LinkPreviewDto>>();
-                    rider.AddConsumer<NotificationConsumer<ImagePreviewDto>>();
+                    rider.AddConsumer<NotificationConsumer>();
                     rider.UsingKafka((context, k) =>
                     {
                         var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
                         var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
                         k.Host(kafkaSettings.Url);
-                        k.TopicEndpoint<Notification<MessageDto>>(
-                            topicSettings.MessageNotification,
+                        k.TopicEndpoint<Notification>(
+                            topicSettings.Notification,
                             kafkaSettings.GroupId,
                             e =>
                             {
-                                e.ConfigureConsumer<NotificationConsumer<MessageDto>>(context);
-                                e.CreateIfMissing();
-                            });
-                        k.TopicEndpoint<Notification<LinkPreviewDto>>(
-                            topicSettings.LinkPreviewNotification,
-                            kafkaSettings.GroupId,
-                            e =>
-                            {
-                                e.ConfigureConsumer<NotificationConsumer<LinkPreviewDto>>(context);
-                                e.CreateIfMissing();
-                            });
-                        k.TopicEndpoint<Notification<ImagePreviewDto>>(
-                            topicSettings.ImagePreviewNotification,
-                            kafkaSettings.GroupId,
-                            e =>
-                            {
-                                e.ConfigureConsumer<NotificationConsumer<ImagePreviewDto>>(context);
+                                e.ConfigureConsumer<NotificationConsumer>(context);
                                 e.CreateIfMissing();
                             });
                     });

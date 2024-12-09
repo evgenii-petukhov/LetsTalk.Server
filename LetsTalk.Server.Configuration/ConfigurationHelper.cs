@@ -28,11 +28,9 @@ public static class ConfigurationHelper
     {
         return new TopicSettings
         {
-            MessageNotification = configuration.GetValue<string>("Topics:MessageNotification"),
+            Notification = configuration.GetValue<string>("Topics:Notification"),
             LinkPreviewRequest = configuration.GetValue<string>("Topics:LinkPreviewRequest"),
-            LinkPreviewNotification = configuration.GetValue<string>("Topics:LinkPreviewNotification"),
             ImageResizeRequest = configuration.GetValue<string>("Topics:ImageResizeRequest"),
-            ImagePreviewNotification = configuration.GetValue<string>("Topics:ImagePreviewNotification"),
             RemoveImageRequest = configuration.GetValue<string>("Topics:RemoveImageRequest"),
             SendLoginCodeRequest = configuration.GetValue<string>("Topics:SendLoginCodeRequest"),
         };

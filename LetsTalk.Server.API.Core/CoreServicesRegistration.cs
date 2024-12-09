@@ -46,9 +46,7 @@ public static class CoreServicesRegistration
                         h.SecretKey(awsSettings.SecretKey);
                     });
 
-                    configure.Message<Notification<MessageDto>>(x => x.SetEntityName(topicSettings.MessageNotification!));
-                    configure.Message<Notification<LinkPreviewDto>>(x => x.SetEntityName(topicSettings.LinkPreviewNotification!));
-                    configure.Message<Notification<ImagePreviewDto>>(x => x.SetEntityName(topicSettings.ImagePreviewNotification!));
+                    configure.Message<Notification>(x => x.SetEntityName(topicSettings.Notification!));
                     configure.Message<LinkPreviewRequest>(x => x.SetEntityName(topicSettings.LinkPreviewRequest!));
                     configure.Message<ImageResizeRequest>(x => x.SetEntityName(topicSettings.ImageResizeRequest!));
                     configure.Message<RemoveImageRequest>(x => x.SetEntityName(topicSettings.RemoveImageRequest!));
@@ -68,9 +66,7 @@ public static class CoreServicesRegistration
                         AllowAutoCreateTopics = true,
                     };
                     rider.UsingKafka((_, configure) => configure.Host(kafkaSettings.Url));
-                    rider.AddProducer<string, Notification<MessageDto>>(topicSettings.MessageNotification, defaultProducerConfig);
-                    rider.AddProducer<string, Notification<LinkPreviewDto>>(topicSettings.LinkPreviewNotification, defaultProducerConfig);
-                    rider.AddProducer<string, Notification<ImagePreviewDto>>(topicSettings.ImagePreviewNotification, defaultProducerConfig);
+                    rider.AddProducer<string, Notification>(topicSettings.Notification, defaultProducerConfig);
                     rider.AddProducer<string, LinkPreviewRequest>(topicSettings.LinkPreviewRequest, defaultProducerConfig);
                     rider.AddProducer<string, ImageResizeRequest>(topicSettings.ImageResizeRequest, defaultProducerConfig);
                     rider.AddProducer<string, RemoveImageRequest>(topicSettings.RemoveImageRequest, defaultProducerConfig);

@@ -4,14 +4,31 @@ using MassTransit;
 
 namespace LetsTalk.Server.Notifications.Handlers;
 
-public class NotificationConsumer<T>(
-    INotificationService notificationService) : IConsumer<Notification<T>>
-    where T : class
+public class NotificationConsumer(
+    INotificationService notificationService) : IConsumer<Notification>
 {
     private readonly INotificationService _notificationService = notificationService;
 
-    public Task Consume(ConsumeContext<Notification<T>> context)
+    public async Task Consume(ConsumeContext<Notification> context)
     {
-        return _notificationService.SendNotificationAsync(context.Message.RecipientId!, context.Message.Message!, typeof(T).Name);
+        if (context.Message.Message != null)
+        {
+            await SendNotificationAsync(context.Message.RecipientId!, context.Message.Message);
+        }
+
+        if (context.Message.LinkPreview != null)
+        {
+            await SendNotificationAsync(context.Message.RecipientId!, context.Message.LinkPreview);
+        }
+
+        if (context.Message.ImagePreview != null)
+        {
+            await SendNotificationAsync(context.Message.RecipientId!, context.Message.ImagePreview);
+        }
+    }
+
+    private Task SendNotificationAsync<T>(string id, T payload)
+    {
+        return _notificationService.SendNotificationAsync(id!, payload, payload!.GetType().Name);
     }
 }

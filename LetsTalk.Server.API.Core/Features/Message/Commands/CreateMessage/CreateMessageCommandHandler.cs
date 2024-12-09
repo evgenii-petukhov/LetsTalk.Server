@@ -18,7 +18,7 @@ public class CreateMessageCommandHandler(
     IMessageCacheManager messageCacheManager,
     IMessageAgnosticService messageAgnosticService,
     ILinkPreviewAgnosticService linkPreviewAgnosticService,
-    IProducer<Notification<MessageDto>> notificationProducer,
+    IProducer<Notification> notificationProducer,
     IProducer<LinkPreviewRequest> linkPreviewProducer,
     IProducer<ImageResizeRequest> imageResizeProducer
 ) : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
@@ -29,7 +29,7 @@ public class CreateMessageCommandHandler(
     private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
     private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
     private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
-    private readonly IProducer<Notification<MessageDto>> _notificationProducer = notificationProducer;
+    private readonly IProducer<Notification> _notificationProducer = notificationProducer;
     private readonly IProducer<LinkPreviewRequest> _linkPreviewProducer = linkPreviewProducer;
     private readonly IProducer<ImageResizeRequest> _imageResizeProducer = imageResizeProducer;
 
@@ -75,7 +75,7 @@ public class CreateMessageCommandHandler(
         var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!, cancellationToken);
 
         await Task.WhenAll(
-            Task.WhenAll(accountIds.Select(accountId => _notificationProducer.PublishAsync(new Notification<MessageDto>
+            Task.WhenAll(accountIds.Select(accountId => _notificationProducer.PublishAsync(new Notification
             {
                 RecipientId = accountId,
                 Message = messageDto with

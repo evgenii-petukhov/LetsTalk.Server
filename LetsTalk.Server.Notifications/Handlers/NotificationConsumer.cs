@@ -1,5 +1,5 @@
-﻿using LetsTalk.Server.Notifications.Abstractions;
-using LetsTalk.Server.Notifications.Models;
+﻿using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Notifications.Abstractions;
 using MassTransit;
 
 namespace LetsTalk.Server.Notifications.Handlers;

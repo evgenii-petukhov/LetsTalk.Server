@@ -1,9 +1,9 @@
 ﻿using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
+using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;
-using LetsTalk.Server.Notifications.Models;
 using LetsTalk.Server.Notifications.Services;
 using MassTransit;
 using System.Net.Mime;

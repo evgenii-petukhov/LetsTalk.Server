@@ -45,8 +45,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Configurati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview", "LetsTalk.Server.LinkPreview\LetsTalk.Server.LinkPreview.csproj", "{11E752F7-CDB2-46D1-8AEB-FFDC845AA936}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Notifications.Models", "LetsTalk.Server.Notifications.Models\LetsTalk.Server.Notifications.Models.csproj", "{490BF070-3BB8-4A67-A934-18246B8DEDE6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.UnitTests", "LetsTalk.Server.UnitTests\LetsTalk.Server.UnitTests.csproj", "{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{EA773367-D1CB-470C-9DB7-8E87CA9D637E}"
@@ -115,7 +113,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Infrastructure.ApiClient", "LetsTalk.Server.Infrastructure.ApiClient\LetsTalk.Server.Infrastructure.ApiClient.csproj", "{B9D70529-799E-49D3-A313-D08C02CB510C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.Redis", "LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj", "{1C16D372-94D2-4E36-9543-6575EF386637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Redis", "LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj", "{1C16D372-94D2-4E36-9543-6575EF386637}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -179,10 +177,6 @@ Global
 		{11E752F7-CDB2-46D1-8AEB-FFDC845AA936}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11E752F7-CDB2-46D1-8AEB-FFDC845AA936}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11E752F7-CDB2-46D1-8AEB-FFDC845AA936}.Release|Any CPU.Build.0 = Release|Any CPU
-		{490BF070-3BB8-4A67-A934-18246B8DEDE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{490BF070-3BB8-4A67-A934-18246B8DEDE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{490BF070-3BB8-4A67-A934-18246B8DEDE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{490BF070-3BB8-4A67-A934-18246B8DEDE6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -335,7 +329,6 @@ Global
 		{EC1975E7-2840-4118-93BE-8EA432C0883B} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{19665F53-60F8-4B32-BADF-C5BC5070EF5A} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{11E752F7-CDB2-46D1-8AEB-FFDC845AA936} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
-		{490BF070-3BB8-4A67-A934-18246B8DEDE6} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{428BEEDB-7C4D-496C-8DE3-DB79684B85E2} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{EA773367-D1CB-470C-9DB7-8E87CA9D637E} = {A561CE66-E97D-4520-B4EB-5AA4F199CDEE}
 		{CF0EEACD-0876-43D3-965F-C3F34C00E8B1} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}

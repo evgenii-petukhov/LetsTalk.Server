@@ -12,8 +12,6 @@ using LetsTalk.Server.API.Core.Services.Cache.Profile;
 using LetsTalk.Server.Persistence.AgnosticServices;
 using LetsTalk.Server.Persistence.Redis;
 using MassTransit;
-using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Notifications.Models;
 using Confluent.Kafka;
 using LetsTalk.Server.Kafka.Models;
 

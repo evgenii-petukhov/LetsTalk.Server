@@ -40,11 +40,9 @@ public static class ConfigurationHelper
     {
         return new QueueSettings
         {
-            MessageNotification = configuration.GetValue<string>("Queues:MessageNotification"),
+            Notification = configuration.GetValue<string>("Queues:Notification"),
             LinkPreviewRequest = configuration.GetValue<string>("Queues:LinkPreviewRequest"),
-            LinkPreviewNotification = configuration.GetValue<string>("Queues:LinkPreviewNotification"),
             ImageResizeRequest = configuration.GetValue<string>("Queues:ImageResizeRequest"),
-            ImagePreviewNotification = configuration.GetValue<string>("Queues:ImagePreviewNotification"),
             RemoveImageRequest = configuration.GetValue<string>("Queues:RemoveImageRequest"),
             SendLoginCodeRequest = configuration.GetValue<string>("Queues:SendLoginCodeRequest"),
         };

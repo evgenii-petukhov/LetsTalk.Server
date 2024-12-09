@@ -48,7 +48,7 @@ public static class NotificationsServicesRegistration
                         h.SecretKey(awsSettings.SecretKey);
                     });
                     configure.WaitTimeSeconds = 20;
-                    configure.ReceiveEndpoint(queueSettings.MessageNotification!, e =>
+                    configure.ReceiveEndpoint(queueSettings.Notification!, e =>
                     {
                         e.WaitTimeSeconds = 20;
                         e.DefaultContentType = new ContentType("application/json");

@@ -1,15 +1,17 @@
 ﻿using LetsTalk.Server.EmailService.Abstractions;
 using LetsTalk.Server.Kafka.Models;
 using MassTransit;
+using System.Globalization;
+using System.Text;
 
 namespace LetsTalk.Server.EmailService;
 
 public class SendLoginCodeRequestConsumer(IEmailService emailService) : IConsumer<SendLoginCodeRequest>
 {
-    private const string MessageTemplate = "{0} is your new login code\r\n" +
+    private static readonly CompositeFormat MessageTemplate = CompositeFormat.Parse("{0} is your new login code\r\n" +
         "\r\n" +
         "All the best,\r\n" +
-        "LetsTalk team.";
+        "LetsTalk team.");
 
     private const string Subject = "LetsTalk: login code";
 
@@ -21,6 +23,6 @@ public class SendLoginCodeRequestConsumer(IEmailService emailService) : IConsume
             context.Message.Email!,
             null!,
             Subject,
-            string.Format(MessageTemplate, context.Message.Code));
+            string.Format(CultureInfo.InvariantCulture, MessageTemplate, context.Message.Code));
     }
 }

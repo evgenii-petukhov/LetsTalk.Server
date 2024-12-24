@@ -2,7 +2,7 @@
 using LetsTalk.Server.API.Core.Abstractions;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.API.Core.Services.Cache.Chats;
+namespace LetsTalk.Server.API.Core.Services.Cache.Accounts;
 
 public abstract class AccountCacheServiceBase
 {

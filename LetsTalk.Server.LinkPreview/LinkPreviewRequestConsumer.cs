@@ -16,6 +16,13 @@ public class LinkPreviewRequestConsumer(
     ISignPackageService signPackageService,
     IOptions<ApplicationUrlSettings> options) : IConsumer<LinkPreviewRequest>
 {
+    private static readonly Action<ILogger, string, Exception?> _logTitleEmpty =
+        LoggerMessage.Define<string>(LogLevel.Information, new EventId(1, nameof(LinkPreviewRequestConsumer)), "Title is empty: {Url}");
+    private static readonly Action<ILogger, string, Exception?> _logSuccess =
+        LoggerMessage.Define<string>(LogLevel.Information, new EventId(1, nameof(LinkPreviewRequestConsumer)), "New LinkPreview added: {Url}");
+    private static readonly Action<ILogger, string, Exception?> _logUnableToDownload =
+        LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LinkPreviewRequestConsumer)), "Unable to download: {Url}");
+
     private readonly ILinkPreviewService _linkPreviewService = linkPreviewService;
     private readonly ILogger<LinkPreviewRequestConsumer> _logger = logger;
     private readonly ISignPackageService _signPackageService = signPackageService;
@@ -33,13 +40,13 @@ public class LinkPreviewRequestConsumer(
 
         if (model == null)
         {
-            _logger.LogInformation("Title is empty: {url}", context.Message.Url);
+            _logTitleEmpty(_logger, context.Message.Url, null);
             return;
         }
 
         if (model.Error != null)
         {
-            _logger.LogError(model.Error, "Unable to download: {url}", context.Message.Url);
+            _logUnableToDownload(_logger, context.Message.Url, model.Error);
         }
 
         var payload = new SetLinkPreviewRequest
@@ -54,6 +61,6 @@ public class LinkPreviewRequestConsumer(
         using var client = _httpClientService.GetHttpClient();
         var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
         await apiClient.SetLinkPreviewAsync(payload);
-        _logger.LogInformation("New LinkPreview added: {url}", context.Message.Url);
+        _logSuccess(_logger, context.Message.Url, null);
     }
 }

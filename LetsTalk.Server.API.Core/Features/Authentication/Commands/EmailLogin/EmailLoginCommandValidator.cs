@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
-namespace LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
+namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
 public class EmailLoginCommandValidator : AbstractValidator<EmailLoginCommand>
 {
@@ -19,6 +18,6 @@ public class EmailLoginCommandValidator : AbstractValidator<EmailLoginCommand>
 
     private Task<bool> IsLoginCodeValidAsync(EmailLoginCommand model, CancellationToken cancellationToken)
     {
-        return _loginCodeCacheService.ValidateCodeAsync(model.Email?.Trim().ToLower()!, model.Code);
+        return _loginCodeCacheService.ValidateCodeAsync(model.Email?.Trim().ToLowerInvariant()!, model.Code);
     }
 }

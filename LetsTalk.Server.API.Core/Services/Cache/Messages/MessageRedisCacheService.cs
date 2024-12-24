@@ -5,6 +5,7 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using LetsTalk.Server.Persistence.Redis;
+using System.Globalization;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 
@@ -30,7 +31,7 @@ public class MessageRedisCacheService(
             ? GetFirstMessagePageKey(chatId)
             : GetMessagePageKey(chatId));
 
-        var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString()));
+        var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString(CultureInfo.InvariantCulture)));
 
         if (cachedMessages == RedisValue.Null)
         {
@@ -42,7 +43,7 @@ public class MessageRedisCacheService(
 
             await _database.HashSetAsync(
                 key,
-                new RedisValue(pageIndex.ToString()),
+                new RedisValue(pageIndex.ToString(CultureInfo.InvariantCulture)),
                 new RedisValue(JsonSerializer.Serialize(messageDtos)),
                 When.NotExists);
 

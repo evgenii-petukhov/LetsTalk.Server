@@ -1,5 +1,6 @@
 using LetsTalk.Server.Authentication;
 using Serilog;
+using System.Globalization;
 using JwtTokenGrpcService = LetsTalk.Server.Authentication.Services.JwtTokenGrpcService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,7 @@ builder.Services.AddAuthenticationServices(builder.Configuration);
 builder.Host.UseSerilog((context, loggerConfig) =>
 {
     loggerConfig
-    .WriteTo.Console()
+    .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
     .ReadFrom.Configuration(context.Configuration);
 });
 

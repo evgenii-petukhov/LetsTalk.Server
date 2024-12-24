@@ -31,7 +31,7 @@ public class EmailLoginCommandHandler(
 
         var accountId = await _accountAgnosticService.GetOrCreateAsync(
             AccountTypes.Email,
-            command.Email?.Trim().ToLower()!,
+            command.Email?.Trim().ToLowerInvariant()!,
             cancellationToken);
 
         // generate jwt token to access secure routes on this API

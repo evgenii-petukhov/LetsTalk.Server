@@ -29,7 +29,6 @@ public static class CoreServicesRegistration
         services.AddScoped<IHtmlGenerator, HtmlGenerator>();
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<ILoginCodeGenerator, LoginCodeGenerator>();
-        services.AddScoped<IEmailService, EmailService>();
         services.AddMassTransit(x =>
         {
             var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);

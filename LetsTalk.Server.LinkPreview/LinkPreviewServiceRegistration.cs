@@ -1,6 +1,4 @@
-﻿using KafkaFlow;
-using KafkaFlow.Serializer;
-using LetsTalk.Server.Configuration;
+﻿using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +7,9 @@ using LetsTalk.Server.SignPackage;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 using LetsTalk.Server.LinkPreview.Utility.Services;
 using LetsTalk.Server.DependencyInjection;
+using MassTransit;
+using LetsTalk.Server.Kafka.Models;
+using System.Net.Mime;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -18,30 +19,55 @@ public static class LinkPreviewServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
-        services.AddKafka(
-            kafka => kafka
-                .UseConsoleLog()
-                .AddCluster(
-                    cluster => cluster
-                        .WithBrokers(new[]
-                        {
-                                kafkaSettings.Url
-                        })
-                        .CreateTopicIfNotExists(kafkaSettings.LinkPreviewRequest!.Topic, 1, 1)
-                        .AddConsumer(consumer => consumer
-                            .Topic(kafkaSettings.LinkPreviewRequest.Topic)
-                            .WithGroupId(kafkaSettings.LinkPreviewRequest.GroupId)
-                            .WithBufferSize(100)
-                            .WithWorkersCount(10)
-                            .AddMiddlewares(middlewares => middlewares
-                                .AddDeserializer<JsonCoreDeserializer>()
-                                .AddTypedHandlers(h => h.AddHandler<LinkPreviewRequestHandler>().WithHandlerLifetime(InstanceLifetime.Transient))
-                            )
-                        )
-                )
-        );
-        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        services.AddMassTransit(x =>
+        {
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
+            {
+                x.AddConsumer<LinkPreviewRequestConsumer>();
+
+                x.UsingAmazonSqs((context, configure) =>
+                {
+                    var awsSettings = ConfigurationHelper.GetAwsSettings(configuration);
+                    configure.Host(awsSettings.Region, h =>
+                    {
+                        h.AccessKey(awsSettings.AccessKey);
+                        h.SecretKey(awsSettings.SecretKey);
+                    });
+                    configure.WaitTimeSeconds = 20;
+                    configure.ReceiveEndpoint("letstalk-link-preview-request-queue", e =>
+                    {
+                        e.WaitTimeSeconds = 20;
+                        e.DefaultContentType = new ContentType("application/json");
+                        e.UseRawJsonDeserializer();
+                        e.ConfigureConsumeTopology = false;
+                        e.ConfigureConsumer<LinkPreviewRequestConsumer>(context);
+                    });
+                });
+            }
+            else
+            {
+                x.UsingInMemory();
+
+                x.AddRider(rider =>
+                {
+                    rider.AddConsumer<LinkPreviewRequestConsumer>();
+                    rider.UsingKafka((context, k) =>
+                    {
+                        var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
+						var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
+                        k.Host(kafkaSettings.Url);
+                        k.TopicEndpoint<LinkPreviewRequest>(
+                            topicSettings.LinkPreviewRequest,
+                            kafkaSettings.GroupId,
+                            e =>
+                            {
+                                e.ConfigureConsumer<LinkPreviewRequestConsumer>(context);
+                                e.CreateIfMissing();
+                            });
+                    });
+                });
+            }
+        });
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
         services.AddSignPackageServices(configuration);
         services.AddScoped<IHttpClientService, HttpClientService>();
@@ -51,7 +77,7 @@ public static class LinkPreviewServiceRegistration
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 #endif
         });
-        switch (configuration.GetValue<string>("Features:linkPreview"))
+        switch (configuration.GetValue<string>("Features:LinkPreviewMode"))
         {
             case "aws":
                 services.Configure<AwsSettings>(configuration.GetSection("Aws"));

@@ -1,44 +1,27 @@
 ﻿using AutoMapper;
-using KafkaFlow;
-using KafkaFlow.Producers;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Notifications.Models;
+using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using MediatR;
-using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
 
-public class SetLinkPreviewCommandHandler : IRequestHandler<SetLinkPreviewCommand, Unit>
+public class SetLinkPreviewCommandHandler(
+    IMessageAgnosticService messageAgnosticService,
+    ILinkPreviewAgnosticService linkPreviewAgnosticService,
+    IChatAgnosticService chatAgnosticService,
+    IProducer<Notification> producer,
+    IMapper mapper,
+    IMessageCacheManager messageCacheManager) : IRequestHandler<SetLinkPreviewCommand, Unit>
 {
-    private readonly IMessageAgnosticService _messageAgnosticService;
-    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService;
-    private readonly IChatAgnosticService _chatAgnosticService;
-    private readonly IMapper _mapper;
-    private readonly IMessageProducer _linkPreviewNotificationProducer;
-    private readonly KafkaSettings _kafkaSettings;
-    private readonly IMessageCacheManager _messageCacheManager;
-
-    public SetLinkPreviewCommandHandler(
-        IMessageAgnosticService messageAgnosticService,
-        ILinkPreviewAgnosticService linkPreviewAgnosticService,
-        IChatAgnosticService chatAgnosticService,
-        IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings,
-        IMapper mapper,
-        IMessageCacheManager messageCacheManager)
-    {
-        _messageAgnosticService = messageAgnosticService;
-        _linkPreviewAgnosticService = linkPreviewAgnosticService;
-        _chatAgnosticService = chatAgnosticService;
-        _mapper = mapper;
-        _messageCacheManager = messageCacheManager;
-        _kafkaSettings = kafkaSettings.Value;
-        _linkPreviewNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.LinkPreviewNotification!.Producer);
-    }
+    private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
+    private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
+    private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
+    private readonly IMapper _mapper = mapper;
+    private readonly IProducer<Notification> _producer = producer;
+    private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
 
     public async Task<Unit> Handle(SetLinkPreviewCommand request, CancellationToken cancellationToken)
     {
@@ -66,14 +49,12 @@ public class SetLinkPreviewCommandHandler : IRequestHandler<SetLinkPreviewComman
         var linkPreviewDto = _mapper.Map<LinkPreviewDto>(message);
 
         await Task.WhenAll([
-            _linkPreviewNotificationProducer.ProduceAsync(
-                _kafkaSettings.LinkPreviewNotification!.Topic,
-                Guid.NewGuid().ToString(),
-                accountIds.Select(accountId => new Notification<LinkPreviewDto>
+            Task.WhenAll(accountIds.Select(accountId => _producer.PublishAsync(
+                new Notification
                 {
                     RecipientId = accountId,
-                    Message = linkPreviewDto
-                }).ToArray()),
+                    LinkPreview = linkPreviewDto
+                }, cancellationToken))),
             _messageCacheManager.ClearAsync(message.ChatId!)
         ]);
 

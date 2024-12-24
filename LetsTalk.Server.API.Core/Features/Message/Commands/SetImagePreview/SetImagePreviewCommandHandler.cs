@@ -1,41 +1,24 @@
 ﻿using AutoMapper;
-using KafkaFlow;
-using KafkaFlow.Producers;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Notifications.Models;
+using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.Enums;
 using MediatR;
-using Microsoft.Extensions.Options;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
 
-public class SetImagePreviewCommandHandler : IRequestHandler<SetImagePreviewCommand, Unit>
+public class SetImagePreviewCommandHandler(
+    IMessageAgnosticService messageAgnosticService,
+    IChatAgnosticService chatAgnosticService,
+    IProducer<Notification> producer,
+    IMapper mapper,
+    IMessageCacheManager messageCacheManager) : IRequestHandler<SetImagePreviewCommand, Unit>
 {
-    private readonly IMessageAgnosticService _messageAgnosticService;
-    private readonly IChatAgnosticService _chatAgnosticService;
-    private readonly IMapper _mapper;
-    private readonly IMessageProducer _imagePreviewNotificationProducer;
-    private readonly KafkaSettings _kafkaSettings;
-    private readonly IMessageCacheManager _messageCacheManager;
-
-    public SetImagePreviewCommandHandler(
-        IMessageAgnosticService messageAgnosticService,
-        IChatAgnosticService chatAgnosticService,
-        IProducerAccessor producerAccessor,
-        IOptions<KafkaSettings> kafkaSettings,
-        IMapper mapper,
-        IMessageCacheManager messageCacheManager)
-    {
-        _messageAgnosticService = messageAgnosticService;
-        _chatAgnosticService = chatAgnosticService;
-        _mapper = mapper;
-        _messageCacheManager = messageCacheManager;
-        _kafkaSettings = kafkaSettings.Value;
-        _imagePreviewNotificationProducer = producerAccessor.GetProducer(_kafkaSettings.ImagePreviewNotification!.Producer);
-    }
+    private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
+    private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
+    private readonly IMapper _mapper = mapper;
+    private readonly IProducer<Notification> _producer = producer;
+    private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
 
     public async Task<Unit> Handle(SetImagePreviewCommand request, CancellationToken cancellationToken)
     {
@@ -51,14 +34,12 @@ public class SetImagePreviewCommandHandler : IRequestHandler<SetImagePreviewComm
         var imagePreviewDto = _mapper.Map<ImagePreviewDto>(message);
 
         await Task.WhenAll([
-            _imagePreviewNotificationProducer.ProduceAsync(
-                _kafkaSettings.ImagePreviewNotification!.Topic,
-                Guid.NewGuid().ToString(),
-                accountIds.Select(accountId => new Notification<ImagePreviewDto>
+            Task.WhenAll(accountIds.Select(accountId => _producer.PublishAsync(
+                new Notification
                 {
                     RecipientId = accountId,
-                    Message = imagePreviewDto
-                }).ToArray()),
+                    ImagePreview = imagePreviewDto
+                }, cancellationToken))),
             _messageCacheManager.ClearAsync(message.ChatId!)
         ]);
 

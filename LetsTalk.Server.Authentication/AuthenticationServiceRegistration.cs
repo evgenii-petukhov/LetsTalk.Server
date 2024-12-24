@@ -33,7 +33,7 @@ namespace LetsTalk.Server.Authentication
             services.Configure<CachingSettings>(configuration.GetSection("Caching"));
             services.AddScoped<IJwtStorageService, JwtStorageService>();
 
-            switch (configuration.GetValue<string>("Features:cachingMode"))
+            switch (configuration.GetValue<string>("Features:CachingMode"))
             {
                 case "redis":
                     services.AddRedisCache();

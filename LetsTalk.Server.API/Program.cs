@@ -1,4 +1,3 @@
-using KafkaFlow;
 using LetsTalk.Server.API;
 using LetsTalk.Server.API.Middleware;
 using Serilog;
@@ -38,8 +37,5 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.MapControllers();
-
-var kafkaBus = app.Services.CreateKafkaBus();
-await kafkaBus.StartAsync();
 
 app.Run();

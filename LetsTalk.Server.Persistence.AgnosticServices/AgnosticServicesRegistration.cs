@@ -11,7 +11,7 @@ public static class AgnosticServicesRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        switch (configuration.GetValue<string>("Features:databaseType"))
+        switch (configuration.GetValue<string>("Features:DatabaseMode"))
         {
             case "MongoDB":
                 services.AddMongoDBServices(configuration);

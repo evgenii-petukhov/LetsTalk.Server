@@ -1,12 +1,12 @@
-﻿using KafkaFlow;
-using KafkaFlow.Serializer;
-using LetsTalk.Server.AuthenticationClient;
+﻿using LetsTalk.Server.AuthenticationClient;
 using LetsTalk.Server.Configuration;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;
 using LetsTalk.Server.Notifications.Services;
+using MassTransit;
+using System.Net.Mime;
 
 namespace LetsTalk.Server.Notifications;
 
@@ -16,7 +16,6 @@ public static class NotificationsServicesRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var kafkaSettings = KafkaSettingsHelper.GetKafkaSettings(configuration);
         services.AddSingleton<IConnectionManager, ConnectionManager>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddAuthenticationClientServices(configuration);
@@ -33,40 +32,55 @@ public static class NotificationsServicesRegistration
             });
         });
         services.AddLoggingServices();
-        services.AddKafka(kafka => kafka
-            .UseConsoleLog()
-            .AddCluster(cluster => cluster
-                .WithBrokers(new[]
+        services.AddMassTransit(x =>
+        {
+            if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
+            {
+                x.AddConsumer<NotificationConsumer>();
+
+                x.UsingAmazonSqs((context, configure) =>
                 {
-                    kafkaSettings.Url
-                })
-                .CreateTopicIfNotExists(kafkaSettings.MessageNotification!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.LinkPreviewNotification!.Topic, 1, 1)
-                .CreateTopicIfNotExists(kafkaSettings.ImagePreviewNotification!.Topic, 1, 1)
-                .AddConsumer(consumer => consumer
-                    .Topic(kafkaSettings.MessageNotification.Topic)
-                    .WithGroupId(kafkaSettings.MessageNotification.GroupId)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(10)
-                    .AddMiddlewares(middlewares => middlewares
-                        .AddDeserializer<JsonCoreDeserializer>()
-                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<MessageDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
-                .AddConsumer(consumer => consumer
-                    .Topic(kafkaSettings.LinkPreviewNotification.Topic)
-                    .WithGroupId(kafkaSettings.LinkPreviewNotification.GroupId)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(10)
-                    .AddMiddlewares(middlewares => middlewares
-                        .AddDeserializer<JsonCoreDeserializer>()
-                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<LinkPreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))
-                .AddConsumer(consumer => consumer
-                    .Topic(kafkaSettings.ImagePreviewNotification.Topic)
-                    .WithGroupId(kafkaSettings.ImagePreviewNotification.GroupId)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(10)
-                    .AddMiddlewares(middlewares => middlewares
-                        .AddDeserializer<JsonCoreDeserializer>()
-                        .AddTypedHandlers(h => h.AddHandler<NotificationHandler<ImagePreviewDto>>().WithHandlerLifetime(InstanceLifetime.Transient))))));
+                    var awsSettings = ConfigurationHelper.GetAwsSettings(configuration);
+                    var queueSettings = ConfigurationHelper.GetQueueSettings(configuration);
+                    configure.Host(awsSettings.Region, h =>
+                    {
+                        h.AccessKey(awsSettings.AccessKey);
+                        h.SecretKey(awsSettings.SecretKey);
+                    });
+                    configure.WaitTimeSeconds = 20;
+                    configure.ReceiveEndpoint(queueSettings.Notification!, e =>
+                    {
+                        e.WaitTimeSeconds = 20;
+                        e.DefaultContentType = new ContentType("application/json");
+                        e.UseRawJsonDeserializer();
+                        e.ConfigureConsumeTopology = false;
+                        e.ConfigureConsumer<NotificationConsumer>(context);
+                    });
+                });
+            }
+            else
+            {
+                x.UsingInMemory();
+                x.AddRider(rider =>
+                {
+                    rider.AddConsumer<NotificationConsumer>();
+                    rider.UsingKafka((context, k) =>
+                    {
+                        var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
+                        var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
+                        k.Host(kafkaSettings.Url);
+                        k.TopicEndpoint<Notification>(
+                            topicSettings.Notification,
+                            kafkaSettings.GroupId,
+                            e =>
+                            {
+                                e.ConfigureConsumer<NotificationConsumer>(context);
+                                e.CreateIfMissing();
+                            });
+                    });
+                });
+            }
+        });
 
         return services;
     }

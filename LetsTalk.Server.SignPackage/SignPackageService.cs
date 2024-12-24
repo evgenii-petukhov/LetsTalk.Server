@@ -13,9 +13,9 @@ public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPa
     private readonly string _salt = options.Value?.Salt ?? string.Empty;
     private readonly string[] _supportedTypes = ["System.Int32", "System.String"];
 
-    public void Sign(object obj)
+    public void Sign(object objectToSign)
     {
-        if (obj == null || obj is not ISignable signable)
+        if (objectToSign == null || objectToSign is not ISignable signable)
         {
             return;
         }

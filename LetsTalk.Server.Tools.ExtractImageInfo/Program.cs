@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.Globalization;
 
 using var host = CreateDefaultBuilder().Build();
 using var serviceScope = host.Services.CreateScope();
@@ -28,6 +29,6 @@ static IHostBuilder CreateDefaultBuilder()
             loggerConfig
                 .ReadFrom.Configuration(context.Configuration)
                 .Enrich.FromLogContext()
-                .WriteTo.Console();
+                .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);
         });
 }

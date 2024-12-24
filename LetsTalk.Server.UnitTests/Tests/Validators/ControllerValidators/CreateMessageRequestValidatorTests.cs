@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.API.Models.Message;
-using LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
+using LetsTalk.Server.API.Validation;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 

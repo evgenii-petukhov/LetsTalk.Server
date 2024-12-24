@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.API.Validation;
 
 namespace LetsTalk.Server.API.Controllers;
 

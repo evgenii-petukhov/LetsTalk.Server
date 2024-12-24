@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.API.Models.Message;
-using LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 using LetsTalk.Server.API.Models.Profile;
+using LetsTalk.Server.API.Validation;
 
 namespace LetsTalk.Server.UnitTests.Tests.Validators.ControllerValidators;
 

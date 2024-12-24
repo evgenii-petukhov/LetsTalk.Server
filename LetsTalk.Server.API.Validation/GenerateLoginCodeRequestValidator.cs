@@ -3,13 +3,13 @@ using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Utility.Common;
 
-namespace LetsTalk.Server.API.Validators;
+namespace LetsTalk.Server.API.Validation;
 
-public class EmailLoginRequestValidator : AbstractValidator<EmailLoginRequest>
+public class GenerateLoginCodeRequestValidator : AbstractValidator<GenerateLoginCodeRequest>
 {
     private readonly SecuritySettings _securitySettings;
 
-    public EmailLoginRequestValidator(SecuritySettings securitySettings)
+    public GenerateLoginCodeRequestValidator(SecuritySettings securitySettings)
     {
         RuleFor(model => model.Email)
             .NotNull()
@@ -18,10 +18,6 @@ public class EmailLoginRequestValidator : AbstractValidator<EmailLoginRequest>
             .WithMessage("{PropertyName} cannot be empty")
             .EmailAddress()
             .WithMessage("{PropertyName} must be a valid email");
-
-        RuleFor(model => model.Code)
-            .InclusiveBetween(1000, 9999)
-            .WithMessage("Code should contain 4 digits");
 
         RuleFor(model => model.AntiSpamToken)
             .NotEmpty()

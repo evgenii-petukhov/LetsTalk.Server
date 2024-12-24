@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.API.Models.Chat;
 
-namespace LetsTalk.Server.API.Validators;
+namespace LetsTalk.Server.API.Validation;
 
 public class CreateIndividualChatRequestValidator : AbstractValidator<CreateIndividualChatRequest>
 {

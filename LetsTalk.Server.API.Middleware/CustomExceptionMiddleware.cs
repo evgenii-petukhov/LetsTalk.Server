@@ -1,6 +1,8 @@
 ﻿using LetsTalk.Server.API.Middleware.Models;
 using LetsTalk.Server.Exceptions;
+using Microsoft.AspNetCore.Http;
 using System.Net;
+using System.Text.Json;
 
 namespace LetsTalk.Server.API.Middleware;
 
@@ -76,6 +78,7 @@ public class CustomExceptionMiddleware(RequestDelegate next)
         }
 
         ctx.Response.StatusCode = statusCode;
-        return ctx.Response.WriteAsJsonAsync(problem);
+        ctx.Response.ContentType = "application/json";
+        return ctx.Response.WriteAsync(JsonSerializer.Serialize(problem));
     }
 }

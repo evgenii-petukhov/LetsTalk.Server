@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using LetsTalk.Server.Authentication.Abstractions;
+using Microsoft.AspNetCore.Http;
 
 namespace LetsTalk.Server.API.Middleware;
 
@@ -11,7 +12,7 @@ public class JwtMiddleware(RequestDelegate next)
         HttpContext context,
         IAuthenticationClient authenticationClient)
     {
-        var token = context.Request.Headers.Authorization.FirstOrDefault()?
+        var token = context.Request.Headers["Authorization"].FirstOrDefault()?
             .Split(" ")
             .Last();
 

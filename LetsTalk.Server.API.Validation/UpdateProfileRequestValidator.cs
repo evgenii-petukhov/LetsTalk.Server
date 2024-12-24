@@ -3,7 +3,7 @@ using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.API.Models.Profile;
 using LetsTalk.Server.SignPackage.Abstractions;
 
-namespace LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
+namespace LetsTalk.Server.API.Validation;
 
 public class UpdateProfileRequestValidator : AbstractValidator<UpdateProfileRequest>
 {

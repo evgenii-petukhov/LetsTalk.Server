@@ -5,7 +5,7 @@ using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.API.Validators;
+using LetsTalk.Server.API.Validation;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Configuration.Models;
 

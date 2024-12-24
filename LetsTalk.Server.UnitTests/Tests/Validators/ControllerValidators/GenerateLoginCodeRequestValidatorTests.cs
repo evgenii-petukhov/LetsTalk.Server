@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.API.Models.Login;
-using LetsTalk.Server.API.Validators;
+using LetsTalk.Server.API.Validation;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Utility.Common;
 

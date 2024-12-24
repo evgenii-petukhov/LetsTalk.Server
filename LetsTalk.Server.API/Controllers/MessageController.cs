@@ -12,6 +12,7 @@ using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
 using Microsoft.AspNetCore.Authorization;
+using LetsTalk.Server.API.Validation;
 
 namespace LetsTalk.Server.API.Controllers;
 

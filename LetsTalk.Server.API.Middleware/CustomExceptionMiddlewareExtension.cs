@@ -1,4 +1,6 @@
-﻿namespace LetsTalk.Server.API.Middleware;
+﻿using Microsoft.AspNetCore.Builder;
+
+namespace LetsTalk.Server.API.Middleware;
 
 public static class CustomExceptionMiddlewareExtension
 {

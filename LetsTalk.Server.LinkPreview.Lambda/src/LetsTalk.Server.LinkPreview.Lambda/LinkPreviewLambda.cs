@@ -6,9 +6,9 @@ using LetsTalk.Server.LinkPreview.Utility.Services;
 
 namespace LetsTalk.Server.LinkPreview.Lambda
 {
-    public static class Function
+    public static class LinkPreviewLambda
     {
-        public static Task<LinkPreviewResponse> GenerateLinkPreviewAsync(string input)
+        public static Task<LinkPreviewResponse> GenerateAsync(string input)
         {
             var linkPreviewService = new LinkPreviewService(
                 new DownloadService(new FakeHttpClientService()),

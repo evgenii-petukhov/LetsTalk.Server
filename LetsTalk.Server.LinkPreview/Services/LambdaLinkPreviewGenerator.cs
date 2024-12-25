@@ -26,7 +26,7 @@ public class LambdaLinkPreviewGenerator(
         using var client = GetLambdaClient();
         var response = await client.InvokeAsync(new InvokeRequest
         {
-            FunctionName = "GenerateLinkPreviewAsync",
+            FunctionName = "LinkPreviewLambda_GenerateAsync",
             Payload = JsonSerializer.Serialize(url)
         }, cancellationToken);
 

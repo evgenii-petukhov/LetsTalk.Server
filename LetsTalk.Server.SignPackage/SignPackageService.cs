@@ -50,7 +50,7 @@ public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPa
 
         if (stringPairs.Count == 0)
         {
-            throw new Exception("There is no supported properties to sign");
+            throw new InvalidOperationException("There are no supported properties to sign");
         }
 
         var s = new StringBuilder()

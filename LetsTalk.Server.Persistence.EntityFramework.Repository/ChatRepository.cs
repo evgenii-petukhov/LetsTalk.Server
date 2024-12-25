@@ -3,6 +3,7 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
@@ -101,20 +102,20 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 x.Chat,
                 AccountIds = x.Accounts.ConvertAll(x => x!.Id)
                     .Where(x => x != accountId)
-                    .Select(x => x.ToString())
+                    .Select(x => x.ToString(CultureInfo.InvariantCulture))
                     .ToArray(),
                 Account = x.Accounts.FirstOrDefault(),
                 Metrics = y
             })
             .Select(g => new ChatServiceModel
             {
-                Id = g.Chat!.Id.ToString(),
+                Id = g.Chat!.Id.ToString(CultureInfo.InvariantCulture),
                 ChatName = g.Chat!.IsIndividual ? $"{g.Account!.FirstName} {g.Account.LastName}" : g.Chat.Name,
                 PhotoUrl = g.Chat.IsIndividual ? g.Account!.PhotoUrl : null,
                 AccountTypeId = g.Chat.IsIndividual ? g.Account!.AccountTypeId : null,
                 ImageId = g.Chat.IsIndividual ? g.Account!.ImageId : g.Chat.ImageId,
                 LastMessageDate = g.Metrics.LastMessageDate,
-                LastMessageId = g.Metrics.LastMessageId.ToString(),
+                LastMessageId = g.Metrics.LastMessageId.ToString(CultureInfo.InvariantCulture),
                 UnreadCount = g.Metrics.UnreadCount,
                 IsIndividual = g.Chat!.IsIndividual,
                 AccountIds = g.AccountIds

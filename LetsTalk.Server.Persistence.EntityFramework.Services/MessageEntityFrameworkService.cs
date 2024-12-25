@@ -5,6 +5,7 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
@@ -32,8 +33,8 @@ public class MessageEntityFrameworkService(
         CancellationToken cancellationToken)
     {
         var message = new Message(
-            int.Parse(senderId),
-            int.Parse(chatId),
+            int.Parse(senderId, CultureInfo.InvariantCulture),
+            int.Parse(chatId, CultureInfo.InvariantCulture),
             text,
             textHtml,
             int.TryParse(linkPreviewId, out int linkPreviewIdInt) ? linkPreviewIdInt : null);
@@ -56,8 +57,8 @@ public class MessageEntityFrameworkService(
         var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
 
         var message = new Message(
-            int.Parse(senderId),
-            int.Parse(chatId),
+            int.Parse(senderId, CultureInfo.InvariantCulture),
+            int.Parse(chatId, CultureInfo.InvariantCulture),
             text,
             textHtml,
             image: image);
@@ -74,7 +75,7 @@ public class MessageEntityFrameworkService(
         CancellationToken cancellationToken = default)
     {
         var messages = await _messageRepository.GetPagedAsync(
-            int.Parse(chatId),
+            int.Parse(chatId, CultureInfo.InvariantCulture),
             pageIndex,
             messagesPerPage,
             cancellationToken);
@@ -84,8 +85,8 @@ public class MessageEntityFrameworkService(
 
     public async Task<MessageServiceModel> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default)
     {
-        var linkPreview = await _linkPreviewRepository.GetByIdAsync(int.Parse(linkPreviewId), cancellationToken);
-        var message = await _messageRepository.GetByIdAsTrackingAsync(int.Parse(messageId), cancellationToken);
+        var linkPreview = await _linkPreviewRepository.GetByIdAsync(int.Parse(linkPreviewId, CultureInfo.InvariantCulture), cancellationToken);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(int.Parse(messageId, CultureInfo.InvariantCulture), cancellationToken);
         message.SetLinkPreview(linkPreview);
         await _unitOfWork.SaveAsync(cancellationToken);
 
@@ -100,7 +101,7 @@ public class MessageEntityFrameworkService(
         CancellationToken cancellationToken = default)
     {
         var linkPreview = _entityFactory.CreateLinkPreview(url, title, imageUrl);
-        var message = await _messageRepository.GetByIdAsTrackingAsync(int.Parse(messageId), cancellationToken);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(int.Parse(messageId, CultureInfo.InvariantCulture), cancellationToken);
         message.SetLinkPreview(linkPreview);
         await _unitOfWork.SaveAsync(cancellationToken);
 

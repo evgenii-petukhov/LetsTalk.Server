@@ -12,7 +12,7 @@ public class JwtMiddleware(RequestDelegate next)
         HttpContext context,
         IAuthenticationClient authenticationClient)
     {
-        var token = context.Request.Headers["Authorization"].FirstOrDefault()?
+        var token = context.Request.Headers.Authorization.FirstOrDefault()?
             .Split(" ")
             .Last();
 

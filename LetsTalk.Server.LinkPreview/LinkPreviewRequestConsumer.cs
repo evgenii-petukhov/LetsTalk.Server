@@ -19,9 +19,9 @@ public class LinkPreviewRequestConsumer(
     private static readonly Action<ILogger, string, Exception?> _logTitleEmpty =
         LoggerMessage.Define<string>(LogLevel.Information, new EventId(1, nameof(LinkPreviewRequestConsumer)), "Title is empty: {Url}");
     private static readonly Action<ILogger, string, Exception?> _logSuccess =
-        LoggerMessage.Define<string>(LogLevel.Information, new EventId(1, nameof(LinkPreviewRequestConsumer)), "New LinkPreview added: {Url}");
+        LoggerMessage.Define<string>(LogLevel.Information, new EventId(2, nameof(LinkPreviewRequestConsumer)), "New LinkPreview added: {Url}");
     private static readonly Action<ILogger, string, Exception?> _logUnableToDownload =
-        LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LinkPreviewRequestConsumer)), "Unable to download: {Url}");
+        LoggerMessage.Define<string>(LogLevel.Error, new EventId(3, nameof(LinkPreviewRequestConsumer)), "Unable to download: {Url}");
 
     private readonly ILinkPreviewService _linkPreviewService = linkPreviewService;
     private readonly ILogger<LinkPreviewRequestConsumer> _logger = logger;

@@ -14,19 +14,19 @@ public abstract class GenericRepository<T> : Repository, IGenericRepository<T>
 
     public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        await _context.Set<T>().AddAsync(entity, cancellationToken);
+        await Context.Set<T>().AddAsync(entity, cancellationToken);
     }
 
     public virtual Task<T> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
     {
-        return _context.Set<T>()
+        return Context.Set<T>()
             .AsTracking()
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
     }
 
     public virtual Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return _context.Set<T>()
+        return Context.Set<T>()
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
     }
 }

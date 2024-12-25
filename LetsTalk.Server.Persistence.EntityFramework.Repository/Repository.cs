@@ -4,7 +4,7 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
 public abstract class Repository(LetsTalkDbContext context) : IDisposable
 {
-    protected readonly LetsTalkDbContext _context = context;
+    protected LetsTalkDbContext Context { get; } = context;
     private bool _disposed;
 
     protected virtual void Dispose(bool disposing)
@@ -13,7 +13,7 @@ public abstract class Repository(LetsTalkDbContext context) : IDisposable
         {
             if (disposing)
             {
-                _context.Dispose();
+                Context.Dispose();
             }
 
             _disposed = true;

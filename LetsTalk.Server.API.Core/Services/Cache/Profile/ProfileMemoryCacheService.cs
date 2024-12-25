@@ -15,18 +15,18 @@ public class ProfileMemoryCacheService(
 
     public Task<ProfileDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
-        return _isActive
+        return IsActive
             ? _memoryCache.GetOrCreateAsync(GetProfileKey(accountId), cacheEntry =>
             {
-                cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
-                return _profileService.GetProfileAsync(accountId, cancellationToken);
+                cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
+                return ProfileService.GetProfileAsync(accountId, cancellationToken);
             })!
-            : _profileService.GetProfileAsync(accountId, cancellationToken);
+            : ProfileService.GetProfileAsync(accountId, cancellationToken);
     }
 
     public Task ClearAsync(string accountId)
     {
-        if (_isActive)
+        if (IsActive)
         {
             _memoryCache.Remove(GetProfileKey(accountId));
         }

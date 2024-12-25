@@ -20,12 +20,12 @@ public class LoginCodeMemoryCacheService(
 
         var code = _memoryCache.GetOrCreate(GetLoginCodeKey(email), cacheEntry =>
         {
-            cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
+            cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
             isCreated = true;
             return _generator.GenerateCode();
         });
 
-        return Task.FromResult((code, isCreated, _cacheLifeTimeInSeconds));
+        return Task.FromResult((code, isCreated, CacheLifeTimeInSeconds));
     }
 
     public Task<bool> ValidateCodeAsync(string email, int code)

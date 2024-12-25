@@ -6,30 +6,30 @@ public class ConnectionManager : IConnectionManager
 {
     private readonly object _lock = new();
 
-    public readonly Dictionary<string, HashSet<string>> _connectionIdAccountIdBy = new(StringComparer.Ordinal);
+    public Dictionary<string, HashSet<string>> ConnectionIdAccountIdBy { get; } = new(StringComparer.Ordinal);
 
     public HashSet<string> GetConnectionIds(string accountId)
     {
-        return _connectionIdAccountIdBy.GetValueOrDefault(accountId)!;
+        return ConnectionIdAccountIdBy.GetValueOrDefault(accountId)!;
     }
 
     public void RemoveConnectionId(string connectionId)
     {
         lock (_lock)
         {
-            var isFound = _connectionIdAccountIdBy
+            var isFound = ConnectionIdAccountIdBy
                 .Any(x => x.Value.Contains(connectionId));
 
             if (isFound)
             {
-                var mapping = _connectionIdAccountIdBy
+                var mapping = ConnectionIdAccountIdBy
                     .First(x => x.Value.Contains(connectionId));
 
                 mapping.Value.RemoveWhere(x => string.Equals(x, connectionId, StringComparison.Ordinal));
 
                 if (mapping.Value.Count == 0)
                 {
-                    _connectionIdAccountIdBy.Remove(mapping.Key);
+                    ConnectionIdAccountIdBy.Remove(mapping.Key);
                 }
             }
         }
@@ -39,13 +39,13 @@ public class ConnectionManager : IConnectionManager
     {
         lock (_lock)
         {
-            if (_connectionIdAccountIdBy.TryGetValue(accountId, out var value))
+            if (ConnectionIdAccountIdBy.TryGetValue(accountId, out var value))
             {
                 value.Add(connectionId);
             }
             else
             {
-                _connectionIdAccountIdBy.Add(
+                ConnectionIdAccountIdBy.Add(
                     accountId,
                     new HashSet<string>(StringComparer.Ordinal)
                     {

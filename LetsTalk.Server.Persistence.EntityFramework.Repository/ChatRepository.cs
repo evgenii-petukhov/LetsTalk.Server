@@ -11,10 +11,10 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
 {
     public async Task<List<ChatServiceModel>> GetChatsAsync(int accountId, CancellationToken cancellationToken = default)
     {
-        var chats = await _context.ChatMembers
+        var chats = await Context.ChatMembers
             .Include(cm => cm.Chat)
             .Include(cm => cm.Account)
-            .Where(cm => cm.AccountId != accountId && _context.ChatMembers.Where(x => x.AccountId == accountId).Select(x => x.ChatId).Contains(cm.ChatId))
+            .Where(cm => cm.AccountId != accountId && Context.ChatMembers.Where(x => x.AccountId == accountId).Select(x => x.ChatId).Contains(cm.ChatId))
             .GroupBy(x => x.Chat)
             .Select(g => new
             {
@@ -28,9 +28,9 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             })
             .ToListAsync(cancellationToken);
 
-        var metrics = await _context.ChatMembers
+        var metrics = await Context.ChatMembers
             .Where(cm => cm.AccountId == accountId)
-            .GroupJoin(_context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
+            .GroupJoin(Context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
             {
                 x.ChatId,
                 Messages = y
@@ -41,7 +41,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 Message = y
             })
             .GroupJoin(
-                _context.ChatMessageStatuses,
+                Context.ChatMessageStatuses,
                 x => x.Message!.Id,
                 x => x.MessageId,
                 (x, y) => new
@@ -64,7 +64,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 LastMessageId = g.Max(x => x.Message!.Id),
                 LastReadMessageId = g.Max(x => x.ReadMessageId)
             })
-            .GroupJoin(_context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
+            .GroupJoin(Context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
             {
                 x.ChatId,
                 x.LastMessageId,
@@ -125,13 +125,13 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
 
     public Task<bool> IsChatIdValidAsync(int id, CancellationToken cancellationToken = default)
     {
-        return _context.Chats
+        return Context.Chats
             .AnyAsync(chat => chat.Id == id, cancellationToken);
     }
 
     public Task<Chat> GetIndividualChatByAccountIdsAsync(int[] accountIds, CancellationToken cancellationToken = default)
     {
-        return _context.ChatMembers
+        return Context.ChatMembers
             .GroupBy(x => x.Chat)
             .Where(g => g.Key!.IsIndividual && g.All(x => accountIds.Contains(x.AccountId)))
             .Select(g => g.Key)

@@ -16,16 +16,16 @@ public class AccountMemoryCacheService(
 
     public Task<IReadOnlyList<AccountDto>> GetAccountsAsync(CancellationToken cancellationToken)
     {
-        return _isActive
+        return IsActive
             ? _memoryCache.GetOrCreateAsync(AccountCacheKey, cacheEntry =>
             {
-                if (_isVolotile)
+                if (IsVolotile)
                 {
-                    cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
+                    cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
                 }
 
-                return _accountService.GetAccountsAsync(cancellationToken);
+                return AccountService.GetAccountsAsync(cancellationToken);
             })!
-            : _accountService.GetAccountsAsync(cancellationToken);
+            : AccountService.GetAccountsAsync(cancellationToken);
     }
 }

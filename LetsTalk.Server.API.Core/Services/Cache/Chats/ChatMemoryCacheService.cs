@@ -15,22 +15,22 @@ public class ChatMemoryCacheService(
 
     public Task<IReadOnlyList<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
-        return _isActive
+        return IsActive
             ? _memoryCache.GetOrCreateAsync(GetChatsKey(accountId), cacheEntry =>
             {
-                if (_isVolotile)
+                if (IsVolotile)
                 {
-                    cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
+                    cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
                 }
 
-                return _chatService.GetChatsAsync(accountId, cancellationToken);
+                return ChatService.GetChatsAsync(accountId, cancellationToken);
             })!
-            : _chatService.GetChatsAsync(accountId, cancellationToken);
+            : ChatService.GetChatsAsync(accountId, cancellationToken);
     }
 
     public Task ClearAsync(string accountId)
     {
-        if (_isActive)
+        if (IsActive)
         {
             _memoryCache.Remove(GetChatsKey(accountId));
         }

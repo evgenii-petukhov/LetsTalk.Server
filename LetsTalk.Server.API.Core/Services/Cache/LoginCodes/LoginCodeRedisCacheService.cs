@@ -21,9 +21,9 @@ public class LoginCodeRedisCacheService(
         var key = new RedisKey(GetLoginCodeKey(email));
         var code = _generator.GenerateCode();
 
-        var isCreated = await _database.StringSetAsync(key, new RedisValue(code.ToString(CultureInfo.InvariantCulture)), _cacheLifeTimeInSeconds, when: When.NotExists);
+        var isCreated = await _database.StringSetAsync(key, new RedisValue(code.ToString(CultureInfo.InvariantCulture)), CacheLifeTimeInSeconds, when: When.NotExists);
         var ttl = await _database.KeyTimeToLiveAsync(key);
-        return (code, isCreated, ttl ?? _cacheLifeTimeInSeconds);
+        return (code, isCreated, ttl ?? CacheLifeTimeInSeconds);
     }
 
     public async Task<bool> ValidateCodeAsync(string email, int code)

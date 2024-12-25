@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using LetsTalk.Server.Authentication.Abstractions;
+﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
@@ -34,7 +32,6 @@ public class EmailLoginCommandHandler(
             command.Email?.Trim().ToLowerInvariant()!,
             cancellationToken);
 
-        // generate jwt token to access secure routes on this API
         var token = await _authenticationClient.GenerateJwtTokenAsync(accountId);
 
         return new LoginResponseDto

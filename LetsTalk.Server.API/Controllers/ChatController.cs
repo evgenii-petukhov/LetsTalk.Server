@@ -1,11 +1,11 @@
 ﻿using LetsTalk.Server.API.Models.Chat;
-using LetsTalk.Server.API.Core.Features.Chat.Commands.CreateIndividualChat;
 using LetsTalk.Server.API.Core.Features.Chat.Queries.GetChats;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.API.Validation;
 using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.API.Core.Commands;
 
 namespace LetsTalk.Server.API.Controllers;
 

@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Persistence.Enums;
 using MediatR;
 
-namespace LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
+namespace LetsTalk.Server.API.Core.Commands;
 
 public class SetImagePreviewCommand : IRequest<Unit>
 {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace LetsTalk.Server.API.Core.Features.Message.Commands.ReadMessage;
+namespace LetsTalk.Server.API.Core.Commands;
 
 public class ReadMessageCommand : IRequest<Unit>
 {

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.API.Core.Abstractions;
+using LetsTalk.Server.API.Core.Commands;
 
 namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 

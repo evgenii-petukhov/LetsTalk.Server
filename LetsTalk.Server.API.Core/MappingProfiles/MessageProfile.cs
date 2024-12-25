@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Message;
-using LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
-using LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
+using LetsTalk.Server.API.Core.Commands;
 
 namespace LetsTalk.Server.API.Core.MappingProfiles;
 

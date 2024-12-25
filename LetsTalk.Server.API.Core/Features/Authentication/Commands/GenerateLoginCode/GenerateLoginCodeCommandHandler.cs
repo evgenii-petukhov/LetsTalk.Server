@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
+using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using MediatR;

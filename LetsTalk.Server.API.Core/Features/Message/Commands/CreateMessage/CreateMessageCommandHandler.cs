@@ -7,6 +7,7 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;
+using LetsTalk.Server.API.Core.Commands;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
 

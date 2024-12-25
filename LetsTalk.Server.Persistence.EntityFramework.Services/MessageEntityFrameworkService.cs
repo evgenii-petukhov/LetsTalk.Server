@@ -114,7 +114,11 @@ public class MessageEntityFrameworkService(
         string messageId,
         CancellationToken cancellationToken)
     {
-        return MarkAsReadAsync(int.Parse(chatId), int.Parse(accountId), int.Parse(messageId), cancellationToken);
+        return MarkAsReadAsync(
+            int.Parse(chatId, CultureInfo.InvariantCulture),
+            int.Parse(accountId, CultureInfo.InvariantCulture),
+            int.Parse(messageId, CultureInfo.InvariantCulture),
+            cancellationToken);
     }
 
     public async Task<MessageServiceModel> SaveImagePreviewAsync(
@@ -126,7 +130,9 @@ public class MessageEntityFrameworkService(
         CancellationToken cancellationToken = default)
     {
         var image = _entityFactory.CreateImage(filename, imageFormat, width, height);
-        var message = await _messageRepository.GetByIdAsTrackingAsync(int.Parse(messageId), cancellationToken);
+        var message = await _messageRepository.GetByIdAsTrackingAsync(
+            int.Parse(messageId, CultureInfo.InvariantCulture),
+            cancellationToken);
         message.SetImagePreview(image);
 
         await _unitOfWork.SaveAsync(cancellationToken);

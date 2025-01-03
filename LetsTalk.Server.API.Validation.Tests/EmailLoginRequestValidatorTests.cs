@@ -1,17 +1,16 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.API.Models.Login;
-using LetsTalk.Server.API.Validation;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Utility.Common;
 
-namespace LetsTalk.Server.UnitTests.Tests.Validators.ControllerValidators;
+namespace LetsTalk.Server.API.Validation.Tests;
 
 [TestFixture]
-public class GenerateLoginCodeRequestValidatorTests
+public class EmailLoginRequestValidatorTests
 {
     private const string ValidEmailSample = "email@example.com";
 
-    private GenerateLoginCodeRequestValidator _validator;
+    private EmailLoginRequestValidator _validator;
 
     [SetUp]
     public void SetUp()
@@ -26,7 +25,7 @@ public class GenerateLoginCodeRequestValidatorTests
     public async Task ValidateAsync_When_EmailIsNull_ShouldContainValidationErrors()
     {
         // Arrange
-        var request = new GenerateLoginCodeRequest();
+        var request = new EmailLoginRequest();
         var cancellationToken = new CancellationToken();
 
         // Act
@@ -39,6 +38,7 @@ public class GenerateLoginCodeRequestValidatorTests
         {
             "Email is required",
             "Email cannot be empty",
+            "Code should contain 4 digits",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
         });
@@ -50,7 +50,7 @@ public class GenerateLoginCodeRequestValidatorTests
     public async Task ValidateAsync_When_EmailIsEmpty_ShouldContainValidationErrors(string email)
     {
         // Arrange
-        var request = new GenerateLoginCodeRequest
+        var request = new EmailLoginRequest
         {
             Email = email
         };
@@ -66,6 +66,7 @@ public class GenerateLoginCodeRequestValidatorTests
         {
             "Email cannot be empty",
             "Email must be a valid email",
+            "Code should contain 4 digits",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
         });
@@ -80,7 +81,7 @@ public class GenerateLoginCodeRequestValidatorTests
     public async Task ValidateAsync_When_EmailIsInvalid_ShouldContainValidationErrors(string email)
     {
         // Arrange
-        var request = new GenerateLoginCodeRequest
+        var request = new EmailLoginRequest
         {
             Email = email
         };
@@ -95,21 +96,25 @@ public class GenerateLoginCodeRequestValidatorTests
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
             "Email must be a valid email",
+            "Code should contain 4 digits",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
         });
     }
 
     [Test]
-    [TestCase(-60)]
-    [TestCase(60)]
-    public async Task ValidateAsync_When_EmailIsValid_AntiSpamTokenIsInvalid_ShouldContainValidationErrors(long delta)
+    [TestCase(1)]
+    [TestCase(11)]
+    [TestCase(111)]
+    [TestCase(11111)]
+    [TestCase(-1111)]
+    public async Task ValidateAsync_When_EmailIsValid_CodeIsInvalid_ShouldContainValidationErrors(int code)
     {
         // Arrange
-        var request = new GenerateLoginCodeRequest
+        var request = new EmailLoginRequest
         {
             Email = ValidEmailSample,
-            AntiSpamToken = DateHelper.GetUnixTimestamp() + delta
+            Code = code
         };
         var cancellationToken = new CancellationToken();
 
@@ -121,22 +126,25 @@ public class GenerateLoginCodeRequestValidatorTests
         validationResult.IsValid.Should().BeFalse();
         validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
         {
+            "Code should contain 4 digits",
+            "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
         });
     }
 
     [Test]
-    [TestCase(0)]
-    [TestCase(1)]
-    [TestCase(-1)]
-    [TestCase(-59)]
-    [TestCase(59)]
-    public async Task ValidateAsync_When_EmailIsValid_AntiSpamTokenIsValid_ShouldBeValid(long delta)
+    [TestCase(1234, 0)]
+    [TestCase(9876, 1)]
+    [TestCase(5783, -1)]
+    [TestCase(8173, -59)]
+    [TestCase(3520, 59)]
+    public async Task ValidateAsync_When_EmailIsValid_CodeISValid_AntiSpamTokenIsValid_ShouldBeValid(int code, long delta)
     {
         // Arrange
-        var request = new GenerateLoginCodeRequest
+        var request = new EmailLoginRequest
         {
             Email = ValidEmailSample,
+            Code = code,
             AntiSpamToken = DateHelper.GetUnixTimestamp() + delta
         };
         var cancellationToken = new CancellationToken();

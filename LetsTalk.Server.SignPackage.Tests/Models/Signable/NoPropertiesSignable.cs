@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.SignPackage.Models;
 
-namespace LetsTalk.Server.UnitTests.Models.Signable;
+namespace LetsTalk.Server.SignPackage.Tests.Models.Signable;
 
 public class NoPropertiesSignable : ISignable
 {

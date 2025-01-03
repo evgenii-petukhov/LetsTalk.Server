@@ -1,8 +1,8 @@
 ﻿using LetsTalk.Server.SignPackage.Models;
-using LetsTalk.Server.UnitTests.Models;
-using LetsTalk.Server.UnitTests.Models.Signable;
+using LetsTalk.Server.SignPackage.Tests.Models;
+using LetsTalk.Server.SignPackage.Tests.Models.Signable;
 
-namespace LetsTalk.Server.UnitTests.TestCases;
+namespace LetsTalk.Server.SignPackage.Tests.TestCases;
 
 public static class SignPackageServiceTestCases
 {

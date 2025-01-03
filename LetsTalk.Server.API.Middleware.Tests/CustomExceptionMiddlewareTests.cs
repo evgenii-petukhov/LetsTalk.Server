@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.API.Middleware;
 using LetsTalk.Server.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Net;
 
-namespace LetsTalk.Server.UnitTests.Tests.Middleware;
+namespace LetsTalk.Server.API.Middleware.Tests;
 
 [TestFixture]
 public class CustomExceptionMiddlewareTests

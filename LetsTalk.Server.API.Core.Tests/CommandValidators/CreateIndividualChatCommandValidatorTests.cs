@@ -4,7 +4,7 @@ using LetsTalk.Server.API.Core.Features.Chat.Commands.CreateIndividualChat;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using Moq;
 
-namespace LetsTalk.Server.UnitTests.Tests.Validators.CommandValidators;
+namespace LetsTalk.Server.API.Core.Tests.CommandValidators;
 
 #pragma warning disable CA1861 // Avoid constant arrays as arguments
 

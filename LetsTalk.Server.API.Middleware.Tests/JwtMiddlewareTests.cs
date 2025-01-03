@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.API.Middleware;
 using LetsTalk.Server.Authentication.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Moq;
 
-namespace LetsTalk.Server.UnitTests.Tests.Middleware;
+namespace LetsTalk.Server.API.Middleware.Tests;
 
 [TestFixture]
 public class JwtMiddlewareTests

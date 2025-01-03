@@ -3,9 +3,8 @@ using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.SignPackage.Abstractions;
 using Moq;
 using LetsTalk.Server.API.Models.Profile;
-using LetsTalk.Server.API.Validation;
 
-namespace LetsTalk.Server.UnitTests.Tests.Validators.ControllerValidators;
+namespace LetsTalk.Server.API.Validation.Tests;
 
 #pragma warning disable CA1861 // Avoid constant arrays as arguments
 

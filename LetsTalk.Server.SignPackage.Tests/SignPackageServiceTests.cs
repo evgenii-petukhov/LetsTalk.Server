@@ -1,19 +1,19 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.SignPackage;
+using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.SignPackage.Models;
-using LetsTalk.Server.UnitTests.Models;
-using LetsTalk.Server.UnitTests.Models.Signable;
-using LetsTalk.Server.UnitTests.TestCases;
+using LetsTalk.Server.SignPackage.Tests.Models;
+using LetsTalk.Server.SignPackage.Tests.Models.Signable;
+using LetsTalk.Server.SignPackage.Tests.TestCases;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace LetsTalk.Server.UnitTests.Tests.Services;
+namespace LetsTalk.Server.SignPackage.Tests;
 
 [TestFixture]
 public class SignPackageServiceTests
 {
-    private SignPackageService _signPackageService;
+    private ISignPackageService _signPackageService;
     private Mock<IOptions<SignPackageSettings>> _mockSignPackageSettingsOptions;
 
     [SetUp]

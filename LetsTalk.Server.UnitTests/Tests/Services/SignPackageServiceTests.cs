@@ -53,7 +53,7 @@ public class SignPackageServiceTests
         Action action = () => _signPackageService.Sign(new NoPropertiesSignable());
 
         // Assert
-        action.Should().Throw<Exception>().Which.Message.Should().Be("There is no supported properties to sign");
+        action.Should().Throw<Exception>().Which.Message.Should().Be("There are no supported properties to sign");
     }
 
     [Test]

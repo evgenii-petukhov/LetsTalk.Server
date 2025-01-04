@@ -157,7 +157,7 @@ public class AccountRepository : IAccountRepository
     public Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default)
     {
         return _accountCollection
-            .Find(Builders<Account>.Filter.Where(x => x.AccountTypeId == (int)accountType && x.Email!.Equals(email, StringComparison.CurrentCultureIgnoreCase)))
+            .Find(Builders<Account>.Filter.Where(x => x.AccountTypeId == (int)accountType && x.Email!.Equals(email, StringComparison.OrdinalIgnoreCase)))
             .FirstOrDefaultAsync(cancellationToken);
     }
 

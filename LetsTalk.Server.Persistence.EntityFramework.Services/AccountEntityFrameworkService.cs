@@ -4,6 +4,7 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
@@ -22,7 +23,7 @@ public class AccountEntityFrameworkService(
 
     public async Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.GetByIdAsync(int.Parse(id), cancellationToken);
+        var account = await _accountRepository.GetByIdAsync(int.Parse(id, CultureInfo.InvariantCulture), cancellationToken);
 
         return _mapper.Map<ProfileServiceModel>(account);
     }
@@ -33,7 +34,7 @@ public class AccountEntityFrameworkService(
         string lastName,
         CancellationToken cancellationToken = default)
     {
-        var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
+        var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId, CultureInfo.InvariantCulture), cancellationToken);
         account.UpdateProfile(firstName, lastName);
 
         await _unitOfWork.SaveAsync(cancellationToken);
@@ -52,7 +53,7 @@ public class AccountEntityFrameworkService(
         CancellationToken cancellationToken = default)
     {
         var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
-        var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId), cancellationToken);
+        var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId, CultureInfo.InvariantCulture), cancellationToken);
 
         if (account.Image != null && !string.IsNullOrEmpty(imageId))
         {
@@ -84,11 +85,11 @@ public class AccountEntityFrameworkService(
                 await _accountRepository.CreateAsync(account, cancellationToken);
                 await _unitOfWork.SaveAsync(cancellationToken);
 
-                return account.Id.ToString();
+                return account.Id.ToString(CultureInfo.InvariantCulture);
             }
             catch (DbUpdateException)
             {
-                return (await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken)).Id.ToString();
+                return (await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken)).Id.ToString(CultureInfo.InvariantCulture);
             }
         }
         else
@@ -96,7 +97,7 @@ public class AccountEntityFrameworkService(
             account.SetupProfile(firstName!, lastName!, photoUrl!, !string.IsNullOrEmpty(account.ImageId));
             await _unitOfWork.SaveAsync(cancellationToken);
 
-            return account.Id.ToString();
+            return account.Id.ToString(CultureInfo.InvariantCulture);
         }
     }
 
@@ -106,7 +107,7 @@ public class AccountEntityFrameworkService(
 
         if (account != null)
         {
-            return account.Id.ToString();
+            return account.Id.ToString(CultureInfo.InvariantCulture);
         }
 
         try
@@ -115,11 +116,11 @@ public class AccountEntityFrameworkService(
             await _accountRepository.CreateAsync(account, cancellationToken);
             await _unitOfWork.SaveAsync(cancellationToken);
 
-            return account.Id.ToString();
+            return account.Id.ToString(CultureInfo.InvariantCulture);
         }
         catch (DbUpdateException)
         {
-            return (await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken)).Id.ToString();
+            return (await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken)).Id.ToString(CultureInfo.InvariantCulture);
         }
     }
 
@@ -132,6 +133,6 @@ public class AccountEntityFrameworkService(
 
     public Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default)
     {
-        return _accountRepository.IsAccountIdValidAsync(int.Parse(id), cancellationToken);
+        return _accountRepository.IsAccountIdValidAsync(int.Parse(id, CultureInfo.InvariantCulture), cancellationToken);
     }
 }

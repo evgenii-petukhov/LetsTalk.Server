@@ -3,6 +3,7 @@ using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using LetsTalk.Server.API.Core.Services.Cache.Accounts;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Chats;
 
@@ -15,16 +16,16 @@ public class AccountMemoryCacheService(
 
     public Task<IReadOnlyList<AccountDto>> GetAccountsAsync(CancellationToken cancellationToken)
     {
-        return _isActive
+        return IsActive
             ? _memoryCache.GetOrCreateAsync(AccountCacheKey, cacheEntry =>
             {
-                if (_isVolotile)
+                if (IsVolotile)
                 {
-                    cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
+                    cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
                 }
 
-                return _accountService.GetAccountsAsync(cancellationToken);
+                return AccountService.GetAccountsAsync(cancellationToken);
             })!
-            : _accountService.GetAccountsAsync(cancellationToken);
+            : AccountService.GetAccountsAsync(cancellationToken);
     }
 }

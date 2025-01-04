@@ -6,26 +6,26 @@ namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 
 public abstract class MessageCacheServiceBase
 {
-    protected readonly bool _isActive;
+    protected bool IsActive { get; }
 
-    protected readonly bool _isVolotile;
+    protected bool IsVolotile { get; }
 
-    protected readonly TimeSpan _cacheLifeTimeInSeconds;
+    protected TimeSpan CacheLifeTimeInSeconds { get; }
 
-    protected readonly IMessageService _messageService;
+    protected IMessageService MessageService { get; }
 
     protected MessageCacheServiceBase(
         IMessageService messageService,
         IOptions<CachingSettings> cachingSettings)
     {
-        _messageService = messageService;
+        MessageService = messageService;
 
-        _isActive = cachingSettings.Value.MessagesCacheLifeTimeInSeconds != 0;
-        _isVolotile = _isActive && cachingSettings.Value.MessagesCacheLifeTimeInSeconds > 0;
+        IsActive = cachingSettings.Value.MessagesCacheLifeTimeInSeconds != 0;
+        IsVolotile = IsActive && cachingSettings.Value.MessagesCacheLifeTimeInSeconds > 0;
 
-        if (_isVolotile)
+        if (IsVolotile)
         {
-            _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
+            CacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
         }
     }
 

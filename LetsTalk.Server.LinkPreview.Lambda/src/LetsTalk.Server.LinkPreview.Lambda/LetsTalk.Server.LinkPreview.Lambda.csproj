@@ -9,10 +9,11 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <!-- Generate ready to run images during publishing to improve cold start time. -->
     <PublishReadyToRun>true</PublishReadyToRun>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
-    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.1" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.5.0" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\LetsTalk.Server.LinkPreview.Utility\LetsTalk.Server.LinkPreview.Utility.csproj" />

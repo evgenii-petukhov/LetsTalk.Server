@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Login;
-using LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.API.Validators;
+using LetsTalk.Server.API.Validation;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.API.Core.Commands;
 
 namespace LetsTalk.Server.API.Controllers;
 

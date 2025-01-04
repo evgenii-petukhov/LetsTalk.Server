@@ -17,9 +17,9 @@ public class ChatRedisCacheService(
 
     public async Task<IReadOnlyList<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
-        if (!_isActive)
+        if (!IsActive)
         {
-            return await _chatService.GetChatsAsync(accountId, cancellationToken);
+            return await ChatService.GetChatsAsync(accountId, cancellationToken);
         }
 
         var key = new RedisKey(GetChatsKey(accountId));
@@ -28,15 +28,15 @@ public class ChatRedisCacheService(
 
         if (cachedAccounts == RedisValue.Null)
         {
-            var accountDtos = await _chatService.GetChatsAsync(accountId, cancellationToken);
+            var accountDtos = await ChatService.GetChatsAsync(accountId, cancellationToken);
             await _database.StringSetAsync(
                 key,
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),
                 when: When.NotExists);
 
-            if (_isVolotile)
+            if (IsVolotile)
             {
-                await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
+                await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }
 
             return accountDtos;
@@ -47,7 +47,7 @@ public class ChatRedisCacheService(
 
     public async Task ClearAsync(string accountId)
     {
-        if (_isActive)
+        if (IsActive)
         {
             await _database.KeyDeleteAsync(GetChatsKey(accountId), CommandFlags.FireAndForget);
         }

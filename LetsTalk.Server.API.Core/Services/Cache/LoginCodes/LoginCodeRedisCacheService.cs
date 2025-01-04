@@ -3,6 +3,8 @@ using LetsTalk.Server.API.Core.Abstractions;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Persistence.Redis;
 using StackExchange.Redis;
+using LetsTalk.Server.API.Core.Services.Cache.LoginCodes;
+using System.Globalization;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 
@@ -19,9 +21,9 @@ public class LoginCodeRedisCacheService(
         var key = new RedisKey(GetLoginCodeKey(email));
         var code = _generator.GenerateCode();
 
-        var isCreated = await _database.StringSetAsync(key, new RedisValue(code.ToString()), _cacheLifeTimeInSeconds, when: When.NotExists);
+        var isCreated = await _database.StringSetAsync(key, new RedisValue(code.ToString(CultureInfo.InvariantCulture)), CacheLifeTimeInSeconds, when: When.NotExists);
         var ttl = await _database.KeyTimeToLiveAsync(key);
-        return (code, isCreated, ttl ?? _cacheLifeTimeInSeconds);
+        return (code, isCreated, ttl ?? CacheLifeTimeInSeconds);
     }
 
     public async Task<bool> ValidateCodeAsync(string email, int code)
@@ -29,6 +31,6 @@ public class LoginCodeRedisCacheService(
         var key = new RedisKey(GetLoginCodeKey(email));
         var value = await _database.StringGetAsync(key);
 
-        return string.Equals(value, code.ToString(), StringComparison.Ordinal);
+        return string.Equals(value, code.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal);
     }
 }

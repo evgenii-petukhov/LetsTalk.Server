@@ -6,26 +6,26 @@ namespace LetsTalk.Server.API.Core.Services.Cache.Profile;
 
 public abstract class ProfileCacheServiceBase
 {
-    protected readonly bool _isActive;
+    protected bool IsActive { get; }
 
-    protected readonly bool _isVolotile;
+    protected bool IsVolotile { get; }
 
-    protected readonly TimeSpan _cacheLifeTimeInSeconds;
+    protected TimeSpan CacheLifeTimeInSeconds { get; }
 
-    protected readonly IProfileService _profileService;
+    protected IProfileService ProfileService { get; }
 
     protected ProfileCacheServiceBase(
         IProfileService profileService,
         IOptions<CachingSettings> cachingSettings)
     {
-        _profileService = profileService;
+        ProfileService = profileService;
 
-        _isActive = cachingSettings.Value.ProfileCacheLifeTimeInSeconds != 0;
-        _isVolotile = _isActive && cachingSettings.Value.ProfileCacheLifeTimeInSeconds > 0;
+        IsActive = cachingSettings.Value.ProfileCacheLifeTimeInSeconds != 0;
+        IsVolotile = IsActive && cachingSettings.Value.ProfileCacheLifeTimeInSeconds > 0;
 
-        if (_isVolotile)
+        if (IsVolotile)
         {
-            _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ProfileCacheLifeTimeInSeconds);
+            CacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ProfileCacheLifeTimeInSeconds);
         }
     }
 

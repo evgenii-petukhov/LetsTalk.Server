@@ -1,6 +1,7 @@
 using LetsTalk.Server.Notifications;
 using LetsTalk.Server.Notifications.Hubs;
 using Serilog;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddNotificationsServices(builder.Configuration);
 builder.Host.UseSerilog((context, loggerConfig) =>
 {
     loggerConfig
-    .WriteTo.Console()
+    .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
     .ReadFrom.Configuration(context.Configuration);
 });
 

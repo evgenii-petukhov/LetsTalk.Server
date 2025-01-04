@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
+using System.Globalization;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 
@@ -13,6 +14,6 @@ public class LinkPreviewEntityFrameworkService(ILinkPreviewRepository linkPrevie
 
         return linkPreviewId == 0
             ? null
-            : linkPreviewId.ToString();
+            : linkPreviewId.ToString(CultureInfo.InvariantCulture);
     }
 }

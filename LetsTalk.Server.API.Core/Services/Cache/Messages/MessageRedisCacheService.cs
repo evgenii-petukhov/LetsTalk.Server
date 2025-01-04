@@ -5,6 +5,7 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using LetsTalk.Server.Persistence.Redis;
+using System.Globalization;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 
@@ -17,9 +18,9 @@ public class MessageRedisCacheService(
 
     public async Task<IReadOnlyList<MessageServiceModel>> GetPagedAsync(string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
-        if (!_isActive)
+        if (!IsActive)
         {
-            return await _messageService.GetPagedAsync(
+            return await MessageService.GetPagedAsync(
                 chatId,
                 pageIndex,
                 messagesPerPage,
@@ -30,11 +31,11 @@ public class MessageRedisCacheService(
             ? GetFirstMessagePageKey(chatId)
             : GetMessagePageKey(chatId));
 
-        var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString()));
+        var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString(CultureInfo.InvariantCulture)));
 
         if (cachedMessages == RedisValue.Null)
         {
-            var messageDtos = await _messageService.GetPagedAsync(
+            var messageDtos = await MessageService.GetPagedAsync(
                 chatId,
                 pageIndex,
                 messagesPerPage,
@@ -42,13 +43,13 @@ public class MessageRedisCacheService(
 
             await _database.HashSetAsync(
                 key,
-                new RedisValue(pageIndex.ToString()),
+                new RedisValue(pageIndex.ToString(CultureInfo.InvariantCulture)),
                 new RedisValue(JsonSerializer.Serialize(messageDtos)),
                 When.NotExists);
 
-            if (_isVolotile && pageIndex > 0)
+            if (IsVolotile && pageIndex > 0)
             {
-                await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
+                await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }
 
             return messageDtos;
@@ -59,7 +60,7 @@ public class MessageRedisCacheService(
 
     public Task ClearAsync(string chatId)
     {
-        return _isActive
+        return IsActive
             ? Task.WhenAll(
                 _database.KeyDeleteAsync(GetMessagePageKey(chatId), CommandFlags.FireAndForget),
                 _database.KeyDeleteAsync(GetFirstMessagePageKey(chatId), CommandFlags.FireAndForget))

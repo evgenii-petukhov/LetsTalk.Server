@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,34 +6,37 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>99e4dbd6-f864-4056-b16d-fb1e63f8d8e6</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Serilog" Version="3.1.1" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="4.5.0" />
+    <PackageReference Include="Serilog" Version="4.2.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="4.12.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.API.Core\LetsTalk.Server.API.Core.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.API.Middleware\LetsTalk.Server.API.Middleware.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.API.Validation\LetsTalk.Server.API.Validation.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.SignPackage\LetsTalk.Server.SignPackage.csproj" />

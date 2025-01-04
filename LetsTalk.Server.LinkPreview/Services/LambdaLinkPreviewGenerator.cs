@@ -15,6 +15,9 @@ public class LambdaLinkPreviewGenerator(
     ILogger<LambdaLinkPreviewGenerator> logger,
     IOptions<AwsSettings> awsOptions) : ILinkPreviewService
 {
+    private static readonly Action<ILogger, string, Exception?> _logTitleEmpty =
+        LoggerMessage.Define<string>(LogLevel.Information, new EventId(1, nameof(LambdaLinkPreviewGenerator)), "Title is empty: {Url}");
+
     private readonly ILogger<LambdaLinkPreviewGenerator> _logger = logger;
     private readonly AwsSettings _awsSettings = awsOptions.Value;
 
@@ -23,13 +26,13 @@ public class LambdaLinkPreviewGenerator(
         using var client = GetLambdaClient();
         var response = await client.InvokeAsync(new InvokeRequest
         {
-            FunctionName = "GenerateLinkPreviewAsync",
+            FunctionName = "LinkPreviewLambda_GenerateAsync",
             Payload = JsonSerializer.Serialize(url)
         }, cancellationToken);
 
         if (response == null)
         {
-            _logger.LogInformation("Title is empty: {url}", url);
+            _logTitleEmpty(_logger, url, null);
             return null!;
         }
 

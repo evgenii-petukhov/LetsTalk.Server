@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using LetsTalk.Server.Authentication.Abstractions;
+﻿using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;
+using LetsTalk.Server.API.Core.Commands;
 
 namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
@@ -19,10 +18,10 @@ public class EmailLoginCommandHandler(
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
 
-    public async Task<LoginResponseDto> Handle(EmailLoginCommand command, CancellationToken cancellationToken)
+    public async Task<LoginResponseDto> Handle(EmailLoginCommand request, CancellationToken cancellationToken)
     {
         var validator = new EmailLoginCommandValidator(_loginCodeCacheService);
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
@@ -31,10 +30,9 @@ public class EmailLoginCommandHandler(
 
         var accountId = await _accountAgnosticService.GetOrCreateAsync(
             AccountTypes.Email,
-            command.Email?.Trim().ToLower()!,
+            request.Email?.Trim().ToLowerInvariant()!,
             cancellationToken);
 
-        // generate jwt token to access secure routes on this API
         var token = await _authenticationClient.GenerateJwtTokenAsync(accountId);
 
         return new LoginResponseDto

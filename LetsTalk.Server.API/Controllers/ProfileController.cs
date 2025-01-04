@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Profile;
-using LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 using LetsTalk.Server.API.Core.Features.Profile.Queries.GetProfile;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.Exceptions;
+using LetsTalk.Server.API.Validation;
+using LetsTalk.Server.API.Core.Commands;
 
 namespace LetsTalk.Server.API.Controllers;
 

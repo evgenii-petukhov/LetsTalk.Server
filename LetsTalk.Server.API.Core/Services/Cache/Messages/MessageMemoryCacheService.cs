@@ -16,9 +16,9 @@ public class MessageMemoryCacheService(
 
     public Task<IReadOnlyList<MessageServiceModel>> GetPagedAsync(string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
-        if (!_isActive)
+        if (!IsActive)
         {
-            return _messageService.GetPagedAsync(
+            return MessageService.GetPagedAsync(
                 chatId,
                 pageIndex,
                 messagesPerPage,
@@ -27,12 +27,12 @@ public class MessageMemoryCacheService(
 
         return _memoryCache.GetOrCreateAsync(GetMessagePageKey(chatId), cacheEntry =>
         {
-            if (_isVolotile && pageIndex > 0)
+            if (IsVolotile && pageIndex > 0)
             {
-                cacheEntry.SetAbsoluteExpiration(_cacheLifeTimeInSeconds);
+                cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
             }
             var dict = new ConcurrentDictionary<int, Task<IReadOnlyList<MessageServiceModel>>>();
-            return dict.GetOrAdd(pageIndex, _ => _messageService.GetPagedAsync(
+            return dict.GetOrAdd(pageIndex, _ => MessageService.GetPagedAsync(
                 chatId,
                 pageIndex,
                 messagesPerPage,
@@ -42,7 +42,7 @@ public class MessageMemoryCacheService(
 
     public Task ClearAsync(string chatId)
     {
-        if (_isActive)
+        if (IsActive)
         {
             _memoryCache.Remove(GetMessagePageKey(chatId));
             _memoryCache.Remove(GetFirstMessagePageKey(chatId));

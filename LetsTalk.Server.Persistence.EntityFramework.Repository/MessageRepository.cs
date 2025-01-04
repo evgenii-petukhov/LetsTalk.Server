@@ -9,7 +9,7 @@ public class MessageRepository(LetsTalkDbContext context) : GenericRepository<Me
 {
     public Task<List<Message>> GetPagedAsync(int chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
     {
-        return _context.Messages
+        return Context.Messages
             .Include(message => message.LinkPreview)
             .Include(message => message.ImagePreview)
             .Where(message => message.ChatId == chatId)
@@ -22,7 +22,7 @@ public class MessageRepository(LetsTalkDbContext context) : GenericRepository<Me
 
     public override Task<Message> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return _context.Messages
+        return Context.Messages
             .Include(x => x.LinkPreview)
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
     }

@@ -8,6 +8,6 @@ public class ImageRepository(LetsTalkDbContext context) : Repository(context), I
 {
     public void Delete(Image image)
     {
-        _context.Images.Remove(image);
+        Context.Images.Remove(image);
     }
 }

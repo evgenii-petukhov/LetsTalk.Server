@@ -5,6 +5,7 @@ using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Persistence.Redis;
 using StackExchange.Redis;
+using LetsTalk.Server.API.Core.Services.Cache.Accounts;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Chats;
 
@@ -17,9 +18,9 @@ public class AccountRedisCacheService(
 
     public async Task<IReadOnlyList<AccountDto>> GetAccountsAsync(CancellationToken cancellationToken)
     {
-        if (!_isActive)
+        if (!IsActive)
         {
-            return await _accountService.GetAccountsAsync(cancellationToken);
+            return await AccountService.GetAccountsAsync(cancellationToken);
         }
 
         var key = new RedisKey(AccountCacheKey);
@@ -28,15 +29,15 @@ public class AccountRedisCacheService(
 
         if (cachedAccounts == RedisValue.Null)
         {
-            var accountDtos = await _accountService.GetAccountsAsync(cancellationToken);
+            var accountDtos = await AccountService.GetAccountsAsync(cancellationToken);
             await _database.StringSetAsync(
                 key,
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),
                 when: When.NotExists);
 
-            if (_isVolotile)
+            if (IsVolotile)
             {
-                await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
+                await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }
 
             return accountDtos;

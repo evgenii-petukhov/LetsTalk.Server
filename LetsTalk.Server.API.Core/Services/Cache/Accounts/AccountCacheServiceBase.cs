@@ -2,32 +2,32 @@
 using LetsTalk.Server.API.Core.Abstractions;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.API.Core.Services.Cache.Chats;
+namespace LetsTalk.Server.API.Core.Services.Cache.Accounts;
 
 public abstract class AccountCacheServiceBase
 {
     protected const string AccountCacheKey = "accounts";
 
-    protected readonly bool _isActive;
+    protected bool IsActive { get; }
 
-    protected readonly bool _isVolotile;
+    protected bool IsVolotile { get; }
 
-    protected readonly TimeSpan _cacheLifeTimeInSeconds;
+    protected TimeSpan CacheLifeTimeInSeconds { get; }
 
-    protected readonly IAccountService _accountService;
+    protected IAccountService AccountService { get; }
 
     protected AccountCacheServiceBase(
         IAccountService accountService,
         IOptions<CachingSettings> cachingSettings)
     {
-        _accountService = accountService;
+        AccountService = accountService;
 
-        _isActive = cachingSettings.Value.AccountCacheLifeTimeInSeconds != 0;
-        _isVolotile = _isActive && cachingSettings.Value.AccountCacheLifeTimeInSeconds > 0;
+        IsActive = cachingSettings.Value.AccountCacheLifeTimeInSeconds != 0;
+        IsVolotile = IsActive && cachingSettings.Value.AccountCacheLifeTimeInSeconds > 0;
 
-        if (_isVolotile)
+        if (IsVolotile)
         {
-            _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.AccountCacheLifeTimeInSeconds);
+            CacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.AccountCacheLifeTimeInSeconds);
         }
     }
 }

@@ -17,9 +17,9 @@ public class ProfileRedisCacheService(
 
     public async Task<ProfileDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
-        if (!_isActive)
+        if (!IsActive)
         {
-            return await _profileService.GetProfileAsync(accountId, cancellationToken);
+            return await ProfileService.GetProfileAsync(accountId, cancellationToken);
         }
 
         var key = new RedisKey(GetProfileKey(accountId));
@@ -28,15 +28,15 @@ public class ProfileRedisCacheService(
 
         if (cachedProfile == RedisValue.Null)
         {
-            var profile = await _profileService.GetProfileAsync(accountId, cancellationToken);
+            var profile = await ProfileService.GetProfileAsync(accountId, cancellationToken);
             await _database.StringSetAsync(
                 key,
                 new RedisValue(JsonSerializer.Serialize(profile)),
                 when: When.NotExists);
 
-            if (_isVolotile)
+            if (IsVolotile)
             {
-                await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
+                await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }
 
             return profile;
@@ -47,7 +47,7 @@ public class ProfileRedisCacheService(
 
     public async Task ClearAsync(string accountId)
     {
-        if (_isActive)
+        if (IsActive)
         {
             await _database.KeyDeleteAsync(GetProfileKey(accountId), CommandFlags.FireAndForget);
         }

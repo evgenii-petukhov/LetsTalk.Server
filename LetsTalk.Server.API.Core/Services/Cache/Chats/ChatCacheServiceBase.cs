@@ -6,26 +6,26 @@ namespace LetsTalk.Server.API.Core.Services.Cache.Chats;
 
 public abstract class ChatCacheServiceBase
 {
-    protected readonly bool _isActive;
+    protected bool IsActive { get; }
 
-    protected readonly bool _isVolotile;
+    protected bool IsVolotile { get; }
 
-    protected readonly TimeSpan _cacheLifeTimeInSeconds;
+    protected TimeSpan CacheLifeTimeInSeconds { get; }
 
-    protected readonly IChatService _chatService;
+    protected IChatService ChatService { get; }
 
     protected ChatCacheServiceBase(
         IChatService chatService,
         IOptions<CachingSettings> cachingSettings)
     {
-        _chatService = chatService;
+        ChatService = chatService;
 
-        _isActive = cachingSettings.Value.ChatCacheLifeTimeInSeconds != 0;
-        _isVolotile = _isActive && cachingSettings.Value.ChatCacheLifeTimeInSeconds > 0;
+        IsActive = cachingSettings.Value.ChatCacheLifeTimeInSeconds != 0;
+        IsVolotile = IsActive && cachingSettings.Value.ChatCacheLifeTimeInSeconds > 0;
 
-        if (_isVolotile)
+        if (IsVolotile)
         {
-            _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ChatCacheLifeTimeInSeconds);
+            CacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ChatCacheLifeTimeInSeconds);
         }
     }
 

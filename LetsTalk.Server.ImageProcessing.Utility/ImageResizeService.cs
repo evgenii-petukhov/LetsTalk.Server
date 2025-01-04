@@ -18,7 +18,7 @@ public class ImageResizeService : IImageResizeService
         var targetWidth = (int)(scale * sourceBitmap.Width);
         var targetHeight = (int)(scale * sourceBitmap.Height);
 
-        using var scaledBitmap = sourceBitmap.Resize(new SKImageInfo(targetWidth, targetHeight), SKFilterQuality.High);
+        using var scaledBitmap = sourceBitmap.Resize(new SKImageInfo(targetWidth, targetHeight), SKSamplingOptions.Default);
         using var scaledImage = SKImage.FromBitmap(scaledBitmap);
         using var scaledData = scaledImage.Encode(SKEncodedImageFormat.Webp, 92);
 

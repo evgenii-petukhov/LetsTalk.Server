@@ -9,7 +9,7 @@ public class ChatMemberRepository(LetsTalkDbContext context) : GenericRepository
 {
     public Task<int[]> GetChatMemberAccountIdsAsync(int chatId, CancellationToken cancellationToken = default)
     {
-        return _context.ChatMembers
+        return Context.ChatMembers
             .Where(x => x.ChatId == chatId)
             .Select(x => x.AccountId)
             .ToArrayAsync(cancellationToken);

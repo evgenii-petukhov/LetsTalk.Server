@@ -1,16 +1,12 @@
-﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.SignPackage.Abstractions;
+﻿using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.SignPackage.Models;
-using Microsoft.Extensions.Options;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace LetsTalk.Server.SignPackage;
 
-public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPackageService
+public class SignPackageService : ISignPackageService
 {
     private const char Separator = ';';
-    private readonly string _salt = options.Value?.Salt ?? string.Empty;
     private readonly string[] _supportedTypes = ["System.Int32", "System.String"];
 
     public void Sign(object objectToSign)
@@ -20,15 +16,21 @@ public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPa
             return;
         }
 
-        signable.Signature = GetSignature(signable);
+        signable.Signature = BCrypt.Net.BCrypt.EnhancedHashPassword(
+            GetPropertiesAsString(signable),
+            11,
+            BCrypt.Net.HashType.SHA384);
     }
 
     public bool Validate(ISignable signable)
     {
-        return string.Equals(GetSignature(signable), signable.Signature, StringComparison.OrdinalIgnoreCase);
+        return BCrypt.Net.BCrypt.EnhancedVerify(
+            GetPropertiesAsString(signable),
+            signable.Signature,
+            BCrypt.Net.HashType.SHA384);
     }
 
-    private string GetSignature(ISignable signable)
+    private string GetPropertiesAsString(ISignable signable)
     {
         var stringPairs = signable
             .GetType()
@@ -53,14 +55,9 @@ public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPa
             throw new InvalidOperationException("There are no supported properties to sign");
         }
 
-        var s = new StringBuilder()
+        return new StringBuilder()
             .AppendJoin(Separator, stringPairs)
             .Append(stringPairs.Count != 0 ? Separator : string.Empty)
-            .Append("salt=")
-            .Append(_salt)
             .ToString();
-
-        var hashBytes = MD5.HashData(Encoding.Default.GetBytes(s));
-        return Convert.ToHexString(hashBytes);
     }
 }

@@ -14,9 +14,9 @@ public class GenerateLoginCodeCommandHandler(
     private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
     private readonly IProducer<SendLoginCodeRequest> _producer = producer;
 
-    public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand command, CancellationToken cancellationToken)
+    public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand request, CancellationToken cancellationToken)
     {
-        var email = command.Email.Trim().ToLowerInvariant();
+        var email = request.Email.Trim().ToLowerInvariant();
 
         var (code, isCodeCreated, ttl) = await _loginCodeCacheService.GenerateCodeAsync(email);
 

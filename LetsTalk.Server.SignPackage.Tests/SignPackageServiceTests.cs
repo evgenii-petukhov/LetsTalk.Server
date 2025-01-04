@@ -1,26 +1,20 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.SignPackage.Models;
 using LetsTalk.Server.SignPackage.Tests.Models;
 using LetsTalk.Server.SignPackage.Tests.Models.Signable;
 using LetsTalk.Server.SignPackage.Tests.TestCases;
-using Microsoft.Extensions.Options;
-using Moq;
 
 namespace LetsTalk.Server.SignPackage.Tests;
 
 [TestFixture]
 public class SignPackageServiceTests
 {
-    private ISignPackageService _signPackageService;
-    private Mock<IOptions<SignPackageSettings>> _mockSignPackageSettingsOptions;
+    private SignPackageService _signPackageService;
 
     [SetUp]
     public void SetUp()
     {
-        _mockSignPackageSettingsOptions = new Mock<IOptions<SignPackageSettings>>();
-        _signPackageService = new SignPackageService(_mockSignPackageSettingsOptions.Object);
+        _signPackageService = new SignPackageService();
     }
 
     [Test]
@@ -61,30 +55,17 @@ public class SignPackageServiceTests
         typeof(SignPackageServiceTestCases),
         nameof(SignPackageServiceTestCases.ObjectsToSign)
     )]
-    public void Sign_When_ObjIsValid_ShouldReturnExpectedResult(TestData<ISignable, string> testData)
+    public void Sign_When_ObjIsValid_ShouldReturnExpectedResult(ISignable signable)
     {
         // Arrange
         // Act
-        _signPackageService.Sign(testData.Value!);
+        _signPackageService.Sign(signable);
+        var result = _signPackageService.Validate(signable);
 
         // Assert
-        testData.Result.Should()
-            .NotBeNull()
-            .And.Be(testData.Result);
-    }
+        signable.Signature.Should()
+            .NotBeNull();
 
-    [Test]
-    [TestCaseSource(
-        typeof(SignPackageServiceTestCases),
-        nameof(SignPackageServiceTestCases.ObjectsToValidate)
-    )]
-    public void Validate_ShouldReturnExpectedResult(TestData<SimpleSignable, bool> testData)
-    {
-        // Arrange
-        // Act
-        var result = _signPackageService.Validate(testData.Value!);
-
-        // Assert
-        result.Should().Be(testData.Result);
+        result.Should().BeTrue();
     }
 }

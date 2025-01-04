@@ -6,8 +6,6 @@ using Moq;
 
 namespace LetsTalk.Server.API.Core.Tests.CommandValidators;
 
-#pragma warning disable CA1861 // Avoid constant arrays as arguments
-
 [TestFixture]
 public class CreateMessageRequestValidatorTests
 {
@@ -40,12 +38,12 @@ public class CreateMessageRequestValidatorTests
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
 
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Chat Id cannot be empty",
             "Chat Id is required",
             "Text and ImageId both cannot be empty"
-        });
+        ]);
     }
 
     [Test]
@@ -64,11 +62,11 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Chat Id cannot be empty",
             "Text and ImageId both cannot be empty"
-        });
+        ]);
     }
 
     [Test]
@@ -89,11 +87,11 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Chat Id must be greater than 0, if integer",
             "Text and ImageId both cannot be empty"
-        });
+        ]);
     }
 
     [Test]
@@ -114,10 +112,10 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Text and ImageId both cannot be empty"
-        });
+        ]);
     }
 
     [Test]
@@ -137,10 +135,10 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Text and ImageId both cannot be empty"
-        });
+        ]);
     }
 
     [Test]
@@ -163,10 +161,10 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Image signature is invalid"
-        });
+        ]);
     }
 
     [Test]
@@ -190,10 +188,10 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Image signature is invalid"
-        });
+        ]);
     }
 
     [Test]
@@ -215,12 +213,12 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Chat Id cannot be empty",
             "Chat Id is required",
             "Image signature is invalid"
-        });
+        ]);
     }
 
     [Test]
@@ -243,12 +241,12 @@ public class CreateMessageRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Chat Id cannot be empty",
             "Chat Id is required",
             "Image signature is invalid"
-        });
+        ]);
     }
 
     [Test]
@@ -325,4 +323,3 @@ public class CreateMessageRequestValidatorTests
         validationResult.IsValid.Should().BeTrue();
     }
 }
-#pragma warning restore CA1861 // Avoid constant arrays as arguments

@@ -6,8 +6,6 @@ using Moq;
 
 namespace LetsTalk.Server.API.Core.Tests.CommandValidators;
 
-#pragma warning disable CA1861 // Avoid constant arrays as arguments
-
 [TestFixture]
 public class CreateMessageCommandValidatorTests
 {
@@ -43,10 +41,10 @@ public class CreateMessageCommandValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Chat must exist"
-        });
+        ]);
         _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 
@@ -74,4 +72,3 @@ public class CreateMessageCommandValidatorTests
         _mockChatAgnosticService.Verify(x => x.IsChatIdValidAsync(SampleChatId, cancellationToken), Times.Once);
     }
 }
-#pragma warning restore CA1861 // Avoid constant arrays as arguments

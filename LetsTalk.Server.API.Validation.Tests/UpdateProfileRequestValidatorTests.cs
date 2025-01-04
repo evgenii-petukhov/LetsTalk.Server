@@ -6,8 +6,6 @@ using LetsTalk.Server.API.Models.Profile;
 
 namespace LetsTalk.Server.API.Validation.Tests;
 
-#pragma warning disable CA1861 // Avoid constant arrays as arguments
-
 [TestFixture]
 public class UpdateProfileRequestValidatorTests
 {
@@ -34,13 +32,13 @@ public class UpdateProfileRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "First Name is required",
             "First Name cannot be empty",
             "Last Name is required",
             "Last Name cannot be empty",
-        });
+        ]);
     }
 
     [Test]
@@ -60,11 +58,11 @@ public class UpdateProfileRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "First Name cannot be empty",
             "Last Name cannot be empty",
-        });
+        ]);
     }
 
     [Test]
@@ -88,10 +86,10 @@ public class UpdateProfileRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Image signature is invalid"
-        });
+        ]);
     }
 
     [Test]
@@ -141,4 +139,3 @@ public class UpdateProfileRequestValidatorTests
         validationResult.Errors.Should().BeEmpty();
     }
 }
-#pragma warning restore CA1861 // Avoid constant arrays as arguments

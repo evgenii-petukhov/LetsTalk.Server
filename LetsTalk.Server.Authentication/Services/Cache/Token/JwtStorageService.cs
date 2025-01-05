@@ -8,9 +8,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace LetsTalk.Server.Authentication.Services;
+namespace LetsTalk.Server.Authentication.Services.Cache.Token;
 
-public class JwtStorageService: IJwtStorageService
+public class JwtStorageService : IJwtStorageService
 {
     private const string CLAIM_ID = "id";
 
@@ -62,10 +62,10 @@ public class JwtStorageService: IJwtStorageService
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
+            Subject = new ClaimsIdentity(
+            [
                 new Claim(CLAIM_ID, accountId)
-            }),
+            ]),
             Expires = DateTime.UtcNow.AddYears(1),
             SigningCredentials = _signingCredentials
         };

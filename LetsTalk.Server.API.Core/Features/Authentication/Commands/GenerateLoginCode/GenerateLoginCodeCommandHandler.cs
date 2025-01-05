@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using MediatR;
@@ -7,18 +8,18 @@ using MediatR;
 namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.GenerateLoginCode;
 
 public class GenerateLoginCodeCommandHandler(
-    ILoginCodeCacheService loginCodeCacheService,
+    IAuthenticationClient authenticationClient,
     IProducer<SendLoginCodeRequest> producer
 ) : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {
-    private readonly ILoginCodeCacheService _loginCodeCacheService = loginCodeCacheService;
+    private readonly IAuthenticationClient _authenticationClient = authenticationClient;
     private readonly IProducer<SendLoginCodeRequest> _producer = producer;
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand request, CancellationToken cancellationToken)
     {
         var email = request.Email.Trim().ToLowerInvariant();
 
-        var (code, isCodeCreated, ttl) = await _loginCodeCacheService.GenerateCodeAsync(email);
+        var (code, isCodeCreated, ttl) = await _authenticationClient.GenerateLoginCodeAsync(email);
 
         if (isCodeCreated)
         {
@@ -32,7 +33,7 @@ public class GenerateLoginCodeCommandHandler(
 
         return new GenerateLoginCodeResponseDto
         {
-            CodeValidInSeconds = (int)ttl.TotalSeconds
+            CodeValidInSeconds = ttl
         };
     }
 }

@@ -28,7 +28,6 @@ public static class CoreServicesRegistration
         services.AddScoped<IRegexService, RegexService>();
         services.AddScoped<IHtmlGenerator, HtmlGenerator>();
         services.AddScoped<IMessageService, MessageService>();
-        services.AddScoped<ILoginCodeGenerator, LoginCodeGenerator>();
         services.AddMassTransit(x =>
         {
             var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
@@ -92,7 +91,6 @@ public static class CoreServicesRegistration
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
                 services.AddScoped<IProfileCacheManager, ProfileRedisCacheService>();
-                services.AddScoped<ILoginCodeCacheService, LoginCodeRedisCacheService>();
                 break;
             default:
                 services.AddMemoryCache();
@@ -111,7 +109,6 @@ public static class CoreServicesRegistration
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();
                 services.AddScoped<IProfileCacheManager, ProfileMemoryCacheService>();
-                services.AddScoped<ILoginCodeCacheService, LoginCodeMemoryCacheService>();
                 break;
         }
 

@@ -1,24 +1,24 @@
 ﻿using FluentValidation;
-using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.Authentication.Abstractions;
 
 namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.EmailLogin;
 
 public class EmailLoginCommandValidator : AbstractValidator<EmailLoginCommand>
 {
-    private readonly ILoginCodeCacheService _loginCodeCacheService;
+    private readonly IAuthenticationClient _authenticationClient;
 
-    public EmailLoginCommandValidator(ILoginCodeCacheService loginCodeCacheService)
+    public EmailLoginCommandValidator(IAuthenticationClient authenticationClient)
     {
         RuleFor(model => model)
             .MustAsync(IsLoginCodeValidAsync)
             .WithMessage("Code has expired");
 
-        _loginCodeCacheService = loginCodeCacheService;
+        _authenticationClient = authenticationClient;
     }
 
     private Task<bool> IsLoginCodeValidAsync(EmailLoginCommand model, CancellationToken cancellationToken)
     {
-        return _loginCodeCacheService.ValidateCodeAsync(model.Email?.Trim().ToLowerInvariant()!, model.Code);
+        return _authenticationClient.ValidateLoginCodeAsync(model.Email?.Trim().ToLowerInvariant()!, model.Code);
     }
 }

@@ -127,6 +127,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.API.Validat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.API.Core.Tests", "LetsTalk.Server.API.Core.Tests\LetsTalk.Server.API.Core.Tests.csproj", "{00FE4F1B-667C-40F9-B1B3-13A84EBA0353}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Authentication.Tests", "LetsTalk.Server.Authentication.Tests\LetsTalk.Server.Authentication.Tests.csproj", "{AAF0C89B-36E3-4E87-9BAE-2200C6867D5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -341,6 +343,10 @@ Global
 		{00FE4F1B-667C-40F9-B1B3-13A84EBA0353}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00FE4F1B-667C-40F9-B1B3-13A84EBA0353}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00FE4F1B-667C-40F9-B1B3-13A84EBA0353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF0C89B-36E3-4E87-9BAE-2200C6867D5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF0C89B-36E3-4E87-9BAE-2200C6867D5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF0C89B-36E3-4E87-9BAE-2200C6867D5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF0C89B-36E3-4E87-9BAE-2200C6867D5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -406,6 +412,7 @@ Global
 		{A75B8F0A-E2C9-4779-9D62-CE6B6380A2E1} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{9C32D253-E34F-42DA-A487-D79FD1D910E7} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{00FE4F1B-667C-40F9-B1B3-13A84EBA0353} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
+		{AAF0C89B-36E3-4E87-9BAE-2200C6867D5D} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

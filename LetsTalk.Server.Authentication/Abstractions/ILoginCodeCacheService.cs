@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.API.Core.Abstractions;
+﻿namespace LetsTalk.Server.Authentication.Abstractions;
 
 public interface ILoginCodeCacheService
 {

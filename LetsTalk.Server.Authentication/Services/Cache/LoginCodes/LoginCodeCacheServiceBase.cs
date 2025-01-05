@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.API.Core.Services.Cache.LoginCodes;
+namespace LetsTalk.Server.Authentication.Services.Cache.LoginCodes;
 
 public abstract class LoginCodeCacheServiceBase(
     IOptions<CachingSettings> cachingSettings)

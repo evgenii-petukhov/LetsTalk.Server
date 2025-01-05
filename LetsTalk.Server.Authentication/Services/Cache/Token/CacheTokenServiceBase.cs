@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Authentication.Services.Cache;
+﻿namespace LetsTalk.Server.Authentication.Services.Cache.Token;
 
 public class CacheTokenServiceBase
 {

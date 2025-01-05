@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace LetsTalk.Server.Authentication.Services.Cache;
+namespace LetsTalk.Server.Authentication.Services.Cache.Token;
 
 public class MemoryCacheTokenService(
     IJwtStorageService jwtStorageService,

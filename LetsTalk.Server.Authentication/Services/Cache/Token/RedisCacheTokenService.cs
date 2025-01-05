@@ -3,7 +3,7 @@ using LetsTalk.Server.Persistence.Redis;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace LetsTalk.Server.Authentication.Services.Cache;
+namespace LetsTalk.Server.Authentication.Services.Cache.Token;
 
 public class RedisCacheTokenService(
     IJwtStorageService jwtStorageService,

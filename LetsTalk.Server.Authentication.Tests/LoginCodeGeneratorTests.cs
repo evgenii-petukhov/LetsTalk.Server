@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using LetsTalk.Server.API.Core.Services;
+using LetsTalk.Server.Authentication.Services.Cache.LoginCodes;
 
-namespace LetsTalk.Server.API.Core.Tests.Services;
+namespace LetsTalk.Server.Authentication.Tests;
 
 [TestFixture]
 public class LoginCodeGeneratorTests

@@ -1,0 +1,30 @@
+syntax = "proto3";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "LetsTalk.Server.Authentication";
+
+package logincodes;
+
+service LoginCodeGrpcService {
+  rpc GenerateLoginCode (GenerateLoginCodeRequest) returns (GenerateLoginCodeResponse);
+  rpc ValidateLoginCode (ValidateLoginCodeRequest) returns (ValidateLoginCodeResponse);
+}
+
+message GenerateLoginCodeRequest {
+	google.protobuf.StringValue email = 1;
+}
+
+message GenerateLoginCodeResponse {
+	int32 code = 1;
+	bool isCodeCreated = 2;
+	int32 ttl = 3;
+}
+
+message ValidateLoginCodeRequest {
+	google.protobuf.StringValue email = 1;
+	int32 code = 2;
+}
+
+message ValidateLoginCodeResponse {
+	bool isValid = 1;
+}

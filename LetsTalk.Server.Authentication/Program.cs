@@ -2,6 +2,7 @@ using LetsTalk.Server.Authentication;
 using Serilog;
 using System.Globalization;
 using JwtTokenGrpcService = LetsTalk.Server.Authentication.Services.JwtTokenGrpcService;
+using LoginCodeGrpcService = LetsTalk.Server.Authentication.Services.LoginCodeGrpcService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ app.UseSerilogRequestLogging();
 app.MapGrpcReflectionService();
 
 app.MapGrpcService<JwtTokenGrpcService>()
+    .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+app.MapGrpcService<LoginCodeGrpcService>()
     .RequireCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.Run();

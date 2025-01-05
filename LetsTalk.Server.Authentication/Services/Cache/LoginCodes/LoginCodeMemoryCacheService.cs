@@ -1,10 +1,9 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.API.Core.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using LetsTalk.Server.API.Core.Services.Cache.LoginCodes;
+using LetsTalk.Server.Authentication.Abstractions;
 
-namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
+namespace LetsTalk.Server.Authentication.Services.Cache.LoginCodes;
 
 public class LoginCodeMemoryCacheService(
     IMemoryCache memoryCache,

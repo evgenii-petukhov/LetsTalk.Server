@@ -1,12 +1,15 @@
-﻿using LetsTalk.Server.SignPackage.Abstractions;
+﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.SignPackage.Abstractions;
 using LetsTalk.Server.SignPackage.Models;
+using Microsoft.Extensions.Options;
 using System.Text;
 
 namespace LetsTalk.Server.SignPackage;
 
-public class SignPackageService : ISignPackageService
+public class SignPackageService(IOptions<SignPackageSettings> options) : ISignPackageService
 {
     private const char Separator = ';';
+    private readonly string _pepper = options.Value?.Pepper ?? string.Empty;
     private readonly string[] _supportedTypes = ["System.Int32", "System.String"];
 
     public void Sign(object objectToSign)
@@ -58,6 +61,8 @@ public class SignPackageService : ISignPackageService
         return new StringBuilder()
             .AppendJoin(Separator, stringPairs)
             .Append(stringPairs.Count != 0 ? Separator : string.Empty)
+            .Append("pepper=")
+            .Append(_pepper)
             .ToString();
     }
 }

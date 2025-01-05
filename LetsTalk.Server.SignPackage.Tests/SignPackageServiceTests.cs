@@ -1,7 +1,10 @@
 ﻿using FluentAssertions;
+using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.SignPackage.Models;
 using LetsTalk.Server.SignPackage.Tests.Models.Signable;
 using LetsTalk.Server.SignPackage.Tests.TestCases;
+using Microsoft.Extensions.Options;
+using Moq;
 
 namespace LetsTalk.Server.SignPackage.Tests;
 
@@ -9,11 +12,19 @@ namespace LetsTalk.Server.SignPackage.Tests;
 public class SignPackageServiceTests
 {
     private SignPackageService _signPackageService;
+    private Mock<IOptions<SignPackageSettings>> _mockSignPackageSettingsOptions;
 
     [SetUp]
     public void SetUp()
     {
-        _signPackageService = new SignPackageService();
+        _mockSignPackageSettingsOptions = new Mock<IOptions<SignPackageSettings>>();
+        _mockSignPackageSettingsOptions
+            .Setup(x => x.Value)
+            .Returns(new SignPackageSettings
+            {
+                Pepper = nameof(SignPackageSettings.Pepper)
+            });
+        _signPackageService = new SignPackageService(_mockSignPackageSettingsOptions.Object);
     }
 
     [Test]

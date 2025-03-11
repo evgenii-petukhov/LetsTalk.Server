@@ -12,7 +12,7 @@ public static class FileStorageAgnosticServicesRegistration
     {
         switch (configuration.GetValue<string>("Features:FileStorage"))
         {
-            case "Aws":
+            case "aws":
                 break;
             default:
                 services.AddLocalFileStorageServices();

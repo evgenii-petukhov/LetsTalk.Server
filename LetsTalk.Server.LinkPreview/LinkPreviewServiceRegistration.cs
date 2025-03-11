@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.SignPackage;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 using LetsTalk.Server.LinkPreview.Utility.Services;
-using LetsTalk.Server.DependencyInjection;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
 using System.Net.Mime;
@@ -87,7 +86,6 @@ public static class LinkPreviewServiceRegistration
                 services.AddScoped<IDownloadService, DownloadService>();
                 services.AddScoped<IRegexService, RegexService>();
                 services.AddScoped<ILinkPreviewService, LinkPreviewService>();
-                services.DecorateScoped<ILinkPreviewService, LinkPreviewGenerator>();
                 break;
         }
 

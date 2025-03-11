@@ -21,4 +21,6 @@ public interface IFileService
         CancellationToken cancellationToken = default);
 
     Task<ImageInfoModel> LoadImageInfoAsync(string filename, CancellationToken cancellationToken = default);
+
+    void DeleteFile(string filename, FileTypes fileType);
 }

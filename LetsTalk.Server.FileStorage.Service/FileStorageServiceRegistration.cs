@@ -38,7 +38,6 @@ public static class FileStorageServiceRegistration
         services.AddGrpc(options => options.Interceptors.Add<JwtInterceptor>());
         services.AddGrpcReflection();
         services.AddScoped<IImageValidationService, ImageValidationService>();
-        services.AddScoped<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
         services.AddImageProcessingUtilityServices();

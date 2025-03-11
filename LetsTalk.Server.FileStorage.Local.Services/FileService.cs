@@ -61,6 +61,12 @@ public class FileService(
         return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
     }
 
+    public void DeleteFile(string filename, FileTypes fileType)
+    {
+        var path = _fileStoragePathProvider.GetFilePath(filename, fileType);
+        File.Delete(path);
+    }
+
     private static async Task<string> SaveDataWithRetryAsync(
         byte[] data,
         Func<(string, string)> generateUniqueFilename,

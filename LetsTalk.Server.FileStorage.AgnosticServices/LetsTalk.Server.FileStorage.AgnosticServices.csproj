@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Amazon.Services\LetsTalk.Server.FileStorage.Amazon.Services.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Local.Services\LetsTalk.Server.FileStorage.Local.Services.csproj" />
   </ItemGroup>
 

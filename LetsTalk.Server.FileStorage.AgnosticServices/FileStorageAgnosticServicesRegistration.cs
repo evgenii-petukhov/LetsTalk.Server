@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.FileStorage.Local.Services;
+using LetsTalk.Server.FileStorage.Amazon.Services;
 
 namespace LetsTalk.Server.FileStorage.AgnosticServices;
 
@@ -13,6 +14,7 @@ public static class FileStorageAgnosticServicesRegistration
         switch (configuration.GetValue<string>("Features:FileStorage"))
         {
             case "aws":
+                services.AddAmazonFileStorageServices(configuration);
                 break;
             default:
                 services.AddLocalFileStorageServices();

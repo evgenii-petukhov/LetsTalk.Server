@@ -1,7 +1,7 @@
-﻿using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+﻿using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorage.Utility.Abstractions;
+namespace LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
 
 public interface IFileService
 {

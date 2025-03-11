@@ -1,9 +1,9 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
+using LetsTalk.Server.FileStorage.Local.Services.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.FileStorage.Utility;
+namespace LetsTalk.Server.FileStorage.Local.Services;
 
 public class FileStoragePathProvider(
     IOptions<FileStorageSettings> fileStorageSettings) : IFileStoragePathProvider

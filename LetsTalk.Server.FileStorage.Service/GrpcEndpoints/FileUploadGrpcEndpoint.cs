@@ -1,5 +1,5 @@
 ﻿using Grpc.Core;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Protos;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;

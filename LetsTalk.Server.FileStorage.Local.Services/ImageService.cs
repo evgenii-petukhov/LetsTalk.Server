@@ -1,8 +1,9 @@
-﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+﻿using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.FileStorage.Local.Services.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorage.Utility;
+namespace LetsTalk.Server.FileStorage.Local.Services;
 
 public class ImageService(
     IFileService fileService,

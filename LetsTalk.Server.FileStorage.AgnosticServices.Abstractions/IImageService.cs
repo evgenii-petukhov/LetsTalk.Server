@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+﻿using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 
-namespace LetsTalk.Server.FileStorage.Utility.Abstractions;
+namespace LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
 
 public interface IImageService
 {

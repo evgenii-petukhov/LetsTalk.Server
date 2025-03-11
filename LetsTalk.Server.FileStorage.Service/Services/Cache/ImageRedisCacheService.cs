@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Redis;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;

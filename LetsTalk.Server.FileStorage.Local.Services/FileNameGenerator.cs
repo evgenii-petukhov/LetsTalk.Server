@@ -1,7 +1,7 @@
-﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
+﻿using LetsTalk.Server.FileStorage.Local.Services.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorage.Utility;
+namespace LetsTalk.Server.FileStorage.Local.Services;
 
 public class FileNameGenerator(IFileStoragePathProvider fileStoragePathProvider) : IFileNameGenerator
 {

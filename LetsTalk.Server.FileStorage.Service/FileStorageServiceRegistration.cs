@@ -5,10 +5,10 @@ using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
 using LetsTalk.Server.FileStorage.Service.Services;
 using LetsTalk.Server.Logging;
-using LetsTalk.Server.FileStorage.Utility;
+using LetsTalk.Server.FileStorage.AgnosticServices;
 using LetsTalk.Server.ImageProcessing.Utility;
 using System.Reflection;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Services.Cache;
 using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.SignPackage;
@@ -96,7 +96,7 @@ public static class FileStorageServiceRegistration
         });
 
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
-        services.AddFileStorageUtilityServices();
+        services.AddFileStorageAgnosticServices(configuration);
         services.AddSignPackageServices(configuration);
 
         switch (configuration.GetValue<string>("Features:CachingMode"))

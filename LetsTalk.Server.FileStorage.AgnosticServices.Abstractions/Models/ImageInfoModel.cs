@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+﻿namespace LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 
 public class ImageInfoModel
 {

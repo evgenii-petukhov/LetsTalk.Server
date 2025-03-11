@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorage.Utility;
+using LetsTalk.Server.FileStorage.AgnosticServices;
 using LetsTalk.Server.ImageProcessing.Utility;
 using LetsTalk.Server.SignPackage;
 using MassTransit;
@@ -17,7 +17,7 @@ public static class ImageProcessingServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddFileStorageUtilityServices();
+        services.AddFileStorageAgnosticServices(configuration);
         services.AddImageProcessingUtilityServices();
         services.AddMassTransit(x =>
         {

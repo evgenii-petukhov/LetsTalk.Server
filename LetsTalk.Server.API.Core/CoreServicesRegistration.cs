@@ -112,7 +112,7 @@ public static class CoreServicesRegistration
                 break;
         }
 
-        services.AddAgnosticServices(configuration);
+        services.AddPersistenceAgnosticServices(configuration);
 
         return services;
     }

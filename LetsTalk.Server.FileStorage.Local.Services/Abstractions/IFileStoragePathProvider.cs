@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorage.Utility.Abstractions;
+namespace LetsTalk.Server.FileStorage.Local.Services.Abstractions;
 
 public interface IFileStoragePathProvider
 {

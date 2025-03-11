@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.FileStorage.Service.Abstractions;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 
 namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 

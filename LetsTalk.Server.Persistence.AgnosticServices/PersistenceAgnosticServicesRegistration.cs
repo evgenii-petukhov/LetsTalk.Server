@@ -5,9 +5,9 @@ using LetsTalk.Server.Persistence.EntityFramework.Services;
 
 namespace LetsTalk.Server.Persistence.AgnosticServices;
 
-public static class AgnosticServicesRegistration
+public static class PersistenceAgnosticServicesRegistration
 {
-    public static IServiceCollection AddAgnosticServices(
+    public static IServiceCollection AddPersistenceAgnosticServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {

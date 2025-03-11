@@ -1,9 +1,10 @@
-﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.FileStorage.Utility.Abstractions.Models;
+﻿using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
+using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.FileStorage.Local.Services.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using System.Text.Json;
 
-namespace LetsTalk.Server.FileStorage.Utility;
+namespace LetsTalk.Server.FileStorage.Local.Services;
 
 public class FileService(
     IFileNameGenerator fileNameGenerator,
@@ -83,7 +84,7 @@ public class FileService(
         string filepath,
         CancellationToken cancellationToken = default)
     {
-        using var stream = new FileStream(filepath, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
+        await using var stream = new FileStream(filepath, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
         await stream.WriteAsync(data, cancellationToken);
     }
 }

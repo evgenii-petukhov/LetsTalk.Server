@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.FileStorage.Utility.Abstractions;
+﻿using LetsTalk.Server.FileStorage.Local.Services.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 

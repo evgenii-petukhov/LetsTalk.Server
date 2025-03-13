@@ -6,7 +6,7 @@ using LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
 using LetsTalk.Server.FileStorage.Service.Services;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.AgnosticServices;
-using LetsTalk.Server.ImageProcessing.Utility;
+using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using System.Reflection;
 using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Services.Cache;
@@ -40,7 +40,7 @@ public static class FileStorageServiceRegistration
         services.AddScoped<IImageValidationService, ImageValidationService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
-        services.AddImageProcessingUtilityServices();
+        services.AddImageResizeEngineServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMassTransit(x =>

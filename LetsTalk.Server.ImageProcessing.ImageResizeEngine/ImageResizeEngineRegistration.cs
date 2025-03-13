@@ -1,11 +1,11 @@
-﻿using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
+﻿using LetsTalk.Server.ImageProcessing.ImageResizeEngine.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LetsTalk.Server.ImageProcessing.Utility;
+namespace LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 
-public static class ImageProcessingUtilityServiceRegistration
+public static class ImageResizeEngineRegistration
 {
-    public static IServiceCollection AddImageProcessingUtilityServices(
+    public static IServiceCollection AddImageResizeEngineServices(
         this IServiceCollection services)
     {
         services.AddScoped<IImageInfoService, ImageInfoService>();

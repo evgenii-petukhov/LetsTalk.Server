@@ -8,6 +8,9 @@ using LetsTalk.Server.SignPackage;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
 using System.Net.Mime;
+using LetsTalk.Server.ImageProcessing.Service.Services;
+using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
+using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
@@ -18,7 +21,7 @@ public static class ImageProcessingServiceRegistration
         IConfiguration configuration)
     {
         services.AddFileStorageAgnosticServices(configuration);
-        services.AddImageProcessingUtilityServices();
+        services.AddImageResizeEngineServices();
         services.AddMassTransit(x =>
         {
             if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
@@ -78,6 +81,16 @@ public static class ImageProcessingServiceRegistration
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 #endif
         });
+
+        switch (configuration.GetValue<string>("Features:FileStorage"))
+        {
+            case "aws":
+                services.AddScoped<IImageProcessingService, LambdaImageProcessingService>();
+                break;
+            default:
+                services.AddScoped<IImageProcessingService, ImageProcessingService>();
+                break;
+        }
 
         return services;
     }

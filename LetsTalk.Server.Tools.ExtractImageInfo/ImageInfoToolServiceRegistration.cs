@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.AgnosticServices;
-using LetsTalk.Server.ImageProcessing.Utility;
+using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +12,7 @@ public static class ImageInfoToolServiceRegistration
     this IServiceCollection services,
     IConfiguration configuration)
     {
-        services.AddImageProcessingUtilityServices();
+        services.AddImageResizeEngineServices();
         services.AddFileStorageAgnosticServices(configuration);
         services.AddHostedService<ImageInfoHostedService>();
 

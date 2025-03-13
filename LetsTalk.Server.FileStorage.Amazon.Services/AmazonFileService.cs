@@ -13,12 +13,31 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.FileStorage.Amazon.Services;
 
-public class AmazonFileService(
-    IFileService fileService,
-    IOptions<AwsSettings> options) : IFileService
+public class AmazonFileService : IFileService
 {
-    private readonly IFileService _fileService = fileService;
-    private readonly AwsSettings _awsSettings = options.Value;
+    private readonly IFileService? _fileService;
+    private readonly string? _accessKey;
+    private readonly string? _secretKey;
+    private readonly string? _region;
+    private readonly string _bucketName;
+    private readonly bool _isInitializedByLambda;
+
+    public AmazonFileService(
+        IFileService fileService,
+        IOptions<AwsSettings> options)
+    {
+        _fileService = fileService;
+        _accessKey = options.Value.AccessKey!;
+        _secretKey = options.Value.SecretKey!;
+        _region = options.Value.Region!;
+        _bucketName = options.Value.BucketName!;
+    }
+
+    public AmazonFileService(string bucketName)
+    {
+        _isInitializedByLambda = true;
+        _bucketName = bucketName;
+    }
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
@@ -29,7 +48,7 @@ public class AmazonFileService(
     {
         var request = new GetObjectRequest
         {
-            BucketName = _awsSettings.BucketName,
+            BucketName = _bucketName,
             Key = filename
         };
 
@@ -41,7 +60,7 @@ public class AmazonFileService(
             await response.ResponseStream.CopyToAsync(ms, cancellationToken);
             return ms.ToArray();
         }
-        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound && _fileService != null)
         {
             return await _fileService.ReadFileAsync(filename, fileType, cancellationToken);
         }
@@ -58,7 +77,7 @@ public class AmazonFileService(
         using var transferUtility = new TransferUtility(client);
         await using var ms = new MemoryStream(data);
         var filename = Guid.NewGuid().ToString();
-        await transferUtility.UploadAsync(ms, _awsSettings.BucketName, filename, cancellationToken);
+        await transferUtility.UploadAsync(ms, _bucketName, filename, cancellationToken);
         return filename;
     }
 
@@ -79,14 +98,14 @@ public class AmazonFileService(
         using var client = GetS3Client();
         using var transferUtility = new TransferUtility(client);
         await using var ms = new MemoryStream(data);
-        await transferUtility.UploadAsync(ms, _awsSettings.BucketName, filename + ".info", cancellationToken);
+        await transferUtility.UploadAsync(ms, _bucketName, filename + ".info", cancellationToken);
     }
 
     public async Task<ImageInfoModel> LoadImageInfoAsync(string filename, CancellationToken cancellationToken = default)
     {
         var request = new GetObjectRequest
         {
-            BucketName = _awsSettings.BucketName,
+            BucketName = _bucketName,
             Key = filename
         };
 
@@ -98,7 +117,7 @@ public class AmazonFileService(
             var imageInfoString = await reader.ReadToEndAsync(cancellationToken);
             return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
         }
-        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound && _fileService != null)
         {
             return await _fileService.LoadImageInfoAsync(filename, cancellationToken);
         }
@@ -106,10 +125,15 @@ public class AmazonFileService(
 
     private AmazonS3Client GetS3Client()
     {
-        var awsCredentials = new BasicAWSCredentials(_awsSettings.AccessKey, _awsSettings.SecretKey);
+        if (_isInitializedByLambda)
+        {
+            return new AmazonS3Client();
+        }
+
+        var awsCredentials = new BasicAWSCredentials(_accessKey, _secretKey);
         var s3Config = new AmazonS3Config
         {
-            RegionEndpoint = RegionEndpoint.GetBySystemName(_awsSettings.Region)
+            RegionEndpoint = RegionEndpoint.GetBySystemName(_region)
         };
         return new AmazonS3Client(awsCredentials, s3Config);
     }

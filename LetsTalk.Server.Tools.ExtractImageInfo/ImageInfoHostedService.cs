@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
-using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
+using LetsTalk.Server.ImageProcessing.ImageResizeEngine.Abstractions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 

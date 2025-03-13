@@ -13,8 +13,11 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.FileStorage.Amazon.Services;
 
-public class FileService(IOptions<AwsSettings> options) : IFileService
+public class AmazonFileService(
+    IFileService fileService,
+    IOptions<AwsSettings> options) : IFileService
 {
+    private readonly IFileService _fileService = fileService;
     private readonly AwsSettings _awsSettings = options.Value;
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
@@ -31,10 +34,17 @@ public class FileService(IOptions<AwsSettings> options) : IFileService
         };
 
         using var client = GetS3Client();
-        using var response = await client.GetObjectAsync(request, cancellationToken);
-        await using var ms = new MemoryStream();
-        await response.ResponseStream.CopyToAsync(ms, cancellationToken);
-        return ms.ToArray();
+        try
+        {
+            using var response = await client.GetObjectAsync(request, cancellationToken);
+            await using var ms = new MemoryStream();
+            await response.ResponseStream.CopyToAsync(ms, cancellationToken);
+            return ms.ToArray();
+        }
+        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return await _fileService.ReadFileAsync(filename, fileType, cancellationToken);
+        }
     }
 
     public async Task<string> SaveDataAsync(
@@ -81,10 +91,17 @@ public class FileService(IOptions<AwsSettings> options) : IFileService
         };
 
         using var client = GetS3Client();
-        using var response = await client.GetObjectAsync(request, cancellationToken);
-        using var reader = new StreamReader(response.ResponseStream);
-        var imageInfoString = await reader.ReadToEndAsync(cancellationToken);
-        return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
+        try
+        {
+            using var response = await client.GetObjectAsync(request, cancellationToken);
+            using var reader = new StreamReader(response.ResponseStream);
+            var imageInfoString = await reader.ReadToEndAsync(cancellationToken);
+            return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
+        }
+        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return await _fileService.LoadImageInfoAsync(filename, cancellationToken);
+        }
     }
 
     private AmazonS3Client GetS3Client()

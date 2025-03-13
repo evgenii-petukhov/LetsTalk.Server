@@ -1,5 +1,7 @@
 ﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
+using LetsTalk.Server.FileStorage.Local.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,8 +14,8 @@ public static class AmazonFileStorageServiceRegistration
         IConfiguration configuration)
     {
         services.Configure<AwsSettings>(configuration.GetSection("Aws"));
-        services.AddScoped<IFileService, FileService>();
-        services.AddScoped<IImageService, ImageService>();
+        services.AddFileStorageServices();
+        services.DecorateScoped<IFileService, AmazonFileService>();
         return services;
     }
 }

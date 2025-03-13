@@ -57,7 +57,8 @@ public class FileService(
 
     public async Task<ImageInfoModel> LoadImageInfoAsync(string filename, CancellationToken cancellationToken = default)
     {
-        var imageInfoString = await File.ReadAllTextAsync(filename, cancellationToken);
+        var filepath = _fileStoragePathProvider.GetFilePath(filename, FileTypes.Image);
+        var imageInfoString = await File.ReadAllTextAsync(filepath, cancellationToken);
         return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
     }
 

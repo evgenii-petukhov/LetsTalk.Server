@@ -2,7 +2,7 @@
 using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorage.Amazon.Services;
+namespace LetsTalk.Server.FileStorage.AgnosticServices;
 
 public class ImageService(IFileService fileService) : IImageService
 {
@@ -10,8 +10,7 @@ public class ImageService(IFileService fileService) : IImageService
 
     public async Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {
-        var infoFilename = imageId + ".info";
-        var imageInfo = await _fileService.LoadImageInfoAsync(infoFilename, cancellationToken);
+        var imageInfo = await _fileService.LoadImageInfoAsync(imageId + ".info", cancellationToken);
 
         var content = await _fileService.ReadFileAsync(imageId, FileTypes.Image, cancellationToken);
 

@@ -1,5 +1,4 @@
 using Amazon.Lambda.Core;
-using LetsTalk.Server.FileStorage.AgnosticServices;
 using LetsTalk.Server.FileStorage.Amazon.Services;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using LetsTalk.Server.ImageProcessing.Utility;
@@ -15,10 +14,9 @@ namespace LetsTalk.Server.ImageProcessing.Lambda
     {
         public static Task<ProcessImageResponse> ProcessImageAsync(ProcessImageRequest request)
         {
-            var fileService = new AmazonFileService(request.BucketName);
+            var fileService = new AmazonFileService(request.BucketName!);
 
             var imageProcessingService = new ImageProcessingService(
-                new ImageService(fileService),
                 fileService,
                 new ImageResizeService());
 

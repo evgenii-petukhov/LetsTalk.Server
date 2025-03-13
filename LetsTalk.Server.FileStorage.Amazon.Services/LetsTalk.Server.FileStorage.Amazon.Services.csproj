@@ -14,9 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Local.Services\LetsTalk.Server.FileStorage.Local.Services.csproj" />
   </ItemGroup>
 
 </Project>

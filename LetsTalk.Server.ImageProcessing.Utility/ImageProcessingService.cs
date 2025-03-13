@@ -7,20 +7,18 @@ using LetsTalk.Server.Persistence.Enums;
 namespace LetsTalk.Server.ImageProcessing.Utility;
 
 public class ImageProcessingService(
-    IImageService imageService,
-    IFileService fileService,
+    IAgnosticFileService fileService,
     IImageResizeService imageResizeService) : IImageProcessingService
 {
-    private readonly IImageService _imageService = imageService;
-    private readonly IFileService _fileService = fileService;
+    private readonly IAgnosticFileService _fileService = fileService;
     private readonly IImageResizeService _imageResizeService = imageResizeService;
 
     public async Task<ProcessImageResponse> ProcessImageAsync(string imageId, int maxWidth, int maxHeight, CancellationToken cancellationToken = default)
     {
-        var fetchImageResponse = await _imageService.FetchImageAsync(imageId, cancellationToken);
+        var content = await _fileService.ReadFileAsync(imageId, FileTypes.Image, cancellationToken);
 
         var (data, width, height) = _imageResizeService.Resize(
-            fetchImageResponse!.Content!,
+            content,
             maxWidth,
             maxHeight);
 

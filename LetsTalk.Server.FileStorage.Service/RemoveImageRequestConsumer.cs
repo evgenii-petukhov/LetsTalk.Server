@@ -7,10 +7,10 @@ using MassTransit;
 namespace LetsTalk.Server.FileStorage.Service;
 
 public class RemoveImageRequestConsumer(
-    IFileService fileService,
+    IAgnosticFileService fileService,
     IImageCacheManager imageCacheManager) : IConsumer<RemoveImageRequest>
 {
-    private readonly IFileService _fileService = fileService;
+    private readonly IAgnosticFileService _fileService = fileService;
     private readonly IImageCacheManager _imageCacheManager = imageCacheManager;
 
     public Task Consume(ConsumeContext<RemoveImageRequest> context)

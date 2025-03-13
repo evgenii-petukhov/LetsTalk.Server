@@ -12,12 +12,12 @@ namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 public class FileUploadGrpcEndpoint(
     IImageValidationService imageValidationService,
     IMapper mapper,
-    IFileService fileService,
+    IAgnosticFileService fileService,
     IImageService imageService) : FileUploadGrpcEndpointBase
 {
     private readonly IImageValidationService _imageValidationService = imageValidationService;
     private readonly IMapper _mapper = mapper;
-    private readonly IFileService _fileService = fileService;
+    private readonly IAgnosticFileService _fileService = fileService;
     private readonly IImageService _imageService = imageService;
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)

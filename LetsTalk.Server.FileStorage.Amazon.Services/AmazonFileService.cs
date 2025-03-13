@@ -13,29 +13,23 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.FileStorage.Amazon.Services;
 
-public class AmazonFileService : IFileService
+public class AmazonFileService : IAmazonFileService, IAgnosticFileService
 {
-    private readonly IFileService? _fileService;
     private readonly string? _accessKey;
     private readonly string? _secretKey;
     private readonly string? _region;
     private readonly string _bucketName;
-    private readonly bool _isInitializedByLambda;
 
-    public AmazonFileService(
-        IFileService fileService,
-        IOptions<AwsSettings> options)
+    public AmazonFileService(IOptions<AwsSettings> options)
     {
-        _fileService = fileService;
-        _accessKey = options.Value.AccessKey!;
-        _secretKey = options.Value.SecretKey!;
-        _region = options.Value.Region!;
-        _bucketName = options.Value.BucketName!;
+        _accessKey = options?.Value.AccessKey!;
+        _secretKey = options?.Value.SecretKey!;
+        _region = options?.Value.Region!;
+        _bucketName = options?.Value.BucketName!;
     }
 
     public AmazonFileService(string bucketName)
     {
-        _isInitializedByLambda = true;
         _bucketName = bucketName;
     }
 
@@ -53,17 +47,10 @@ public class AmazonFileService : IFileService
         };
 
         using var client = GetS3Client();
-        try
-        {
-            using var response = await client.GetObjectAsync(request, cancellationToken);
-            await using var ms = new MemoryStream();
-            await response.ResponseStream.CopyToAsync(ms, cancellationToken);
-            return ms.ToArray();
-        }
-        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound && _fileService != null)
-        {
-            return await _fileService.ReadFileAsync(filename, fileType, cancellationToken);
-        }
+        using var response = await client.GetObjectAsync(request, cancellationToken);
+        await using var ms = new MemoryStream();
+        await response.ResponseStream.CopyToAsync(ms, cancellationToken);
+        return ms.ToArray();
     }
 
     public async Task<string> SaveDataAsync(
@@ -110,22 +97,15 @@ public class AmazonFileService : IFileService
         };
 
         using var client = GetS3Client();
-        try
-        {
-            using var response = await client.GetObjectAsync(request, cancellationToken);
-            using var reader = new StreamReader(response.ResponseStream);
-            var imageInfoString = await reader.ReadToEndAsync(cancellationToken);
-            return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
-        }
-        catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound && _fileService != null)
-        {
-            return await _fileService.LoadImageInfoAsync(filename, cancellationToken);
-        }
+        using var response = await client.GetObjectAsync(request, cancellationToken);
+        using var reader = new StreamReader(response.ResponseStream);
+        var imageInfoString = await reader.ReadToEndAsync(cancellationToken);
+        return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
     }
 
     private AmazonS3Client GetS3Client()
     {
-        if (_isInitializedByLambda)
+        if (string.IsNullOrWhiteSpace(_accessKey))
         {
             return new AmazonS3Client();
         }

@@ -9,13 +9,13 @@ namespace LetsTalk.Server.Tools.ExtractImageInfo;
 public class ImageInfoHostedService(
     IImageInfoService imageInfoService,
     TextWriter outputWriter,
-    IFileService fileService,
+    IAgnosticFileService fileService,
     IOptions<FileStorageSettings> options) : IHostedService
 {
     private readonly FileStorageSettings _fileStorageSettings = options.Value;
     private readonly IImageInfoService _imageInfoService = imageInfoService;
     private readonly TextWriter _outputWriter = outputWriter;
-    private readonly IFileService _fileService = fileService;
+    private readonly IAgnosticFileService _fileService = fileService;
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {

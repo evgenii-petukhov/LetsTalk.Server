@@ -2,11 +2,11 @@
 using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.FileStorage.AgnosticServices;
+namespace LetsTalk.Server.FileStorage.AgnosticServices.Services;
 
-public class ImageService(IFileService fileService) : IImageService
+public class ImageService(IAgnosticFileService fileService) : IImageService
 {
-    private readonly IFileService _fileService = fileService;
+    private readonly IAgnosticFileService _fileService = fileService;
 
     public async Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
     {

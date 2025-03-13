@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.csproj" />
   </ItemGroup>
 

@@ -8,7 +8,7 @@ namespace LetsTalk.Server.FileStorage.Local.Services;
 
 public class FileService(
     IFileNameGenerator fileNameGenerator,
-    IFileStoragePathProvider fileStoragePathProvider) : IFileService
+    IFileStoragePathProvider fileStoragePathProvider) : IAgnosticFileService
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {

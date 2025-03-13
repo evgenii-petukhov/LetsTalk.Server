@@ -1,5 +1,5 @@
-﻿using LetsTalk.Server.ImageProcessing.Abstractions;
-using LetsTalk.Server.ImageProcessing.Abstractions.Models;
+﻿using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
+using LetsTalk.Server.ImageProcessing.Utility.Abstractions.Models;
 using SkiaSharp;
 
 namespace LetsTalk.Server.ImageProcessing.Utility;

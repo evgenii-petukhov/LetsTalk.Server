@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.ImageProcessing.Abstractions;
+﻿using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LetsTalk.Server.ImageProcessing.Utility;

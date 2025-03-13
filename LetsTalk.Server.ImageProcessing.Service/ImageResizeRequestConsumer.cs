@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
-using LetsTalk.Server.ImageProcessing.Abstractions;
+using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
 using LetsTalk.Server.Infrastructure.ApiClient;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Enums;

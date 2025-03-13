@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 

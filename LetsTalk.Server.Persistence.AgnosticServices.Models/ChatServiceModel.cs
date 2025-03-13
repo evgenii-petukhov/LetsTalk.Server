@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 public class ChatServiceModel
 {

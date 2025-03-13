@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 using Microsoft.Extensions.Options;

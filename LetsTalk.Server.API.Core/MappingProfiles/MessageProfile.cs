@@ -2,8 +2,8 @@
 using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 namespace LetsTalk.Server.API.Core.MappingProfiles;
 

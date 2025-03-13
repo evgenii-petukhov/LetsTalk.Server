@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 

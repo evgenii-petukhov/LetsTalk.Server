@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;

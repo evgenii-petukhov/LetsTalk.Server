@@ -1,12 +1,7 @@
 ﻿namespace LetsTalk.Server.API.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
-public abstract class BaseStringIdAttribute<T> : Attribute
+public abstract class BaseStringIdAttribute<T>(T id) : Attribute
 {
-    public T Id { get; }
-
-    protected BaseStringIdAttribute(T id)
-    {
-        Id = id;
-    }
+    public T Id { get; } = id;
 }

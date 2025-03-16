@@ -13,7 +13,7 @@ namespace LetsTalk.Server.ImageProcessing.Lambda
         public static Task<ProcessImageResponse> ProcessImageAsync(ProcessImageRequest request)
         {
             var imageProcessingService = new ImageProcessingService(
-                new FakeFileServiceResolver("letstalk-images"),
+                new FakeFileServiceResolver(request.BucketName!),
                 new ImageResizeService());
 
             return imageProcessingService.ProcessImageAsync(request.FileName!, request.MaxWidth, request.MaxHeight);

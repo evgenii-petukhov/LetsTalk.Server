@@ -37,7 +37,8 @@ public class ImageResizeRequestConsumer(
             Filename = response.Filename,
             Width = response.Width,
             Height = response.Height,
-            ImageFormat = (int)ImageFormats.Webp
+            ImageFormat = (int)ImageFormats.Webp,
+            FileStorageTypeId = context.Message.FileStorageTypeId
         };
         _signPackageService.Sign(payload);
         using var client = _httpClientFactory.CreateClient(nameof(ImageResizeRequestConsumer));

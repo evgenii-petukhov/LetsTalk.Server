@@ -50,9 +50,10 @@ public class AccountEntityFrameworkService(
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
-        var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
+        var image = _entityFactory.CreateImage(imageId, imageFormat, width, height, fileStorageType);
         var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId, CultureInfo.InvariantCulture), cancellationToken);
 
         if (account.Image != null && !string.IsNullOrEmpty(imageId))

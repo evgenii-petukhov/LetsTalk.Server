@@ -106,6 +106,7 @@ public class AccountRepository : IAccountRepository
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
         var filter = Builders<Account>.Filter
@@ -122,7 +123,8 @@ public class AccountRepository : IAccountRepository
                 Id = imageId,
                 Width = width,
                 Height = height,
-                ImageFormatId = (int)imageFormat
+                ImageFormatId = (int)imageFormat,
+                FileStorageTypeId = (int)fileStorageType
             });
         }
 

@@ -29,6 +29,7 @@ public class SetImagePreviewCommandHandler(
             request.ImageFormat,
             request.Width,
             request.Height,
+            request.FileStorageTypeId,
             cancellationToken: cancellationToken);
 
         var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId!, cancellationToken);

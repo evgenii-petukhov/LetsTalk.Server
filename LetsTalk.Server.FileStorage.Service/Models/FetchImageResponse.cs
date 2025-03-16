@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
+﻿namespace LetsTalk.Server.FileStorage.Service.Models;
 
 public class FetchImageResponse
 {

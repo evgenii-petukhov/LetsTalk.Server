@@ -167,11 +167,49 @@ namespace LetsTalk.Server.Persistence.Migrations
                     b.ToTable("chatmessagestatuses");
                 });
 
+            modelBuilder.Entity("LetsTalk.Server.Domain.FileStorageType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("filestoragetypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Local"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "AmazonS3"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "AzureBlobStorage"
+                        });
+                });
+
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
+
+                    b.Property<int>("FileStorageTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("Height")
                         .HasColumnType("int");
@@ -183,6 +221,8 @@ namespace LetsTalk.Server.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileStorageTypeId");
 
                     b.HasIndex("ImageFormatId");
 
@@ -382,11 +422,19 @@ namespace LetsTalk.Server.Persistence.Migrations
 
             modelBuilder.Entity("LetsTalk.Server.Domain.Image", b =>
                 {
+                    b.HasOne("LetsTalk.Server.Domain.FileStorageType", "FileStorageType")
+                        .WithMany()
+                        .HasForeignKey("FileStorageTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LetsTalk.Server.Domain.ImageFormat", "ImageFormat")
                         .WithMany()
                         .HasForeignKey("ImageFormatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FileStorageType");
 
                     b.Navigation("ImageFormat");
                 });

@@ -22,6 +22,8 @@ public class LetsTalkDbContext(DbContextOptions<LetsTalkDbContext> options) : Db
 
     public DbSet<ChatMessageStatus> ChatMessageStatuses { get; set; }
 
+    public DbSet<FileStorageType> FileStorageTypes { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LetsTalkDbContext).Assembly);

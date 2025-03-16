@@ -1,6 +1,6 @@
 ﻿namespace LetsTalk.Server.FileStorage.Service.Abstractions;
 
-public interface IImageCacheManager
+public interface IImageStorageCacheManager
 {
     Task ClearAsync(string imageId);
 }

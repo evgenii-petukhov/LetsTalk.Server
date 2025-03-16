@@ -19,4 +19,6 @@ public record MessageDto
     public string? ImageId { get; set; }
 
     public ImagePreviewDto? ImagePreview { get; set; }
+
+    public int FileStorageTypeId { get; set; }
 }

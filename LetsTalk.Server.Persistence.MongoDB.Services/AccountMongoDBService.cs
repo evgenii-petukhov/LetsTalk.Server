@@ -39,6 +39,7 @@ public class AccountMongoDBService(
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.UpdateProfileAsync(
@@ -49,6 +50,7 @@ public class AccountMongoDBService(
             width,
             height,
             imageFormat,
+            fileStorageType,
             cancellationToken);
 
         return _mapper.Map<ProfileServiceModel>(account);

@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
+﻿using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Enums;
@@ -7,17 +7,18 @@ using MassTransit;
 namespace LetsTalk.Server.FileStorage.Service;
 
 public class RemoveImageRequestConsumer(
-    IAgnosticFileService fileService,
-    IImageCacheManager imageCacheManager) : IConsumer<RemoveImageRequest>
+    IFileServiceResolver fileServiceResolver,
+    IImageStorageCacheManager imageStorageCacheManager) : IConsumer<RemoveImageRequest>
 {
-    private readonly IAgnosticFileService _fileService = fileService;
-    private readonly IImageCacheManager _imageCacheManager = imageCacheManager;
+    private readonly IImageStorageCacheManager _imageStorageCacheManager = imageStorageCacheManager;
+    private readonly IFileServiceResolver _fileServiceResolver = fileServiceResolver;
 
     public Task Consume(ConsumeContext<RemoveImageRequest> context)
     {
-        _fileService.DeleteFile(context.Message.ImageId!, FileTypes.Image);
-        _fileService.DeleteFile(context.Message.ImageId! + ".info", FileTypes.Image);
+        var fileService = _fileServiceResolver.Resolve(context.Message.FileStorageType);
+        fileService.DeleteFile(context.Message.ImageId!, FileTypes.Image);
+        fileService.DeleteFile(context.Message.ImageId! + ".info", FileTypes.Image);
 
-        return _imageCacheManager.ClearAsync(context.Message.ImageId!);
+        return _imageStorageCacheManager.ClearAsync(context.Message.ImageId!);
     }
 }

@@ -86,6 +86,7 @@ public class MessageRepository : IMessageRepository
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
         var message = new Message
@@ -100,7 +101,8 @@ public class MessageRepository : IMessageRepository
                 Id = imageId,
                 ImageFormatId = (int)imageFormat,
                 Width = width,
-                Height = height
+                Height = height,
+                FileStorageTypeId = (int)fileStorageType
             }
         };
 
@@ -190,6 +192,7 @@ public class MessageRepository : IMessageRepository
         ImageFormats imageFormat,
         int width,
         int height,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
         return _messageCollection.FindOneAndUpdateAsync(
@@ -199,7 +202,8 @@ public class MessageRepository : IMessageRepository
                 Id = filename,
                 ImageFormatId = (int)imageFormat,
                 Width = width,
-                Height = height
+                Height = height,
+                FileStorageTypeId = (int)fileStorageType
             }),
             new FindOneAndUpdateOptions<Message, Message>
             {

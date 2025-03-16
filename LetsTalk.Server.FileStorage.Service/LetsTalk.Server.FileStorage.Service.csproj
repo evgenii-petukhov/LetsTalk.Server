@@ -35,7 +35,6 @@
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.AgnosticServices\LetsTalk.Server.FileStorage.AgnosticServices.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj" />

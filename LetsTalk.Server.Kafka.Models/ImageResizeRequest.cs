@@ -9,4 +9,6 @@ public class ImageResizeRequest
     public string[]? AccountIds { get; set; }
 
     public string? ChatId { get; set; }
+
+    public int FileStorageTypeId { get; set; }
 }

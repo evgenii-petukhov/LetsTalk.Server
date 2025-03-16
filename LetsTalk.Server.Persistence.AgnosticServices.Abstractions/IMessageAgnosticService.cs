@@ -22,6 +22,7 @@ public interface IMessageAgnosticService
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken);
 
     Task<List<MessageServiceModel>> GetPagedAsync(
@@ -51,5 +52,6 @@ public interface IMessageAgnosticService
         ImageFormats imageFormat,
         int width,
         int height,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default);
 }

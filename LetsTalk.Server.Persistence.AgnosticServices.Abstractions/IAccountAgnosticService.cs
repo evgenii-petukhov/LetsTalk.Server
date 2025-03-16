@@ -36,6 +36,7 @@ public interface IAccountAgnosticService
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default);
 
     Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default);

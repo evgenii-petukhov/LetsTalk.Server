@@ -14,6 +14,7 @@ using LetsTalk.Server.Persistence.Redis;
 using MassTransit;
 using Confluent.Kafka;
 using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.API.Core.Services.Cache.Accounts;
 
 namespace LetsTalk.Server.API.Core;
 

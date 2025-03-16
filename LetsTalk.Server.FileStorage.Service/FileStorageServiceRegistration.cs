@@ -8,7 +8,6 @@ using LetsTalk.Server.Logging;
 using LetsTalk.Server.FileStorage.AgnosticServices;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using System.Reflection;
-using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Services.Cache;
 using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.SignPackage;
@@ -37,6 +36,7 @@ public static class FileStorageServiceRegistration
         });
         services.AddGrpc(options => options.Interceptors.Add<JwtInterceptor>());
         services.AddGrpcReflection();
+        services.AddScoped<IImageStorageService, ImageStorageService>();
         services.AddScoped<IImageValidationService, ImageValidationService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
@@ -102,13 +102,13 @@ public static class FileStorageServiceRegistration
         {
             case "redis":
                 services.AddRedisCache();
-                services.AddScoped<IImageCacheManager, ImageRedisCacheService>();
-                services.DecorateScoped<IImageService, ImageRedisCacheService>();
+                services.AddScoped<IImageStorageCacheManager, ImageStorageRedisCacheService>();
+                services.DecorateScoped<IImageStorageService, ImageStorageRedisCacheService>();
                 break;
             default:
                 services.AddMemoryCache();
-                services.AddScoped<IImageCacheManager, ImageMemoryCacheService>();
-                services.DecorateScoped<IImageService, ImageMemoryCacheService>();
+                services.AddScoped<IImageStorageCacheManager, ImageStorageMemoryCacheService>();
+                services.DecorateScoped<IImageStorageService, ImageStorageMemoryCacheService>();
                 break;
         }
 

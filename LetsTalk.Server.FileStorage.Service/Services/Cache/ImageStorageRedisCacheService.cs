@@ -1,15 +1,15 @@
 ﻿using System.Text.Json;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
-using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
-using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.Persistence.Redis;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.FileStorage.Service.Models;
 
 namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 
-public class ImageRedisCacheService : IImageService, IImageCacheManager
+public class ImageStorageRedisCacheService : IImageStorageService, IImageStorageCacheManager
 {
     private readonly bool _isActive;
     private readonly bool _isVolotile;
@@ -18,16 +18,16 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
     private readonly int _imageSizeThresholdInBytes;
 
     private readonly IDatabase _database;
-    private readonly IImageService _imageService;
+    private readonly IImageStorageService _imageStorageService;
 
-    public ImageRedisCacheService(
+    public ImageStorageRedisCacheService(
         RedisConnection redisConnection,
         IOptions<CachingSettings> cachingSettings,
-        IImageService imageService)
+        IImageStorageService imageStorageService)
     {
         _database = redisConnection.Connection.GetDatabase();
         _imageSizeThresholdInBytes = cachingSettings.Value.ImageSizeThresholdInBytes;
-        _imageService = imageService;
+        _imageStorageService = imageStorageService;
 
         _isActive = cachingSettings.Value.ImagesCacheLifeTimeInSeconds != 0;
         _isVolotile = _isActive && cachingSettings.Value.ImagesCacheLifeTimeInSeconds > 0;
@@ -38,11 +38,11 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
         }
     }
 
-    public async Task<FetchImageResponse?> FetchImageAsync(string imageId, CancellationToken cancellationToken = default)
+    public async Task<FetchImageResponse?> GetImageAsync(string imageId, FileStorageTypes fileStorageType, CancellationToken cancellationToken = default)
     {
         if (!_isActive)
         {
-            return await _imageService.FetchImageAsync(imageId, cancellationToken);
+            return await _imageStorageService.GetImageAsync(imageId, fileStorageType, cancellationToken);
         }
 
         var key = new RedisKey(GetImageKey(imageId));
@@ -51,7 +51,7 @@ public class ImageRedisCacheService : IImageService, IImageCacheManager
 
         if (cached == RedisValue.Null)
         {
-            var image = await _imageService.FetchImageAsync(imageId, cancellationToken);
+            var image = await _imageStorageService.GetImageAsync(imageId, fileStorageType, cancellationToken);
 
             if (image?.Content?.Length < _imageSizeThresholdInBytes)
             {

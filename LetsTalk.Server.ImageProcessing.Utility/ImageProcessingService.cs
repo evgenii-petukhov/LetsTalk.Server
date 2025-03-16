@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
+﻿using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine.Abstractions;
 using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
 using LetsTalk.Server.ImageProcessing.Utility.Abstractions.Models;
@@ -7,11 +7,11 @@ using LetsTalk.Server.Persistence.Enums;
 namespace LetsTalk.Server.ImageProcessing.Utility;
 
 public class ImageProcessingService(
-    IAgnosticFileService fileService,
+    IFileServiceResolver fileServiceResolver,
     IImageResizeService imageResizeService) : IImageProcessingService
 {
-    private readonly IAgnosticFileService _fileService = fileService;
     private readonly IImageResizeService _imageResizeService = imageResizeService;
+    private readonly IFileService _fileService = fileServiceResolver.Resolve();
 
     public async Task<ProcessImageResponse> ProcessImageAsync(string imageId, int maxWidth, int maxHeight, CancellationToken cancellationToken = default)
     {

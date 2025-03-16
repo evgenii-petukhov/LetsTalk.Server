@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions\LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Abstractions\LetsTalk.Server.FileStorage.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.ImageResizeEngine.Abstractions\LetsTalk.Server.ImageProcessing.ImageResizeEngine.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility.Abstractions\LetsTalk.Server.ImageProcessing.Utility.Abstractions.csproj" />
   </ItemGroup>

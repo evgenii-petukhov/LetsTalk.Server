@@ -12,6 +12,7 @@ public class MessageRepository(LetsTalkDbContext context) : GenericRepository<Me
         return Context.Messages
             .Include(message => message.LinkPreview)
             .Include(message => message.ImagePreview)
+            .Include(message => message.Image)
             .Where(message => message.ChatId == chatId)
             .OrderByDescending(mesage => mesage.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
@@ -24,6 +25,14 @@ public class MessageRepository(LetsTalkDbContext context) : GenericRepository<Me
     {
         return Context.Messages
             .Include(x => x.LinkPreview)
-            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)!;
+            .FirstOrDefaultAsync(message => message.Id == id, cancellationToken)!;
+    }
+
+    public override Task<Message> GetByIdAsTrackingAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return Context.Messages
+            .Include(x => x.Image)
+            .AsTracking()
+            .FirstOrDefaultAsync(message => message.Id == id, cancellationToken)!;
     }
 }

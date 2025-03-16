@@ -35,6 +35,7 @@ public class MessageMongoDBService(
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken)
     {
         var message = await _messageRepository.CreateAsync(
@@ -46,6 +47,7 @@ public class MessageMongoDBService(
             width,
             height,
             imageFormat,
+            fileStorageType,
             cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(message);
@@ -100,6 +102,7 @@ public class MessageMongoDBService(
         ImageFormats imageFormat,
         int width,
         int height,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
         var message = await _messageRepository.SetImagePreviewAsync(
@@ -108,6 +111,7 @@ public class MessageMongoDBService(
             imageFormat,
             width,
             height,
+            fileStorageType,
             cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(message);

@@ -8,7 +8,6 @@ public class ImageProfile : Profile
 {
     public ImageProfile()
     {
-        CreateMap<Image, ImageServiceModel>();
         CreateMap<Image, ImagePreviewServiceModel>();
     }
 }

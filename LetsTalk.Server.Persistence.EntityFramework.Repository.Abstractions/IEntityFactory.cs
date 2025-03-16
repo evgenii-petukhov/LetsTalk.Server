@@ -5,7 +5,7 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 public interface IEntityFactory
 {
-    Image CreateImage(string id, ImageFormats imageFormat, int width, int height);
+    Image CreateImage(string id, ImageFormats imageFormat, int width, int height, FileStorageTypes fileStorageType);
 
     Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl);
 

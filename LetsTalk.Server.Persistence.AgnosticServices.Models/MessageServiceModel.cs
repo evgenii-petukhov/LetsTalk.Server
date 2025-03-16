@@ -16,6 +16,8 @@ public class MessageServiceModel
 
     public string? ImageId { get; set; }
 
+    public int FileStorageTypeId { get; set; }
+
     public ImagePreviewServiceModel? ImagePreview { get; set; }
 
     public LinkPreviewServiceModel? LinkPreview { get; set; }

@@ -9,9 +9,9 @@ public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
 {
     private readonly LetsTalkDbContext _context = context;
 
-    public Image CreateImage(string id, ImageFormats imageFormat, int width, int height)
+    public Image CreateImage(string id, ImageFormats imageFormat, int width, int height, FileStorageTypes fileStorageType)
     {
-        return new Image(id, (int)imageFormat, width, height);
+        return new Image(id, (int)imageFormat, width, height, (int)fileStorageType);
     }
 
     public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl)

@@ -16,6 +16,8 @@ public class ChatDto : ChatDtoBase
 
     public string? ImageId { get; set; }
 
+    public int FileStorageTypeId { get; set; }
+
     public bool IsIndividual { get; set; }
 
     public string[]? AccountIds { get; set; }

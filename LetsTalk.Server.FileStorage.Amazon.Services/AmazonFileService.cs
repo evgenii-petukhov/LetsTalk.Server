@@ -4,8 +4,9 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
-using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.FileStorage.Abstractions;
+using LetsTalk.Server.FileStorage.Abstractions.Attributes;
+using LetsTalk.Server.FileStorage.Abstractions.Models;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.Extensions.Options;
 using System.Text;
@@ -13,7 +14,8 @@ using System.Text.Json;
 
 namespace LetsTalk.Server.FileStorage.Amazon.Services;
 
-public class AmazonFileService : IAmazonFileService, IAgnosticFileService
+[FileStorageType(FileStorageTypes.AmazonS3)]
+public class AmazonFileService : IFileService
 {
     private readonly string? _accessKey;
     private readonly string? _secretKey;

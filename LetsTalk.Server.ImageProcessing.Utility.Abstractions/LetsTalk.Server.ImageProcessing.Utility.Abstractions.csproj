@@ -7,4 +7,8 @@
 	<AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj" />
+  </ItemGroup>
+
 </Project>

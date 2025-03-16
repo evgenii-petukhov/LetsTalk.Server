@@ -1,14 +1,16 @@
-﻿using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions;
-using LetsTalk.Server.FileStorage.AgnosticServices.Abstractions.Models;
+﻿using LetsTalk.Server.FileStorage.Abstractions;
+using LetsTalk.Server.FileStorage.Abstractions.Attributes;
+using LetsTalk.Server.FileStorage.Abstractions.Models;
 using LetsTalk.Server.FileStorage.Local.Services.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using System.Text.Json;
 
 namespace LetsTalk.Server.FileStorage.Local.Services;
 
+[FileStorageType(FileStorageTypes.Local)]
 public class FileService(
     IFileNameGenerator fileNameGenerator,
-    IFileStoragePathProvider fileStoragePathProvider) : IAgnosticFileService
+    IFileStoragePathProvider fileStoragePathProvider) : IFileService
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {

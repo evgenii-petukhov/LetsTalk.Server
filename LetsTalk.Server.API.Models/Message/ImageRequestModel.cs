@@ -12,5 +12,7 @@ public class ImageRequestModel: ISignable
 
     public int ImageFormat { get; set; }
 
+    public int FileStorageTypeId { get; set; }
+
     public string? Signature { get; set; }
 }

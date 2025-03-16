@@ -5,9 +5,8 @@ using LetsTalk.Server.Dto.Models;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Persistence.Redis;
 using StackExchange.Redis;
-using LetsTalk.Server.API.Core.Services.Cache.Accounts;
 
-namespace LetsTalk.Server.API.Core.Services.Cache.Chats;
+namespace LetsTalk.Server.API.Core.Services.Cache.Accounts;
 
 public class AccountRedisCacheService(
     RedisConnection redisConnection,

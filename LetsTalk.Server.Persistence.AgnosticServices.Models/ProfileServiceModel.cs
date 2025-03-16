@@ -17,4 +17,6 @@ public class ProfileServiceModel
     public string? Email { get; set; }
 
     public string? ImageId { get; set; }
+
+    public int FileStorageTypeId { get; set; }
 }

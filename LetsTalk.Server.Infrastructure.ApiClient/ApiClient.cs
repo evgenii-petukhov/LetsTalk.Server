@@ -1168,6 +1168,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("imageId")]
         public string ImageId { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1197,6 +1200,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("imageId")]
         public string ImageId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("isIndividual")]
         public bool IsIndividual { get; set; }
@@ -1294,6 +1300,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("height")]
         public int? Height { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1311,6 +1320,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("imageFormat")]
         public int ImageFormat { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("signature")]
         public string Signature { get; set; }
@@ -1381,6 +1393,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("imagePreview")]
         public ImagePreviewDto ImagePreview { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1405,6 +1420,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("imageId")]
         public string ImageId { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1428,6 +1446,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("height")]
         public int Height { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("signature")]
         public string Signature { get; set; }

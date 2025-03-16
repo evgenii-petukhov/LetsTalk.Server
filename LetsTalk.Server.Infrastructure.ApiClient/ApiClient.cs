@@ -1282,6 +1282,18 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ImageDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
+        public int FileStorageTypeId { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ImagePreviewDto
     {
 
@@ -1387,14 +1399,11 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("linkPreview")]
         public LinkPreviewDto LinkPreview { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("imageId")]
-        public string ImageId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("image")]
+        public ImageDto Image { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("imagePreview")]
         public ImagePreviewDto ImagePreview { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
-        public int FileStorageTypeId { get; set; }
 
     }
 

@@ -14,9 +14,7 @@ public class MessageServiceModel
 
     public long? DateCreatedUnix { get; set; }
 
-    public string? ImageId { get; set; }
-
-    public int FileStorageTypeId { get; set; }
+    public ImageServiceModel? Image { get; set; }
 
     public ImagePreviewServiceModel? ImagePreview { get; set; }
 

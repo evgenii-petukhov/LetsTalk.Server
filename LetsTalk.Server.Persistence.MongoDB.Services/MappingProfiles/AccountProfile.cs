@@ -10,8 +10,8 @@ public class AccountProfile: Profile
     public AccountProfile()
     {
         CreateMap<Account, ProfileServiceModel>()
-            .ForMember(x => x.FileStorageTypeId, x => x.MapFrom(source => source.Image != null ? source.Image.FileStorageTypeId : (int)FileStorageTypes.Local)); ;
+            .ForMember(x => x.FileStorageTypeId, x => x.MapFrom(source => source.Image == null ? (int)FileStorageTypes.Local : source.Image.FileStorageTypeId));
         CreateMap<Account, AccountServiceModel>()
-            .ForMember(x => x.FileStorageTypeId, x => x.MapFrom(source => source.Image != null ? source.Image.FileStorageTypeId : (int)FileStorageTypes.Local)); ;
+            .ForMember(x => x.FileStorageTypeId, x => x.MapFrom(source => source.Image == null ? (int)FileStorageTypes.Local : source.Image.FileStorageTypeId));
     }
 }

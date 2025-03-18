@@ -123,7 +123,7 @@ public class ChatRepository : IChatRepository
                 ChatName = g.Chat!.IsIndividual ? $"{g.Account!.FirstName} {g.Account.LastName}" : g.Chat.Name,
                 PhotoUrl = g.Chat.IsIndividual ? g.Account!.PhotoUrl : null,
                 AccountTypeId = g.Chat.IsIndividual ? g.Account!.AccountTypeId : null,
-                ImageId = g.Chat.IsIndividual ? g.Account!.Image?.Id : g.Chat.ImageId,
+                ImageId = g.Chat.IsIndividual ? g.Account!.Image?.Id : g.Chat.Image?.Id,
                 LastMessageDate = g.Metrics.LastMessageDate,
                 LastMessageId = g.Metrics.LastMessageId,
                 UnreadCount = g.Metrics.UnreadCount,

@@ -12,115 +12,64 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
     public async Task<List<ChatServiceModel>> GetChatsAsync(int accountId, CancellationToken cancellationToken = default)
     {
         var chats = await Context.ChatMembers
-            .Include(cm => cm.Chat)
-            .Include(cm => cm.Account)
-            .Where(cm => cm.AccountId != accountId && Context.ChatMembers.Where(x => x.AccountId == accountId).Select(x => x.ChatId).Contains(cm.ChatId))
-            .GroupBy(x => x.Chat)
-            .Select(g => new
-            {
-                Chat = g.Key,
-                Accounts = g.Select(x => x.Account).ToList()
-            })
-            .Select(g => new
-            {
-                g.Chat,
-                g.Accounts
-            })
+            .Where(cm => cm.AccountId == accountId)
+            .Include(cm => cm.Chat!.ChatMembers!)
+                .ThenInclude(cm => cm.Account)
+            .Include(cm => cm.Chat!.Messages)
+            .Select(cm => cm.Chat)
             .ToListAsync(cancellationToken);
 
-        var metrics = await Context.ChatMembers
-            .Where(cm => cm.AccountId == accountId)
-            .GroupJoin(Context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
-            {
-                x.ChatId,
-                Messages = y
-            })
-            .SelectMany(x => x.Messages.DefaultIfEmpty(), (x, y) => new
-            {
-                x.ChatId,
-                Message = y
-            })
-            .GroupJoin(
-                Context.ChatMessageStatuses,
-                x => x.Message!.Id,
-                x => x.MessageId,
-                (x, y) => new
+
+        var chatMetrics = await Context.Messages
+            .Where(m => m.Chat!.ChatMembers!.Any(cm => cm.AccountId == accountId))
+            .GroupJoin(Context.ChatMessageStatuses,
+                m => m.Id,
+                cms => cms.MessageId,
+                (m, statuses) => new
+                {
+                    m.ChatId,
+                    Message = m,
+                    Statuses = statuses
+                })
+            .SelectMany(x => x.Statuses.DefaultIfEmpty(),
+                (x, status) => new
                 {
                     x.ChatId,
                     x.Message,
-                    Statuses = y
+                    ReadMessageId = status == null ? 0 : status.MessageId
                 })
-            .SelectMany(x => x.Statuses.DefaultIfEmpty(), (x, y) => new
-            {
-                x.ChatId,
-                x.Message,
-                ReadMessageId = y == null ? 0 : y.MessageId
-            })
             .GroupBy(x => x.ChatId)
             .Select(g => new
             {
                 ChatId = g.Key,
-                LastMessageDate = g.Max(x => x.Message!.DateCreatedUnix),
-                LastMessageId = g.Max(x => x.Message!.Id),
-                LastReadMessageId = g.Max(x => x.ReadMessageId)
-            })
-            .GroupJoin(Context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageId,
-                x.LastMessageDate,
-                Messages = y
-            })
-            .SelectMany(x => x.Messages.DefaultIfEmpty(), (x, y) => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageId,
-                x.LastMessageDate,
-                Message = y
-            })
-            .GroupBy(x => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageId,
-                x.LastMessageDate,
-            })
-            .Select(g => new
-            {
-                g.Key.ChatId,
-                g.Key.LastMessageId,
-                g.Key.LastMessageDate,
-                UnreadCount = g.Count(x => x.Message!.Id > x.LastReadMessageId && x.Message.SenderId != accountId)
+                LastMessageDate = g.Max(x => x.Message.DateCreatedUnix),
+                LastMessageId = g.Max(x => x.Message.Id),
+                UnreadCount = g.Count(x => x.Message.Id > x.ReadMessageId && x.Message.SenderId != accountId)
             })
             .ToListAsync(cancellationToken);
 
-        return chats
-            .Join(metrics, x => x.Chat!.Id, x => x.ChatId, (x, y) => new
+        return chats.Select(chat =>
+        {
+            var metrics = chatMetrics.FirstOrDefault(m => m.ChatId == chat!.Id);
+            var otherAccount = chat!.ChatMembers!.FirstOrDefault(cm => cm.AccountId != accountId)?.Account;
+
+            return new ChatServiceModel
             {
-                x.Chat,
-                AccountIds = x.Accounts.ConvertAll(x => x!.Id)
-                    .Where(x => x != accountId)
-                    .Select(x => x.ToString(CultureInfo.InvariantCulture))
-                    .ToArray(),
-                Account = x.Accounts.FirstOrDefault(),
-                Metrics = y
-            })
-            .Select(g => new ChatServiceModel
-            {
-                Id = g.Chat!.Id.ToString(CultureInfo.InvariantCulture),
-                ChatName = g.Chat!.IsIndividual ? $"{g.Account!.FirstName} {g.Account.LastName}" : g.Chat.Name,
-                PhotoUrl = g.Chat.IsIndividual ? g.Account!.PhotoUrl : null,
-                AccountTypeId = g.Chat.IsIndividual ? g.Account!.AccountTypeId : null,
-                ImageId = g.Chat.IsIndividual ? g.Account!.ImageId : g.Chat.ImageId,
-                LastMessageDate = g.Metrics.LastMessageDate,
-                LastMessageId = g.Metrics.LastMessageId.ToString(CultureInfo.InvariantCulture),
-                UnreadCount = g.Metrics.UnreadCount,
-                IsIndividual = g.Chat!.IsIndividual,
-                AccountIds = g.AccountIds
-            })
-            .ToList();
+                Id = chat.Id.ToString(CultureInfo.InvariantCulture),
+                ChatName = chat.IsIndividual && otherAccount != null ? $"{otherAccount.FirstName} {otherAccount.LastName}" : chat.Name,
+                PhotoUrl = chat.IsIndividual ? otherAccount?.PhotoUrl : null,
+                AccountTypeId = chat.IsIndividual ? otherAccount?.AccountTypeId : null,
+                ImageId = chat.IsIndividual ? otherAccount?.ImageId : chat.ImageId,
+                LastMessageDate = metrics?.LastMessageDate,
+                LastMessageId = metrics?.LastMessageId.ToString(CultureInfo.InvariantCulture),
+                UnreadCount = metrics?.UnreadCount ?? 0,
+                IsIndividual = chat.IsIndividual,
+                AccountIds = chat.ChatMembers!
+                    .Where(cm => cm.AccountId != accountId)
+                    .Select(cm => cm.AccountId.ToString(CultureInfo.InvariantCulture))
+                    .ToArray()
+            };
+        }).ToList();
     }
 
     public Task<bool> IsChatIdValidAsync(int id, CancellationToken cancellationToken = default)

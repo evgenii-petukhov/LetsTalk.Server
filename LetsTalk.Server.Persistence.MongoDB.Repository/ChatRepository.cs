@@ -130,7 +130,8 @@ public class ChatRepository : IChatRepository
                 IsIndividual = g.Chat.IsIndividual,
                 AccountIds = g.Chat.AccountIds!
                     .Where(x => !string.Equals(x, accountId, StringComparison.Ordinal))
-                    .ToArray()
+                    .ToArray(),
+                FileStorageTypeId = g.Chat.IsIndividual ? g.Account!.Image?.FileStorageTypeId : null
             })
             .ToList();
     }

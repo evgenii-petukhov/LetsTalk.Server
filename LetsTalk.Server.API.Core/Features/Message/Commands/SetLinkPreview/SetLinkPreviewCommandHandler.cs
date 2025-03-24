@@ -4,7 +4,7 @@ using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using MediatR;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;

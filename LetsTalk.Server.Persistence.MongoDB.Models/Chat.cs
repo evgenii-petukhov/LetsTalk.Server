@@ -9,8 +9,7 @@ public class Chat
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string? ImageId { get; set; }
+    public Image? Image { get; set; }
 
     public bool IsIndividual { get; set; }
 

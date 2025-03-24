@@ -26,6 +26,7 @@ public class UpdateProfileCommandHandler(
         var account = await _accountAgnosticService.GetByIdAsync(request.AccountId!, cancellationToken);
 
         var previousImageId = account.ImageId;
+        var previousFileStorageTypeId = account.FileStorageTypeId;
         var deletePreviousImage = previousImageId != null && request.Image != null;
 
         account = request.Image == null
@@ -42,6 +43,7 @@ public class UpdateProfileCommandHandler(
                 request.Image.Width,
                 request.Image.Height,
                 (ImageFormats)request.Image.ImageFormat,
+                (FileStorageTypes)request.Image.FileStorageTypeId,
                 cancellationToken);
 
         await _profileCacheManager.ClearAsync(request.AccountId!);
@@ -51,7 +53,8 @@ public class UpdateProfileCommandHandler(
             await _producer.PublishAsync(
                 new RemoveImageRequest
                 {
-                    ImageId = previousImageId
+                    ImageId = previousImageId,
+                    FileStorageType = (FileStorageTypes)previousFileStorageTypeId
                 }, cancellationToken);
         }
 

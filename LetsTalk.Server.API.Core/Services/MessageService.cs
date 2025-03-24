@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 namespace LetsTalk.Server.API.Core.Services;
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -50,9 +50,10 @@ public class AccountEntityFrameworkService(
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
-        var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
+        var image = _entityFactory.CreateImage(imageId, imageFormat, width, height, fileStorageType);
         var account = await _accountRepository.GetByIdAsTrackingAsync(int.Parse(accountId, CultureInfo.InvariantCulture), cancellationToken);
 
         if (account.Image != null && !string.IsNullOrEmpty(imageId))

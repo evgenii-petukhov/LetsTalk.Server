@@ -11,6 +11,17 @@ public class GenerateLoginCodeRequestValidatorTests
     private const string ValidEmailSample = "email@example.com";
 
     private GenerateLoginCodeRequestValidator _validator;
+    private static readonly string[] expectation =
+        [
+            "Email cannot be empty",
+            "Email must be a valid email",
+            "Anti Spam Token cannot be empty",
+            "Anti-spam check failed"
+        ];
+    private static readonly string[] expectationArray =
+        [
+            "Anti-spam check failed"
+        ];
 
     [SetUp]
     public void SetUp()
@@ -34,13 +45,13 @@ public class GenerateLoginCodeRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Email is required",
             "Email cannot be empty",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
-        });
+        ]);
     }
 
     [Test]
@@ -61,13 +72,7 @@ public class GenerateLoginCodeRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "Email cannot be empty",
-            "Email must be a valid email",
-            "Anti Spam Token cannot be empty",
-            "Anti-spam check failed"
-        });
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(expectation);
     }
 
     [Test]
@@ -91,12 +96,12 @@ public class GenerateLoginCodeRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Email must be a valid email",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
-        });
+        ]);
     }
 
     [Test]
@@ -118,10 +123,7 @@ public class GenerateLoginCodeRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
-            "Anti-spam check failed"
-        });
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(expectationArray);
     }
 
     [Test]

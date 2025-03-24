@@ -16,5 +16,7 @@ public class SetImagePreviewRequest : ISignable
 
     public int Height { get; set; }
 
+    public int FileStorageTypeId { get; set; }
+
     public string? Signature { get; set; }
 }

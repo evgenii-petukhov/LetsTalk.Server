@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 public class MessageServiceModel
 {
@@ -14,7 +14,7 @@ public class MessageServiceModel
 
     public long? DateCreatedUnix { get; set; }
 
-    public string? ImageId { get; set; }
+    public ImageServiceModel? Image { get; set; }
 
     public ImagePreviewServiceModel? ImagePreview { get; set; }
 

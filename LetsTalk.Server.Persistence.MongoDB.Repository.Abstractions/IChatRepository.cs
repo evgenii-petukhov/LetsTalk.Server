@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 namespace LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 

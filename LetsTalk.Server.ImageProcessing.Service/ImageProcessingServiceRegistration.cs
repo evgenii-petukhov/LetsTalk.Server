@@ -2,12 +2,15 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorage.Utility;
+using LetsTalk.Server.FileStorage.AgnosticServices;
 using LetsTalk.Server.ImageProcessing.Utility;
 using LetsTalk.Server.SignPackage;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
 using System.Net.Mime;
+using LetsTalk.Server.ImageProcessing.Service.Services;
+using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
+using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
 
 namespace LetsTalk.Server.ImageProcessing.Service;
 
@@ -17,8 +20,8 @@ public static class ImageProcessingServiceRegistration
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddFileStorageUtilityServices();
-        services.AddImageProcessingUtilityServices();
+        services.AddFileStorageAgnosticServices(configuration);
+        services.AddImageResizeEngineServices();
         services.AddMassTransit(x =>
         {
             if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
@@ -78,6 +81,16 @@ public static class ImageProcessingServiceRegistration
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 #endif
         });
+
+        switch (configuration.GetValue<string>("Features:FileStorage"))
+        {
+            case "aws":
+                services.AddScoped<IImageProcessingService, LambdaImageProcessingService>();
+                break;
+            default:
+                services.AddScoped<IImageProcessingService, ImageProcessingService>();
+                break;
+        }
 
         return services;
     }

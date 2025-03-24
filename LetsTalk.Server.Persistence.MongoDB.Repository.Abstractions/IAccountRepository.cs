@@ -46,6 +46,7 @@ public interface IAccountRepository
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default);
 
     Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default);

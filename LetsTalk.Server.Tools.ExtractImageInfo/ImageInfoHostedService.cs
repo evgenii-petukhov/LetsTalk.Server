@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
-using LetsTalk.Server.ImageProcessing.Abstractions;
+using LetsTalk.Server.FileStorage.Abstractions;
+using LetsTalk.Server.ImageProcessing.ImageResizeEngine.Abstractions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -9,13 +9,13 @@ namespace LetsTalk.Server.Tools.ExtractImageInfo;
 public class ImageInfoHostedService(
     IImageInfoService imageInfoService,
     TextWriter outputWriter,
-    IFileService fileService,
+    IFileServiceResolver fileServiceResolver,
     IOptions<FileStorageSettings> options) : IHostedService
 {
     private readonly FileStorageSettings _fileStorageSettings = options.Value;
     private readonly IImageInfoService _imageInfoService = imageInfoService;
     private readonly TextWriter _outputWriter = outputWriter;
-    private readonly IFileService _fileService = fileService;
+    private readonly IFileService _fileService = fileServiceResolver.Resolve();
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {

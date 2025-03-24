@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 public class ProfileServiceModel
 {
@@ -17,4 +17,6 @@ public class ProfileServiceModel
     public string? Email { get; set; }
 
     public string? ImageId { get; set; }
+
+    public int FileStorageTypeId { get; set; }
 }

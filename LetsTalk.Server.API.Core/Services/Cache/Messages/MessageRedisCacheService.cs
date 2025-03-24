@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using LetsTalk.Server.Persistence.Redis;
 using System.Globalization;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -52,9 +52,10 @@ public class MessageEntityFrameworkService(
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken)
     {
-        var image = _entityFactory.CreateImage(imageId, imageFormat, width, height);
+        var image = _entityFactory.CreateImage(imageId, imageFormat, width, height, fileStorageType);
 
         var message = new Message(
             int.Parse(senderId, CultureInfo.InvariantCulture),
@@ -127,9 +128,10 @@ public class MessageEntityFrameworkService(
         ImageFormats imageFormat,
         int width,
         int height,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default)
     {
-        var image = _entityFactory.CreateImage(filename, imageFormat, width, height);
+        var image = _entityFactory.CreateImage(filename, imageFormat, width, height, fileStorageType);
         var message = await _messageRepository.GetByIdAsTrackingAsync(
             int.Parse(messageId, CultureInfo.InvariantCulture),
             cancellationToken);

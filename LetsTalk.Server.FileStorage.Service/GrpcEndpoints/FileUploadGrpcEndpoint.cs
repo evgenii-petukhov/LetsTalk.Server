@@ -1,24 +1,27 @@
 ﻿using Grpc.Core;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Protos;
 using static LetsTalk.Server.FileStorage.Service.Protos.FileUploadGrpcEndpoint;
 using ImageRoles = LetsTalk.Server.Persistence.Enums.ImageRoles;
 using AutoMapper;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.FileStorage.Abstractions;
+using LetsTalk.Server.Configuration.Abstractions;
 
 namespace LetsTalk.Server.FileStorage.Service.GrpcEndpoints;
 
 public class FileUploadGrpcEndpoint(
     IImageValidationService imageValidationService,
     IMapper mapper,
-    IFileService fileService,
-    IImageService imageService) : FileUploadGrpcEndpointBase
+    IFileServiceResolver fileServiceResolver,
+    IImageStorageService imageStorageService,
+    IFeaturesSettingsService featuresSettingsService) : FileUploadGrpcEndpointBase
 {
     private readonly IImageValidationService _imageValidationService = imageValidationService;
     private readonly IMapper _mapper = mapper;
-    private readonly IFileService _fileService = fileService;
-    private readonly IImageService _imageService = imageService;
+    private readonly IFileService _fileService = fileServiceResolver.Resolve();
+    private readonly IImageStorageService _imageStorageService = imageStorageService;
+    private readonly IFeaturesSettingsService _featuresSettingsService = featuresSettingsService;
 
     public override async Task<UploadImageResponse> UploadImageAsync(UploadImageRequest request, ServerCallContext context)
     {
@@ -34,13 +37,14 @@ public class FileUploadGrpcEndpoint(
             Id = filename,
             Width = width,
             Height = height,
-            ImageFormat = (int)imageFormat
+            ImageFormat = (int)imageFormat,
+            FileStorageTypeId = (int)_featuresSettingsService.GetFileStorageType()
         };
     }
 
     public override async Task<DownloadImageResponse> DownloadImageAsync(DownloadImageRequest request, ServerCallContext context)
     {
-        var model = await _imageService.FetchImageAsync(request.ImageId, context.CancellationToken);
+        var model = await _imageStorageService.GetImageAsync(request.ImageId, (FileStorageTypes)request.FileStorageTypeId, context.CancellationToken);
 
         return _mapper.Map<DownloadImageResponse>(model);
     }

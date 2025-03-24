@@ -13,4 +13,6 @@ public class AccountDto
     public string? LastName { get; set; }
 
     public string? ImageId { get; set; }
+
+    public int FileStorageTypeId { get; set; }
 }

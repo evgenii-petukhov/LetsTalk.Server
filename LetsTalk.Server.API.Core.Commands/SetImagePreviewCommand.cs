@@ -16,4 +16,6 @@ public class SetImagePreviewCommand : IRequest<Unit>
     public int Width { get; set; }
 
     public int Height { get; set; }
+
+    public FileStorageTypes FileStorageTypeId { get; set; }
 }

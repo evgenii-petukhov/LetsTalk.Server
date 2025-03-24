@@ -66,6 +66,7 @@ public class CreateMessageCommandHandler(
                 request.Image.Width,
                 request.Image.Height,
                 (ImageFormats)request.Image.ImageFormat,
+                (FileStorageTypes)request.Image.FileStorageTypeId,
                 cancellationToken);
 
         await _messageCacheManager.ClearAsync(request.ChatId!);
@@ -99,7 +100,8 @@ public class CreateMessageCommandHandler(
                     AccountIds = accountIds,
                     MessageId = messageDto.Id,
                     ImageId = request.Image.Id,
-                    ChatId = request.ChatId
+                    ChatId = request.ChatId,
+                    FileStorageTypeId = request.Image.FileStorageTypeId
                 }, cancellationToken));
 
         return new CreateMessageResponse

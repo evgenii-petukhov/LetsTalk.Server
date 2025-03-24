@@ -5,10 +5,9 @@ using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.FileStorage.Service.GrpcInterceptors;
 using LetsTalk.Server.FileStorage.Service.Services;
 using LetsTalk.Server.Logging;
-using LetsTalk.Server.FileStorage.Utility;
-using LetsTalk.Server.ImageProcessing.Utility;
+using LetsTalk.Server.FileStorage.AgnosticServices;
+using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using System.Reflection;
-using LetsTalk.Server.FileStorage.Utility.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Services.Cache;
 using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.SignPackage;
@@ -37,11 +36,11 @@ public static class FileStorageServiceRegistration
         });
         services.AddGrpc(options => options.Interceptors.Add<JwtInterceptor>());
         services.AddGrpcReflection();
+        services.AddScoped<IImageStorageService, ImageStorageService>();
         services.AddScoped<IImageValidationService, ImageValidationService>();
-        services.AddScoped<IIOService, IOService>();
         services.AddAuthenticationClientServices(configuration);
         services.AddLoggingServices();
-        services.AddImageProcessingUtilityServices();
+        services.AddImageResizeEngineServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMassTransit(x =>
@@ -96,20 +95,20 @@ public static class FileStorageServiceRegistration
         });
 
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
-        services.AddFileStorageUtilityServices();
+        services.AddFileStorageAgnosticServices(configuration);
         services.AddSignPackageServices(configuration);
 
         switch (configuration.GetValue<string>("Features:CachingMode"))
         {
             case "redis":
                 services.AddRedisCache();
-                services.AddScoped<IImageCacheManager, ImageRedisCacheService>();
-                services.DecorateScoped<IImageService, ImageRedisCacheService>();
+                services.AddScoped<IImageStorageCacheManager, ImageStorageRedisCacheService>();
+                services.DecorateScoped<IImageStorageService, ImageStorageRedisCacheService>();
                 break;
             default:
                 services.AddMemoryCache();
-                services.AddScoped<IImageCacheManager, ImageMemoryCacheService>();
-                services.DecorateScoped<IImageService, ImageMemoryCacheService>();
+                services.AddScoped<IImageStorageCacheManager, ImageStorageMemoryCacheService>();
+                services.DecorateScoped<IImageStorageService, ImageStorageMemoryCacheService>();
                 break;
         }
 

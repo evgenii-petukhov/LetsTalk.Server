@@ -28,6 +28,7 @@ public interface IMessageRepository
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default);
 
     Task<Message> GetByIdAsync(string id, CancellationToken cancellationToken = default);
@@ -42,6 +43,7 @@ public interface IMessageRepository
         ImageFormats imageFormat,
         int width,
         int height,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default);
 
     Task<Message> SetLinkPreviewAsync(

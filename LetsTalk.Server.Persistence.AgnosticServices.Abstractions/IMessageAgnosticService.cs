@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
@@ -22,6 +22,7 @@ public interface IMessageAgnosticService
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken);
 
     Task<List<MessageServiceModel>> GetPagedAsync(
@@ -51,5 +52,6 @@ public interface IMessageAgnosticService
         ImageFormats imageFormat,
         int width,
         int height,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default);
 }

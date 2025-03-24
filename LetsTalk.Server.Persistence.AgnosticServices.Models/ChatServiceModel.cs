@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 public class ChatServiceModel
 {
@@ -17,6 +17,8 @@ public class ChatServiceModel
     public string? LastMessageId { get; set; }
 
     public string? ImageId { get; set; }
+
+    public int? FileStorageTypeId { get; set; }
 
     public bool IsIndividual { get; set; }
 

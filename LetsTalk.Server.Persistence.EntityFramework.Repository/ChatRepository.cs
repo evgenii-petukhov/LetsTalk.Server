@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Domain;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +14,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
         var chats = await Context.ChatMembers
             .Include(cm => cm.Chat)
             .Include(cm => cm.Account)
+                .ThenInclude(a => a!.Image)
             .Where(cm => cm.AccountId != accountId && Context.ChatMembers.Where(x => x.AccountId == accountId).Select(x => x.ChatId).Contains(cm.ChatId))
             .GroupBy(x => x.Chat)
             .Select(g => new
@@ -118,7 +119,8 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 LastMessageId = g.Metrics.LastMessageId.ToString(CultureInfo.InvariantCulture),
                 UnreadCount = g.Metrics.UnreadCount,
                 IsIndividual = g.Chat!.IsIndividual,
-                AccountIds = g.AccountIds
+                AccountIds = g.AccountIds,
+                FileStorageTypeId = g.Chat.IsIndividual ? g.Account!.Image?.FileStorageTypeId : null
             })
             .ToList();
     }

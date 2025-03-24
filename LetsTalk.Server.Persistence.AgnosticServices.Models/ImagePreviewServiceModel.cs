@@ -1,8 +1,10 @@
-﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿namespace LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 public class ImagePreviewServiceModel
 {
     public string? Id { get; set; }
+
+    public int FileStorageTypeId { get; set; }
 
     public int? Width { get; set; }
 

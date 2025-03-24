@@ -34,14 +34,14 @@ public class EmailLoginRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Email is required",
             "Email cannot be empty",
             "Code should contain 4 digits",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
-        });
+        ]);
     }
 
     [Test]
@@ -62,14 +62,14 @@ public class EmailLoginRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Email cannot be empty",
             "Email must be a valid email",
             "Code should contain 4 digits",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
-        });
+        ]);
     }
 
     [Test]
@@ -93,13 +93,13 @@ public class EmailLoginRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Email must be a valid email",
             "Code should contain 4 digits",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
-        });
+        ]);
     }
 
     [Test]
@@ -124,12 +124,12 @@ public class EmailLoginRequestValidatorTests
         // Assert
         validationResult.Should().NotBeNull();
         validationResult.IsValid.Should().BeFalse();
-        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(new string[]
-        {
+        validationResult.Errors.Select(error => error.ErrorMessage).Should().BeEquivalentTo(
+        [
             "Code should contain 4 digits",
             "Anti Spam Token cannot be empty",
             "Anti-spam check failed"
-        });
+        ]);
     }
 
     [Test]

@@ -19,15 +19,20 @@ public class Image
 
     public int? Height { get; protected set; }
 
+    public FileStorageType? FileStorageType { get; protected set; }
+
+    public int FileStorageTypeId { get; protected set; }
+
     protected Image()
     {
     }
 
-    public Image(string id, int imageFormatId, int width, int height)
+    public Image(string id, int imageFormatId, int width, int height, int fileStorageTypeId)
     {
         Id = id;
         ImageFormatId = imageFormatId;
         Width = width;
         Height = height;
+        FileStorageTypeId = fileStorageTypeId;
     }
 }

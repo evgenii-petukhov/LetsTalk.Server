@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
+﻿using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
@@ -36,6 +36,7 @@ public interface IAccountAgnosticService
         int width,
         int height,
         ImageFormats imageFormat,
+        FileStorageTypes fileStorageType,
         CancellationToken cancellationToken = default);
 
     Task<bool> IsAccountIdValidAsync(string id, CancellationToken cancellationToken = default);

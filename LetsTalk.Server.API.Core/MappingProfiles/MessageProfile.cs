@@ -2,8 +2,9 @@
 using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Persistence.AgnosticServices.Abstractions.Models;
 using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.Persistence.AgnosticServices.Models;
+using LetsTalk.Server.Persistence.Enums;
 
 namespace LetsTalk.Server.API.Core.MappingProfiles;
 
@@ -25,6 +26,7 @@ public class MessageProfile : Profile
             .ForMember(x => x.Url, x => x.MapFrom(m => m.LinkPreview!.Url));
         CreateMap<MessageServiceModel, ImagePreviewDto>()
             .ForMember(x => x.MessageId, x => x.MapFrom(m => m.Id))
-            .ForMember(x => x.Id, x => x.MapFrom(m => m.ImagePreview!.Id));
+            .ForMember(x => x.Id, x => x.MapFrom(m => m.ImagePreview!.Id))
+            .ForMember(x => x.FileStorageTypeId, x => x.MapFrom(m => m.ImagePreview == null ? (int)FileStorageTypes.Local : m.ImagePreview.FileStorageTypeId));
     }
 }

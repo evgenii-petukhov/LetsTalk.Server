@@ -14,7 +14,7 @@ public class ChatService(
 
     public async Task<IReadOnlyList<ChatDto>> GetChatsAsync(string accountId, CancellationToken cancellationToken)
     {
-        var messages = await _chatAgnosticService.GetChatsAsync(accountId, cancellationToken);
-        return _mapper.Map<List<ChatDto>>(messages);
+        var chats = await _chatAgnosticService.GetChatsAsync(accountId, cancellationToken);
+        return _mapper.Map<List<ChatDto>>(chats);
     }
 }

@@ -97,8 +97,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview.Utility.Abstractions", "LetsTalk.Server.LinkPreview.Utility.Abstractions\LetsTalk.Server.LinkPreview.Utility.Abstractions.csproj", "{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.LinkPreview.Lambda", "LetsTalk.Server.LinkPreview.Lambda\src\LetsTalk.Server.LinkPreview.Lambda\LetsTalk.Server.LinkPreview.Lambda.csproj", "{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Infrastructure.ApiClient", "LetsTalk.Server.Infrastructure.ApiClient\LetsTalk.Server.Infrastructure.ApiClient.csproj", "{B9D70529-799E-49D3-A313-D08C02CB510C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsTalk.Server.Persistence.Redis", "LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj", "{1C16D372-94D2-4E36-9543-6575EF386637}"
@@ -125,8 +123,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.FileStorage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.FileStorage.Amazon.Services", "LetsTalk.Server.FileStorage.Amazon.Services\LetsTalk.Server.FileStorage.Amazon.Services.csproj", "{6A1E553C-D08A-4DC3-AD96-517C6A830412}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessing.Lambda", "LetsTalk.Server.ImageProcessing.Lambda\src\LetsTalk.Server.ImageProcessing.Lambda\LetsTalk.Server.ImageProcessing.Lambda.csproj", "{006E0152-9F23-4E35-9FF4-F84808EF68C2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessing.ImageResizeEngine", "LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj", "{660580E7-7355-49F3-BD76-31C15285660F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageProcessing", "ImageProcessing", "{6F27881E-B40E-4A9D-AFDB-032162D865D5}"
@@ -144,6 +140,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Configuration.Abstractions", "LetsTalk.Server.Configuration.Abstractions\LetsTalk.Server.Configuration.Abstractions.csproj", "{4079322D-B510-4E4F-92EE-9C4D867BEE24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.FileStorage.Abstractions", "LetsTalk.Server.FileStorage.Abstractions\LetsTalk.Server.FileStorage.Abstractions.csproj", "{A71FC810-F621-470F-8BC4-28E31DD10C62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProcessing.Lambda", "LetsTalk.Server.ImageProcessing.Lambda\LetsTalk.Server.ImageProcessing.Lambda.csproj", "{06356FFF-0E54-4F02-9CF9-FC1DAF6D8AA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview.Lambda", "LetsTalk.Server.LinkPreview.Lambda\LetsTalk.Server.LinkPreview.Lambda.csproj", "{585140F8-4DCA-47A3-A176-855CAD263F93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -303,10 +303,6 @@ Global
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9D70529-799E-49D3-A313-D08C02CB510C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9D70529-799E-49D3-A313-D08C02CB510C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9D70529-799E-49D3-A313-D08C02CB510C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -359,10 +355,6 @@ Global
 		{6A1E553C-D08A-4DC3-AD96-517C6A830412}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A1E553C-D08A-4DC3-AD96-517C6A830412}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A1E553C-D08A-4DC3-AD96-517C6A830412}.Release|Any CPU.Build.0 = Release|Any CPU
-		{006E0152-9F23-4E35-9FF4-F84808EF68C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{006E0152-9F23-4E35-9FF4-F84808EF68C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{006E0152-9F23-4E35-9FF4-F84808EF68C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{006E0152-9F23-4E35-9FF4-F84808EF68C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{660580E7-7355-49F3-BD76-31C15285660F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{660580E7-7355-49F3-BD76-31C15285660F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{660580E7-7355-49F3-BD76-31C15285660F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -387,6 +379,14 @@ Global
 		{A71FC810-F621-470F-8BC4-28E31DD10C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A71FC810-F621-470F-8BC4-28E31DD10C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A71FC810-F621-470F-8BC4-28E31DD10C62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06356FFF-0E54-4F02-9CF9-FC1DAF6D8AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06356FFF-0E54-4F02-9CF9-FC1DAF6D8AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06356FFF-0E54-4F02-9CF9-FC1DAF6D8AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06356FFF-0E54-4F02-9CF9-FC1DAF6D8AA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{585140F8-4DCA-47A3-A176-855CAD263F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{585140F8-4DCA-47A3-A176-855CAD263F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{585140F8-4DCA-47A3-A176-855CAD263F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{585140F8-4DCA-47A3-A176-855CAD263F93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -437,7 +437,6 @@ Global
 		{75B54039-D9E0-482D-93C2-6B12A6202920} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 		{1F11AB33-1B2F-4505-93BB-14FCEF745877} = {7BE105C3-AC06-4F62-B258-B76667C957EB}
 		{68C9DA54-D3AF-4DD8-A593-3DC6BD4711D9} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
-		{D47C5C2F-CD40-499D-A8ED-FDA4D9E47CA2} = {7BE105C3-AC06-4F62-B258-B76667C957EB}
 		{B9D70529-799E-49D3-A313-D08C02CB510C} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{1C16D372-94D2-4E36-9543-6575EF386637} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{A734412A-AA48-48D0-BBE5-7B55AA7AD436} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
@@ -451,7 +450,6 @@ Global
 		{A35E24AD-E104-4BEE-A5B1-3AAAA75526E1} = {D83E9825-17AC-4AE9-83D9-CBE9DDCC59F6}
 		{E8DA4936-DE7D-4A3F-B475-F8521B260F03} = {D83E9825-17AC-4AE9-83D9-CBE9DDCC59F6}
 		{6A1E553C-D08A-4DC3-AD96-517C6A830412} = {D83E9825-17AC-4AE9-83D9-CBE9DDCC59F6}
-		{006E0152-9F23-4E35-9FF4-F84808EF68C2} = {6F27881E-B40E-4A9D-AFDB-032162D865D5}
 		{660580E7-7355-49F3-BD76-31C15285660F} = {6F27881E-B40E-4A9D-AFDB-032162D865D5}
 		{6F27881E-B40E-4A9D-AFDB-032162D865D5} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{D83E9825-17AC-4AE9-83D9-CBE9DDCC59F6} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
@@ -461,6 +459,8 @@ Global
 		{7BE105C3-AC06-4F62-B258-B76667C957EB} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{4079322D-B510-4E4F-92EE-9C4D867BEE24} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{A71FC810-F621-470F-8BC4-28E31DD10C62} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
+		{06356FFF-0E54-4F02-9CF9-FC1DAF6D8AA6} = {6F27881E-B40E-4A9D-AFDB-032162D865D5}
+		{585140F8-4DCA-47A3-A176-855CAD263F93} = {7BE105C3-AC06-4F62-B258-B76667C957EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

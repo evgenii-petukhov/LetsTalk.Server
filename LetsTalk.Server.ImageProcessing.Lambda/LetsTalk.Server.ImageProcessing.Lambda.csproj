@@ -17,8 +17,8 @@
     <PackageReference Include="AWSSDK.S3" Version="3.7.415.16" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LetsTalk.Server.FileStorage.Amazon.Services\LetsTalk.Server.FileStorage.Amazon.Services.csproj" />
-    <ProjectReference Include="..\..\..\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
-    <ProjectReference Include="..\..\..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.FileStorage.Amazon.Services\LetsTalk.Server.FileStorage.Amazon.Services.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
   </ItemGroup>
 </Project>

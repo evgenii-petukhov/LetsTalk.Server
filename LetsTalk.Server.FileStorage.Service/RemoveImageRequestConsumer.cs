@@ -13,12 +13,11 @@ public class RemoveImageRequestConsumer(
     private readonly IImageStorageCacheManager _imageStorageCacheManager = imageStorageCacheManager;
     private readonly IFileServiceResolver _fileServiceResolver = fileServiceResolver;
 
-    public Task Consume(ConsumeContext<RemoveImageRequest> context)
+    public async Task Consume(ConsumeContext<RemoveImageRequest> context)
     {
         var fileService = _fileServiceResolver.Resolve(context.Message.FileStorageType);
-        fileService.DeleteFile(context.Message.ImageId!, FileTypes.Image);
-        fileService.DeleteFile(context.Message.ImageId! + ".info", FileTypes.Image);
-
-        return _imageStorageCacheManager.ClearAsync(context.Message.ImageId!);
+        await fileService.DeleteFileAsync(context.Message.ImageId!, FileTypes.Image);
+        await fileService.DeleteFileAsync(context.Message.ImageId! + ".info", FileTypes.Image);
+        await _imageStorageCacheManager.ClearAsync(context.Message.ImageId!);
     }
 }

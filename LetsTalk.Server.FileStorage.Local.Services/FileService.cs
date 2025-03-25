@@ -61,13 +61,16 @@ public class FileService(
     {
         var filepath = _fileStoragePathProvider.GetFilePath(filename, FileTypes.Image);
         var imageInfoString = await File.ReadAllTextAsync(filepath, cancellationToken);
+
         return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
     }
 
-    public void DeleteFile(string filename, FileTypes fileType)
+    public Task DeleteFileAsync(string filename, FileTypes fileType)
     {
         var path = _fileStoragePathProvider.GetFilePath(filename, fileType);
         File.Delete(path);
+
+        return Task.CompletedTask;
     }
 
     private static async Task<string> SaveDataWithRetryAsync(

@@ -105,6 +105,19 @@ public class AmazonFileService : IFileService
         return JsonSerializer.Deserialize<ImageInfoModel>(imageInfoString, JsonSerializerOptions)!;
     }
 
+    public Task DeleteFileAsync(string filename, FileTypes fileType)
+    {
+        var request = new DeleteObjectRequest
+        {
+            BucketName = _bucketName,
+            Key = filename
+        };
+
+        using var client = GetS3Client();
+
+        return client.DeleteObjectAsync(request);
+    }
+
     private AmazonS3Client GetS3Client()
     {
         if (string.IsNullOrWhiteSpace(_accessKey))
@@ -118,10 +131,5 @@ public class AmazonFileService : IFileService
             RegionEndpoint = RegionEndpoint.GetBySystemName(_region)
         };
         return new AmazonS3Client(awsCredentials, s3Config);
-    }
-
-    public void DeleteFile(string filename, FileTypes fileType)
-    {
-        throw new NotImplementedException();
     }
 }

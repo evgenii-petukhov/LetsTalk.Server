@@ -16,6 +16,6 @@
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LetsTalk.Server.LinkPreview.Utility\LetsTalk.Server.LinkPreview.Utility.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.LinkPreview.Utility\LetsTalk.Server.LinkPreview.Utility.csproj" />
   </ItemGroup>
 </Project>

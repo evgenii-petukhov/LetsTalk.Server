@@ -11,25 +11,8 @@ public interface IAccountRepository
         CancellationToken cancellationToken = default);
 
     Task<Account> CreateAccountAsync(
-        string externalId,
-        AccountTypes accountType,
-        string firstName,
-        string lastName,
-        string photoUrl,
-        CancellationToken cancellationToken);
-
-    Task<Account> CreateAccountAsync(
         AccountTypes accountType,
         string email,
-        CancellationToken cancellationToken);
-
-    Task UpdateProfileAsync(
-        string externalId,
-        AccountTypes accountType,
-        string firstName,
-        string lastName,
-        string photoUrl,
-        bool updateAvatar,
         CancellationToken cancellationToken);
 
     Task<Account> UpdateProfileAsync(

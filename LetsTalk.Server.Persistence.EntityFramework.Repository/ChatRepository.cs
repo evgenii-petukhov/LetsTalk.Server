@@ -15,6 +15,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             .Where(cm => cm.AccountId == accountId)
             .Include(cm => cm.Chat!.ChatMembers!)
                 .ThenInclude(cm => cm.Account)
+                .ThenInclude(a => a!.Image)
             .Include(cm => cm.Chat!.Messages)
             .Select(cm => cm.Chat)
             .ToListAsync(cancellationToken);
@@ -67,7 +68,8 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 AccountIds = chat.ChatMembers!
                     .Where(cm => cm.AccountId != accountId)
                     .Select(cm => cm.AccountId.ToString(CultureInfo.InvariantCulture))
-                    .ToArray()
+                    .ToArray(),
+                FileStorageTypeId = chat.IsIndividual ? otherAccount?.Image?.FileStorageTypeId : null
             };
         }).ToList();
     }

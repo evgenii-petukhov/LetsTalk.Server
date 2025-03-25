@@ -14,11 +14,6 @@ public class EntityFactory(LetsTalkDbContext context) : IEntityFactory
         return new Image(id, (int)imageFormat, width, height, (int)fileStorageType);
     }
 
-    public Account CreateAccount(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl)
-    {
-        return new Account(externalId, accountTypeId, firstName, lastName, photoUrl);
-    }
-
     public Account CreateAccount(int accountTypeId, string email)
     {
         return new Account(accountTypeId, email);

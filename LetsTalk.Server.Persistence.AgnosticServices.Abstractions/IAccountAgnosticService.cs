@@ -9,14 +9,6 @@ public interface IAccountAgnosticService
 
     Task<List<AccountServiceModel>> GetAccountsAsync(CancellationToken cancellationToken = default);
 
-    Task<string> CreateOrUpdateAsync(
-        string externalId,
-        AccountTypes accountType,
-        string firstName,
-        string lastName,
-        string photoUrl,
-        CancellationToken cancellationToken = default);
-
     Task<string> GetOrCreateAsync(
         AccountTypes accountType,
         string email,

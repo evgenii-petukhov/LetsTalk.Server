@@ -32,52 +32,6 @@ public class AccountRepository : IAccountRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<Account> CreateAccountAsync(
-        string externalId,
-        AccountTypes accountType,
-        string firstName,
-        string lastName,
-        string photoUrl,
-        CancellationToken cancellationToken)
-    {
-        var account = new Account
-        {
-            AccountTypeId = (int)accountType,
-            ExternalId = externalId,
-            FirstName = firstName,
-            LastName = lastName,
-            PhotoUrl = photoUrl
-        };
-
-        await _accountCollection.InsertOneAsync(account, cancellationToken: cancellationToken);
-
-        return account;
-    }
-
-    public Task UpdateProfileAsync(
-        string externalId,
-        AccountTypes accountType,
-        string firstName,
-        string lastName,
-        string photoUrl,
-        bool updateAvatar,
-        CancellationToken cancellationToken)
-    {
-        var filter = Builders<Account>.Filter
-            .Where(x => x.ExternalId == externalId && x.AccountTypeId == (int)accountType);
-
-        var updateDefinition = Builders<Account>.Update
-            .Set(x => x.FirstName, firstName)
-            .Set(x => x.LastName, lastName);
-
-        updateDefinition = updateAvatar
-            ? updateDefinition
-            : updateDefinition.Set(x => x.PhotoUrl, photoUrl);
-
-        return _accountCollection
-            .UpdateOneAsync(filter, updateDefinition, cancellationToken: cancellationToken);
-    }
-
     public Task<Account> UpdateProfileAsync(
         string id,
         string firstName,

@@ -145,6 +145,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.ImageProces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview.Lambda", "LetsTalk.Server.LinkPreview.Lambda\LetsTalk.Server.LinkPreview.Lambda.csproj", "{585140F8-4DCA-47A3-A176-855CAD263F93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.EntityFramework.Repository.Tests", "LetsTalk.Server.Persistence.EntityFramework.Repository.Tests\LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.csproj", "{39D37347-B50C-4CBC-8585-43D6D3E2C44B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -387,6 +389,10 @@ Global
 		{585140F8-4DCA-47A3-A176-855CAD263F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{585140F8-4DCA-47A3-A176-855CAD263F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{585140F8-4DCA-47A3-A176-855CAD263F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D37347-B50C-4CBC-8585-43D6D3E2C44B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D37347-B50C-4CBC-8585-43D6D3E2C44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D37347-B50C-4CBC-8585-43D6D3E2C44B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D37347-B50C-4CBC-8585-43D6D3E2C44B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -461,6 +467,7 @@ Global
 		{A71FC810-F621-470F-8BC4-28E31DD10C62} = {E84BF77F-9A2C-4620-AAF0-B1E2D9E3BA88}
 		{06356FFF-0E54-4F02-9CF9-FC1DAF6D8AA6} = {6F27881E-B40E-4A9D-AFDB-032162D865D5}
 		{585140F8-4DCA-47A3-A176-855CAD263F93} = {7BE105C3-AC06-4F62-B258-B76667C957EB}
+		{39D37347-B50C-4CBC-8585-43D6D3E2C44B} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

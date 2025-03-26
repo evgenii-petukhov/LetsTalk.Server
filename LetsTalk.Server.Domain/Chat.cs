@@ -15,8 +15,6 @@ public class Chat : BaseEntity
 
     public ICollection<ChatMember>? ChatMembers { get; protected set; }
 
-    public ICollection<Message>? Messages { get; protected set; }
-
     protected Chat()
     {
     }

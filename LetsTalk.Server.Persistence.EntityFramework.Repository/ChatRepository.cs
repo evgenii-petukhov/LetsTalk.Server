@@ -16,7 +16,6 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             .Include(cm => cm.Chat!.ChatMembers!)
                 .ThenInclude(cm => cm.Account)
                 .ThenInclude(a => a!.Image)
-            .Include(cm => cm.Chat!.Messages)
             .Select(cm => cm.Chat)
             .ToListAsync(cancellationToken);
 

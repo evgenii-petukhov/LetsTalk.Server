@@ -70,7 +70,7 @@ public class ChatRepositoryTests
                 UnreadCount = 0,
                 AccountIds = [BobPettit.Id.ToString()],
                 AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             },
             new() {
                 Id = neilWithRick.Id.ToString(),
@@ -132,7 +132,7 @@ public class ChatRepositoryTests
                 UnreadCount = 0,
                 AccountIds = [BobPettit.Id.ToString()],
                 AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             },
         });
 
@@ -196,7 +196,7 @@ public class ChatRepositoryTests
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [BobPettit.Id.ToString()],
                 AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
         });
 
@@ -313,7 +313,7 @@ public class ChatRepositoryTests
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [BobPettit.Id.ToString()],
                 AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
         });
 
@@ -369,7 +369,7 @@ public class ChatRepositoryTests
         var account = new Account((int)AccountTypes.Email, accountModel.Email!);
         var image = string.IsNullOrEmpty(accountModel.ImageId)
             ? null
-            : new Image(accountModel.ImageId, (int)ImageFormats.Webp, 100, 100, (int)FileStorageTypes.Local);
+            : new Image(accountModel.ImageId, (int)ImageFormats.Webp, 100, 100, (int)accountModel.FileStorageType!);
 
         account.UpdateProfile(accountModel.FirstName!, accountModel.LastName!, image);
 

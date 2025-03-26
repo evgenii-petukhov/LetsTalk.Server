@@ -32,7 +32,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                     Message = m,
                     Statuses = statuses
                 })
-            .SelectMany(x => x.Statuses.DefaultIfEmpty(),
+            .SelectMany(x => x.Statuses.Where(s => s.AccountId == accountId).DefaultIfEmpty(),
                 (x, status) => new
                 {
                     x.ChatId,
@@ -43,9 +43,39 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             .Select(g => new
             {
                 ChatId = g.Key,
-                LastMessageDate = g.Max(x => x.Message.DateCreatedUnix),
-                LastMessageId = g.Max(x => x.Message.Id),
-                UnreadCount = g.Count(x => x.Message.Id > x.ReadMessageId && x.Message.SenderId != accountId)
+                LastMessageDate = g.Max(x => x.Message!.DateCreatedUnix),
+                LastMessageId = g.Max(x => x.Message!.Id),
+                LastReadMessageId = g.Max(x => x.ReadMessageId)
+            })
+            .GroupJoin(Context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
+            {
+                x.ChatId,
+                x.LastMessageId,
+                x.LastReadMessageId,
+                x.LastMessageDate,
+                Messages = y
+            })
+            .SelectMany(x => x.Messages.DefaultIfEmpty(), (x, y) => new
+            {
+                x.ChatId,
+                x.LastMessageId,
+                x.LastReadMessageId,
+                x.LastMessageDate,
+                Message = y
+            })
+            .GroupBy(x => new
+            {
+                x.ChatId,
+                x.LastMessageId,
+                x.LastReadMessageId,
+                x.LastMessageDate,
+            })
+            .Select(g => new
+            {
+                g.Key.ChatId,
+                g.Key.LastMessageId,
+                g.Key.LastMessageDate,
+                UnreadCount = g.Count(x => x.Message!.Id > x.LastReadMessageId && x.Message.SenderId != accountId)
             })
             .ToListAsync(cancellationToken);
 

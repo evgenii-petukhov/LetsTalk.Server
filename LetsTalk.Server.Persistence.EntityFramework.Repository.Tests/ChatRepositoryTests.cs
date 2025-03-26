@@ -153,18 +153,18 @@ public class ChatRepositoryTests
 
         var messages = new[]
         {
-            new Message(NeilJohnston.Id, neilWithBob.Id, "Hi Bob", "<p>Hi Bob</p>"),
-            new Message(BobPettit.Id, neilWithBob.Id, "Hi Neil", "<p>Hi Neil</p>"),
-            new Message(NeilJohnston.Id, neilWithBob.Id, "How is it going?", "<p>How is it going?</p>"),
-            new Message(BobPettit.Id, neilWithBob.Id, "Fine", "<p>Fine</p>"),
-            new Message(BobPettit.Id, neilWithBob.Id, "Thanks", "<p>Thanks</p>"),
-            new Message(NeilJohnston.Id, neilWithRick.Id, "Hi Rick", "<p>Hi Rick</p>"),
-            new Message(RickBarry.Id, neilWithRick.Id, "Hi Neil", "<p>Hi Neil</p>"),
-            new Message(NeilJohnston.Id, neilWithRick.Id, "What's up?", "<p>What's up?</p>"),
-            new Message(RickBarry.Id, neilWithRick.Id, "Great", "<p>Great</p>"),
-            new Message(RickBarry.Id, neilWithRick.Id, "Thanks", "<p>Thanks</p>"),
-            new Message(RickBarry.Id, neilWithRick.Id, "What's the weather like in your city?", "<p>What's the weather like in your city?</p>"),
-            new Message(NeilJohnston.Id, neilWithRick.Id, "It's sunny", "<p>It's sunny</p>")
+            new Message(NeilJohnston.Id, neilWithBob.Id, "Hi Bob", "<p>Hi Bob</p>"),// 0
+            new Message(BobPettit.Id, neilWithBob.Id, "Hi Neil", "<p>Hi Neil</p>"),// 1
+            new Message(NeilJohnston.Id, neilWithBob.Id, "How is it going?", "<p>How is it going?</p>"),// 2
+            new Message(BobPettit.Id, neilWithBob.Id, "Fine", "<p>Fine</p>"),// 3
+            new Message(BobPettit.Id, neilWithBob.Id, "Thanks", "<p>Thanks</p>"),// 4
+            new Message(NeilJohnston.Id, neilWithRick.Id, "Hi Rick", "<p>Hi Rick</p>"),// 5
+            new Message(RickBarry.Id, neilWithRick.Id, "Hi Neil", "<p>Hi Neil</p>"),// 6
+            new Message(NeilJohnston.Id, neilWithRick.Id, "What's up?", "<p>What's up?</p>"),// 7
+            new Message(RickBarry.Id, neilWithRick.Id, "Great", "<p>Great</p>"),// 8
+            new Message(RickBarry.Id, neilWithRick.Id, "Thanks", "<p>Thanks</p>"),// 9
+            new Message(RickBarry.Id, neilWithRick.Id, "What's the weather like in your city?", "<p>What's the weather like in your city?</p>"),// 10
+            new Message(NeilJohnston.Id, neilWithRick.Id, "It's sunny", "<p>It's sunny</p>")// 11
         };
 
         _context.Messages.AddRange(messages);
@@ -245,6 +245,188 @@ public class ChatRepositoryTests
 
         // Assert
         chats.Should().BeEmpty();
+
+        // Act (Neil Johnston reads all messages in a chat with Bob Pettit)
+        _context.ChatMessageStatuses.Add(new ChatMessageStatus(neilWithBob.Id, NeilJohnston.Id, messages[4].Id));
+        await _context.SaveChangesAsync();
+
+        // Act (as Neil Johnston)
+        chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+
+        // Assert
+        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
+        {
+            new() {
+                Id = neilWithRick.Id.ToString(),
+                ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
+                IsIndividual = true,
+                UnreadCount = 4,
+                LastMessageId = messages[11].Id.ToString(),
+                LastMessageDate = messages[11].DateCreatedUnix,
+                AccountIds = [RickBarry.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithBob.Id.ToString(),
+                ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
+                ImageId = BobPettit.ImageId,
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[4].Id.ToString(),
+                LastMessageDate = messages[4].DateCreatedUnix,
+                AccountIds = [BobPettit.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email,
+                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+            }
+        });
+
+        // Act (as Bob Pettit)
+        chats = await _repo.GetChatsAsync(BobPettit.Id);
+
+        // Assert
+        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
+        {
+            new() {
+                Id = neilWithBob.Id.ToString(),
+                ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
+                ImageId = NeilJohnston.ImageId,
+                IsIndividual = true,
+                UnreadCount = 2,
+                LastMessageId = messages[4].Id.ToString(),
+                LastMessageDate = messages[4].DateCreatedUnix,
+                AccountIds = [NeilJohnston.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email,
+                FileStorageTypeId = (int)FileStorageTypes.Local
+            }
+        });
+
+        // Act (as Rick Barry)
+        chats = await _repo.GetChatsAsync(RickBarry.Id);
+
+        // Assert
+        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
+        {
+            new() {
+                Id = neilWithRick.Id.ToString(),
+                ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
+                ImageId = NeilJohnston.ImageId,
+                IsIndividual = true,
+                UnreadCount = 3,
+                LastMessageId = messages[11].Id.ToString(),
+                LastMessageDate = messages[11].DateCreatedUnix,
+                AccountIds = [NeilJohnston.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email,
+                FileStorageTypeId = (int)FileStorageTypes.Local
+            }
+        });
+
+        // Act (Rick Barry reads all messages in a chat with Neil Johnston)
+        _context.ChatMessageStatuses.Add(new ChatMessageStatus(neilWithRick.Id, RickBarry.Id, messages[11].Id));
+        await _context.SaveChangesAsync();
+
+        // Act (as Rick Barry)
+        chats = await _repo.GetChatsAsync(RickBarry.Id);
+
+        // Assert
+        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
+        {
+            new() {
+                Id = neilWithRick.Id.ToString(),
+                ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
+                ImageId = NeilJohnston.ImageId,
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[11].Id.ToString(),
+                LastMessageDate = messages[11].DateCreatedUnix,
+                AccountIds = [NeilJohnston.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email,
+                FileStorageTypeId = (int)FileStorageTypes.Local
+            }
+        });
+
+        // Act (as Neil Johnston)
+        chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+
+        // Assert
+        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
+        {
+            new() {
+                Id = neilWithRick.Id.ToString(),
+                ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
+                IsIndividual = true,
+                UnreadCount = 4,
+                LastMessageId = messages[11].Id.ToString(),
+                LastMessageDate = messages[11].DateCreatedUnix,
+                AccountIds = [RickBarry.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithBob.Id.ToString(),
+                ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
+                ImageId = BobPettit.ImageId,
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[4].Id.ToString(),
+                LastMessageDate = messages[4].DateCreatedUnix,
+                AccountIds = [BobPettit.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email,
+                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+            }
+        });
+
+        // Act (Neil Johnston reads all messages in a chat with Rick Barry)
+        _context.ChatMessageStatuses.Add(new ChatMessageStatus(neilWithRick.Id, NeilJohnston.Id, messages[10].Id));
+        await _context.SaveChangesAsync();
+
+        // Act (as Neil Johnston)
+        chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+
+        // Assert
+        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
+        {
+            new() {
+                Id = neilWithRick.Id.ToString(),
+                ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[11].Id.ToString(),
+                LastMessageDate = messages[11].DateCreatedUnix,
+                AccountIds = [RickBarry.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithBob.Id.ToString(),
+                ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
+                ImageId = BobPettit.ImageId,
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[4].Id.ToString(),
+                LastMessageDate = messages[4].DateCreatedUnix,
+                AccountIds = [BobPettit.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email,
+                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+            }
+        });
+
+        // Act (as Rick Barry)
+        chats = await _repo.GetChatsAsync(RickBarry.Id);
+
+        // Assert
+        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
+        {
+            new() {
+                Id = neilWithRick.Id.ToString(),
+                ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
+                ImageId = NeilJohnston.ImageId,
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[11].Id.ToString(),
+                LastMessageDate = messages[11].DateCreatedUnix,
+                AccountIds = [NeilJohnston.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email,
+                FileStorageTypeId = (int)FileStorageTypes.Local
+            }
+        });
     }
 
     [Test]

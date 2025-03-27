@@ -2,18 +2,22 @@
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.DatabaseContext;
+using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.TestData;
+using LetsTalk.Server.Persistence.EntityFramework.Services;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Tests;
 
 [TestFixture]
-public class ChatRepositoryTests
+public class ChatEntityFrameworkServiceTests
 {
     private LetsTalkDbContext _context;
-    private ChatRepository _repo;
+    private ChatEntityFrameworkService _service;
+    private ChatRepository _chatRepository;
     private Account NeilJohnston;
     private Account BobPettit;
     private Account RickBarry;
@@ -29,7 +33,12 @@ public class ChatRepositoryTests
         _context = new LetsTalkDbContext(options);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-        _repo = new ChatRepository(_context);
+
+        _chatRepository = new ChatRepository(_context);
+        _service = new ChatEntityFrameworkService(
+            _chatRepository,
+            Mock.Of<IChatMemberRepository>(),
+            Mock.Of<IUnitOfWork>());
 
         NeilJohnston = CreateAcccount(Accounts.NeilJohnston);
         BobPettit = CreateAcccount(Accounts.BobPettit);
@@ -41,7 +50,7 @@ public class ChatRepositoryTests
     [TearDown]
     public void TearDown()
     {
-        _repo.Dispose();
+        _chatRepository.Dispose();
         _context.Dispose();
     }
 
@@ -57,11 +66,11 @@ public class ChatRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act (as Neil Johnston)
-        var chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+        var chats = await _service.GetChatsAsync(NeilJohnston.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
@@ -80,14 +89,14 @@ public class ChatRepositoryTests
                 AccountIds = [RickBarry.Id.ToString()],
                 AccountTypeId = (int)AccountTypes.Email
             }
-        });
+        ]);
 
         // Act (as Bob Pettit)
-        chats = await _repo.GetChatsAsync(BobPettit.Id);
+        chats = await _service.GetChatsAsync(BobPettit.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -106,14 +115,14 @@ public class ChatRepositoryTests
                 AccountIds = [RickBarry.Id.ToString()],
                 AccountTypeId = (int)AccountTypes.Email
             }
-        });
+        ]);
 
         // Act (as Rick Barry)
-        chats = await _repo.GetChatsAsync(RickBarry.Id);
+        chats = await _service.GetChatsAsync(RickBarry.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -134,10 +143,10 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             },
-        });
+        ]);
 
         // Act (as George Gervin)
-        chats = await _repo.GetChatsAsync(GeorgeGervin.Id);
+        chats = await _service.GetChatsAsync(GeorgeGervin.Id.ToString());
 
         // Assert
         chats.Should().BeEmpty();
@@ -171,11 +180,11 @@ public class ChatRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act (as Neil Johnston)
-        var chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+        var chats = await _service.GetChatsAsync(NeilJohnston.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
@@ -198,14 +207,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
-        });
+        ]);
 
         // Act (as Bob Pettit)
-        chats = await _repo.GetChatsAsync(BobPettit.Id);
+        chats = await _service.GetChatsAsync(BobPettit.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -218,14 +227,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
 
         // Act (as Rick Barry)
-        chats = await _repo.GetChatsAsync(RickBarry.Id);
+        chats = await _service.GetChatsAsync(RickBarry.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -238,10 +247,10 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
 
         // Act (as George Gervin)
-        chats = await _repo.GetChatsAsync(GeorgeGervin.Id);
+        chats = await _service.GetChatsAsync(GeorgeGervin.Id.ToString());
 
         // Assert
         chats.Should().BeEmpty();
@@ -251,11 +260,11 @@ public class ChatRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act (as Neil Johnston)
-        chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+        chats = await _service.GetChatsAsync(NeilJohnston.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
@@ -278,14 +287,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
-        });
+        ]);
 
         // Act (as Bob Pettit)
-        chats = await _repo.GetChatsAsync(BobPettit.Id);
+        chats = await _service.GetChatsAsync(BobPettit.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -298,14 +307,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
 
         // Act (as Rick Barry)
-        chats = await _repo.GetChatsAsync(RickBarry.Id);
+        chats = await _service.GetChatsAsync(RickBarry.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -318,18 +327,18 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
 
         // Act (Rick Barry reads all messages in a chat with Neil Johnston)
         _context.ChatMessageStatuses.Add(new ChatMessageStatus(neilWithRick.Id, RickBarry.Id, messages[11].Id));
         await _context.SaveChangesAsync();
 
         // Act (as Rick Barry)
-        chats = await _repo.GetChatsAsync(RickBarry.Id);
+        chats = await _service.GetChatsAsync(RickBarry.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -342,14 +351,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
 
         // Act (as Neil Johnston)
-        chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+        chats = await _service.GetChatsAsync(NeilJohnston.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
@@ -372,18 +381,18 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
-        });
+        ]);
 
         // Act (Neil Johnston reads all messages in a chat with Rick Barry)
         _context.ChatMessageStatuses.Add(new ChatMessageStatus(neilWithRick.Id, NeilJohnston.Id, messages[10].Id));
         await _context.SaveChangesAsync();
 
         // Act (as Neil Johnston)
-        chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+        chats = await _service.GetChatsAsync(NeilJohnston.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
@@ -406,14 +415,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
-        });
+        ]);
 
         // Act (as Rick Barry)
-        chats = await _repo.GetChatsAsync(RickBarry.Id);
+        chats = await _service.GetChatsAsync(RickBarry.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -426,7 +435,7 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
     }
 
     [Test]
@@ -470,11 +479,11 @@ public class ChatRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act (as Neil Johnston)
-        var chats = await _repo.GetChatsAsync(NeilJohnston.Id);
+        var chats = await _service.GetChatsAsync(NeilJohnston.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
@@ -497,14 +506,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
-        });
+        ]);
 
         // Act (as Bob Pettit)
-        chats = await _repo.GetChatsAsync(BobPettit.Id);
+        chats = await _service.GetChatsAsync(BobPettit.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -517,14 +526,14 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
 
         // Act (as Rick Barry)
-        chats = await _repo.GetChatsAsync(RickBarry.Id);
+        chats = await _service.GetChatsAsync(RickBarry.Id.ToString());
 
         // Assert
-        chats.Should().BeEquivalentTo(new List<ChatServiceModel>
-        {
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
@@ -537,10 +546,10 @@ public class ChatRepositoryTests
                 AccountTypeId = (int)AccountTypes.Email,
                 FileStorageTypeId = (int)FileStorageTypes.Local
             }
-        });
+        ]);
 
         // Act (as George Gervin)
-        chats = await _repo.GetChatsAsync(GeorgeGervin.Id);
+        chats = await _service.GetChatsAsync(GeorgeGervin.Id.ToString());
 
         // Assert
         chats.Should().BeEmpty();

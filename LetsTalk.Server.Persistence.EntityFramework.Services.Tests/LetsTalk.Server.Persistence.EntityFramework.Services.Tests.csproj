@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Persistence.EntityFramework.Repository\LetsTalk.Server.Persistence.EntityFramework.Repository.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Persistence.EntityFramework.Services\LetsTalk.Server.Persistence.EntityFramework.Services.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
   </ItemGroup>
 

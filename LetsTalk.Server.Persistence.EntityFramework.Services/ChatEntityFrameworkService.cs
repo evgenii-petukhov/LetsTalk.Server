@@ -15,9 +15,35 @@ public class ChatEntityFrameworkService(
     private readonly IChatMemberRepository _chatMemberRepository = chatMemberRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
+    public async Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
     {
-        return  _chatRepository.GetChatsAsync(int.Parse(accountId, CultureInfo.InvariantCulture), cancellationToken);
+        var accountIdAsInt = int.Parse(accountId, CultureInfo.InvariantCulture);
+        var chats = await _chatRepository.GetChatsByAccountIdAsync(accountIdAsInt, cancellationToken);
+        var chatMetrics = await _chatRepository.GetChatMetricsAsync(accountIdAsInt, cancellationToken);
+
+        return chats.Select(chat =>
+        {
+            var metrics = chatMetrics.FirstOrDefault(m => m.ChatId == chat!.Id);
+            var otherAccount = chat!.ChatMembers!.FirstOrDefault(cm => cm.AccountId != accountIdAsInt)?.Account;
+
+            return new ChatServiceModel
+            {
+                Id = chat.Id.ToString(CultureInfo.InvariantCulture),
+                ChatName = chat.IsIndividual && otherAccount != null ? $"{otherAccount.FirstName} {otherAccount.LastName}" : chat.Name,
+                PhotoUrl = chat.IsIndividual ? otherAccount?.PhotoUrl : null,
+                AccountTypeId = chat.IsIndividual ? otherAccount?.AccountTypeId : null,
+                ImageId = chat.IsIndividual ? otherAccount?.ImageId : chat.ImageId,
+                LastMessageDate = metrics?.LastMessageDate,
+                LastMessageId = metrics?.LastMessageId.ToString(CultureInfo.InvariantCulture),
+                UnreadCount = metrics?.UnreadCount ?? 0,
+                IsIndividual = chat.IsIndividual,
+                AccountIds = chat.ChatMembers!
+                    .Where(cm => cm.AccountId != accountIdAsInt)
+                    .Select(cm => cm.AccountId.ToString(CultureInfo.InvariantCulture))
+                    .ToArray(),
+                FileStorageTypeId = chat.IsIndividual ? otherAccount?.Image?.FileStorageTypeId : null
+            };
+        }).ToList();
     }
 
     public async Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)

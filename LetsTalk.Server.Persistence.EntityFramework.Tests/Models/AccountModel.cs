@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Persistence.Enums;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.Models;
+namespace LetsTalk.Server.Persistence.EntityFramework.Tests.Models;
 
 public class AccountModel
 {

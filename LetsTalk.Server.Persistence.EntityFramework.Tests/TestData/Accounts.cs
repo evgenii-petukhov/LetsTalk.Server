@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.Models;
+﻿using LetsTalk.Server.Persistence.EntityFramework.Tests.Models;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.TestData;
+namespace LetsTalk.Server.Persistence.EntityFramework.Tests.TestData;
 
 public static class Accounts
 {

@@ -2,15 +2,16 @@
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.DatabaseContext;
+using LetsTalk.Server.Persistence.EntityFramework.Repository;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
-using LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.Models;
-using LetsTalk.Server.Persistence.EntityFramework.Repository.Tests.TestData;
 using LetsTalk.Server.Persistence.EntityFramework.Services;
+using LetsTalk.Server.Persistence.EntityFramework.Tests.Models;
+using LetsTalk.Server.Persistence.EntityFramework.Tests.TestData;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Tests;
+namespace LetsTalk.Server.Persistence.EntityFramework.Tests;
 
 [TestFixture]
 public class ChatEntityFrameworkServiceTests

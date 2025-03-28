@@ -26,15 +26,6 @@ public class Account : BaseEntity
 
     public string? ImageId { get; protected set; }
 
-    public Account(string externalId, int accountTypeId, string firstName, string lastName, string photoUrl)
-    {
-        ExternalId = externalId;
-        AccountTypeId = accountTypeId;
-        FirstName = firstName;
-        LastName = lastName;
-        PhotoUrl = photoUrl;
-    }
-
     public Account(int accountTypeId, string email)
     {
         AccountTypeId = accountTypeId;
@@ -43,17 +34,6 @@ public class Account : BaseEntity
 
     protected Account()
     {
-    }
-
-    public void SetupProfile(string firstName, string lastName, string photoUrl, bool hasImageId)
-    {
-        FirstName = firstName;
-        LastName = lastName;
-
-        if (!hasImageId)
-        {
-            PhotoUrl = photoUrl;
-        }
     }
 
     public void UpdateProfile(string firstName, string lastName, Image? image = null)

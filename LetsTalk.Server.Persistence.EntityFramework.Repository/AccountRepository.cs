@@ -23,19 +23,6 @@ public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Ac
             .FirstOrDefaultAsync(account => account.Id == id, cancellationToken)!;
     }
 
-    public Task<Account> GetByExternalIdAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default)
-    {
-        return Context.Accounts
-            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken)!;
-    }
-
-    public Task<Account> GetByExternalIdAsTrackingAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default)
-    {
-        return Context.Accounts
-            .AsTracking()
-            .FirstOrDefaultAsync(q => q.ExternalId == externalId && q.AccountTypeId == (int)accountType, cancellationToken)!;
-    }
-
     public Task<List<Account>> GetAccountsAsync(CancellationToken cancellationToken = default)
     {
         return Context.Accounts

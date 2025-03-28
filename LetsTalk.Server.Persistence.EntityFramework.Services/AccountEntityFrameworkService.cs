@@ -68,40 +68,6 @@ public class AccountEntityFrameworkService(
         return _mapper.Map<ProfileServiceModel>(account);
     }
 
-    public async Task<string> CreateOrUpdateAsync(
-        string externalId,
-        AccountTypes accountType,
-        string firstName,
-        string lastName,
-        string photoUrl,
-        CancellationToken cancellationToken = default)
-    {
-        var account = await _accountRepository.GetByExternalIdAsTrackingAsync(externalId, accountType, cancellationToken);
-
-        if (account == null)
-        {
-            try
-            {
-                account = _entityFactory.CreateAccount(externalId, (int)accountType, firstName!, lastName!, photoUrl!);
-                await _accountRepository.CreateAsync(account, cancellationToken);
-                await _unitOfWork.SaveAsync(cancellationToken);
-
-                return account.Id.ToString(CultureInfo.InvariantCulture);
-            }
-            catch (DbUpdateException)
-            {
-                return (await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken)).Id.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-        else
-        {
-            account.SetupProfile(firstName!, lastName!, photoUrl!, !string.IsNullOrEmpty(account.ImageId));
-            await _unitOfWork.SaveAsync(cancellationToken);
-
-            return account.Id.ToString(CultureInfo.InvariantCulture);
-        }
-    }
-
     public async Task<string> GetOrCreateAsync(AccountTypes accountType, string email, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken);

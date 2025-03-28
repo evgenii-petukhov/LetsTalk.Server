@@ -5,10 +5,6 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 public interface IAccountRepository : IGenericRepository<Account>
 {
-    Task<Account> GetByExternalIdAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default);
-
-    Task<Account> GetByExternalIdAsTrackingAsync(string externalId, AccountTypes accountType, CancellationToken cancellationToken = default);
-
     Task<List<Account>> GetAccountsAsync(CancellationToken cancellationToken = default);
 
     Task<Account> GetByEmailAsync(string email, AccountTypes accountType, CancellationToken cancellationToken = default);

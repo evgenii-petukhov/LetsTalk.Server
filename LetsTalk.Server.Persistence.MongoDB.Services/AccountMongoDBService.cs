@@ -56,48 +56,6 @@ public class AccountMongoDBService(
         return _mapper.Map<ProfileServiceModel>(account);
     }
 
-    public async Task<string> CreateOrUpdateAsync(
-        string externalId,
-        AccountTypes accountType,
-        string firstName,
-        string lastName,
-        string photoUrl,
-        CancellationToken cancellationToken = default)
-    {
-        var account = await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken);
-
-        if (account == null)
-        {
-            try
-            {
-                account = await _accountRepository.CreateAccountAsync(
-                    externalId,
-                    accountType,
-                    firstName,
-                    lastName,
-                    photoUrl,
-                    cancellationToken);
-
-                return account.Id!;
-            }
-            catch
-            {
-                return (await _accountRepository.GetByExternalIdAsync(externalId, accountType, cancellationToken)).Id!;
-            }
-        }
-
-        await _accountRepository.UpdateProfileAsync(
-            externalId,
-            accountType,
-            firstName,
-            lastName,
-            photoUrl,
-            account.Image == null,
-            cancellationToken);
-
-        return account.Id!;
-    }
-
     public async Task<string> GetOrCreateAsync(
         AccountTypes accountType,
         string email,

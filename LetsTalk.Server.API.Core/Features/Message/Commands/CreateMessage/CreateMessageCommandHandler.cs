@@ -18,6 +18,7 @@ public class CreateMessageCommandHandler(
     IMessageCacheManager messageCacheManager,
     IMessageAgnosticService messageAgnosticService,
     ILinkPreviewAgnosticService linkPreviewAgnosticService,
+    IChatCacheManager chatCacheManager,
     IProducer<Notification> notificationProducer,
     IProducer<LinkPreviewRequest> linkPreviewProducer,
     IProducer<ImageResizeRequest> imageResizeProducer
@@ -29,6 +30,7 @@ public class CreateMessageCommandHandler(
     private readonly IMessageCacheManager _messageCacheManager = messageCacheManager;
     private readonly IMessageAgnosticService _messageAgnosticService = messageAgnosticService;
     private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
+    private readonly IChatCacheManager _chatCacheManager = chatCacheManager;
     private readonly IProducer<Notification> _notificationProducer = notificationProducer;
     private readonly IProducer<LinkPreviewRequest> _linkPreviewProducer = linkPreviewProducer;
     private readonly IProducer<ImageResizeRequest> _imageResizeProducer = imageResizeProducer;
@@ -84,6 +86,7 @@ public class CreateMessageCommandHandler(
                     IsMine = accountId == request.SenderId
                 }
             }, cancellationToken))),
+            Task.WhenAll(accountIds.Select(_chatCacheManager.ClearAsync)),
             (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId))
                 ? Task.CompletedTask
                 : _linkPreviewProducer.PublishAsync(new LinkPreviewRequest

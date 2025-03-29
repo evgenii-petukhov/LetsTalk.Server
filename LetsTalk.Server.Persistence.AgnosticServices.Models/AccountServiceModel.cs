@@ -12,7 +12,5 @@ public class AccountServiceModel
 
     public string? LastName { get; set; }
 
-    public string? ImageId { get; set; }
-
-    public int FileStorageTypeId { get; set; }
+    public ImageServiceModel? Image { get; set; }
 }

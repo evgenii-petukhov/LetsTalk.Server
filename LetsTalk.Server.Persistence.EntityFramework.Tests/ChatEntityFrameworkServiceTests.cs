@@ -1,10 +1,12 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.EntityFramework.Repository;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 using LetsTalk.Server.Persistence.EntityFramework.Services;
+using LetsTalk.Server.Persistence.EntityFramework.Tests.MappingProfiles;
 using LetsTalk.Server.Persistence.EntityFramework.Tests.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Tests.TestData;
 using LetsTalk.Server.Persistence.Enums;
@@ -19,6 +21,7 @@ public class ChatEntityFrameworkServiceTests
     private LetsTalkDbContext _context;
     private ChatEntityFrameworkService _service;
     private ChatRepository _chatRepository;
+    private IMapper _mapper;
     private Account NeilJohnston;
     private Account BobPettit;
     private Account RickBarry;
@@ -36,10 +39,19 @@ public class ChatEntityFrameworkServiceTests
         _context.Database.EnsureCreated();
 
         _chatRepository = new ChatRepository(_context);
+
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<ImageProfile>();
+        });
+
+        _mapper = config.CreateMapper();
+
         _service = new ChatEntityFrameworkService(
             _chatRepository,
             Mock.Of<IChatMemberRepository>(),
-            Mock.Of<IUnitOfWork>());
+            Mock.Of<IUnitOfWork>(),
+            _mapper);
 
         NeilJohnston = CreateAcccount(Accounts.NeilJohnston);
         BobPettit = CreateAcccount(Accounts.BobPettit);
@@ -75,12 +87,15 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
-                ImageId = BobPettit.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 AccountIds = [BobPettit.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                AccountTypeId = (int)AccountTypes.Email
             },
             new() {
                 Id = neilWithRick.Id.ToString(),
@@ -101,12 +116,15 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             },
             new() {
                 Id = bobWithRick.Id.ToString(),
@@ -127,22 +145,28 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             },
             new() {
                 Id = bobWithRick.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
-                ImageId = BobPettit.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 AccountIds = [BobPettit.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                AccountTypeId = (int)AccountTypes.Email
             },
         ]);
 
@@ -199,14 +223,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
-                ImageId = BobPettit.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
                 IsIndividual = true,
                 UnreadCount = 3,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [BobPettit.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -219,14 +246,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 2,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -239,14 +269,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 3,
                 LastMessageId = messages[11].Id.ToString(),
                 LastMessageDate = messages[11].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -279,14 +312,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
-                ImageId = BobPettit.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [BobPettit.Id.ToString()],
                 AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
             }
         ]);
 
@@ -299,14 +335,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 2,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -319,14 +358,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 3,
                 LastMessageId = messages[11].Id.ToString(),
                 LastMessageDate = messages[11].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -343,14 +385,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 LastMessageId = messages[11].Id.ToString(),
                 LastMessageDate = messages[11].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -373,14 +418,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
-                ImageId = BobPettit.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [BobPettit.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -407,14 +455,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
-                ImageId = BobPettit.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [BobPettit.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -427,14 +478,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 0,
                 LastMessageId = messages[11].Id.ToString(),
                 LastMessageDate = messages[11].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
     }
@@ -498,14 +552,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
-                ImageId = BobPettit.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
                 IsIndividual = true,
                 UnreadCount = 1,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [BobPettit.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -518,14 +575,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithBob.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 1,
                 LastMessageId = messages[4].Id.ToString(),
                 LastMessageDate = messages[4].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 
@@ -538,14 +598,17 @@ public class ChatEntityFrameworkServiceTests
             new() {
                 Id = neilWithRick.Id.ToString(),
                 ChatName = $"{NeilJohnston.FirstName} {NeilJohnston.LastName}",
-                ImageId = NeilJohnston.ImageId,
+                Image = new ImageServiceModel
+                {
+                    Id = NeilJohnston.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.Local
+                },
                 IsIndividual = true,
                 UnreadCount = 3,
                 LastMessageId = messages[11].Id.ToString(),
                 LastMessageDate = messages[11].DateCreatedUnix,
                 AccountIds = [NeilJohnston.Id.ToString()],
-                AccountTypeId = (int)AccountTypes.Email,
-                FileStorageTypeId = (int)FileStorageTypes.Local
+                AccountTypeId = (int)AccountTypes.Email
             }
         ]);
 

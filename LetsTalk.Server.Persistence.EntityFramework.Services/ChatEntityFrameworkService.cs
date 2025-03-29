@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.Domain;
+﻿using AutoMapper;
+using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
@@ -9,11 +10,13 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Services;
 public class ChatEntityFrameworkService(
     IChatRepository chatRepository,
     IChatMemberRepository chatMemberRepository,
-    IUnitOfWork unitOfWork) : IChatAgnosticService
+    IUnitOfWork unitOfWork,
+    IMapper mapper) : IChatAgnosticService
 {
     private readonly IChatRepository _chatRepository = chatRepository;
     private readonly IChatMemberRepository _chatMemberRepository = chatMemberRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
     {
@@ -32,7 +35,7 @@ public class ChatEntityFrameworkService(
                 ChatName = chat.IsIndividual && otherAccount != null ? $"{otherAccount.FirstName} {otherAccount.LastName}" : chat.Name,
                 PhotoUrl = chat.IsIndividual ? otherAccount?.PhotoUrl : null,
                 AccountTypeId = chat.IsIndividual ? otherAccount?.AccountTypeId : null,
-                ImageId = chat.IsIndividual ? otherAccount?.ImageId : chat.ImageId,
+                Image = chat.IsIndividual && otherAccount!.Image != null ? _mapper.Map<ImageServiceModel>(otherAccount.Image) : null,
                 LastMessageDate = metrics?.LastMessageDate,
                 LastMessageId = metrics?.LastMessageId.ToString(CultureInfo.InvariantCulture),
                 UnreadCount = metrics?.UnreadCount ?? 0,
@@ -40,8 +43,7 @@ public class ChatEntityFrameworkService(
                 AccountIds = chat.ChatMembers!
                     .Where(cm => cm.AccountId != accountIdAsInt)
                     .Select(cm => cm.AccountId.ToString(CultureInfo.InvariantCulture))
-                    .ToArray(),
-                FileStorageTypeId = chat.IsIndividual ? otherAccount?.Image?.FileStorageTypeId : null
+                    .ToArray()
             };
         }).ToList();
     }

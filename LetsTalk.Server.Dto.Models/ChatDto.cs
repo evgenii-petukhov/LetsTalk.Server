@@ -14,9 +14,7 @@ public class ChatDto : ChatDtoBase
 
     public string? LastMessageId { get; set; }
 
-    public string? ImageId { get; set; }
-
-    public int FileStorageTypeId { get; set; }
+    public ImageDto? Image { get; set; }
 
     public bool IsIndividual { get; set; }
 

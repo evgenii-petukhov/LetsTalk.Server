@@ -1165,11 +1165,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("lastName")]
         public string LastName { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("imageId")]
-        public string ImageId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
-        public int FileStorageTypeId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("image")]
+        public ImageDto Image { get; set; }
 
     }
 
@@ -1198,11 +1195,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("lastMessageId")]
         public string LastMessageId { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("imageId")]
-        public string ImageId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
-        public int FileStorageTypeId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("image")]
+        public ImageDto Image { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("isIndividual")]
         public bool IsIndividual { get; set; }
@@ -1426,11 +1420,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("email")]
         public string Email { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("imageId")]
-        public string ImageId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("fileStorageTypeId")]
-        public int FileStorageTypeId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("image")]
+        public ImageDto Image { get; set; }
 
     }
 

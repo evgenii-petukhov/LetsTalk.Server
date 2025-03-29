@@ -25,9 +25,8 @@ public class UpdateProfileCommandHandler(
     {
         var account = await _accountAgnosticService.GetByIdAsync(request.AccountId!, cancellationToken);
 
-        var previousImageId = account.ImageId;
-        var previousFileStorageTypeId = account.FileStorageTypeId;
-        var deletePreviousImage = previousImageId != null && request.Image != null;
+        var previousImage = account.Image;
+        var deletePreviousImage = previousImage != null && request.Image != null;
 
         account = request.Image == null
             ? await _accountAgnosticService.UpdateProfileAsync(
@@ -50,12 +49,8 @@ public class UpdateProfileCommandHandler(
 
         if (deletePreviousImage)
         {
-            await _producer.PublishAsync(
-                new RemoveImageRequest
-                {
-                    ImageId = previousImageId,
-                    FileStorageType = (FileStorageTypes)previousFileStorageTypeId
-                }, cancellationToken);
+            var removeImageRequest = _mapper.Map<RemoveImageRequest>(previousImage);
+            await _producer.PublishAsync(removeImageRequest, cancellationToken);
         }
 
         return _mapper.Map<ProfileDto>(account);

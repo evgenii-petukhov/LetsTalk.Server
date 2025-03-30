@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace LetsTalk.Server.Exceptions;
+namespace LetsTalk.Server.Authentication.Exceptions;
 
 public class AppException : Exception
 {

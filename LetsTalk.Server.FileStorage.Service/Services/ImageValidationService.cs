@@ -1,6 +1,7 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
+using LetsTalk.Server.FileStorage.Service.Exceptions;
 using LetsTalk.Server.FileStorage.Service.Models;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine.Abstractions;
 using LetsTalk.Server.Persistence.Enums;

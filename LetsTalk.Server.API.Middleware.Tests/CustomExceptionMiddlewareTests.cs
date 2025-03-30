@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using LetsTalk.Server.API.Middleware.Exceptions;
 using LetsTalk.Server.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Moq;

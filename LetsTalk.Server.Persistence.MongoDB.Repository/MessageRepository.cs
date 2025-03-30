@@ -129,13 +129,29 @@ public class MessageRepository : IMessageRepository
 
     public Task MarkAsReadAsync(string chatId, string accountId, string messageId, CancellationToken cancellationToken = default)
     {
-        return _chatMessageStatusCollection.InsertOneAsync(new ChatMessageStatus
+        var filter = Builders<ChatMessageStatus>.Filter.And(
+            Builders<ChatMessageStatus>.Filter.Eq(x => x.ChatId, chatId),
+            Builders<ChatMessageStatus>.Filter.Eq(x => x.AccountId, accountId),
+            Builders<ChatMessageStatus>.Filter.Eq(x => x.MessageId, messageId)
+        );
+
+        var update = Builders<ChatMessageStatus>.Update
+            .Set(x => x.DateReadUnix, DateHelper.GetUnixTimestamp());
+
+        var options = new ReplaceOptions
+        {
+            IsUpsert = true
+        };
+
+        var chatMessageStatus = new ChatMessageStatus
         {
             ChatId = chatId,
             AccountId = accountId,
             MessageId = messageId,
             DateReadUnix = DateHelper.GetUnixTimestamp()
-        }, cancellationToken: cancellationToken);
+        };
+
+        return _chatMessageStatusCollection.ReplaceOneAsync(filter, chatMessageStatus, options, cancellationToken);
     }
 
     public async Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default)

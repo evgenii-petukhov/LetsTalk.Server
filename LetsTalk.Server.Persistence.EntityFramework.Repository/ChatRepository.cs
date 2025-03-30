@@ -19,7 +19,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             .ToListAsync(cancellationToken);
     }
 
-    public Task<List<ChatMetric>> GetChatMetricsAsync(int accountId, CancellationToken cancellationToken = default)
+    public Task<Dictionary<int, ChatMetric>> GetChatMetricsAsync(int accountId, CancellationToken cancellationToken = default)
     {
         return Context.Messages
             .Where(m => m.Chat!.ChatMembers!.Any(cm => cm.AccountId == accountId))
@@ -77,7 +77,7 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
                 LastMessageDate = g.Key.LastMessageDate,
                 UnreadCount = g.Count(x => x.Message!.Id > x.LastReadMessageId && x.Message.SenderId != accountId)
             })
-            .ToListAsync(cancellationToken);
+            .ToDictionaryAsync(x => x.ChatId, cancellationToken);
     }
 
     public Task<bool> IsChatIdValidAsync(int id, CancellationToken cancellationToken = default)

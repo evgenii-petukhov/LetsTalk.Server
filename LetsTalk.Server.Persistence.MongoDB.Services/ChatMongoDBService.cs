@@ -14,9 +14,37 @@ public class ChatMongoDBService(
         return _chatRepository.GetChatMemberAccountIdsAsync(chatId, cancellationToken);
     }
 
-    public Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
+    public async Task<List<ChatServiceModel>> GetChatsAsync(string accountId, CancellationToken cancellationToken = default)
     {
-        return _chatRepository.GetChatsAsync(accountId, cancellationToken);
+        var chats = await _chatRepository.GetChatsByAccountIdAsync(accountId, cancellationToken);
+
+        var accounts = await _chatRepository.GetAccountsByChatsAsync(chats, accountId, cancellationToken);
+
+        var chatMetrics = _chatRepository.GetChatMetrics(accountId, cancellationToken);
+
+        return chats.Select(chat =>
+        {
+            chatMetrics.TryGetValue(chat.Id!, out var metrics);
+            var otherAccount = accounts.FirstOrDefault(a => chat.AccountIds!.Contains(a.Id));
+
+            return new ChatServiceModel
+            {
+                Id = chat.Id,
+                ChatName = chat.IsIndividual ? $"{otherAccount?.FirstName} {otherAccount?.LastName}" : chat.Name,
+                PhotoUrl = chat.IsIndividual ? otherAccount?.PhotoUrl : null,
+                AccountTypeId = chat.IsIndividual ? otherAccount?.AccountTypeId : null,
+                Image = chat.IsIndividual && otherAccount?.Image != null ? new ImageServiceModel
+                {
+                    Id = otherAccount.Image.Id,
+                    FileStorageTypeId = otherAccount.Image.FileStorageTypeId
+                } : null,
+                LastMessageDate = metrics?.LastMessageDate,
+                LastMessageId = metrics?.LastMessageId,
+                UnreadCount = metrics?.UnreadCount ?? 0,
+                IsIndividual = chat.IsIndividual,
+                AccountIds = chat.AccountIds!.Where(x => x != accountId).ToArray()
+            };
+        }).ToList();
     }
 
     public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)

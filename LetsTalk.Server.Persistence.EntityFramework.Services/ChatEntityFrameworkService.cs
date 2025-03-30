@@ -26,7 +26,7 @@ public class ChatEntityFrameworkService(
 
         return chats.Select(chat =>
         {
-            var metrics = chatMetrics.FirstOrDefault(m => m.ChatId == chat!.Id);
+            chatMetrics.TryGetValue(chat.Id!, out var metrics);
             var otherAccount = chat!.ChatMembers!.FirstOrDefault(cm => cm.AccountId != accountIdAsInt)?.Account;
 
             return new ChatServiceModel

@@ -11,6 +11,11 @@ namespace LetsTalk.Server.Persistence.MongoDB.Repository;
 
 public class MessageRepository : IMessageRepository
 {
+    private static readonly ReplaceOptions UpsertReplaceOptions = new()
+    {
+        IsUpsert = true
+    };
+
     private readonly IMongoCollection<Message> _messageCollection;
     private readonly IMongoCollection<ChatMessageStatus> _chatMessageStatusCollection;
     private readonly IMongoCollection<LinkPreview> _linkPreviewCollection;
@@ -135,14 +140,6 @@ public class MessageRepository : IMessageRepository
             Builders<ChatMessageStatus>.Filter.Eq(x => x.MessageId, messageId)
         );
 
-        var update = Builders<ChatMessageStatus>.Update
-            .Set(x => x.DateReadUnix, DateHelper.GetUnixTimestamp());
-
-        var options = new ReplaceOptions
-        {
-            IsUpsert = true
-        };
-
         var chatMessageStatus = new ChatMessageStatus
         {
             ChatId = chatId,
@@ -151,7 +148,7 @@ public class MessageRepository : IMessageRepository
             DateReadUnix = DateHelper.GetUnixTimestamp()
         };
 
-        return _chatMessageStatusCollection.ReplaceOneAsync(filter, chatMessageStatus, options, cancellationToken);
+        return _chatMessageStatusCollection.ReplaceOneAsync(filter, chatMessageStatus, UpsertReplaceOptions, cancellationToken);
     }
 
     public async Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default)

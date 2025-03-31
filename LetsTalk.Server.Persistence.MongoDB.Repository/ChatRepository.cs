@@ -70,7 +70,7 @@ public class ChatRepository : IChatRepository
                     x.Message,
                     Statuses = y
                 })
-            .SelectMany(x => x.Statuses.DefaultIfEmpty(), (x, y) => new
+            .SelectMany(x => x.Statuses.Where(s => s.AccountId == accountId).DefaultIfEmpty(), (x, y) => new
             {
                 x.ChatId,
                 x.Message,
@@ -81,8 +81,8 @@ public class ChatRepository : IChatRepository
             {
                 ChatId = g.Key,
                 LastMessageDate = g.Max(x => x.Message!.DateCreatedUnix),
-                LastMessageId = g.Max(x => x.Message!.Id),
-                LastReadMessageDate = g.Max(x => x.DateReadUnix)
+                LastMessageId = g.First(x => x.Message!.DateCreatedUnix == g.Max(x => x.Message!.DateCreatedUnix)).Message!.Id,
+                LastReadMessageDate = g.First(x => x.DateReadUnix == g.Max(m => m.DateReadUnix)).Message!.DateCreatedUnix
             })
             .GroupJoin(_messageCollection.AsQueryable(), x => x.ChatId, x => x.ChatId, (x, y) => new
             {

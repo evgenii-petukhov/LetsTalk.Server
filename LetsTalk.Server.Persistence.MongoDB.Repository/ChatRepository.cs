@@ -64,55 +64,32 @@ public class ChatRepository : IChatRepository
                 _chatMessageStatusCollection.AsQueryable(),
                 x => x.Message!.Id,
                 x => x.MessageId,
-                (x, y) => new
+                (x, statuses) => new
                 {
                     x.ChatId,
                     x.Message,
-                    Statuses = y
+                    Statuses = statuses
                 })
-            .SelectMany(x => x.Statuses.Where(s => s.AccountId == accountId).DefaultIfEmpty(), (x, y) => new
+            .SelectMany(x => x.Statuses.Where(s => s.AccountId == accountId).DefaultIfEmpty(), (x, status) => new
             {
                 x.ChatId,
                 x.Message,
-                y!.DateReadUnix
+                status!.DateReadUnix
             })
             .GroupBy(x => x.ChatId)
             .Select(g => new
             {
                 ChatId = g.Key,
                 LastMessageDate = g.Max(x => x.Message!.DateCreatedUnix),
-                LastMessageId = g.First(x => x.Message!.DateCreatedUnix == g.Max(x => x.Message!.DateCreatedUnix)).Message!.Id,
-                LastReadMessageDate = g.First(x => x.DateReadUnix == g.Max(m => m.DateReadUnix)).Message!.DateCreatedUnix
+                LastReadMessageDate = g.First(x => x.DateReadUnix == g.Max(m => m.DateReadUnix)).Message!.DateCreatedUnix,
+                Messages = g.Select(x => x.Message).ToList()
             })
-            .GroupJoin(_messageCollection.AsQueryable(), x => x.ChatId, x => x.ChatId, (x, y) => new
+            .Select(x => new ChatMetric
             {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageDate,
-                x.LastMessageDate,
-                Messages = y
-            })
-            .SelectMany(x => x.Messages.DefaultIfEmpty(), (x, y) => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageDate,
-                x.LastMessageDate,
-                Message = y
-            })
-            .GroupBy(x => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageDate,
-                x.LastMessageDate,
-            })
-            .Select(g => new ChatMetric
-            {
-                ChatId = g.Key.ChatId,
-                LastMessageId = g.Key.LastMessageId,
-                LastMessageDate = g.Key.LastMessageDate,
-                UnreadCount = g.Count(x => x.Message!.DateCreatedUnix > x.LastReadMessageDate && x.Message.SenderId != accountId)
+                ChatId = x.ChatId,
+                LastMessageDate = x.LastMessageDate,
+                LastMessageId = x.Messages.First(m => m!.DateCreatedUnix == x.LastMessageDate)!.Id,
+                UnreadCount = x.Messages.Count(m => m!.DateCreatedUnix > x.LastReadMessageDate && m!.SenderId != accountId)
             })
             .ToDictionary(x => x.ChatId!, StringComparer.Ordinal);
     }

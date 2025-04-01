@@ -21,61 +21,38 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
 
     public Task<Dictionary<int, ChatMetric>> GetChatMetricsAsync(int accountId, CancellationToken cancellationToken = default)
     {
-        return Context.Messages
-            .Where(m => m.Chat!.ChatMembers!.Any(cm => cm.AccountId == accountId))
-            .GroupJoin(Context.ChatMessageStatuses,
-                m => m.Id,
-                cms => cms.MessageId,
-                (m, statuses) => new
-                {
-                    m.ChatId,
-                    Message = m,
-                    Statuses = statuses
-                })
-            .SelectMany(x => x.Statuses.Where(s => s.AccountId == accountId).DefaultIfEmpty(),
-                (x, status) => new
-                {
-                    x.ChatId,
-                    x.Message,
-                    ReadMessageId = status == null ? 0 : status.MessageId
-                })
-            .GroupBy(x => x.ChatId)
+        return Context.Chats
+            .Where(m => m.ChatMembers!.Any(cm => cm.AccountId == accountId))
+            .SelectMany(m => m.Messages!)
+            .Select(m => new
+            {
+                m.ChatId,
+                m.Id,
+                m.DateCreatedUnix,
+                ReadMessageId = Context.ChatMessageStatuses
+                    .Where(s => s.AccountId == accountId && s.MessageId == m.Id)
+                    .Select(s => s.MessageId)
+                    .FirstOrDefault()
+            })
+            .GroupBy(m => m.ChatId)
             .Select(g => new
             {
                 ChatId = g.Key,
-                LastMessageDate = g.Max(x => x.Message!.DateCreatedUnix),
-                LastMessageId = g.Max(x => x.Message!.Id),
-                LastReadMessageId = g.Max(x => x.ReadMessageId)
+                LastMessageId = g.Max(m => m.Id),
+                LastMessageDate = g.Max(m => m.DateCreatedUnix),
+                LastReadMessageId = g.Max(m => m.ReadMessageId)
             })
-            .GroupJoin(Context.Messages, x => x.ChatId, x => x.ChatId, (x, y) => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageId,
-                x.LastMessageDate,
-                Messages = y
-            })
-            .SelectMany(x => x.Messages.DefaultIfEmpty(), (x, y) => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageId,
-                x.LastMessageDate,
-                Message = y
-            })
-            .GroupBy(x => new
-            {
-                x.ChatId,
-                x.LastMessageId,
-                x.LastReadMessageId,
-                x.LastMessageDate,
-            })
+            .Join(Context.Messages.Where(m => m.SenderId != accountId),
+                metric => metric.ChatId,
+                message => message.ChatId,
+                (metric, message) => new { metric, message })
+            .GroupBy(x => x.metric)
             .Select(g => new ChatMetric
             {
                 ChatId = g.Key.ChatId,
                 LastMessageId = g.Key.LastMessageId,
                 LastMessageDate = g.Key.LastMessageDate,
-                UnreadCount = g.Count(x => x.Message!.Id > x.LastReadMessageId && x.Message.SenderId != accountId)
+                UnreadCount = g.Count(x => x.message.Id > g.Key.LastReadMessageId)
             })
             .ToDictionaryAsync(x => x.ChatId, cancellationToken);
     }

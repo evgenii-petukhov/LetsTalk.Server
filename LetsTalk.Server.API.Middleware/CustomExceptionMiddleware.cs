@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.API.Middleware.Models;
+﻿using LetsTalk.Server.API.Middleware.Exceptions;
+using LetsTalk.Server.API.Middleware.Models;
 using LetsTalk.Server.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System.Net;

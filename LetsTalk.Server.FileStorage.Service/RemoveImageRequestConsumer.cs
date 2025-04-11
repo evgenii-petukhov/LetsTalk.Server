@@ -15,9 +15,9 @@ public class RemoveImageRequestConsumer(
 
     public async Task Consume(ConsumeContext<RemoveImageRequest> context)
     {
-        var fileService = _fileServiceResolver.Resolve(context.Message.FileStorageType);
-        await fileService.DeleteFileAsync(context.Message.ImageId!, FileTypes.Image);
-        await fileService.DeleteFileAsync(context.Message.ImageId! + ".info", FileTypes.Image);
-        await _imageStorageCacheManager.ClearAsync(context.Message.ImageId!);
+        var fileService = _fileServiceResolver.Resolve((FileStorageTypes)context.Message.FileStorageTypeId);
+        await fileService.DeleteFileAsync(context.Message.Id!, FileTypes.Image);
+        await fileService.DeleteFileAsync(context.Message.Id! + ".info", FileTypes.Image);
+        await _imageStorageCacheManager.ClearAsync(context.Message.Id!);
     }
 }

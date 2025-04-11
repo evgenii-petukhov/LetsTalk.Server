@@ -1,10 +1,8 @@
-﻿using LetsTalk.Server.Persistence.Enums;
-
-namespace LetsTalk.Server.Kafka.Models;
+﻿namespace LetsTalk.Server.Kafka.Models;
 
 public class RemoveImageRequest
 {
-    public string? ImageId { get; set; }
+    public string? Id { get; set; }
 
-    public FileStorageTypes FileStorageType { get; set; }
+    public int FileStorageTypeId { get; set; }
 }

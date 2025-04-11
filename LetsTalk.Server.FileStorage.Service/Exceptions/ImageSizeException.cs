@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Exceptions;
+﻿namespace LetsTalk.Server.FileStorage.Service.Exceptions;
 
 public class ImageSizeException : Exception
 {

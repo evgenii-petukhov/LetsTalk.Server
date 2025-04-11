@@ -11,6 +11,11 @@ namespace LetsTalk.Server.Persistence.MongoDB.Repository;
 
 public class MessageRepository : IMessageRepository
 {
+    private static readonly ReplaceOptions UpsertReplaceOptions = new()
+    {
+        IsUpsert = true
+    };
+
     private readonly IMongoCollection<Message> _messageCollection;
     private readonly IMongoCollection<ChatMessageStatus> _chatMessageStatusCollection;
     private readonly IMongoCollection<LinkPreview> _linkPreviewCollection;
@@ -129,13 +134,21 @@ public class MessageRepository : IMessageRepository
 
     public Task MarkAsReadAsync(string chatId, string accountId, string messageId, CancellationToken cancellationToken = default)
     {
-        return _chatMessageStatusCollection.InsertOneAsync(new ChatMessageStatus
+        var filter = Builders<ChatMessageStatus>.Filter.And(
+            Builders<ChatMessageStatus>.Filter.Eq(x => x.ChatId, chatId),
+            Builders<ChatMessageStatus>.Filter.Eq(x => x.AccountId, accountId),
+            Builders<ChatMessageStatus>.Filter.Eq(x => x.MessageId, messageId)
+        );
+
+        var chatMessageStatus = new ChatMessageStatus
         {
             ChatId = chatId,
             AccountId = accountId,
             MessageId = messageId,
             DateReadUnix = DateHelper.GetUnixTimestamp()
-        }, cancellationToken: cancellationToken);
+        };
+
+        return _chatMessageStatusCollection.ReplaceOneAsync(filter, chatMessageStatus, UpsertReplaceOptions, cancellationToken);
     }
 
     public async Task<Message> SetLinkPreviewAsync(string messageId, string linkPreviewId, CancellationToken cancellationToken = default)

@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
+using LetsTalk.Server.Authentication.Exceptions;
 using LetsTalk.Server.Authentication.Models;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Exceptions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

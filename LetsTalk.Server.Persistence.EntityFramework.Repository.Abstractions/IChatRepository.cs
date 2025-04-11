@@ -7,7 +7,7 @@ public interface IChatRepository : IGenericRepository<Chat>
 {
     Task<List<Chat>> GetChatsByAccountIdAsync(int accountId, CancellationToken cancellationToken = default);
 
-    Task<List<ChatMetric>> GetChatMetricsAsync(int accountId, CancellationToken cancellationToken = default);
+    Task<Dictionary<int, ChatMetric>> GetChatMetricsAsync(int accountId, CancellationToken cancellationToken = default);
 
     Task<bool> IsChatIdValidAsync(int id, CancellationToken cancellationToken = default);
 

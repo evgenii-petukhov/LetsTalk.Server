@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Exceptions;
+﻿namespace LetsTalk.Server.API.Middleware.Exceptions;
 
 public class NotFoundException : Exception
 {

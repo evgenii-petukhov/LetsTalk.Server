@@ -88,6 +88,7 @@ public static class CoreServicesRegistration
 
                 services.AddScoped<IAccountService, AccountService>();
                 services.DecorateScoped<IAccountService, AccountRedisCacheService>();
+                services.AddScoped<IAccountCacheManager, AccountRedisCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
@@ -106,6 +107,7 @@ public static class CoreServicesRegistration
 
                 services.AddScoped<IAccountService, AccountService>();
                 services.DecorateScoped<IAccountService, AccountMemoryCacheService>();
+                services.AddScoped<IAccountCacheManager, AccountMemoryCacheService>();
 
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();

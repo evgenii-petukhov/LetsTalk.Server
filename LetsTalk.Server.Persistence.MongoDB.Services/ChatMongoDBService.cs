@@ -9,7 +9,7 @@ public class ChatMongoDBService(
 {
     private readonly IChatRepository _chatRepository = chatRepository;
 
-    public Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
+    public Task<List<string>> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
     {
         return _chatRepository.GetChatMemberAccountIdsAsync(chatId, cancellationToken);
     }
@@ -42,7 +42,7 @@ public class ChatMongoDBService(
                 LastMessageId = metrics?.LastMessageId,
                 UnreadCount = metrics?.UnreadCount ?? 0,
                 IsIndividual = chat.IsIndividual,
-                AccountIds = chat.AccountIds!.Where(x => x != accountId).ToArray()
+                AccountIds = chat.AccountIds!.Where(x => x != accountId).ToList()
             };
         }).ToList();
     }
@@ -52,12 +52,17 @@ public class ChatMongoDBService(
         return _chatRepository.IsChatIdValidAsync(id, cancellationToken);
     }
 
-    public async Task<string> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    public async Task<string> CreateIndividualChatAsync(IEnumerable<string> accountIds, CancellationToken cancellationToken = default)
     {
         var chat = await _chatRepository.GetIndividualChatByAccountIdsAsync(accountIds, cancellationToken);
 
         chat ??= await _chatRepository.CreateIndividualChatAsync(accountIds, cancellationToken);
 
         return chat.Id!;
+    }
+
+    public Task<List<string>> GetAccountIdsInIndividualChatsAsync(string accountId, CancellationToken cancellationToken = default)
+    {
+        return _chatRepository.GetAccountIdsInIndividualChatsAsync(accountId, cancellationToken);
     }
 }

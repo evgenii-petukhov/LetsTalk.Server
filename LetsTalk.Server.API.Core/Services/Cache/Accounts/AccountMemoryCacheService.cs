@@ -9,7 +9,7 @@ namespace LetsTalk.Server.API.Core.Services.Cache.Accounts;
 public class AccountMemoryCacheService(
     IMemoryCache memoryCache,
     IOptions<CachingSettings> cachingSettings,
-    IAccountService accountService) : AccountCacheServiceBase(accountService, cachingSettings), IAccountService
+    IAccountService accountService) : AccountCacheServiceBase(accountService, cachingSettings), IAccountService, IAccountCacheManager
 {
     private readonly IMemoryCache _memoryCache = memoryCache;
 
@@ -26,5 +26,15 @@ public class AccountMemoryCacheService(
                 return AccountService.GetAccountsAsync(cancellationToken);
             })!
             : AccountService.GetAccountsAsync(cancellationToken);
+    }
+
+    public Task ClearAsync()
+    {
+        if (IsActive)
+        {
+            _memoryCache.Remove(AccountCacheKey);
+        }
+
+        return Task.CompletedTask;
     }
 }

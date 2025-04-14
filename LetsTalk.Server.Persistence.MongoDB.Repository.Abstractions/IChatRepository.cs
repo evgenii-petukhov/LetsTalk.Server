@@ -10,11 +10,13 @@ public interface IChatRepository
 
     Dictionary<string, ChatMetric> GetChatMetrics(string accountId, CancellationToken cancellationToken = default);
 
-    Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default);
+    Task<List<string>> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default);
 
-    Task<Chat> GetIndividualChatByAccountIdsAsync(string[] accountIds, CancellationToken cancellationToken = default);
+    Task<Chat> GetIndividualChatByAccountIdsAsync(IEnumerable<string> accountIds, CancellationToken cancellationToken = default);
 
     Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default);
 
-    Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default);
+    Task<Chat> CreateIndividualChatAsync(IEnumerable<string> accountIds, CancellationToken cancellationToken = default);
+
+    Task<List<string>> GetAccountIdsInIndividualChatsAsync(string accountId, CancellationToken cancellationToken = default);
 }

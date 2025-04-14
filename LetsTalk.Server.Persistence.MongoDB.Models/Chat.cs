@@ -16,5 +16,5 @@ public class Chat
     public string? Name { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public string[]? AccountIds { get; set; }
+    public List<string>? AccountIds { get; set; }
 }

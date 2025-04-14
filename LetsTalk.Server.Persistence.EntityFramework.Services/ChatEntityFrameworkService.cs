@@ -43,16 +43,23 @@ public class ChatEntityFrameworkService(
                 AccountIds = chat.ChatMembers!
                     .Where(cm => cm.AccountId != accountIdAsInt)
                     .Select(cm => cm.AccountId.ToString(CultureInfo.InvariantCulture))
-                    .ToArray()
+                    .ToList()
             };
         }).ToList();
     }
 
-    public async Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
+    public async Task<List<string>> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
     {
         var ids = await _chatMemberRepository.GetChatMemberAccountIdsAsync(int.Parse(chatId, CultureInfo.InvariantCulture), cancellationToken);
 
-        return ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray();
+        return ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
+    }
+
+    public async Task<List<string>> GetAccountIdsInIndividualChatsAsync(string accountId, CancellationToken cancellationToken = default)
+    {
+        var ids = await _chatRepository.GetAccountIdsInIndividualChatsAsync(int.Parse(accountId, CultureInfo.InvariantCulture), cancellationToken);
+
+        return ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
     }
 
     public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)
@@ -61,12 +68,12 @@ public class ChatEntityFrameworkService(
     }
 
     public async Task<string> CreateIndividualChatAsync(
-        string[] accountIds,
+        IEnumerable<string> accountIds,
         CancellationToken cancellationToken = default)
     {
         var accountIdsAsInt = accountIds
             .Select(int.Parse)
-            .ToArray();
+            .ToList();
 
         var chat = await _chatRepository.GetIndividualChatByAccountIdsAsync(accountIdsAsInt, cancellationToken);
 

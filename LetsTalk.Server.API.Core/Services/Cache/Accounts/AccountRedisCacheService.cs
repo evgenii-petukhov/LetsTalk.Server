@@ -11,7 +11,7 @@ namespace LetsTalk.Server.API.Core.Services.Cache.Accounts;
 public class AccountRedisCacheService(
     RedisConnection redisConnection,
     IOptions<CachingSettings> cachingSettings,
-    IAccountService accountService) : AccountCacheServiceBase(accountService, cachingSettings), IAccountService
+    IAccountService accountService) : AccountCacheServiceBase(accountService, cachingSettings), IAccountService, IAccountCacheManager
 {
     private readonly IDatabase _database = redisConnection.Connection.GetDatabase();
 
@@ -43,5 +43,13 @@ public class AccountRedisCacheService(
         }
 
         return JsonSerializer.Deserialize<List<AccountDto>>(cachedAccounts!)!;
+    }
+
+    public async Task ClearAsync()
+    {
+        if (IsActive)
+        {
+            await _database.KeyDeleteAsync(AccountCacheKey, CommandFlags.FireAndForget);
+        }
     }
 }

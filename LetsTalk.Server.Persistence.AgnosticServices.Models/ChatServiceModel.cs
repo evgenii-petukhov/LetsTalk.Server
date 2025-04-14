@@ -20,5 +20,5 @@ public class ChatServiceModel
 
     public bool IsIndividual { get; set; }
 
-    public string[]? AccountIds { get; set; }
+    public List<string>? AccountIds { get; set; }
 }

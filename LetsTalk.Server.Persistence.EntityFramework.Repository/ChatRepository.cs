@@ -63,12 +63,23 @@ public class ChatRepository(LetsTalkDbContext context) : GenericRepository<Chat>
             .AnyAsync(chat => chat.Id == id, cancellationToken);
     }
 
-    public Task<Chat> GetIndividualChatByAccountIdsAsync(int[] accountIds, CancellationToken cancellationToken = default)
+    public Task<Chat> GetIndividualChatByAccountIdsAsync(IEnumerable<int> accountIds, CancellationToken cancellationToken = default)
     {
         return Context.ChatMembers
             .GroupBy(x => x.Chat)
             .Where(g => g.Key!.IsIndividual && g.All(x => accountIds.Contains(x.AccountId)))
             .Select(g => g.Key)
             .FirstOrDefaultAsync(cancellationToken)!;
+    }
+
+    public Task<List<int>> GetAccountIdsInIndividualChatsAsync(int accountId, CancellationToken cancellationToken = default)
+    {
+        return Context.Chats
+            .Where(chat => chat.IsIndividual && chat.ChatMembers!.Any(cm => cm.AccountId == accountId))
+            .SelectMany(m => m.ChatMembers!)
+            .Where(cm => cm.AccountId != accountId)
+            .Select(cm => cm.AccountId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
     }
 }

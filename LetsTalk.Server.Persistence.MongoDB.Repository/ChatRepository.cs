@@ -94,7 +94,7 @@ public class ChatRepository : IChatRepository
             .ToDictionary(x => x.ChatId!, StringComparer.Ordinal);
     }
 
-    public async Task<string[]> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
+    public async Task<List<string>> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
     {
         var chat = await _chatCollection
             .Find(Builders<Chat>.Filter.Eq(x => x.Id, chatId))
@@ -110,7 +110,7 @@ public class ChatRepository : IChatRepository
             .AnyAsync(cancellationToken);
     }
 
-    public Task<Chat> GetIndividualChatByAccountIdsAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    public Task<Chat> GetIndividualChatByAccountIdsAsync(IEnumerable<string> accountIds, CancellationToken cancellationToken = default)
     {
         return _chatCollection
             .Aggregate()
@@ -118,16 +118,30 @@ public class ChatRepository : IChatRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<Chat> CreateIndividualChatAsync(string[] accountIds, CancellationToken cancellationToken = default)
+    public async Task<Chat> CreateIndividualChatAsync(IEnumerable<string> accountIds, CancellationToken cancellationToken = default)
     {
         var chat = new Chat
         {
             IsIndividual = true,
-            AccountIds = accountIds
+            AccountIds = accountIds.ToList()
         };
 
         await _chatCollection.InsertOneAsync(chat, cancellationToken: cancellationToken);
 
         return chat;
+    }
+
+    public async Task<List<string>> GetAccountIdsInIndividualChatsAsync(string accountId, CancellationToken cancellationToken = default)
+    {
+        var chats = await _chatCollection
+            .Find(Builders<Chat>.Filter.And(
+                Builders<Chat>.Filter.Eq(x => x.IsIndividual, true),
+                Builders<Chat>.Filter.AnyEq(x => x.AccountIds, accountId)))
+            .ToListAsync(cancellationToken);
+
+        return chats.SelectMany(x => x.AccountIds!)
+            .Where(x => !string.Equals(x, accountId, StringComparison.Ordinal))
+            .Distinct()
+            .ToList();
     }
 }

@@ -11,14 +11,20 @@ namespace LetsTalk.Server.API.Core.Features.Profile.Commands.UpdateProfile;
 
 public class UpdateProfileCommandHandler(
     IAccountAgnosticService accountAgnosticService,
+    IChatAgnosticService chatAgnosticService,
     IMapper mapper,
     IProfileCacheManager profileCacheManager,
+    IAccountCacheManager accountCacheManager,
+    IChatCacheManager chatCacheManager,
     IProducer<RemoveImageRequest> producer
 ) : IRequestHandler<UpdateProfileCommand, ProfileDto>
 {
     private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
+    private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly IMapper _mapper = mapper;
     private readonly IProfileCacheManager _profileCacheManager = profileCacheManager;
+    private readonly IAccountCacheManager _accountCacheManager = accountCacheManager;
+    private readonly IChatCacheManager _chatCacheManager = chatCacheManager;
     private readonly IProducer<RemoveImageRequest> _producer = producer;
 
     public async Task<ProfileDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
@@ -45,12 +51,17 @@ public class UpdateProfileCommandHandler(
                 (FileStorageTypes)request.Image.FileStorageTypeId,
                 cancellationToken);
 
-        await _profileCacheManager.ClearAsync(request.AccountId!);
+        await Task.WhenAll(
+            _profileCacheManager.ClearAsync(request.AccountId!),
+            _accountCacheManager.ClearAsync());
 
         if (deletePreviousImage)
         {
+            var accountIds = await _chatAgnosticService.GetAccountIdsInIndividualChatsAsync(request.AccountId!, cancellationToken);
             var removeImageRequest = _mapper.Map<RemoveImageRequest>(previousImage);
-            await _producer.PublishAsync(removeImageRequest, cancellationToken);
+            await Task.WhenAll(
+                _producer.PublishAsync(removeImageRequest, cancellationToken),
+                Task.WhenAll(accountIds.Select(_chatCacheManager.ClearAsync)));
         }
 
         return _mapper.Map<ProfileDto>(account);

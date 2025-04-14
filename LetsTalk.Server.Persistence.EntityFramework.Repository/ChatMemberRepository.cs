@@ -7,11 +7,11 @@ namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
 public class ChatMemberRepository(LetsTalkDbContext context) : GenericRepository<Message>(context), IChatMemberRepository
 {
-    public Task<int[]> GetChatMemberAccountIdsAsync(int chatId, CancellationToken cancellationToken = default)
+    public Task<List<int>> GetChatMemberAccountIdsAsync(int chatId, CancellationToken cancellationToken = default)
     {
         return Context.ChatMembers
             .Where(x => x.ChatId == chatId)
             .Select(x => x.AccountId)
-            .ToArrayAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
     }
 }

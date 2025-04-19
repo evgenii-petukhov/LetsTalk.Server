@@ -1,13 +1,12 @@
 ﻿using LetsTalk.Server.Persistence.MongoDB.Models;
 using MongoDB.Driver;
-using MongoDBMigrations;
+using SimpleMongoMigrations;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services.Migrations;
 
+[Order(3)]
 public class ChatMessageStatusCreateUniqueIndexMigration : IMigration
 {
-    public MongoDBMigrations.Version Version => new(0, 1, 2);
-
     public string Name => "ChatMessageStatus: Create a unique index (ChatId + AccountId + MessageId)";
 
     public void Down(IMongoDatabase database)

@@ -1,19 +1,13 @@
 ﻿using LetsTalk.Server.Persistence.MongoDB.Models;
 using MongoDB.Driver;
-using MongoDBMigrations;
+using SimpleMongoMigrations;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services.Migrations;
 
+[Order(1)]
 public class LinkPreviewCreateUniqueIndexMigration : IMigration
 {
-    public MongoDBMigrations.Version Version => new(0, 1, 0);
-
     public string Name => "LinkPreview: Create a unique index (Url)";
-
-    public void Down(IMongoDatabase database)
-    {
-        throw new NotImplementedException();
-    }
 
     public void Up(IMongoDatabase database)
     {

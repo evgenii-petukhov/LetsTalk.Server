@@ -149,6 +149,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Tests", "LetsTalk.Server.Persistence.MongoDB.Tests\LetsTalk.Server.Persistence.MongoDB.Tests.csproj", "{91D5464D-EC15-446A-9C66-6F7B533242D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMongoMigrations", "..\SimpleMongoMigrations\SimpleMongoMigrations\SimpleMongoMigrations.csproj", "{500ADFCB-631F-4BB7-877C-8D7CC56CA408}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -399,6 +401,10 @@ Global
 		{91D5464D-EC15-446A-9C66-6F7B533242D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91D5464D-EC15-446A-9C66-6F7B533242D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91D5464D-EC15-446A-9C66-6F7B533242D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{500ADFCB-631F-4BB7-877C-8D7CC56CA408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{500ADFCB-631F-4BB7-877C-8D7CC56CA408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{500ADFCB-631F-4BB7-877C-8D7CC56CA408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{500ADFCB-631F-4BB7-877C-8D7CC56CA408}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.9.0" />
+    <PackageReference Include="MailKit" Version="4.12.1" />
     <PackageReference Include="MassTransit" Version="8.4.1" />
     <PackageReference Include="MassTransit.AmazonSQS" Version="8.4.1" />
     <PackageReference Include="MassTransit.Kafka" Version="8.4.1" />

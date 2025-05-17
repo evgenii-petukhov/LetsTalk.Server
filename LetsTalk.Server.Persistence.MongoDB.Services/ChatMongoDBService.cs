@@ -25,7 +25,7 @@ public class ChatMongoDBService(
         return chats.Select(chat =>
         {
             chatMetrics.TryGetValue(chat.Id!, out var metrics);
-            var otherAccount = accounts.FirstOrDefault(a => chat.AccountIds!.Contains(a.Id));
+            var otherAccount = accounts.FirstOrDefault(a => chat.AccountIds!.Contains(a.Id!));
 
             return new ChatServiceModel
             {

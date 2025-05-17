@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using System.Reflection;
 using LetsTalk.Server.Persistence.MongoDB.Repository;
-using MongoDBMigrations;
+using SimpleMongoMigrations;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
@@ -24,11 +24,11 @@ public static class MongoDBServicesRegistration
 
         services.AddMongoDBRepository(configuration);
 
-        new MigrationEngine()
-            .UseDatabase(configuration.GetConnectionString("MongoDB"), configuration.GetValue<string>("MongoDB:DatabaseName"))
-            .UseAssembly(Assembly.GetExecutingAssembly())
-            .UseSchemeValidation(false)
-            .Run("0.1.2");
+        new MigrationEngine(
+            configuration.GetConnectionString("MongoDB")!,
+            configuration.GetValue<string>("MongoDB:DatabaseName")!,
+            Assembly.GetExecutingAssembly())
+            .Run();
 
         return services;
     }

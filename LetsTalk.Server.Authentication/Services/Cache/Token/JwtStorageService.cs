@@ -57,7 +57,7 @@ public class JwtStorageService : IJwtStorageService
         };
     }
 
-    public Task<StoredToken> GenerateAsync(string accountId)
+    public StoredToken Generate(string accountId)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -71,11 +71,11 @@ public class JwtStorageService : IJwtStorageService
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var jwtToken = (JwtSecurityToken)token;
-        return Task.FromResult(new StoredToken
+        return new StoredToken
         {
             AccountId = accountId,
             Token = tokenHandler.WriteToken(token),
             ValidTo = jwtToken.ValidTo
-        });
+        };
     }
 }

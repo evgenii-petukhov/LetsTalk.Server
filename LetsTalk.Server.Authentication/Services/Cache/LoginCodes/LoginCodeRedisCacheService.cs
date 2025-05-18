@@ -15,7 +15,7 @@ public class LoginCodeRedisCacheService(
     private readonly ILoginCodeGenerator _generator = loginCodeGenerator;
     private readonly IDatabase _database = redisConnection.Connection.GetDatabase();
 
-    public async Task<(int, bool, TimeSpan)> GenerateCodeAsync(string email)
+    public async ValueTask<(int, bool, TimeSpan)> GenerateCodeAsync(string email)
     {
         var key = new RedisKey(GetLoginCodeKey(email));
         var code = _generator.GenerateCode();
@@ -25,7 +25,7 @@ public class LoginCodeRedisCacheService(
         return (code, isCreated, ttl ?? CacheLifeTimeInSeconds);
     }
 
-    public async Task<bool> ValidateCodeAsync(string email, int code)
+    public async ValueTask<bool> ValidateCodeAsync(string email, int code)
     {
         var key = new RedisKey(GetLoginCodeKey(email));
         var value = await _database.StringGetAsync(key);

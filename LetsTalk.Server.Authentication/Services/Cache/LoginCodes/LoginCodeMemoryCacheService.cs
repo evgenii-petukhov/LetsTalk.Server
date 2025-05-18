@@ -27,8 +27,8 @@ public class LoginCodeMemoryCacheService(
         return new ValueTask<(int, bool, TimeSpan)>((code, isCreated, CacheLifeTimeInSeconds));
     }
 
-    public Task<bool> ValidateCodeAsync(string email, int code)
+    public ValueTask<bool> ValidateCodeAsync(string email, int code)
     {
-        return Task.FromResult(_memoryCache.Get<int>(GetLoginCodeKey(email)) == code);
+        return new ValueTask<bool>(_memoryCache.Get<int>(GetLoginCodeKey(email)) == code);
     }
 }

@@ -25,7 +25,7 @@ public class LoginCodeRedisCacheService(
         return (code, isCreated, ttl ?? CacheLifeTimeInSeconds);
     }
 
-    public async Task<bool> ValidateCodeAsync(string email, int code)
+    public async ValueTask<bool> ValidateCodeAsync(string email, int code)
     {
         var key = new RedisKey(GetLoginCodeKey(email));
         var value = await _database.StringGetAsync(key);

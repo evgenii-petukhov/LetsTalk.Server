@@ -11,7 +11,7 @@ using LetsTalk.Server.Utility.Common;
 using Microsoft.Extensions.Options;
 using Mongo2Go;
 using MongoDB.Driver;
-using MongoDBMigrations;
+using SimpleMongoMigrations;
 using System.Reflection;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Tests;
@@ -52,11 +52,11 @@ public class ChatMongoDBServiceTests
 
         _accountCollection.InsertMany([NeilJohnston, BobPettit, RickBarry, GeorgeGervin]);
 
-        new MigrationEngine()
-            .UseDatabase(client, "LetsTalk")
-            .UseAssembly(Assembly.GetAssembly(typeof(ChatMongoDBService)))
-            .UseSchemeValidation(false)
-            .Run("0.1.2");
+        new MigrationEngine(
+            client,
+            "LetsTalk",
+            Assembly.GetAssembly(typeof(ChatMongoDBService)))
+            .Run();
 
         _chatRepository = new ChatRepository(client, Options.Create(new MongoDBSettings
         {

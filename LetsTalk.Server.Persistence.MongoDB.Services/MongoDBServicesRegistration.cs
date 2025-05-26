@@ -24,11 +24,13 @@ public static class MongoDBServicesRegistration
 
         services.AddMongoDBRepository(configuration);
 
-        new MigrationEngine(
-            configuration.GetConnectionString("MongoDB")!,
-            configuration.GetValue<string>("MongoDB:DatabaseName")!,
-            Assembly.GetExecutingAssembly())
-            .Run();
+        MigrationEngineBuilder
+            .Create()
+            .WithConnectionString(configuration.GetConnectionString("MongoDB")!)
+            .WithDatabase(configuration.GetValue<string>("MongoDB:DatabaseName")!)
+            .WithAssembly(Assembly.GetExecutingAssembly())
+            .Build()
+            .RunAsync(default).Wait();
 
         return services;
     }

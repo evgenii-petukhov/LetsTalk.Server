@@ -9,13 +9,13 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services.Migrations;
 [Name("LinkPreview: Create a unique index (Url)")]
 public class LinkPreviewCreateUniqueIndexMigration : IMigration
 {
-    public void Up(IMongoDatabase database)
+    public Task UpAsync(IMongoDatabase database, CancellationToken cancellationToken)
     {
-        database.GetCollection<LinkPreview>(nameof(LinkPreview)).Indexes.CreateOne(new CreateIndexModel<LinkPreview>(
+        return database.GetCollection<LinkPreview>(nameof(LinkPreview)).Indexes.CreateOneAsync(new CreateIndexModel<LinkPreview>(
             Builders<LinkPreview>.IndexKeys.Ascending(x => x.Url),
             new CreateIndexOptions
             {
                 Unique = true
-            }));
+            }), cancellationToken: cancellationToken);
     }
 }

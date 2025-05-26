@@ -35,7 +35,7 @@ public class ChatMongoDBServiceTests
     private Account GeorgeGervin;
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
         _runner = MongoDbRunner.Start();
         var client = new MongoClient(_runner.ConnectionString);
@@ -52,11 +52,13 @@ public class ChatMongoDBServiceTests
 
         _accountCollection.InsertMany([NeilJohnston, BobPettit, RickBarry, GeorgeGervin]);
 
-        new MigrationEngine(
-            client,
-            "LetsTalk",
-            Assembly.GetAssembly(typeof(ChatMongoDBService)))
-            .Run();
+        await MigrationEngineBuilder
+            .Create()
+            .WithDatabase("LetsTalk")
+            .WithAssembly(typeof(ChatMongoDBService).Assembly)
+            .WithClient(client)
+            .Build()
+            .RunAsync(default);
 
         _chatRepository = new ChatRepository(client, Options.Create(new MongoDBSettings
         {

@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
     <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
-    <PackageReference Include="SimpleMongoMigrations" Version="1.0.2" />
+    <PackageReference Include="SimpleMongoMigrations" Version="1.0.12" />
   </ItemGroup>
 
   <ItemGroup>

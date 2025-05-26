@@ -9,9 +9,9 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services.Migrations;
 [Name("ChatMessageStatus: Create a unique index (ChatId + AccountId + MessageId)")]
 public class ChatMessageStatusCreateUniqueIndexMigration : IMigration
 {
-    public void Up(IMongoDatabase database)
+    public Task UpAsync(IMongoDatabase database, CancellationToken cancellationToken)
     {
-        database.GetCollection<ChatMessageStatus>(nameof(ChatMessageStatus)).Indexes.CreateOne(new CreateIndexModel<ChatMessageStatus>(
+        return database.GetCollection<ChatMessageStatus>(nameof(ChatMessageStatus)).Indexes.CreateOneAsync(new CreateIndexModel<ChatMessageStatus>(
             Builders<ChatMessageStatus>.IndexKeys
                 .Ascending(x => x.ChatId)
                 .Ascending(x => x.AccountId)
@@ -19,6 +19,6 @@ public class ChatMessageStatusCreateUniqueIndexMigration : IMigration
             new CreateIndexOptions
             {
                 Unique = true,
-            }));
+            }), cancellationToken: cancellationToken);
     }
 }

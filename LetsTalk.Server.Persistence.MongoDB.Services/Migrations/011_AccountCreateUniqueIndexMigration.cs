@@ -9,9 +9,9 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services.Migrations;
 [Name("Account: Create a unique index (AccountTypeId + ExternalId + Email)")]
 public class AccountCreateUniqueIndexMigration : IMigration
 {
-    public void Up(IMongoDatabase database)
+    public Task UpAsync(IMongoDatabase database, CancellationToken cancellationToken)
     {
-        database.GetCollection<Account>(nameof(Account)).Indexes.CreateOne(new CreateIndexModel<Account>(
+        return database.GetCollection<Account>(nameof(Account)).Indexes.CreateOneAsync(new CreateIndexModel<Account>(
             Builders<Account>.IndexKeys
                 .Ascending(x => x.AccountTypeId)
                 .Ascending(x => x.ExternalId)
@@ -19,6 +19,6 @@ public class AccountCreateUniqueIndexMigration : IMigration
             new CreateIndexOptions
             {
                 Unique = true,
-            }));
+            }), cancellationToken: cancellationToken);
     }
 }

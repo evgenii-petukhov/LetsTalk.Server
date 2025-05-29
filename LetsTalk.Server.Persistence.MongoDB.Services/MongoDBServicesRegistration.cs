@@ -10,7 +10,7 @@ namespace LetsTalk.Server.Persistence.MongoDB.Services;
 
 public static class MongoDBServicesRegistration
 {
-    public static IServiceCollection AddMongoDBServices(
+    public static async Task<IServiceCollection> AddMongoDBServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -24,13 +24,13 @@ public static class MongoDBServicesRegistration
 
         services.AddMongoDBRepository(configuration);
 
-        MigrationEngineBuilder
+        await MigrationEngineBuilder
             .Create()
             .WithConnectionString(configuration.GetConnectionString("MongoDB")!)
             .WithDatabase(configuration.GetValue<string>("MongoDB:DatabaseName")!)
             .WithAssembly(Assembly.GetExecutingAssembly())
             .Build()
-            .RunAsync(default).Wait();
+            .RunAsync(default);
 
         return services;
     }

@@ -11,12 +11,12 @@ namespace LetsTalk.Server.API;
 
 public static class ApiServiceRegistration
 {
-    public static IServiceCollection AddApiServices(
+    public static async Task<IServiceCollection> AddApiServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddCoreServices(configuration);
+        await services.AddCoreServices(configuration);
         services.AddLoggingServices();
         services.AddAuthenticationClientServices(configuration);
         services.AddSignPackageServices(configuration);

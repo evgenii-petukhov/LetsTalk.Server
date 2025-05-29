@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"), optional: false);
 
-builder.Services.AddApiServices(builder.Configuration);
+await builder.Services.AddApiServices(builder.Configuration);
 
 builder.Host.UseSerilog((context, loggerConfig) =>
 {

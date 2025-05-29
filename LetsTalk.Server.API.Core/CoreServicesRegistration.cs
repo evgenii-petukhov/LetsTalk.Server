@@ -20,7 +20,7 @@ namespace LetsTalk.Server.API.Core;
 
 public static class CoreServicesRegistration
 {
-    public static IServiceCollection AddCoreServices(
+    public static async Task<IServiceCollection> AddCoreServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -115,7 +115,7 @@ public static class CoreServicesRegistration
                 break;
         }
 
-        services.AddPersistenceAgnosticServices(configuration);
+        await services.AddPersistenceAgnosticServices(configuration);
 
         return services;
     }

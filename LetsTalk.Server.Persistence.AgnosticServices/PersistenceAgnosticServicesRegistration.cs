@@ -7,14 +7,14 @@ namespace LetsTalk.Server.Persistence.AgnosticServices;
 
 public static class PersistenceAgnosticServicesRegistration
 {
-    public static IServiceCollection AddPersistenceAgnosticServices(
+    public static async Task<IServiceCollection> AddPersistenceAgnosticServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
         switch (configuration.GetValue<string>("Features:DatabaseMode"))
         {
             case "MongoDB":
-                services.AddMongoDBServices(configuration);
+                await services.AddMongoDBServices(configuration);
                 break;
             default:
                 services.AddEntityFrameworkServices(configuration);

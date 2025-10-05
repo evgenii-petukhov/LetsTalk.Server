@@ -47,7 +47,7 @@ public static class CoreServicesRegistration
                     configure.Message<LinkPreviewRequest>(x => x.SetEntityName(topicSettings.LinkPreviewRequest!));
                     configure.Message<ImageResizeRequest>(x => x.SetEntityName(topicSettings.ImageResizeRequest!));
                     configure.Message<RemoveImageRequest>(x => x.SetEntityName(topicSettings.RemoveImageRequest!));
-                    configure.Message<SendLoginCodeRequest>(x => x.SetEntityName(topicSettings.SendLoginCodeRequest!));
+                    configure.Message<SendEmailRequest>(x => x.SetEntityName(topicSettings.SendEmailRequest!));
                 });
                 services.AddScoped(typeof(IProducer<>), typeof(SqsProducer<>));
             }
@@ -67,7 +67,7 @@ public static class CoreServicesRegistration
                     rider.AddProducer<string, LinkPreviewRequest>(topicSettings.LinkPreviewRequest, defaultProducerConfig);
                     rider.AddProducer<string, ImageResizeRequest>(topicSettings.ImageResizeRequest, defaultProducerConfig);
                     rider.AddProducer<string, RemoveImageRequest>(topicSettings.RemoveImageRequest, defaultProducerConfig);
-                    rider.AddProducer<string, SendLoginCodeRequest>(topicSettings.SendLoginCodeRequest, defaultProducerConfig);
+                    rider.AddProducer<string, SendEmailRequest>(topicSettings.SendEmailRequest, defaultProducerConfig);
                 });
             }
         });

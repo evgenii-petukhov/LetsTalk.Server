@@ -10,5 +10,5 @@ public class TopicSettings
 
     public string? RemoveImageRequest { get; set; }
 
-    public string? SendLoginCodeRequest { get; set; }
+    public string? SendEmailRequest { get; set; }
 }

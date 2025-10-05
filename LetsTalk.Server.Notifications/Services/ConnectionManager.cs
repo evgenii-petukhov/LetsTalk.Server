@@ -4,7 +4,7 @@ namespace LetsTalk.Server.Notifications.Services;
 
 public class ConnectionManager : IConnectionManager
 {
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     public Dictionary<string, HashSet<string>> ConnectionIdAccountIdBy { get; } = new(StringComparer.Ordinal);
 

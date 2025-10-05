@@ -24,7 +24,7 @@ public class ChatEntityFrameworkService(
         var chats = await _chatRepository.GetChatsByAccountIdAsync(accountIdAsInt, cancellationToken);
         var chatMetrics = await _chatRepository.GetChatMetricsAsync(accountIdAsInt, cancellationToken);
 
-        return chats.Select(chat =>
+        return [.. chats.Select(chat =>
         {
             chatMetrics.TryGetValue(chat.Id!, out var metrics);
             var otherAccount = chat!.ChatMembers!.FirstOrDefault(cm => cm.AccountId != accountIdAsInt)?.Account;
@@ -40,26 +40,25 @@ public class ChatEntityFrameworkService(
                 LastMessageId = metrics?.LastMessageId.ToString(CultureInfo.InvariantCulture),
                 UnreadCount = metrics?.UnreadCount ?? 0,
                 IsIndividual = chat.IsIndividual,
-                AccountIds = chat.ChatMembers!
+                AccountIds = [.. chat.ChatMembers!
                     .Where(cm => cm.AccountId != accountIdAsInt)
-                    .Select(cm => cm.AccountId.ToString(CultureInfo.InvariantCulture))
-                    .ToList()
+                    .Select(cm => cm.AccountId.ToString(CultureInfo.InvariantCulture))]
             };
-        }).ToList();
+        })];
     }
 
     public async Task<List<string>> GetChatMemberAccountIdsAsync(string chatId, CancellationToken cancellationToken = default)
     {
         var ids = await _chatMemberRepository.GetChatMemberAccountIdsAsync(int.Parse(chatId, CultureInfo.InvariantCulture), cancellationToken);
 
-        return ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
+        return [.. ids.Select(x => x.ToString(CultureInfo.InvariantCulture))];
     }
 
     public async Task<List<string>> GetAccountIdsInIndividualChatsAsync(string accountId, CancellationToken cancellationToken = default)
     {
         var ids = await _chatRepository.GetAccountIdsInIndividualChatsAsync(int.Parse(accountId, CultureInfo.InvariantCulture), cancellationToken);
 
-        return ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
+        return [.. ids.Select(x => x.ToString(CultureInfo.InvariantCulture))];
     }
 
     public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)

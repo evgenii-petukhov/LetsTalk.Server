@@ -47,6 +47,7 @@ public class LinkPreviewRequestConsumer(
         if (model.Error != null)
         {
             _logUnableToDownload(_logger, context.Message.Url, model.Error);
+            return;
         }
 
         var payload = new SetLinkPreviewRequest
@@ -54,8 +55,8 @@ public class LinkPreviewRequestConsumer(
             MessageId = context.Message.MessageId,
             ChatId = context.Message.ChatId,
             Url = context.Message.Url,
-            Title = model.OpenGraphModel!.Title,
-            ImageUrl = model.OpenGraphModel!.ImageUrl
+            Title = model.OpenGraphModel?.Title,
+            ImageUrl = model.OpenGraphModel?.ImageUrl
         };
         _signPackageService.Sign(payload);
         using var client = _httpClientService.GetHttpClient();

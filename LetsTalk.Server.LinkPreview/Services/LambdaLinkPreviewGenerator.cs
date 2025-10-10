@@ -21,18 +21,18 @@ public class LambdaLinkPreviewGenerator(
     private readonly ILogger<LambdaLinkPreviewGenerator> _logger = logger;
     private readonly AwsSettings _awsSettings = awsOptions.Value;
 
-    public async Task<LinkPreviewResponse> GenerateLinkPreviewAsync(string url, CancellationToken cancellationToken)
+    public async Task<LinkPreviewResponse> GenerateLinkPreviewAsync(LinkPreviewRequest request, CancellationToken cancellationToken)
     {
         using var client = GetLambdaClient();
         var response = await client.InvokeAsync(new InvokeRequest
         {
             FunctionName = "LinkPreviewLambda_GenerateAsync",
-            Payload = JsonSerializer.Serialize(url)
+            Payload = JsonSerializer.Serialize(request)
         }, cancellationToken);
 
         if (response == null)
         {
-            _logTitleEmpty(_logger, url, null);
+            _logTitleEmpty(_logger, request.Url!, null);
             return null!;
         }
 

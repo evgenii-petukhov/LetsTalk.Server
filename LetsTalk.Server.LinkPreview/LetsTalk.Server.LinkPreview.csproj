@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Infrastructure.ApiClient\LetsTalk.Server.Infrastructure.ApiClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj" />

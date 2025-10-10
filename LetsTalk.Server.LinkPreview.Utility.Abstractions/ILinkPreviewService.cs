@@ -4,5 +4,5 @@ namespace LetsTalk.Server.LinkPreview.Utility.Abstractions;
 
 public interface ILinkPreviewService
 {
-    Task<LinkPreviewResponse> GenerateLinkPreviewAsync(string url, CancellationToken cancellationToken = default);
+    Task<LinkPreviewResponse> GenerateLinkPreviewAsync(LinkPreviewRequest request, CancellationToken cancellationToken = default);
 }

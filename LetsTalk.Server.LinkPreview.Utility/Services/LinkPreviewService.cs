@@ -6,17 +6,18 @@ namespace LetsTalk.Server.LinkPreview.Utility.Services;
 
 public class LinkPreviewService(
     IDownloadService downloadService,
-    IRegexService regexService) : ILinkPreviewService
+    IRegexService regexService,
+    ILinkPreviewService linkPreviewService) : ILinkPreviewService
 {
     private readonly IDownloadService _downloadService = downloadService;
     private readonly IRegexService _regexService = regexService;
+    private readonly ILinkPreviewService _linkPreviewService = linkPreviewService;
 
-    public async Task<LinkPreviewResponse> GenerateLinkPreviewAsync(string url, CancellationToken cancellationToken = default)
+    public async Task<LinkPreviewResponse> GenerateLinkPreviewAsync(LinkPreviewRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            var pageString = await _downloadService.DownloadAsStringAsync(url, cancellationToken);
-
+            var pageString = await _downloadService.DownloadAsStringAsync(request.Url!, cancellationToken);
             var model = _regexService.GetOpenGraphModel(pageString);
 
             return new LinkPreviewResponse
@@ -30,12 +31,10 @@ public class LinkPreviewService(
                     }
             };
         }
-        catch(Exception e)
+        catch (HttpRequestException e)
+        when (e.StatusCode == System.Net.HttpStatusCode.Forbidden && !string.IsNullOrWhiteSpace(request.SecretKey))
         {
-            return new LinkPreviewResponse
-            {
-                Error = e
-            };
+            return await _linkPreviewService.GenerateLinkPreviewAsync(request, cancellationToken);
         }
     }
 }

@@ -20,7 +20,7 @@ public static class EmailServiceRegistration
         {
             if (configuration.GetValue<string>("Features:EventBrokerMode") == "aws")
             {
-                x.AddConsumer<SendLoginCodeRequestConsumer>();
+                x.AddConsumer<SendEmailRequestConsumer>();
 
                 x.UsingAmazonSqs((context, configure) =>
                 {
@@ -32,13 +32,13 @@ public static class EmailServiceRegistration
                         h.SecretKey(awsSettings.SecretKey);
                     });
                     configure.WaitTimeSeconds = 20;
-                    configure.ReceiveEndpoint(queueSettings.SendLoginCodeRequest!, e =>
+                    configure.ReceiveEndpoint(queueSettings.SendEmailRequest!, e =>
                     {
                         e.WaitTimeSeconds = 20;
                         e.DefaultContentType = new ContentType("application/json");
                         e.UseRawJsonDeserializer();
                         e.ConfigureConsumeTopology = false;
-                        e.ConfigureConsumer<SendLoginCodeRequestConsumer>(context);
+                        e.ConfigureConsumer<SendEmailRequestConsumer>(context);
                     });
                 });
             }
@@ -47,18 +47,18 @@ public static class EmailServiceRegistration
                 x.UsingInMemory();
                 x.AddRider(rider =>
                 {
-                    rider.AddConsumer<SendLoginCodeRequestConsumer>();
+                    rider.AddConsumer<SendEmailRequestConsumer>();
                     rider.UsingKafka((context, k) =>
                     {
                         var kafkaSettings = ConfigurationHelper.GetKafkaSettings(configuration);
                         var topicSettings = ConfigurationHelper.GetTopicSettings(configuration);
                         k.Host(kafkaSettings.Url);
-                        k.TopicEndpoint<SendLoginCodeRequest>(
-                            topicSettings.SendLoginCodeRequest!,
+                        k.TopicEndpoint<SendEmailRequest>(
+                            topicSettings.SendEmailRequest!,
                             kafkaSettings.GroupId,
                             e =>
                             {
-                                e.ConfigureConsumer<SendLoginCodeRequestConsumer>(context);
+                                e.ConfigureConsumer<SendEmailRequestConsumer>(context);
                                 e.CreateIfMissing();
                             });
                     });

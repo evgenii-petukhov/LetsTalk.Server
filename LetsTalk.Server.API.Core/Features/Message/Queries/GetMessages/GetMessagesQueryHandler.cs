@@ -20,13 +20,12 @@ public class GetMessagesQueryHandler(
             request.MessagesPerPage,
             cancellationToken);
 
-        return messages
+        return [.. messages
             .Select(message =>
             {
                 var messageDto = _mapper.Map<MessageDto>(message);
                 messageDto.IsMine = message.SenderId == request.SenderId;
                 return messageDto;
-            })
-            .ToList();
+            })];
     }
 }

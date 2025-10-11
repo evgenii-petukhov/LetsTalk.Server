@@ -9,6 +9,7 @@ using LetsTalk.Server.LinkPreview.Utility.Services;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
 using System.Net.Mime;
+using LetsTalk.Server.DependencyInjection;
 
 namespace LetsTalk.Server.LinkPreview;
 
@@ -68,6 +69,7 @@ public static class LinkPreviewServiceRegistration
             }
         });
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
+        services.Configure<LinkPreviewSettings>(configuration.GetSection("LinkPreview"));
         services.AddSignPackageServices(configuration);
         services.AddScoped<IHttpClientService, HttpClientService>();
         services.AddHttpClient(nameof(HttpClientService)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
@@ -85,7 +87,8 @@ public static class LinkPreviewServiceRegistration
             default:
                 services.AddScoped<IDownloadService, DownloadService>();
                 services.AddScoped<IRegexService, RegexService>();
-                services.AddScoped<ILinkPreviewService, LinkPreviewService>();
+                services.AddScoped<ILinkPreviewService, FallbackLinkPreviewService>();
+                services.DecorateScoped<ILinkPreviewService, LinkPreviewService>();
                 break;
         }
 

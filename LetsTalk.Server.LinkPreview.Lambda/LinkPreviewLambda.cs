@@ -8,12 +8,14 @@ namespace LetsTalk.Server.LinkPreview.Lambda
 {
     public static class LinkPreviewLambda
     {
-        public static Task<LinkPreviewResponse> GenerateAsync(string input)
+        public static Task<LinkPreviewResponse> GenerateAsync(LinkPreviewRequest request)
         {
+            var downloadService = new DownloadService(new FakeHttpClientService());
             var linkPreviewService = new LinkPreviewService(
-                new DownloadService(new FakeHttpClientService()),
-                new RegexService());
-            return linkPreviewService.GenerateLinkPreviewAsync(input);
+                downloadService,
+                new RegexService(),
+                new FallbackLinkPreviewService(downloadService));
+            return linkPreviewService.GenerateLinkPreviewAsync(request);
         }
     }
 }

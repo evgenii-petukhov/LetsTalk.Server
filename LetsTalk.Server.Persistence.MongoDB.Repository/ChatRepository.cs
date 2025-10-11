@@ -123,7 +123,7 @@ public class ChatRepository : IChatRepository
         var chat = new Chat
         {
             IsIndividual = true,
-            AccountIds = accountIds.ToList()
+            AccountIds = [.. accountIds]
         };
 
         await _chatCollection.InsertOneAsync(chat, cancellationToken: cancellationToken);
@@ -139,9 +139,8 @@ public class ChatRepository : IChatRepository
                 Builders<Chat>.Filter.AnyEq(x => x.AccountIds, accountId)))
             .ToListAsync(cancellationToken);
 
-        return chats.SelectMany(x => x.AccountIds!)
+        return [.. chats.SelectMany(x => x.AccountIds!)
             .Where(x => !string.Equals(x, accountId, StringComparison.Ordinal))
-            .Distinct()
-            .ToList();
+            .Distinct()];
     }
 }

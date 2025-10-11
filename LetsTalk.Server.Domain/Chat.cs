@@ -25,8 +25,6 @@ public class Chat : BaseEntity
     {
         IsIndividual = true;
 
-        ChatMembers = accountIds
-            .Select(accountId => new ChatMember(accountId))
-            .ToList();
+        ChatMembers = [.. accountIds.Select(accountId => new ChatMember(accountId))];
     }
 }

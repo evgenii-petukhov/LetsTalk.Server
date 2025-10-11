@@ -4,16 +4,20 @@ using LetsTalk.Server.Authentication.Abstractions;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using MediatR;
+using System.Globalization;
+using System.Text;
 
 namespace LetsTalk.Server.API.Core.Features.Authentication.Commands.GenerateLoginCode;
 
 public class GenerateLoginCodeCommandHandler(
     IAuthenticationClient authenticationClient,
-    IProducer<SendLoginCodeRequest> producer
+    IProducer<SendEmailRequest> producer
 ) : IRequestHandler<GenerateLoginCodeCommand, GenerateLoginCodeResponseDto>
 {
+    private static readonly CompositeFormat MessageTemplate = CompositeFormat.Parse(Localization.LoginCodeEmailTemplate);
+
     private readonly IAuthenticationClient _authenticationClient = authenticationClient;
-    private readonly IProducer<SendLoginCodeRequest> _producer = producer;
+    private readonly IProducer<SendEmailRequest> _producer = producer;
 
     public async Task<GenerateLoginCodeResponseDto> Handle(GenerateLoginCodeCommand request, CancellationToken cancellationToken)
     {
@@ -24,10 +28,11 @@ public class GenerateLoginCodeCommandHandler(
         if (isCodeCreated)
         {
             await _producer.PublishAsync(
-                new SendLoginCodeRequest
+                new SendEmailRequest
                 {
-                    Email = email,
-                    Code = code
+                    Address = email,
+                    Subject = Localization.LoginCodeEmailSubject,
+                    Body = string.Format(CultureInfo.InvariantCulture, MessageTemplate, code)
                 }, cancellationToken);
         }
 

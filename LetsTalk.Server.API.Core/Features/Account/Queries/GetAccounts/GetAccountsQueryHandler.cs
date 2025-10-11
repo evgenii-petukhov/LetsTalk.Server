@@ -13,8 +13,6 @@ public class GetAccountsQueryHandler(
     {
         var accountCacheEntries = await _accountService.GetAccountsAsync(cancellationToken);
 
-        return accountCacheEntries
-            .Where(account => account.Id != request.Id)
-            .ToList();
+        return [.. accountCacheEntries.Where(account => account.Id != request.Id)];
     }
 }

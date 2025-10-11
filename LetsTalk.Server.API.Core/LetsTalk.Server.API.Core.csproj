@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +31,21 @@
     <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Localization.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Localization.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

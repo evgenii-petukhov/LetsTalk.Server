@@ -32,7 +32,7 @@ public static class ConfigurationHelper
             LinkPreviewRequest = configuration.GetValue<string>("Topics:LinkPreviewRequest"),
             ImageResizeRequest = configuration.GetValue<string>("Topics:ImageResizeRequest"),
             RemoveImageRequest = configuration.GetValue<string>("Topics:RemoveImageRequest"),
-            SendLoginCodeRequest = configuration.GetValue<string>("Topics:SendLoginCodeRequest"),
+            SendEmailRequest = configuration.GetValue<string>("Topics:SendEmailRequest"),
         };
     }
 
@@ -44,7 +44,7 @@ public static class ConfigurationHelper
             LinkPreviewRequest = configuration.GetValue<string>("Queues:LinkPreviewRequest"),
             ImageResizeRequest = configuration.GetValue<string>("Queues:ImageResizeRequest"),
             RemoveImageRequest = configuration.GetValue<string>("Queues:RemoveImageRequest"),
-            SendLoginCodeRequest = configuration.GetValue<string>("Queues:SendLoginCodeRequest"),
+            SendEmailRequest = configuration.GetValue<string>("Queues:SendEmailRequest"),
         };
     }
 }

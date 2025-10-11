@@ -22,7 +22,7 @@ public class ChatMongoDBService(
 
         var chatMetrics = _chatRepository.GetChatMetrics(accountId, cancellationToken);
 
-        return chats.Select(chat =>
+        return [.. chats.Select(chat =>
         {
             chatMetrics.TryGetValue(chat.Id!, out var metrics);
             var otherAccount = accounts.FirstOrDefault(a => chat.AccountIds!.Contains(a.Id!));
@@ -42,9 +42,9 @@ public class ChatMongoDBService(
                 LastMessageId = metrics?.LastMessageId,
                 UnreadCount = metrics?.UnreadCount ?? 0,
                 IsIndividual = chat.IsIndividual,
-                AccountIds = chat.AccountIds!.Where(x => x != accountId).ToList()
+                AccountIds = [.. chat.AccountIds!.Where(x => x != accountId)]
             };
-        }).ToList();
+        })];
     }
 
     public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)

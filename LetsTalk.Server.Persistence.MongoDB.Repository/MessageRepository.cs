@@ -50,7 +50,8 @@ public class MessageRepository : IMessageRepository
                 DateCreatedUnix = g.Message.DateCreatedUnix,
                 LinkPreview = linkPreview,
                 Image = g.Message.Image,
-                ImagePreview = g.Message.ImagePreview
+                ImagePreview = g.Message.ImagePreview,
+                ChatId = g.Message.ChatId,
             })
             .OrderByDescending(mesage => mesage.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)

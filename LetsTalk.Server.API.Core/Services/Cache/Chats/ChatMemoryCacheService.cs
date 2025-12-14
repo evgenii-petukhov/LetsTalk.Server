@@ -37,4 +37,9 @@ public class ChatMemoryCacheService(
 
         return Task.CompletedTask;
     }
+
+    public Task<bool> IsChatIdValidAsync(string chatId, CancellationToken cancellationToken)
+    {
+        return ChatService.IsChatIdValidAsync(chatId, cancellationToken);
+    }
 }

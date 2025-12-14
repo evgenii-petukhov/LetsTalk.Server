@@ -11,6 +11,8 @@ using LetsTalk.Server.SignPackage.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using LetsTalk.Server.API.Validation;
 using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.API.Core.Features.Chat.Queries.IsChatValid;
+using LetsTalk.Server.API.Middleware.Exceptions;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -27,11 +29,18 @@ public class MessageController(
     private readonly MessagingSettings _messagingSettings = messagingSettings.Value;
 
     [HttpGet("{chatId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<MessageDto>>> GetAsync(
         string chatId,
         [FromQuery(Name="page")] int pageIndex = 0,
         CancellationToken cancellationToken = default)
     {
+        var isChatIdValid = await _mediator.Send(new IsChatValidQuery(chatId), cancellationToken);
+        if (!isChatIdValid)
+        {
+            throw new NotFoundException($"Chat with id '{chatId}' was not found.");
+        }
+
         var senderId = GetAccountId();
         var query = new GetMessagesQuery(senderId, chatId, pageIndex, _messagingSettings.MessagesPerPage);
         var messageDtos = await _mediator.Send(query, cancellationToken);

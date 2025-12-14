@@ -17,4 +17,9 @@ public class ChatService(
         var chats = await _chatAgnosticService.GetChatsAsync(accountId, cancellationToken);
         return _mapper.Map<List<ChatDto>>(chats);
     }
+
+    public Task<bool> IsChatIdValidAsync(string chatId, CancellationToken cancellationToken)
+    {
+        return _chatAgnosticService.IsChatIdValidAsync(chatId, cancellationToken);
+    }
 }

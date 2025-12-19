@@ -3,6 +3,7 @@ using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LetsTalk.Server.Persistence.MongoDB.Repository;
@@ -105,9 +106,11 @@ public class ChatRepository : IChatRepository
 
     public Task<bool> IsChatIdValidAsync(string id, CancellationToken cancellationToken = default)
     {
-        return _chatCollection
-            .Find(Builders<Chat>.Filter.Eq(x => x.Id, id))
-            .AnyAsync(cancellationToken);
+        return IsValidObjectId(id)
+            ? _chatCollection
+                .Find(Builders<Chat>.Filter.Eq(x => x.Id, id))
+                .AnyAsync(cancellationToken)
+            : Task.FromResult(false);
     }
 
     public Task<Chat> GetIndividualChatByAccountIdsAsync(IEnumerable<string> accountIds, CancellationToken cancellationToken = default)
@@ -142,5 +145,10 @@ public class ChatRepository : IChatRepository
         return [.. chats.SelectMany(x => x.AccountIds!)
             .Where(x => !string.Equals(x, accountId, StringComparison.Ordinal))
             .Distinct()];
+    }
+
+    private static bool IsValidObjectId(string? id)
+    {
+        return !string.IsNullOrWhiteSpace(id) && ObjectId.TryParse(id, out _);
     }
 }

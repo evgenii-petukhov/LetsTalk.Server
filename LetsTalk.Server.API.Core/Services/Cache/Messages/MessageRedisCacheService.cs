@@ -18,7 +18,7 @@ public class MessageRedisCacheService(
 
     public async Task<IReadOnlyList<MessageServiceModel>> GetPagedAsync(string chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken)
     {
-        if (!IsActive)
+        if (!IsActive || pageIndex > 0)
         {
             return await MessageService.GetPagedAsync(
                 chatId,
@@ -27,9 +27,7 @@ public class MessageRedisCacheService(
                 cancellationToken);
         }
 
-        var key = new RedisKey(pageIndex == 0
-            ? GetFirstMessagePageKey(chatId)
-            : GetMessagePageKey(chatId));
+        var key = new RedisKey(GetFirstMessagePageKey(chatId));
 
         var cachedMessages = await _database.HashGetAsync(key, new RedisValue(pageIndex.ToString(CultureInfo.InvariantCulture)));
 
@@ -47,7 +45,7 @@ public class MessageRedisCacheService(
                 new RedisValue(JsonSerializer.Serialize(messageDtos)),
                 When.NotExists);
 
-            if (IsVolotile && pageIndex > 0)
+            if (IsVolotile)
             {
                 await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }
@@ -61,9 +59,7 @@ public class MessageRedisCacheService(
     public Task ClearAsync(string chatId)
     {
         return IsActive
-            ? Task.WhenAll(
-                _database.KeyDeleteAsync(GetMessagePageKey(chatId), CommandFlags.FireAndForget),
-                _database.KeyDeleteAsync(GetFirstMessagePageKey(chatId), CommandFlags.FireAndForget))
+            ? _database.KeyDeleteAsync(GetFirstMessagePageKey(chatId), CommandFlags.FireAndForget)
             : Task.CompletedTask;
     }
 }

@@ -11,4 +11,6 @@ public class Notification
     public LinkPreviewDto? LinkPreview { get; set; }
 
     public ImagePreviewDto? ImagePreview { get; set; }
+
+    public RtcSessionSettings? Connection { get; set; }
 }

@@ -25,10 +25,23 @@ public class NotificationConsumer(
         {
             await SendNotificationAsync(context.Message.RecipientId!, context.Message.ImagePreview);
         }
+
+        if (context.Message.Connection != null)
+        {
+            if (string.IsNullOrWhiteSpace(context.Message.Connection.Offer))
+            {
+                await SendNotificationAsync(context.Message.RecipientId!, context.Message.Connection, "RtcSessionOffer");
+            }
+        }
     }
 
     private Task SendNotificationAsync<T>(string id, T payload)
     {
-        return _notificationService.SendNotificationAsync(id!, payload, payload!.GetType().Name);
+        return SendNotificationAsync(id!, payload, payload!.GetType().Name);
+    }
+
+    private Task SendNotificationAsync<T>(string id, T payload, string typeName)
+    {
+        return _notificationService.SendNotificationAsync(id!, payload, typeName);
     }
 }

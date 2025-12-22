@@ -29,6 +29,7 @@ public class MessageController(
     private readonly MessagingSettings _messagingSettings = messagingSettings.Value;
 
     [HttpGet("{chatId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<MessageDto>>> GetAsync(
         string chatId,

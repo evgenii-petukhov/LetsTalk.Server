@@ -17,7 +17,8 @@ public class InitializeCallCommandHandler(
             RecipientId = request.AccountId,
             Connection = new RtcSessionSettings
             {
-                Offer = request.Offer
+                Offer = request.Offer,
+                AccountId = request.InvitingAccountId,
             }
         }, cancellationToken);
 

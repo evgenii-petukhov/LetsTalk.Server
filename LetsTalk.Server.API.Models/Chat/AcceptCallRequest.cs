@@ -4,5 +4,5 @@ public class AcceptCallRequest
 {
     public string? AccountId { get; set; }
 
-    public string? SessionDescription { get; set; }
+    public string? Answer { get; set; }
 }

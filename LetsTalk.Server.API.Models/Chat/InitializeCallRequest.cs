@@ -4,5 +4,5 @@ public class InitializeCallRequest
 {
     public string? AccountId { get; set; }
 
-    public string? SessionDescription { get; set; }
+    public string? Offer { get; set; }
 }

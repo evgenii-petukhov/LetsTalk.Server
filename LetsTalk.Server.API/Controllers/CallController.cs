@@ -14,15 +14,15 @@ public class CallController(
     [HttpPost("Initialize")]
     public async Task<ActionResult> InitializeAsync(InitializeCallRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new InitializeCallCommand(request.AccountId!, request.SessionDescription!);
+        var cmd = new InitializeCallCommand(GetAccountId(), request.AccountId!, request.Offer!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }
 
     [HttpPost("Accept")]
-    public async Task<ActionResult> AcceptAsync(InitializeCallRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult> AcceptAsync(AcceptCallRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new AcceptCallCommand(request.AccountId!, request.SessionDescription!);
+        var cmd = new AcceptCallCommand(request.AccountId!, request.Answer!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

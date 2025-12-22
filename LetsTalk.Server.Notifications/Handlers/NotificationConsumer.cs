@@ -28,9 +28,14 @@ public class NotificationConsumer(
 
         if (context.Message.Connection != null)
         {
-            if (string.IsNullOrWhiteSpace(context.Message.Connection.Offer))
+            if (!string.IsNullOrWhiteSpace(context.Message.Connection.Offer))
             {
                 await SendNotificationAsync(context.Message.RecipientId!, context.Message.Connection, "RtcSessionOffer");
+            }
+
+            if (!string.IsNullOrWhiteSpace(context.Message.Connection.Answer))
+            {
+                await SendNotificationAsync(context.Message.RecipientId!, context.Message.Connection, "RtcSessionAnswer");
             }
         }
     }

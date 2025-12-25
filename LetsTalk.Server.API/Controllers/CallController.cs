@@ -11,18 +11,18 @@ public class CallController(
 {
     private readonly IMediator _mediator = mediator;
 
-    [HttpPost("Initialize")]
-    public async Task<ActionResult> InitializeAsync(InitializeCallRequest request, CancellationToken cancellationToken)
+    [HttpPost("StartOutgoingCall")]
+    public async Task<ActionResult> StartOutgoingCallAsync(StartOutgoingCallRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new InitializeCallCommand(GetAccountId(), request.AccountId!, request.Offer!);
+        var cmd = new StartOutgoingCallCommand(GetAccountId(), request.AccountId!, request.Offer!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }
 
-    [HttpPost("Accept")]
-    public async Task<ActionResult> AcceptAsync(AcceptCallRequest request, CancellationToken cancellationToken)
+    [HttpPost("HandleIncomingCall")]
+    public async Task<ActionResult> HandleIncomingCallAsync(HandleIncomingCallRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new AcceptCallCommand(request.AccountId!, request.Answer!);
+        var cmd = new HandleIncomingCallCommand(request.AccountId!, request.Answer!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

@@ -316,15 +316,15 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task InitializeAsync(InitializeCallRequest body)
+        public virtual System.Threading.Tasks.Task StartOutgoingCallAsync(InitializeCallRequest body)
         {
-            return InitializeAsync(body, System.Threading.CancellationToken.None);
+            return StartOutgoingCallAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task InitializeAsync(InitializeCallRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task StartOutgoingCallAsync(InitializeCallRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -340,8 +340,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/Call/Initialize"
-                    urlBuilder_.Append("api/Call/Initialize");
+                    // Operation Path: "api/Call/StartOutgoingCall"
+                    urlBuilder_.Append("api/Call/StartOutgoingCall");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -392,15 +392,15 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AcceptAsync(AcceptCallRequest body)
+        public virtual System.Threading.Tasks.Task HandleIncomingCallAsync(AcceptCallRequest body)
         {
-            return AcceptAsync(body, System.Threading.CancellationToken.None);
+            return HandleIncomingCallAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AcceptAsync(AcceptCallRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task HandleIncomingCallAsync(AcceptCallRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -416,8 +416,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/Call/Accept"
-                    urlBuilder_.Append("api/Call/Accept");
+                    // Operation Path: "api/Call/HandleIncomingCall"
+                    urlBuilder_.Append("api/Call/HandleIncomingCall");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

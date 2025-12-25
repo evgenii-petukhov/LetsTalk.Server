@@ -2,6 +2,6 @@
 
 namespace LetsTalk.Server.API.Core.Commands;
 
-public record AcceptCallCommand(
+public record HandleIncomingCallCommand(
     string AccountId,
     string Answer) : IRequest<Unit>;

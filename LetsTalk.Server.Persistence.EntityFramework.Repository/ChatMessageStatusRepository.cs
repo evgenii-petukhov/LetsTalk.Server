@@ -4,7 +4,8 @@ using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class ChatMessageStatusRepository(LetsTalkDbContext context) : Repository(context), IChatMessageStatusRepository
+public class ChatMessageStatusRepository(LetsTalkDbContext context)
+    : Repository(context), IChatMessageStatusRepository
 {
     public async Task CreateAsync(ChatMessageStatus entity, CancellationToken cancellationToken = default)
     {

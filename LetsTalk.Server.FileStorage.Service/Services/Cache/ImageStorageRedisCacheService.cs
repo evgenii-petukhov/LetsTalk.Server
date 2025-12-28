@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using LetsTalk.Server.Configuration.Models;
+﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.Persistence.Redis;
 using Microsoft.Extensions.Options;
@@ -47,18 +46,21 @@ public class ImageStorageRedisCacheService : IImageStorageService, IImageStorage
 
         var key = new RedisKey(GetImageKey(imageId));
 
-        var cached = await _database.StringGetAsync(key);
+        var cached = await _database.HashGetAllAsync(key);
 
-        if (cached == RedisValue.Null)
+        if (cached.Length == 0)
         {
             var image = await _imageStorageService.GetImageAsync(imageId, fileStorageType, cancellationToken);
 
             if (image?.Content?.Length < _imageSizeThresholdInBytes)
             {
-                await _database.StringSetAsync(
+                await _database.HashSetAsync(
                     key,
-                    new RedisValue(JsonSerializer.Serialize(image)),
-                    when: When.NotExists);
+                    [
+                        new("content", image.Content),
+                        new("width", image.Width),
+                        new("height", image.Height)
+                    ]);
 
                 if (_isVolotile)
                 {
@@ -69,7 +71,12 @@ public class ImageStorageRedisCacheService : IImageStorageService, IImageStorage
             return image;
         }
 
-        return JsonSerializer.Deserialize<FetchImageResponse>(cached!)!;
+        return new FetchImageResponse
+        {
+            Content = cached.First(x => x.Name == "content").Value,
+            Width = (int)cached.First(x => x.Name == "width").Value,
+            Height = (int)cached.First(x => x.Name == "height").Value
+        };
     }
 
     public Task ClearAsync(string imageId)

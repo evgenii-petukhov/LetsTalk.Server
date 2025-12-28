@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.API.Core.Features.Call.Queries.GetCallSettings;
+using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -10,6 +12,14 @@ public class CallController(
     IMediator mediator) : ApiController
 {
     private readonly IMediator _mediator = mediator;
+
+    [HttpGet("CallSettings")]
+    public async Task<ActionResult<CallSettingsDto>> GetCallSettingsAsync(CancellationToken cancellationToken)
+    {
+        var query = new GetCallSettingsQuery();
+        var settings = await _mediator.Send(query, cancellationToken);
+        return Ok(settings);
+    }
 
     [HttpPost("StartOutgoingCall")]
     public async Task<ActionResult> StartOutgoingCallAsync(StartOutgoingCallRequest request, CancellationToken cancellationToken)

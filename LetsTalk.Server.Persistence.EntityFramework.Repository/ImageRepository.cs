@@ -4,7 +4,8 @@ using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class ImageRepository(LetsTalkDbContext context) : Repository(context), IImageRepository
+public class ImageRepository(LetsTalkDbContext context)
+    : Repository(context), IImageRepository
 {
     public void Delete(Image image)
     {

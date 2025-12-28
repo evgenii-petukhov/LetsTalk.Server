@@ -15,6 +15,7 @@ using MassTransit;
 using Confluent.Kafka;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.API.Core.Services.Cache.Accounts;
+using LetsTalk.Server.API.Core.Services.Cache.IceServerConfiguration;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -28,6 +29,7 @@ public static class CoreServicesRegistration
         services.AddMediatR(options => options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddScoped<IRegexService, RegexService>();
         services.AddScoped<IHtmlGenerator, HtmlGenerator>();
+        services.AddScoped<IIceServerConfigurationService, IceServerConfigurationService>();
         services.AddScoped<IMessageService, MessageService>();
         services.AddMassTransit(x =>
         {
@@ -72,6 +74,8 @@ public static class CoreServicesRegistration
             }
         });
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
+        services.Configure<RtcSettings>(configuration.GetSection("Rtc"));
+        services.Configure<CloudflareSettings>(configuration.GetSection("Cloudflare"));
 
         switch (configuration.GetValue<string>("Features:CachingMode"))
         {
@@ -93,6 +97,9 @@ public static class CoreServicesRegistration
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileRedisCacheService>();
                 services.AddScoped<IProfileCacheManager, ProfileRedisCacheService>();
+
+                services.AddScoped<IIceServerConfigurationService, IceServerConfigurationService>();
+                services.DecorateScoped<IIceServerConfigurationService, IceServerConfigurationRedisCacheService>();
                 break;
             default:
                 services.AddMemoryCache();
@@ -112,6 +119,9 @@ public static class CoreServicesRegistration
                 services.AddScoped<IProfileService, ProfileService>();
                 services.DecorateScoped<IProfileService, ProfileMemoryCacheService>();
                 services.AddScoped<IProfileCacheManager, ProfileMemoryCacheService>();
+
+                services.AddScoped<IIceServerConfigurationService, IceServerConfigurationService>();
+                services.DecorateScoped<IIceServerConfigurationService, IceServerConfigurationMemoryCacheService>();
                 break;
         }
 

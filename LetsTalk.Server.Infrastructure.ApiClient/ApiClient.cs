@@ -316,7 +316,85 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task StartOutgoingCallAsync(InitializeCallRequest body)
+        public virtual System.Threading.Tasks.Task<CallSettingsDto> CallSettingsAsync()
+        {
+            return CallSettingsAsync(System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<CallSettingsDto> CallSettingsAsync(System.Threading.CancellationToken cancellationToken)
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/Call/CallSettings"
+                    urlBuilder_.Append("api/Call/CallSettings");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CallSettingsDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task StartOutgoingCallAsync(StartOutgoingCallRequest body)
         {
             return StartOutgoingCallAsync(body, System.Threading.CancellationToken.None);
         }
@@ -324,7 +402,7 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task StartOutgoingCallAsync(InitializeCallRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task StartOutgoingCallAsync(StartOutgoingCallRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -392,7 +470,7 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task HandleIncomingCallAsync(AcceptCallRequest body)
+        public virtual System.Threading.Tasks.Task HandleIncomingCallAsync(HandleIncomingCallRequest body)
         {
             return HandleIncomingCallAsync(body, System.Threading.CancellationToken.None);
         }
@@ -400,7 +478,7 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task HandleIncomingCallAsync(AcceptCallRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task HandleIncomingCallAsync(HandleIncomingCallRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1331,18 +1409,6 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class AcceptCallRequest
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("accountId")]
-        public string AccountId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("answer")]
-        public string Answer { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class AccountDto
     {
 
@@ -1363,6 +1429,18 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("image")]
         public ImageDto Image { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class CallSettingsDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceServerConfiguration")]
+        public string IceServerConfiguration { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("maxVideoDurationInSeconds")]
+        public int MaxVideoDurationInSeconds { get; set; }
 
     }
 
@@ -1472,6 +1550,18 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class HandleIncomingCallRequest
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountId")]
+        public string AccountId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("answer")]
+        public string Answer { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ImageDto
     {
 
@@ -1528,18 +1618,6 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("signature")]
         public string Signature { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class InitializeCallRequest
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("accountId")]
-        public string AccountId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("offer")]
-        public string Offer { get; set; }
 
     }
 
@@ -1714,6 +1792,18 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("signature")]
         public string Signature { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class StartOutgoingCallRequest
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountId")]
+        public string AccountId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("offer")]
+        public string Offer { get; set; }
 
     }
 

@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public abstract class GenericRepository<T>(LetsTalkDbContext context) : Repository(context), IGenericRepository<T>
+public abstract class GenericRepository<T>(LetsTalkDbContext context)
+    : Repository(context), IGenericRepository<T>
     where T : BaseEntity
 {
     public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)

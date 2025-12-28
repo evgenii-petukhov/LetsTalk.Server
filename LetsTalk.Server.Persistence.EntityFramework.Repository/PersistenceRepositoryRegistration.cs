@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public static class PersistenceRepositoryServiceRegistration
+public static class PersistenceRepositoryRegistration
 {
     public static IServiceCollection AddPersistenceRepositoryServices(
         this IServiceCollection services,

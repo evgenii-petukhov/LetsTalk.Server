@@ -11,7 +11,7 @@ namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 public class ImageStorageRedisCacheService : IImageStorageService, IImageStorageCacheManager
 {
     private readonly bool _isActive;
-    private readonly bool _isVolotile;
+    private readonly bool _isVolatile;
 
     private readonly TimeSpan _cacheLifeTimeInSeconds;
     private readonly int _imageSizeThresholdInBytes;
@@ -29,9 +29,9 @@ public class ImageStorageRedisCacheService : IImageStorageService, IImageStorage
         _imageStorageService = imageStorageService;
 
         _isActive = cachingSettings.Value.ImagesCacheLifeTimeInSeconds != 0;
-        _isVolotile = _isActive && cachingSettings.Value.ImagesCacheLifeTimeInSeconds > 0;
+        _isVolatile = _isActive && cachingSettings.Value.ImagesCacheLifeTimeInSeconds > 0;
 
-        if (_isVolotile)
+        if (_isVolatile)
         {
             _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ImagesCacheLifeTimeInSeconds);
         }
@@ -62,7 +62,7 @@ public class ImageStorageRedisCacheService : IImageStorageService, IImageStorage
                         new("height", image.Height)
                     ]);
 
-                if (_isVolotile)
+                if (_isVolatile)
                 {
                     await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
                 }

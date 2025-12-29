@@ -18,7 +18,7 @@ public class ChatMemoryCacheService(
         return IsActive
             ? _memoryCache.GetOrCreateAsync(GetChatsKey(accountId), cacheEntry =>
             {
-                if (IsVolotile)
+                if (IsVolatile)
                 {
                     cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
                 }

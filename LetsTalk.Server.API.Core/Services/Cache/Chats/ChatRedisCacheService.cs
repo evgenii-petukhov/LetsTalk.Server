@@ -34,7 +34,7 @@ public class ChatRedisCacheService(
                 new RedisValue(JsonSerializer.Serialize(accountDtos)),
                 when: When.NotExists);
 
-            if (IsVolotile)
+            if (IsVolatile)
             {
                 await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }

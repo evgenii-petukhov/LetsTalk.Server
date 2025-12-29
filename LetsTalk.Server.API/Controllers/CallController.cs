@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.API.Core.Commands;
-using LetsTalk.Server.API.Core.Features.Call.Queries.GetCallSettings;
+using LetsTalk.Server.API.Core.Features.VideoCall.Queries.GetCallSettings;
 using LetsTalk.Server.Dto.Models;
 
 namespace LetsTalk.Server.API.Controllers;

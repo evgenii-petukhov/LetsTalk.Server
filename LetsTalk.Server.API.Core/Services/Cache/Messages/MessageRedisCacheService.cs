@@ -44,7 +44,7 @@ public class MessageRedisCacheService(
                 new RedisValue(JsonSerializer.Serialize(messageDtos)),
                 when: When.NotExists);
 
-            if (IsVolotile)
+            if (IsVolatile)
             {
                 await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }

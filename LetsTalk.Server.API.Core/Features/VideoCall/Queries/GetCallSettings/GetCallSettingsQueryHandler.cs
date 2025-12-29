@@ -5,7 +5,7 @@ using LetsTalk.Server.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace LetsTalk.Server.API.Core.Features.Call.Queries.GetCallSettings;
+namespace LetsTalk.Server.API.Core.Features.VideoCall.Queries.GetCallSettings;
 
 public class GetCallSettingsQueryHandler(
     IIceServerConfigurationService iceServerConfigurationService,

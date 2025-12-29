@@ -34,7 +34,7 @@ public class ProfileRedisCacheService(
                 new RedisValue(JsonSerializer.Serialize(profile)),
                 when: When.NotExists);
 
-            if (IsVolotile)
+            if (IsVolatile)
             {
                 await _database.KeyExpireAsync(key, CacheLifeTimeInSeconds);
             }

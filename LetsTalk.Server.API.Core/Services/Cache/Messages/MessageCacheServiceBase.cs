@@ -8,7 +8,7 @@ public abstract class MessageCacheServiceBase
 {
     protected bool IsActive { get; }
 
-    protected bool IsVolotile { get; }
+    protected bool IsVolatile { get; }
 
     protected TimeSpan CacheLifeTimeInSeconds { get; }
 
@@ -21,9 +21,9 @@ public abstract class MessageCacheServiceBase
         MessageService = messageService;
 
         IsActive = cachingSettings.Value.MessagesCacheLifeTimeInSeconds != 0;
-        IsVolotile = IsActive && cachingSettings.Value.MessagesCacheLifeTimeInSeconds > 0;
+        IsVolatile = IsActive && cachingSettings.Value.MessagesCacheLifeTimeInSeconds > 0;
 
-        if (IsVolotile)
+        if (IsVolatile)
         {
             CacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
         }

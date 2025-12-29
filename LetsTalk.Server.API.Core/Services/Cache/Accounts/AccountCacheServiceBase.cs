@@ -10,7 +10,7 @@ public abstract class AccountCacheServiceBase
 
     protected bool IsActive { get; }
 
-    protected bool IsVolotile { get; }
+    protected bool IsVolatile { get; }
 
     protected TimeSpan CacheLifeTimeInSeconds { get; }
 
@@ -23,9 +23,9 @@ public abstract class AccountCacheServiceBase
         AccountService = accountService;
 
         IsActive = cachingSettings.Value.AccountCacheLifeTimeInSeconds != 0;
-        IsVolotile = IsActive && cachingSettings.Value.AccountCacheLifeTimeInSeconds > 0;
+        IsVolatile = IsActive && cachingSettings.Value.AccountCacheLifeTimeInSeconds > 0;
 
-        if (IsVolotile)
+        if (IsVolatile)
         {
             CacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.AccountCacheLifeTimeInSeconds);
         }

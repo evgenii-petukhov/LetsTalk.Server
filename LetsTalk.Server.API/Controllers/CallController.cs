@@ -24,7 +24,7 @@ public class CallController(
     [HttpPost("StartOutgoingCall")]
     public async Task<ActionResult> StartOutgoingCallAsync(StartOutgoingCallRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new StartOutgoingCallCommand(GetAccountId(), request.AccountId!, request.Offer!);
+        var cmd = new StartOutgoingCallCommand(GetAccountId(), request.ChatId!, request.Offer!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }
@@ -32,7 +32,7 @@ public class CallController(
     [HttpPost("HandleIncomingCall")]
     public async Task<ActionResult> HandleIncomingCallAsync(HandleIncomingCallRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new HandleIncomingCallCommand(request.AccountId!, request.Answer!);
+        var cmd = new HandleIncomingCallCommand(GetAccountId(), request.ChatId!, request.Answer!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

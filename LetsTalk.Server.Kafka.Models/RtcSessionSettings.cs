@@ -6,5 +6,5 @@ public class RtcSessionSettings
 
     public string? Answer { get; set; }
 
-    public string? AccountId { get; set; }
+    public string? ChatId { get; set; }
 }

@@ -3,6 +3,6 @@
 namespace LetsTalk.Server.API.Core.Commands;
 
 public record StartOutgoingCallCommand(
-    string InvitingAccountId,
     string AccountId,
+    string ChatId,
     string Offer) : IRequest<Unit>;

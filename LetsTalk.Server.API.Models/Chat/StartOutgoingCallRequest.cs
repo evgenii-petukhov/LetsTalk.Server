@@ -2,7 +2,7 @@
 
 public class StartOutgoingCallRequest
 {
-    public string? AccountId { get; set; }
+    public string? ChatId { get; set; }
 
     public string? Offer { get; set; }
 }

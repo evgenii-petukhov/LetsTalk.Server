@@ -1553,8 +1553,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     public partial class HandleIncomingCallRequest
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("accountId")]
-        public string AccountId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("chatId")]
+        public string ChatId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("answer")]
         public string Answer { get; set; }
@@ -1799,8 +1799,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     public partial class StartOutgoingCallRequest
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("accountId")]
-        public string AccountId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("chatId")]
+        public string ChatId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("offer")]
         public string Offer { get; set; }

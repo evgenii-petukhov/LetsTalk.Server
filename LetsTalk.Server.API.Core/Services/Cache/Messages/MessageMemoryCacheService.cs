@@ -25,9 +25,9 @@ public class MessageMemoryCacheService(
                 cancellationToken);
         }
 
-        return _memoryCache.GetOrCreateAsync(GetFirstMessagePageKey(chatId), cacheEntry =>
+        return _memoryCache.GetOrCreateAsync(GetMessagesKey(chatId), cacheEntry =>
         {
-            if (IsVolotile)
+            if (IsVolatile)
             {
                 cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
             }
@@ -44,7 +44,7 @@ public class MessageMemoryCacheService(
     {
         if (IsActive)
         {
-            _memoryCache.Remove(GetFirstMessagePageKey(chatId));
+            _memoryCache.Remove(GetMessagesKey(chatId));
         }
 
         return Task.CompletedTask;

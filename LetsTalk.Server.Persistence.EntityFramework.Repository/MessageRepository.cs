@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class MessageRepository(LetsTalkDbContext context) : GenericRepository<Message>(context), IMessageRepository
+public class MessageRepository(LetsTalkDbContext context)
+    : GenericRepository<Message>(context), IMessageRepository
 {
     public Task<List<Message>> GetPagedAsync(int chatId, int pageIndex, int messagesPerPage, CancellationToken cancellationToken = default)
     {

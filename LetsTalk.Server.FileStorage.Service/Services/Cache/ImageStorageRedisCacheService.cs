@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using LetsTalk.Server.Configuration.Models;
+﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
 using LetsTalk.Server.Persistence.Redis;
 using Microsoft.Extensions.Options;
@@ -12,7 +11,7 @@ namespace LetsTalk.Server.FileStorage.Service.Services.Cache;
 public class ImageStorageRedisCacheService : IImageStorageService, IImageStorageCacheManager
 {
     private readonly bool _isActive;
-    private readonly bool _isVolotile;
+    private readonly bool _isVolatile;
 
     private readonly TimeSpan _cacheLifeTimeInSeconds;
     private readonly int _imageSizeThresholdInBytes;
@@ -30,9 +29,9 @@ public class ImageStorageRedisCacheService : IImageStorageService, IImageStorage
         _imageStorageService = imageStorageService;
 
         _isActive = cachingSettings.Value.ImagesCacheLifeTimeInSeconds != 0;
-        _isVolotile = _isActive && cachingSettings.Value.ImagesCacheLifeTimeInSeconds > 0;
+        _isVolatile = _isActive && cachingSettings.Value.ImagesCacheLifeTimeInSeconds > 0;
 
-        if (_isVolotile)
+        if (_isVolatile)
         {
             _cacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.ImagesCacheLifeTimeInSeconds);
         }
@@ -47,20 +46,23 @@ public class ImageStorageRedisCacheService : IImageStorageService, IImageStorage
 
         var key = new RedisKey(GetImageKey(imageId));
 
-        var cached = await _database.StringGetAsync(key);
+        var cached = await _database.HashGetAllAsync(key);
 
-        if (cached == RedisValue.Null)
+        if (cached.Length == 0)
         {
             var image = await _imageStorageService.GetImageAsync(imageId, fileStorageType, cancellationToken);
 
             if (image?.Content?.Length < _imageSizeThresholdInBytes)
             {
-                await _database.StringSetAsync(
+                await _database.HashSetAsync(
                     key,
-                    new RedisValue(JsonSerializer.Serialize(image)),
-                    when: When.NotExists);
+                    [
+                        new("content", image.Content),
+                        new("width", image.Width),
+                        new("height", image.Height)
+                    ]);
 
-                if (_isVolotile)
+                if (_isVolatile)
                 {
                     await _database.KeyExpireAsync(key, _cacheLifeTimeInSeconds);
                 }
@@ -69,7 +71,12 @@ public class ImageStorageRedisCacheService : IImageStorageService, IImageStorage
             return image;
         }
 
-        return JsonSerializer.Deserialize<FetchImageResponse>(cached!)!;
+        return new FetchImageResponse
+        {
+            Content = cached.First(x => x.Name == "content").Value,
+            Width = (int)cached.First(x => x.Name == "width").Value,
+            Height = (int)cached.First(x => x.Name == "height").Value
+        };
     }
 
     public Task ClearAsync(string imageId)

@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsTalk.Server.Persistence.EntityFramework.Repository;
 
-public class AccountRepository(LetsTalkDbContext context) : GenericRepository<Account>(context), IAccountRepository
+public class AccountRepository(LetsTalkDbContext context)
+    : GenericRepository<Account>(context), IAccountRepository
 {
     public override Task<Account> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {

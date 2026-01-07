@@ -18,7 +18,7 @@ public class AccountMemoryCacheService(
         return IsActive
             ? _memoryCache.GetOrCreateAsync(AccountCacheKey, cacheEntry =>
             {
-                if (IsVolotile)
+                if (IsVolatile)
                 {
                     cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
                 }

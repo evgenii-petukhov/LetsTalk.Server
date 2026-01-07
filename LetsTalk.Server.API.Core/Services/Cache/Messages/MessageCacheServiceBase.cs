@@ -8,7 +8,7 @@ public abstract class MessageCacheServiceBase
 {
     protected bool IsActive { get; }
 
-    protected bool IsVolotile { get; }
+    protected bool IsVolatile { get; }
 
     protected TimeSpan CacheLifeTimeInSeconds { get; }
 
@@ -21,16 +21,16 @@ public abstract class MessageCacheServiceBase
         MessageService = messageService;
 
         IsActive = cachingSettings.Value.MessagesCacheLifeTimeInSeconds != 0;
-        IsVolotile = IsActive && cachingSettings.Value.MessagesCacheLifeTimeInSeconds > 0;
+        IsVolatile = IsActive && cachingSettings.Value.MessagesCacheLifeTimeInSeconds > 0;
 
-        if (IsVolotile)
+        if (IsVolatile)
         {
             CacheLifeTimeInSeconds = TimeSpan.FromSeconds(cachingSettings.Value.MessagesCacheLifeTimeInSeconds);
         }
     }
 
-    protected static string GetFirstMessagePageKey(string chatId)
+    protected static string GetMessagesKey(string chatId)
     {
-        return $"messages[1st]:{chatId}";
+        return $"messages:{chatId}";
     }
 }

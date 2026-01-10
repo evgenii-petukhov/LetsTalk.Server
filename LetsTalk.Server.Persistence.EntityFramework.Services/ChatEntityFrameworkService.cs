@@ -86,4 +86,12 @@ public class ChatEntityFrameworkService(
 
         return chat.Id.ToString(CultureInfo.InvariantCulture);
     }
+
+    public Task<bool> IsAccountChatMemberAsync(string chatId, string accountId, CancellationToken cancellationToken = default)
+    {
+        return _chatMemberRepository.IsAccountChatMemberAsync(
+            int.Parse(chatId, CultureInfo.InvariantCulture),
+            int.Parse(accountId, CultureInfo.InvariantCulture),
+            cancellationToken);
+    }
 }

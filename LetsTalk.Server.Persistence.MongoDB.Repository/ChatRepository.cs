@@ -147,6 +147,15 @@ public class ChatRepository : IChatRepository
             .Distinct()];
     }
 
+    public Task<bool> IsAccountChatMemberAsync(string chatId, string accountId, CancellationToken cancellationToken = default)
+    {
+        return _chatCollection
+            .Find(Builders<Chat>.Filter.And(
+                Builders<Chat>.Filter.Eq(x => x.Id, chatId),
+                Builders<Chat>.Filter.AnyEq(x => x.AccountIds, accountId)))
+            .AnyAsync(cancellationToken);
+    }
+
     private static bool IsValidObjectId(string? id)
     {
         return !string.IsNullOrWhiteSpace(id) && ObjectId.TryParse(id, out _);

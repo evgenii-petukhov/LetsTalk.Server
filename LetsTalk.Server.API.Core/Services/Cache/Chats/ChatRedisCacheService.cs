@@ -52,9 +52,4 @@ public class ChatRedisCacheService(
             await _database.KeyDeleteAsync(GetChatsKey(accountId), CommandFlags.FireAndForget);
         }
     }
-
-    public Task<bool> IsChatIdValidAsync(string chatId, CancellationToken cancellationToken)
-    {
-        return ChatService.IsChatIdValidAsync(chatId, cancellationToken);
-    }
 }

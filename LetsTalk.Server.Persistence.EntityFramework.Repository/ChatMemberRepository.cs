@@ -15,4 +15,11 @@ public class ChatMemberRepository(LetsTalkDbContext context)
             .Select(x => x.AccountId)
             .ToListAsync(cancellationToken);
     }
+
+    public Task<bool> IsAccountChatMemberAsync(int chatId, int accountId, CancellationToken cancellationToken = default)
+    {
+        return Context.ChatMembers
+            .Where(x => x.ChatId == chatId && accountId == x.AccountId)
+            .AnyAsync(cancellationToken);
+    }
 }

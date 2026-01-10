@@ -33,4 +33,14 @@ public abstract class ChatCacheServiceBase
     {
         return $"chats:{accountId}";
     }
+
+    public Task<bool> IsChatIdValidAsync(string chatId, CancellationToken cancellationToken)
+    {
+        return ChatService.IsChatIdValidAsync(chatId, cancellationToken);
+    }
+
+    public Task<bool> IsAccountChatMemberAsync(string chatId, string accountId, CancellationToken cancellationToken = default)
+    {
+        return ChatService.IsAccountChatMemberAsync(chatId, accountId, cancellationToken);
+    }
 }

@@ -22,4 +22,9 @@ public class ChatService(
     {
         return _chatAgnosticService.IsChatIdValidAsync(chatId, cancellationToken);
     }
+
+    public Task<bool> IsAccountChatMemberAsync(string chatId, string accountId, CancellationToken cancellationToken = default)
+    {
+        return _chatAgnosticService.IsAccountChatMemberAsync(chatId, accountId, cancellationToken);
+    }
 }

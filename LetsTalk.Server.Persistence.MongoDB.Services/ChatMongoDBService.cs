@@ -65,4 +65,9 @@ public class ChatMongoDBService(
     {
         return _chatRepository.GetAccountIdsInIndividualChatsAsync(accountId, cancellationToken);
     }
+
+    public Task<bool> IsAccountChatMemberAsync(string chatId, string accountId, CancellationToken cancellationToken = default)
+    {
+        return _chatRepository.IsAccountChatMemberAsync(chatId, accountId, cancellationToken);
+    }
 }

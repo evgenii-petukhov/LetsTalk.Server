@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.API.Core.Commands\LetsTalk.Server.API.Core.Commands.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.API.Middleware\LetsTalk.Server.API.Middleware.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.AuthenticationClient\LetsTalk.Server.AuthenticationClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />

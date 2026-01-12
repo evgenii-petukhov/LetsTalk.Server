@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.1.11312.151 d18.0
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{A561CE66-E97D-4520-B4EB-5AA4F199CDEE}"
 EndProject
@@ -150,6 +150,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Tests", "LetsTalk.Server.Persistence.MongoDB.Tests\LetsTalk.Server.Persistence.MongoDB.Tests.csproj", "{91D5464D-EC15-446A-9C66-6F7B533242D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Notifications.Tests", "LetsTalk.Server.Notifications.Tests\LetsTalk.Server.Notifications.Tests.csproj", "{9EE193BC-4AE0-4985-B24D-EC56D12FF87E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview.Utility.Tests", "LetsTalk.Server.LinkPreview.Utility.Tests\LetsTalk.Server.LinkPreview.Utility.Tests.csproj", "{75B8982C-CAC6-4E43-A48E-7C20431D40FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -405,6 +407,10 @@ Global
 		{9EE193BC-4AE0-4985-B24D-EC56D12FF87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EE193BC-4AE0-4985-B24D-EC56D12FF87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EE193BC-4AE0-4985-B24D-EC56D12FF87E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75B8982C-CAC6-4E43-A48E-7C20431D40FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75B8982C-CAC6-4E43-A48E-7C20431D40FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75B8982C-CAC6-4E43-A48E-7C20431D40FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75B8982C-CAC6-4E43-A48E-7C20431D40FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -482,6 +488,7 @@ Global
 		{7F44D3B3-2F81-4F08-9B15-F723C414BB2E} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{91D5464D-EC15-446A-9C66-6F7B533242D7} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{9EE193BC-4AE0-4985-B24D-EC56D12FF87E} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
+		{75B8982C-CAC6-4E43-A48E-7C20431D40FD} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

@@ -59,7 +59,7 @@ public class FeaturesSettingsServiceTests
     [TestCase(null)]
     [TestCase("")]
     [TestCase("InvalidValue")]
-    public void GetFileStorageType_When_InvalidValue_ShouldReturnLocal(string fileStorage)
+    public void GetFileStorageType_When_InvalidValue_ShouldReturnLocal(string? fileStorage)
     {
         // Arrange
         var settings = new FeaturesSettings { FileStorage = fileStorage };

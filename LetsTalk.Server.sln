@@ -153,6 +153,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Notificatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview.Utility.Tests", "LetsTalk.Server.LinkPreview.Utility.Tests\LetsTalk.Server.LinkPreview.Utility.Tests.csproj", "{75B8982C-CAC6-4E43-A48E-7C20431D40FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Configuration.Tests", "LetsTalk.Server.Configuration.Tests\LetsTalk.Server.Configuration.Tests.csproj", "{707474FC-C17D-47B9-A7AA-2A792D4A464D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -411,6 +413,10 @@ Global
 		{75B8982C-CAC6-4E43-A48E-7C20431D40FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75B8982C-CAC6-4E43-A48E-7C20431D40FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75B8982C-CAC6-4E43-A48E-7C20431D40FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{707474FC-C17D-47B9-A7AA-2A792D4A464D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{707474FC-C17D-47B9-A7AA-2A792D4A464D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{707474FC-C17D-47B9-A7AA-2A792D4A464D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{707474FC-C17D-47B9-A7AA-2A792D4A464D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -489,6 +495,7 @@ Global
 		{91D5464D-EC15-446A-9C66-6F7B533242D7} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{9EE193BC-4AE0-4985-B24D-EC56D12FF87E} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 		{75B8982C-CAC6-4E43-A48E-7C20431D40FD} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
+		{707474FC-C17D-47B9-A7AA-2A792D4A464D} = {70D0EDDE-0720-4497-8171-A5A54C491B5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

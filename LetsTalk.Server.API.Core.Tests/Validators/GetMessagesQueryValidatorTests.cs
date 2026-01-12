@@ -3,7 +3,7 @@ using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Features.Message.Queries.GetMessages;
 using Moq;
 
-namespace LetsTalk.Server.API.Core.Tests.CommandValidators;
+namespace LetsTalk.Server.API.Core.Tests.Validators;
 
 [TestFixture]
 public class GetMessagesQueryValidatorTests
@@ -76,10 +76,10 @@ public class GetMessagesQueryValidatorTests
     [TestCase(null)]
     [TestCase("")]
     [TestCase(" ")]
-    public async Task ValidateAsync_When_ChatIdIsNullOrWhitespace_ShouldContainValidationError(string chatId)
+    public async Task ValidateAsync_When_ChatIdIsNullOrWhitespace_ShouldContainValidationError(string? chatId)
     {
         // Arrange
-        var query = new GetMessagesQuery("senderId", chatId, 0, 10);
+        var query = new GetMessagesQuery("senderId", chatId!, 0, 10);
 
         // Act
         var result = await _validator.ValidateAsync(query);

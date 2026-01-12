@@ -4,7 +4,7 @@ using LetsTalk.Server.API.Core.Features.Message.Commands.CreateMessage;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using Moq;
 
-namespace LetsTalk.Server.API.Core.Tests.CommandValidators;
+namespace LetsTalk.Server.API.Core.Tests.Validators;
 
 [TestFixture]
 public class CreateMessageCommandValidatorTests

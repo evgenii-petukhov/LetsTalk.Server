@@ -4,14 +4,12 @@ using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
-using LetsTalk.Server.Persistence.MongoDB.Services;
 using Moq;
-using NUnit.Framework;
 
-namespace LetsTalk.Server.Persistence.MongoDB.Tests;
+namespace LetsTalk.Server.Persistence.MongoDB.Services.Tests;
 
 [TestFixture]
-public class MessageMongoDBServiceGeneratedTests
+public class MessageMongoDBServiceTests
 {
     private Mock<IMessageRepository> _mockMessageRepository;
     private Mock<IMapper> _mockMapper;
@@ -26,7 +24,7 @@ public class MessageMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class CreateMessageAsyncWithLinkPreviewTests : MessageMongoDBServiceGeneratedTests
+    public class CreateMessageAsyncWithLinkPreviewTests : MessageMongoDBServiceTests
     {
         [Test]
         public async Task CreateMessageAsync_WithLinkPreview_ShouldCreateMessageAndReturnMappedResult()
@@ -200,7 +198,7 @@ public class MessageMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class CreateMessageAsyncWithImageTests : MessageMongoDBServiceGeneratedTests
+    public class CreateMessageAsyncWithImageTests : MessageMongoDBServiceTests
     {
         [Test]
         public async Task CreateMessageAsync_WithImage_ShouldCreateMessageAndReturnMappedResult()
@@ -402,7 +400,7 @@ public class MessageMongoDBServiceGeneratedTests
         }
     }
     [TestFixture]
-    public class GetPagedAsyncTests : MessageMongoDBServiceGeneratedTests
+    public class GetPagedAsyncTests : MessageMongoDBServiceTests
     {
         [Test]
         public async Task GetPagedAsync_WithValidParameters_ShouldReturnMappedMessages()
@@ -632,7 +630,7 @@ public class MessageMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class SetLinkPreviewAsyncWithIdTests : MessageMongoDBServiceGeneratedTests
+    public class SetLinkPreviewAsyncWithIdTests : MessageMongoDBServiceTests
     {
         [Test]
         public async Task SetLinkPreviewAsync_WithMessageIdAndLinkPreviewId_ShouldReturnMappedMessage()
@@ -726,7 +724,7 @@ public class MessageMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class SetLinkPreviewAsyncWithDetailsTests : MessageMongoDBServiceGeneratedTests
+    public class SetLinkPreviewAsyncWithDetailsTests : MessageMongoDBServiceTests
     {
         [Test]
         public async Task SetLinkPreviewAsync_WithMessageIdAndLinkDetails_ShouldReturnMappedMessage()
@@ -864,7 +862,7 @@ public class MessageMongoDBServiceGeneratedTests
         }
     }
     [TestFixture]
-    public class MarkAsReadAsyncTests : MessageMongoDBServiceGeneratedTests
+    public class MarkAsReadAsyncTests : MessageMongoDBServiceTests
     {
         [Test]
         public async Task MarkAsReadAsync_WithValidParameters_ShouldCallRepository()
@@ -972,7 +970,7 @@ public class MessageMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class SaveImagePreviewAsyncTests : MessageMongoDBServiceGeneratedTests
+    public class SaveImagePreviewAsyncTests : MessageMongoDBServiceTests
     {
         [Test]
         public async Task SaveImagePreviewAsync_WithValidParameters_ShouldReturnMappedMessage()

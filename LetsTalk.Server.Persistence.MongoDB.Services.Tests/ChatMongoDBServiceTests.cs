@@ -1,15 +1,12 @@
 using FluentAssertions;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
-using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions.Models;
-using LetsTalk.Server.Persistence.MongoDB.Services;
 using Moq;
-using NUnit.Framework;
 
-namespace LetsTalk.Server.Persistence.MongoDB.Tests;
+namespace LetsTalk.Server.Persistence.MongoDB.Services.Tests;
 
 [TestFixture]
-public class ChatMongoDBServiceGeneratedTests
+public class ChatMongoDBServiceTests
 {
     private Mock<IChatRepository> _mockChatRepository;
     private ChatMongoDBService _service;
@@ -22,7 +19,7 @@ public class ChatMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetChatMemberAccountIdsAsyncTests : ChatMongoDBServiceGeneratedTests
+    public class GetChatMemberAccountIdsAsyncTests : ChatMongoDBServiceTests
     {
         [Test]
         public async Task GetChatMemberAccountIdsAsync_WithValidChatId_ShouldReturnAccountIds()
@@ -102,7 +99,7 @@ public class ChatMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class IsChatIdValidAsyncTests : ChatMongoDBServiceGeneratedTests
+    public class IsChatIdValidAsyncTests : ChatMongoDBServiceTests
     {
         [Test]
         public async Task IsChatIdValidAsync_WithValidChatId_ShouldReturnTrue()
@@ -196,7 +193,7 @@ public class ChatMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class CreateIndividualChatAsyncTests : ChatMongoDBServiceGeneratedTests
+    public class CreateIndividualChatAsyncTests : ChatMongoDBServiceTests
     {
         [Test]
         public async Task CreateIndividualChatAsync_WhenChatExists_ShouldReturnExistingChatId()
@@ -357,7 +354,7 @@ public class ChatMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetAccountIdsInIndividualChatsAsyncTests : ChatMongoDBServiceGeneratedTests
+    public class GetAccountIdsInIndividualChatsAsyncTests : ChatMongoDBServiceTests
     {
         [Test]
         public async Task GetAccountIdsInIndividualChatsAsync_WithValidAccountId_ShouldReturnAccountIds()
@@ -456,7 +453,7 @@ public class ChatMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class IsAccountChatMemberAsyncTests : ChatMongoDBServiceGeneratedTests
+    public class IsAccountChatMemberAsyncTests : ChatMongoDBServiceTests
     {
         [Test]
         public async Task IsAccountChatMemberAsync_WhenAccountIsMember_ShouldReturnTrue()

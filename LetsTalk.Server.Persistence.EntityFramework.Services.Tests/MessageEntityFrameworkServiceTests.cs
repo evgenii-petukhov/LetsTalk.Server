@@ -3,18 +3,14 @@ using FluentAssertions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
-using LetsTalk.Server.Persistence.EntityFramework.Services;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using NUnit.Framework;
-using System.Globalization;
-using System.Reflection;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Tests;
+namespace LetsTalk.Server.Persistence.EntityFramework.Services.Tests;
 
 [TestFixture]
-public class MessageEntityFrameworkServiceGeneratedTests
+public class MessageEntityFrameworkServiceTests
 {
     private Mock<IMessageRepository> _mockMessageRepository;
     private Mock<IChatMessageStatusRepository> _mockChatMessageStatusRepository;
@@ -44,7 +40,7 @@ public class MessageEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class CreateMessageAsyncWithLinkPreviewTests : MessageEntityFrameworkServiceGeneratedTests
+    public class CreateMessageAsyncWithLinkPreviewTests : MessageEntityFrameworkServiceTests
     {
         [Test]
         public async Task CreateMessageAsync_WithValidLinkPreviewId_ShouldCreateMessageAndReturnMappedResult()
@@ -192,7 +188,7 @@ public class MessageEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class CreateMessageAsyncWithImageTests : MessageEntityFrameworkServiceGeneratedTests
+    public class CreateMessageAsyncWithImageTests : MessageEntityFrameworkServiceTests
     {
         [Test]
         public async Task CreateMessageAsync_WithImage_ShouldCreateMessageWithImageAndReturnMappedResult()
@@ -279,7 +275,7 @@ public class MessageEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetPagedAsyncTests : MessageEntityFrameworkServiceGeneratedTests
+    public class GetPagedAsyncTests : MessageEntityFrameworkServiceTests
     {
         [Test]
         public async Task GetPagedAsync_WithValidParameters_ShouldReturnMappedMessages()
@@ -379,7 +375,7 @@ public class MessageEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class SetLinkPreviewAsyncWithIdTests : MessageEntityFrameworkServiceGeneratedTests
+    public class SetLinkPreviewAsyncWithIdTests : MessageEntityFrameworkServiceTests
     {
         [Test]
         public async Task SetLinkPreviewAsync_WithValidIds_ShouldSetLinkPreviewAndReturnMappedResult()
@@ -444,7 +440,7 @@ public class MessageEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class SetLinkPreviewAsyncWithDataTests : MessageEntityFrameworkServiceGeneratedTests
+    public class SetLinkPreviewAsyncWithDataTests : MessageEntityFrameworkServiceTests
     {
         [Test]
         public async Task SetLinkPreviewAsync_WithValidData_ShouldCreateLinkPreviewAndReturnMappedResult()
@@ -501,7 +497,7 @@ public class MessageEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class MarkAsReadAsyncTests : MessageEntityFrameworkServiceGeneratedTests
+    public class MarkAsReadAsyncTests : MessageEntityFrameworkServiceTests
     {
         [Test]
         public async Task MarkAsReadAsync_WithValidIds_ShouldCreateChatMessageStatusAndSave()
@@ -611,7 +607,7 @@ public class MessageEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class SaveImagePreviewAsyncTests : MessageEntityFrameworkServiceGeneratedTests
+    public class SaveImagePreviewAsyncTests : MessageEntityFrameworkServiceTests
     {
         [Test]
         public async Task SaveImagePreviewAsync_WithValidParameters_ShouldCreateImageAndSetPreview()

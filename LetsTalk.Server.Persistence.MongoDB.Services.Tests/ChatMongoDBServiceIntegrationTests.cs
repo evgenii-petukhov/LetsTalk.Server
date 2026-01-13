@@ -12,12 +12,11 @@ using Microsoft.Extensions.Options;
 using Mongo2Go;
 using MongoDB.Driver;
 using SimpleMongoMigrations;
-using System.Reflection;
 
-namespace LetsTalk.Server.Persistence.MongoDB.Tests;
+namespace LetsTalk.Server.Persistence.MongoDB.Services.Tests;
 
 [TestFixture]
-public class ChatMongoDBServiceTests
+public class ChatMongoDBServiceIntegrationTests
 {
     private MongoDbRunner _runner;
 

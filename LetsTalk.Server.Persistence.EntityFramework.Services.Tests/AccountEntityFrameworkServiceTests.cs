@@ -3,18 +3,14 @@ using FluentAssertions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
-using LetsTalk.Server.Persistence.EntityFramework.Services;
 using LetsTalk.Server.Persistence.Enums;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using NUnit.Framework;
-using System.Globalization;
-using System.Reflection;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Tests;
+namespace LetsTalk.Server.Persistence.EntityFramework.Services.Tests;
 
 [TestFixture]
-public class AccountEntityFrameworkServiceGeneratedTests
+public class AccountEntityFrameworkServiceTests
 {
     private Mock<IAccountRepository> _mockAccountRepository;
     private Mock<IImageRepository> _mockImageRepository;
@@ -41,7 +37,7 @@ public class AccountEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetByIdAsyncTests : AccountEntityFrameworkServiceGeneratedTests
+    public class GetByIdAsyncTests : AccountEntityFrameworkServiceTests
     {
         [Test]
         public async Task GetByIdAsync_WithValidId_ShouldReturnMappedProfile()
@@ -107,7 +103,7 @@ public class AccountEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class UpdateProfileAsyncTests : AccountEntityFrameworkServiceGeneratedTests
+    public class UpdateProfileAsyncTests : AccountEntityFrameworkServiceTests
     {
         [Test]
         public async Task UpdateProfileAsync_WithoutImage_ShouldUpdateProfileAndReturnMappedResult()
@@ -323,7 +319,7 @@ public class AccountEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetOrCreateAsyncTests : AccountEntityFrameworkServiceGeneratedTests
+    public class GetOrCreateAsyncTests : AccountEntityFrameworkServiceTests
     {
         [Test]
         public async Task GetOrCreateAsync_WhenAccountExists_ShouldReturnExistingAccountId()
@@ -442,7 +438,7 @@ public class AccountEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetAccountsAsyncTests : AccountEntityFrameworkServiceGeneratedTests
+    public class GetAccountsAsyncTests : AccountEntityFrameworkServiceTests
     {
         [Test]
         public async Task GetAccountsAsync_ShouldReturnMappedAccounts()
@@ -528,7 +524,7 @@ public class AccountEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class IsAccountIdValidAsyncTests : AccountEntityFrameworkServiceGeneratedTests
+    public class IsAccountIdValidAsyncTests : AccountEntityFrameworkServiceTests
     {
         [Test]
         public async Task IsAccountIdValidAsync_WithValidId_ShouldReturnTrue()

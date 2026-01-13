@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace LetsTalk.Server.Persistence.MongoDB.Tests;
 
 [TestFixture]
-public class AccountMongoDBServiceGeneratedTests
+public class AccountMongoDBServiceTests
 {
     private Mock<IAccountRepository> _mockAccountRepository;
     private Mock<IMapper> _mockMapper;
@@ -26,7 +26,7 @@ public class AccountMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetByIdAsyncTests : AccountMongoDBServiceGeneratedTests
+    public class GetByIdAsyncTests : AccountMongoDBServiceTests
     {
         [Test]
         public async Task GetByIdAsync_WithValidId_ShouldReturnMappedProfile()
@@ -191,7 +191,7 @@ public class AccountMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class UpdateProfileAsyncWithoutImageTests : AccountMongoDBServiceGeneratedTests
+    public class UpdateProfileAsyncWithoutImageTests : AccountMongoDBServiceTests
     {
         [Test]
         public async Task UpdateProfileAsync_WithValidParameters_ShouldReturnMappedProfile()
@@ -317,7 +317,7 @@ public class AccountMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class UpdateProfileAsyncWithImageTests : AccountMongoDBServiceGeneratedTests
+    public class UpdateProfileAsyncWithImageTests : AccountMongoDBServiceTests
     {
         [Test]
         public async Task UpdateProfileAsync_WithImageParameters_ShouldReturnMappedProfile()
@@ -506,7 +506,7 @@ public class AccountMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetOrCreateAsyncTests : AccountMongoDBServiceGeneratedTests
+    public class GetOrCreateAsyncTests : AccountMongoDBServiceTests
     {
         [Test]
         public async Task GetOrCreateAsync_WhenAccountExists_ShouldReturnExistingAccountId()
@@ -689,7 +689,7 @@ public class AccountMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetAccountsAsyncTests : AccountMongoDBServiceGeneratedTests
+    public class GetAccountsAsyncTests : AccountMongoDBServiceTests
     {
         [Test]
         public async Task GetAccountsAsync_WithAccounts_ShouldReturnMappedAccountList()
@@ -872,7 +872,7 @@ public class AccountMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class IsAccountIdValidAsyncTests : AccountMongoDBServiceGeneratedTests
+    public class IsAccountIdValidAsyncTests : AccountMongoDBServiceTests
     {
         [Test]
         public async Task IsAccountIdValidAsync_WithValidId_ShouldReturnTrue()

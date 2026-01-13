@@ -1,13 +1,11 @@
 using FluentAssertions;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
-using LetsTalk.Server.Persistence.EntityFramework.Services;
 using Moq;
-using NUnit.Framework;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Tests;
+namespace LetsTalk.Server.Persistence.EntityFramework.Services.Tests;
 
 [TestFixture]
-public class LinkPreviewEntityFrameworkServiceGeneratedTests
+public class LinkPreviewEntityFrameworkServiceTests
 {
     private Mock<ILinkPreviewRepository> _mockLinkPreviewRepository;
     private LinkPreviewEntityFrameworkService _service;
@@ -20,7 +18,7 @@ public class LinkPreviewEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetIdByUrlAsyncTests : LinkPreviewEntityFrameworkServiceGeneratedTests
+    public class GetIdByUrlAsyncTests : LinkPreviewEntityFrameworkServiceTests
     {
         [Test]
         public async Task GetIdByUrlAsync_WithValidUrl_ShouldReturnIdAsString()

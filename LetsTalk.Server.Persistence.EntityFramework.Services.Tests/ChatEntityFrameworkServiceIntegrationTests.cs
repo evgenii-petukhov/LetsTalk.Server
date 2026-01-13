@@ -16,7 +16,7 @@ using Moq;
 namespace LetsTalk.Server.Persistence.EntityFramework.Tests;
 
 [TestFixture]
-public class ChatEntityFrameworkServiceTests
+public class ChatEntityFrameworkServiceIntegrationTests
 {
     private LetsTalkDbContext _context;
     private ChatEntityFrameworkService _service;

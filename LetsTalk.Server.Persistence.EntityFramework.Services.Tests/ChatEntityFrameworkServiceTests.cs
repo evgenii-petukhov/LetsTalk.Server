@@ -2,16 +2,12 @@ using AutoMapper;
 using FluentAssertions;
 using LetsTalk.Server.Domain;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
-using LetsTalk.Server.Persistence.EntityFramework.Services;
 using Moq;
-using NUnit.Framework;
-using System.Globalization;
-using System.Reflection;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Tests;
+namespace LetsTalk.Server.Persistence.EntityFramework.Services.Tests;
 
 [TestFixture]
-public class ChatEntityFrameworkServiceGeneratedTests
+public class ChatEntityFrameworkServiceTests
 {
     private Mock<IChatRepository> _mockChatRepository;
     private Mock<IChatMemberRepository> _mockChatMemberRepository;
@@ -35,7 +31,7 @@ public class ChatEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetChatMemberAccountIdsAsyncTests : ChatEntityFrameworkServiceGeneratedTests
+    public class GetChatMemberAccountIdsAsyncTests : ChatEntityFrameworkServiceTests
     {
         [Test]
         public async Task GetChatMemberAccountIdsAsync_WithValidChatId_ShouldReturnAccountIds()
@@ -111,7 +107,7 @@ public class ChatEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetAccountIdsInIndividualChatsAsyncTests : ChatEntityFrameworkServiceGeneratedTests
+    public class GetAccountIdsInIndividualChatsAsyncTests : ChatEntityFrameworkServiceTests
     {
         [Test]
         public async Task GetAccountIdsInIndividualChatsAsync_WithValidAccountId_ShouldReturnAccountIds()
@@ -187,7 +183,7 @@ public class ChatEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class IsChatIdValidAsyncTests : ChatEntityFrameworkServiceGeneratedTests
+    public class IsChatIdValidAsyncTests : ChatEntityFrameworkServiceTests
     {
         [Test]
         public async Task IsChatIdValidAsync_WithValidChatId_ShouldReturnTrue()
@@ -259,7 +255,7 @@ public class ChatEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class CreateIndividualChatAsyncTests : ChatEntityFrameworkServiceGeneratedTests
+    public class CreateIndividualChatAsyncTests : ChatEntityFrameworkServiceTests
     {
         [Test]
         public async Task CreateIndividualChatAsync_WhenChatDoesNotExist_ShouldCreateNewChatAndReturnId()
@@ -402,7 +398,7 @@ public class ChatEntityFrameworkServiceGeneratedTests
     }
 
     [TestFixture]
-    public class IsAccountChatMemberAsyncTests : ChatEntityFrameworkServiceGeneratedTests
+    public class IsAccountChatMemberAsyncTests : ChatEntityFrameworkServiceTests
     {
         [Test]
         public async Task IsAccountChatMemberAsync_WhenAccountIsMember_ShouldReturnTrue()

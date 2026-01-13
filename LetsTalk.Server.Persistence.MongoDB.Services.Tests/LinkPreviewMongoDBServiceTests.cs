@@ -1,13 +1,11 @@
 using FluentAssertions;
 using LetsTalk.Server.Persistence.MongoDB.Repository.Abstractions;
-using LetsTalk.Server.Persistence.MongoDB.Services;
 using Moq;
-using NUnit.Framework;
 
-namespace LetsTalk.Server.Persistence.MongoDB.Tests;
+namespace LetsTalk.Server.Persistence.MongoDB.Services.Tests;
 
 [TestFixture]
-public class LinkPreviewMongoDBServiceGeneratedTests
+public class LinkPreviewMongoDBServiceTests
 {
     private Mock<ILinkPreviewRepository> _mockLinkPreviewRepository;
     private LinkPreviewMongoDBService _service;
@@ -20,7 +18,7 @@ public class LinkPreviewMongoDBServiceGeneratedTests
     }
 
     [TestFixture]
-    public class GetIdByUrlAsyncTests : LinkPreviewMongoDBServiceGeneratedTests
+    public class GetIdByUrlAsyncTests : LinkPreviewMongoDBServiceTests
     {
         [Test]
         public async Task GetIdByUrlAsync_WithValidUrl_ShouldReturnId()

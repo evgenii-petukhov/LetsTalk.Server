@@ -2,7 +2,6 @@
 using LetsTalk.Server.API.Core.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using System.Collections.Concurrent;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 
 namespace LetsTalk.Server.API.Core.Services.Cache.Messages;
@@ -31,12 +30,7 @@ public class MessageMemoryCacheService(
             {
                 cacheEntry.SetAbsoluteExpiration(CacheLifeTimeInSeconds);
             }
-            var dict = new ConcurrentDictionary<int, Task<IReadOnlyList<MessageServiceModel>>>();
-            return dict.GetOrAdd(pageIndex, _ => MessageService.GetPagedAsync(
-                chatId,
-                pageIndex,
-                messagesPerPage,
-                cancellationToken));
+            return MessageService.GetPagedAsync(chatId, pageIndex, messagesPerPage, cancellationToken);
         })!;
     }
 

@@ -125,6 +125,8 @@ public static class CoreServicesRegistration
                 break;
         }
 
+        services.AddHttpClient(nameof(IceServerConfigurationService));
+
         await services.AddPersistenceAgnosticServices(configuration);
 
         return services;

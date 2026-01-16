@@ -94,7 +94,8 @@ public class CreateMessageCommandHandler(
                     AccountIds = accountIds,
                     MessageId = messageDto.Id,
                     Url = url,
-                    ChatId = request.ChatId
+                    ChatId = request.ChatId,
+                    Token = request.Token,
                 }, cancellationToken),
             request.Image == null
                 ? Task.CompletedTask
@@ -104,7 +105,8 @@ public class CreateMessageCommandHandler(
                     MessageId = messageDto.Id,
                     ImageId = request.Image.Id,
                     ChatId = request.ChatId,
-                    FileStorageTypeId = request.Image.FileStorageTypeId
+                    FileStorageTypeId = request.Image.FileStorageTypeId,
+                    Token = request.Token,
                 }, cancellationToken));
 
         return new CreateMessageResponse

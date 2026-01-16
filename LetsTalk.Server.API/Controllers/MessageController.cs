@@ -55,6 +55,7 @@ public class MessageController(
 
         var cmd = _mapper.Map<CreateMessageCommand>(request);
         cmd.SenderId = GetAccountId();
+        cmd.Token = GetToken();
         var response = await _mediator.Send(cmd, cancellationToken);
         return Ok(response.Dto);
     }
@@ -76,7 +77,6 @@ public class MessageController(
     }
 
     [HttpPut("SetLinkPreview")]
-    [AllowAnonymous]
     public async Task<ActionResult> SetLinkPreviewAsync(
         SetLinkPreviewRequest request,
         CancellationToken cancellationToken)
@@ -95,7 +95,6 @@ public class MessageController(
     }
 
     [HttpPut("SetImagePreview")]
-    [AllowAnonymous]
     public async Task<ActionResult> SetImagePreviewAsync(
         SetImagePreviewRequest request,
         CancellationToken cancellationToken)

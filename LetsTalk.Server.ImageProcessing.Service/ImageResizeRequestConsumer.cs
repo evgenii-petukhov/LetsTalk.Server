@@ -42,7 +42,8 @@ public class ImageResizeRequestConsumer(
         };
         _signPackageService.Sign(payload);
         using var client = _httpClientFactory.CreateClient(nameof(ImageResizeRequestConsumer));
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {context.Message.Token}");
         var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
-        await apiClient.SetImagePreviewAsync(payload);
+        await apiClient.SetImagePreviewAsync(payload, context.CancellationToken);
     }
 }

@@ -11,4 +11,6 @@ public class ImageResizeRequest
     public string? ChatId { get; set; }
 
     public int FileStorageTypeId { get; set; }
+
+    public string? Token {  get; set; }
 }

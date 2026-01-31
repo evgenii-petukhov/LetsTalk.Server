@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.AgnosticServices;
 using LetsTalk.Server.ImageProcessing.Utility;
-using LetsTalk.Server.SignPackage;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
 using System.Net.Mime;
@@ -74,7 +73,6 @@ public static class ImageProcessingServiceRegistration
 
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
-        services.AddSignPackageServices(configuration);
         services.AddHttpClient(nameof(ImageResizeRequestConsumer)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
 #if DEBUG

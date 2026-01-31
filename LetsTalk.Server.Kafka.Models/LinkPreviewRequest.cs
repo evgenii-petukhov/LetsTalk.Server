@@ -9,4 +9,6 @@ public class LinkPreviewRequest
     public string? Url { get; set; }
 
     public string? ChatId { get; set; }
+
+    public string? Token { get; set; }
 }

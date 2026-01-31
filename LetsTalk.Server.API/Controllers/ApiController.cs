@@ -11,4 +11,9 @@ public class ApiController : ControllerBase
     {
         return (string)HttpContext.Items["AccountId"]!;
     }
+
+    protected string GetToken()
+    {
+        return HttpContext.Request.Headers.Authorization!;
+    }
 }

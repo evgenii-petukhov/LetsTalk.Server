@@ -13,7 +13,6 @@ public class LinkPreviewRequestConsumer(
     ILinkPreviewService linkPreviewService,
     ILogger<LinkPreviewRequestConsumer> logger,
     IHttpClientService httpClientService,
-    ISignPackageService signPackageService,
     IOptions<ApplicationUrlSettings> applicationSettingsOptions,
     IOptions<LinkPreviewSettings> linkPreviewSettingsOptions) : IConsumer<LinkPreviewRequest>
 {
@@ -26,7 +25,6 @@ public class LinkPreviewRequestConsumer(
 
     private readonly ILinkPreviewService _linkPreviewService = linkPreviewService;
     private readonly ILogger<LinkPreviewRequestConsumer> _logger = logger;
-    private readonly ISignPackageService _signPackageService = signPackageService;
     private readonly IHttpClientService _httpClientService = httpClientService;
     private readonly ApplicationUrlSettings _applicationUrlSettings = applicationSettingsOptions.Value;
     private readonly LinkPreviewSettings _linkPreviewSettings = linkPreviewSettingsOptions.Value;
@@ -64,10 +62,10 @@ public class LinkPreviewRequestConsumer(
             Title = model.OpenGraphModel?.Title,
             ImageUrl = model.OpenGraphModel?.ImageUrl
         };
-        _signPackageService.Sign(payload);
         using var client = _httpClientService.GetHttpClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {context.Message.Token}");
         var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
-        await apiClient.SetLinkPreviewAsync(payload);
+        await apiClient.SetLinkPreviewAsync(payload, context.CancellationToken);
         _logSuccess(_logger, context.Message.Url, null);
     }
 }

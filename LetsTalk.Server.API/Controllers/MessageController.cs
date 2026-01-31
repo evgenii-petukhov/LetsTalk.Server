@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.SignPackage.Abstractions;
-using Microsoft.AspNetCore.Authorization;
 using LetsTalk.Server.API.Validation;
 using LetsTalk.Server.API.Core.Commands;
 
@@ -55,6 +54,7 @@ public class MessageController(
 
         var cmd = _mapper.Map<CreateMessageCommand>(request);
         cmd.SenderId = GetAccountId();
+        cmd.Token = GetToken();
         var response = await _mediator.Send(cmd, cancellationToken);
         return Ok(response.Dto);
     }
@@ -76,38 +76,20 @@ public class MessageController(
     }
 
     [HttpPut("SetLinkPreview")]
-    [AllowAnonymous]
     public async Task<ActionResult> SetLinkPreviewAsync(
         SetLinkPreviewRequest request,
         CancellationToken cancellationToken)
     {
-        var validator = new SetLinkPreviewRequestValidator(_signPackageService);
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            throw new BadRequestException("Invalid request", validationResult);
-        }
-
         var cmd = _mapper.Map<SetLinkPreviewCommand>(request);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }
 
     [HttpPut("SetImagePreview")]
-    [AllowAnonymous]
     public async Task<ActionResult> SetImagePreviewAsync(
         SetImagePreviewRequest request,
         CancellationToken cancellationToken)
     {
-        var validator = new SetImagePreviewRequestValidator(_signPackageService);
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            throw new BadRequestException("Invalid request", validationResult);
-        }
-
         var cmd = _mapper.Map<SetImagePreviewCommand>(request);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();

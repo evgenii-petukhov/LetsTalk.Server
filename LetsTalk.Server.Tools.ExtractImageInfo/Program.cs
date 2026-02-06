@@ -6,8 +6,6 @@ using Serilog;
 using System.Globalization;
 
 using var host = CreateDefaultBuilder().Build();
-using var serviceScope = host.Services.CreateScope();
-
 await host.RunAsync();
 
 // https://thecodeblogger.com/2021/05/04/how-to-use-appsettings-json-config-file-with-net-console-applications/

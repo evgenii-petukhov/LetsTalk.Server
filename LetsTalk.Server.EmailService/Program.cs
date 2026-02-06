@@ -1,13 +1,10 @@
 ﻿using LetsTalk.Server.EmailService;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.Globalization;
 
 using var host = CreateDefaultBuilder().Build();
-using var serviceScope = host.Services.CreateScope();
-var provider = serviceScope.ServiceProvider;
 await host.RunAsync();
 
 // https://thecodeblogger.com/2021/05/04/how-to-use-appsettings-json-config-file-with-net-console-applications/

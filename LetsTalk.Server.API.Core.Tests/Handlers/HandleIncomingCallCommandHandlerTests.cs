@@ -33,6 +33,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "sdp-answer-data");
@@ -71,6 +72,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -103,6 +105,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -135,6 +138,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -169,6 +173,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -203,6 +208,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -235,6 +241,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-not-in-chat",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -267,6 +274,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -294,6 +302,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -327,6 +336,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -360,6 +370,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: null!,
             ChatId: null!,
             Answer: null!);
@@ -398,6 +409,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-!@#$%",
             ChatId: "chat-^&*()",
             Answer: "answer-with-special-chars-!@#$%^&*()");
@@ -432,6 +444,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "呼叫者-123",
             ChatId: "聊天-456",
             Answer: "答案-数据-🎥📞");
@@ -467,6 +480,7 @@ public class HandleIncomingCallCommandHandlerTests
         // Arrange
         var longAnswer = new string('a', 10000); // Very long SDP answer
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: longAnswer);
@@ -502,6 +516,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "",
             ChatId: "",
             Answer: "");
@@ -536,6 +551,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -568,6 +584,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data");
@@ -602,6 +619,7 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "test-sdp-answer");

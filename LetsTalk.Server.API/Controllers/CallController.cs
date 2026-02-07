@@ -32,7 +32,7 @@ public class CallController(
     [HttpPost("HandleIncomingCall")]
     public async Task<ActionResult> HandleIncomingCallAsync(HandleIncomingCallRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new HandleIncomingCallCommand(GetAccountId(), request.ChatId!, request.Answer!);
+        var cmd = new HandleIncomingCallCommand(request.CallId!, GetAccountId(), request.ChatId!, request.Answer!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

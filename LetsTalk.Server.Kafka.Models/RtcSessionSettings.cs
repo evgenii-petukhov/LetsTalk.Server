@@ -2,6 +2,8 @@
 
 public class RtcSessionSettings
 {
+    public string? CallId { get; set; }
+
     public string? Offer { get; set; }
 
     public string? Answer { get; set; }

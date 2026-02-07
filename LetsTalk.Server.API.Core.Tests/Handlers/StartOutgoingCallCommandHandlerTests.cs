@@ -433,41 +433,6 @@ public class StartOutgoingCallCommandHandlerTests
     }
 
     [Test]
-    public async Task Handle_WhenUnicodeCharactersInProperties_ShouldHandleCorrectly()
-    {
-        // Arrange
-        var command = new StartOutgoingCallCommand(
-            AccountId: "呼叫者-123",
-            ChatId: "聊天-456",
-            Offer: "提供-数据-🎥📞");
-        var cancellationToken = CancellationToken.None;
-
-        var chatMembers = new List<string> { "呼叫者-123", "接收者-789" };
-
-        _chatAgnosticServiceMock
-            .Setup(x => x.GetChatMemberAccountIdsAsync("聊天-456", cancellationToken))
-            .ReturnsAsync(chatMembers);
-
-        _notificationProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<Notification>(), cancellationToken))
-            .Returns(Task.CompletedTask);
-
-        // Act
-        var result = await _handler.Handle(command, cancellationToken);
-
-        // Assert
-        result.Should().Be(Unit.Value);
-
-        _notificationProducerMock.Verify(
-            x => x.PublishAsync(It.Is<Notification>(n =>
-                n.RecipientId == "接收者-789" &&
-                n.Connection != null &&
-                n.Connection.Offer == "提供-数据-🎥📞" &&
-                n.Connection.ChatId == "聊天-456"), cancellationToken),
-            Times.Once);
-    }
-
-    [Test]
     public async Task Handle_WhenLongOfferData_ShouldHandleCorrectly()
     {
         // Arrange

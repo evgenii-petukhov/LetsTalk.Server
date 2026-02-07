@@ -1553,6 +1553,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     public partial class HandleIncomingCallRequest
     {
 
+        [System.Text.Json.Serialization.JsonPropertyName("callId")]
+        public string CallId { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("chatId")]
         public string ChatId { get; set; }
 
@@ -1798,6 +1801,9 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class StartOutgoingCallRequest
     {
+
+        [System.Text.Json.Serialization.JsonPropertyName("callId")]
+        public string CallId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("chatId")]
         public string ChatId { get; set; }

@@ -24,6 +24,7 @@ public class HandleIncomingCallCommandHandler(
             RecipientId = recipientId,
             Connection = new RtcSessionSettings
             {
+                CallId = request.CallId,
                 Answer = request.Answer
             }
         }, cancellationToken);

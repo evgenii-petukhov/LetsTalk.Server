@@ -24,6 +24,7 @@ public class StartOutgoingCallCommandHandler(
             RecipientId = recipientId,
             Connection = new RtcSessionSettings
             {
+                CallId = Guid.NewGuid().ToString(),
                 Offer = request.Offer,
                 ChatId = request.ChatId,
             }

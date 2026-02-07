@@ -1562,6 +1562,12 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("answer")]
         public string Answer { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
+        public int IceGatheringElapsedMs { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringCollectedAll")]
+        public bool IceGatheringCollectedAll { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1810,6 +1816,12 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("offer")]
         public string Offer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
+        public int IceGatheringElapsedMs { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringCollectedAll")]
+        public bool IceGatheringCollectedAll { get; set; }
 
     }
 

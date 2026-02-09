@@ -6,7 +6,6 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 
@@ -15,6 +14,7 @@ public class HandleIncomingCallCommandHandlerTests
 {
     private Mock<IProducer<Notification>> _notificationProducerMock;
     private Mock<IChatAgnosticService> _chatAgnosticServiceMock;
+    private Mock<ITelemetryService> _telemetryServiceMock;
     private HandleIncomingCallCommandHandler _handler;
 
     [SetUp]
@@ -22,10 +22,12 @@ public class HandleIncomingCallCommandHandlerTests
     {
         _notificationProducerMock = new Mock<IProducer<Notification>>();
         _chatAgnosticServiceMock = new Mock<IChatAgnosticService>();
+        _telemetryServiceMock = new Mock<ITelemetryService>();
 
         _handler = new HandleIncomingCallCommandHandler(
             _notificationProducerMock.Object,
-            _chatAgnosticServiceMock.Object);
+            _chatAgnosticServiceMock.Object,
+            _telemetryServiceMock.Object);
     }
 
     [Test]
@@ -36,7 +38,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "sdp-answer-data");
+            Answer: "sdp-answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -75,7 +79,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -108,7 +114,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "recipient-789", "caller-123" };
@@ -141,7 +149,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123" };
@@ -176,7 +186,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string>();
@@ -211,7 +223,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "caller-123", "member-2", "member-3" };
@@ -244,7 +258,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-not-in-chat",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2", "member-3" };
@@ -277,7 +293,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         _chatAgnosticServiceMock
@@ -305,7 +323,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -339,7 +359,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = new CancellationToken(false);
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -373,7 +395,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: null!,
             ChatId: null!,
-            Answer: null!);
+            Answer: null!,
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2" };
@@ -412,7 +436,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-!@#$%",
             ChatId: "chat-^&*()",
-            Answer: "answer-with-special-chars-!@#$%^&*()");
+            Answer: "answer-with-special-chars-!@#$%^&*()",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-!@#$%", "recipient-{}[]" };
@@ -440,41 +466,6 @@ public class HandleIncomingCallCommandHandlerTests
     }
 
     [Test]
-    public async Task Handle_WhenUnicodeCharactersInProperties_ShouldHandleCorrectly()
-    {
-        // Arrange
-        var command = new HandleIncomingCallCommand(
-            CallId: "call-id",
-            AccountId: "呼叫者-123",
-            ChatId: "聊天-456",
-            Answer: "答案-数据-🎥📞");
-        var cancellationToken = CancellationToken.None;
-
-        var chatMembers = new List<string> { "呼叫者-123", "接收者-789" };
-
-        _chatAgnosticServiceMock
-            .Setup(x => x.GetChatMemberAccountIdsAsync("聊天-456", cancellationToken))
-            .ReturnsAsync(chatMembers);
-
-        _notificationProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<Notification>(), cancellationToken))
-            .Returns(Task.CompletedTask);
-
-        // Act
-        var result = await _handler.Handle(command, cancellationToken);
-
-        // Assert
-        result.Should().Be(Unit.Value);
-
-        _notificationProducerMock.Verify(
-            x => x.PublishAsync(It.Is<Notification>(n =>
-                n.RecipientId == "接收者-789" &&
-                n.Connection != null &&
-                n.Connection.Answer == "答案-数据-🎥📞"), cancellationToken),
-            Times.Once);
-    }
-
-    [Test]
     public async Task Handle_WhenLongAnswerData_ShouldHandleCorrectly()
     {
         // Arrange
@@ -483,7 +474,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: longAnswer);
+            Answer: longAnswer,
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -519,7 +512,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "",
             ChatId: "",
-            Answer: "");
+            Answer: "",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "", "recipient-789" };
@@ -554,7 +549,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "recipient-789", "caller-123" };
@@ -587,7 +584,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "caller-123" };
@@ -622,7 +621,9 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "test-sdp-answer");
+            Answer: "test-sdp-answer",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };

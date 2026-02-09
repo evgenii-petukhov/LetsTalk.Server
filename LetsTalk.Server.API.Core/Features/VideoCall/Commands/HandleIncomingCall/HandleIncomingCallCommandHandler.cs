@@ -8,10 +8,12 @@ namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.HandleIncomingCal
 
 public class HandleIncomingCallCommandHandler(
     IProducer<Notification> notificationProducer,
-    IChatAgnosticService chatAgnosticService) : IRequestHandler<HandleIncomingCallCommand, Unit>
+    IChatAgnosticService chatAgnosticService,
+    ITelemetryService telemetryService) : IRequestHandler<HandleIncomingCallCommand, Unit>
 {
     private readonly IProducer<Notification> _notificationProducer = notificationProducer;
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
+    private readonly ITelemetryService _telemetryService = telemetryService;
 
     public async Task<Unit> Handle(HandleIncomingCallCommand request, CancellationToken cancellationToken)
     {
@@ -28,6 +30,13 @@ public class HandleIncomingCallCommandHandler(
                 Answer = request.Answer
             }
         }, cancellationToken);
+
+        _telemetryService.TrackOutgoingCallStarted(
+            request.CallId,
+            request.ChatId,
+            request.AccountId,
+            request.IceGatheringElapsedMs,
+            request.IceGatheringCollectedAll);
 
         return Unit.Value;
     }

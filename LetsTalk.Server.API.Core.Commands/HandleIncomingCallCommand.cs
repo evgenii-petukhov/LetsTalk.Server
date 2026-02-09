@@ -6,4 +6,6 @@ public record HandleIncomingCallCommand(
     string CallId,
     string AccountId,
     string ChatId,
-    string Answer) : IRequest<Unit>;
+    string Answer,
+    int IceGatheringElapsedMs,
+    bool IceGatheringCollectedAll) : IRequest<Unit>;

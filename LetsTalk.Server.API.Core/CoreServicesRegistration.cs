@@ -76,6 +76,7 @@ public static class CoreServicesRegistration
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
         services.Configure<RtcSettings>(configuration.GetSection("Rtc"));
         services.Configure<CloudflareSettings>(configuration.GetSection("Cloudflare"));
+        services.Configure<ApplicationInsightsSettings>(configuration.GetSection("ApplicationInsights"));
 
         switch (configuration.GetValue<string>("Features:CachingMode"))
         {
@@ -126,8 +127,14 @@ public static class CoreServicesRegistration
         }
 
         services.AddHttpClient(nameof(IceServerConfigurationService));
-
         await services.AddPersistenceAgnosticServices(configuration);
+        services.AddApplicationInsightsTelemetry(options =>
+        {
+            options.EnablePerformanceCounterCollectionModule = false;
+            options.EnableRequestTrackingTelemetryModule = false;
+            options.EnableDependencyTrackingTelemetryModule = false;
+        });
+        services.AddScoped<ITelemetryService, TelemetryService>();
 
         return services;
     }

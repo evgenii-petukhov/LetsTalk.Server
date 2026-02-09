@@ -6,7 +6,6 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 
@@ -15,6 +14,7 @@ public class StartOutgoingCallCommandHandlerTests
 {
     private Mock<IProducer<Notification>> _notificationProducerMock;
     private Mock<IChatAgnosticService> _chatAgnosticServiceMock;
+    private Mock<ITelemetryService> _telemetryServiceMock;
     private StartOutgoingCallCommandHandler _handler;
 
     [SetUp]
@@ -22,10 +22,12 @@ public class StartOutgoingCallCommandHandlerTests
     {
         _notificationProducerMock = new Mock<IProducer<Notification>>();
         _chatAgnosticServiceMock = new Mock<IChatAgnosticService>();
+        _telemetryServiceMock = new Mock<ITelemetryService>();
 
         _handler = new StartOutgoingCallCommandHandler(
             _notificationProducerMock.Object,
-            _chatAgnosticServiceMock.Object);
+            _chatAgnosticServiceMock.Object,
+            _telemetryServiceMock.Object);
     }
 
     [Test]
@@ -35,7 +37,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "sdp-offer-data");
+            Offer: "sdp-offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -74,7 +78,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -106,7 +112,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "recipient-789", "caller-123" };
@@ -138,7 +146,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123" };
@@ -173,7 +183,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string>();
@@ -208,7 +220,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "caller-123", "member-2", "member-3" };
@@ -240,7 +254,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-not-in-chat",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2", "member-3" };
@@ -272,7 +288,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         _chatAgnosticServiceMock
@@ -299,7 +317,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -332,7 +352,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = new CancellationToken(false);
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -365,7 +387,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: null!,
             ChatId: null!,
-            Offer: null!);
+            Offer: null!,
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2" };
@@ -404,7 +428,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-!@#$%",
             ChatId: "chat-^&*()",
-            Offer: "offer-with-special-chars-!@#$%^&*()");
+            Offer: "offer-with-special-chars-!@#$%^&*()",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-!@#$%", "recipient-{}[]" };
@@ -440,7 +466,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: longOffer);
+            Offer: longOffer,
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -476,7 +504,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "",
             ChatId: "",
-            Offer: "");
+            Offer: "",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "", "recipient-789" };
@@ -511,7 +541,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "recipient-789", "caller-123" };
@@ -543,7 +575,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "caller-123" };
@@ -578,7 +612,9 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "test-sdp-offer");
+            Offer: "test-sdp-offer",
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };

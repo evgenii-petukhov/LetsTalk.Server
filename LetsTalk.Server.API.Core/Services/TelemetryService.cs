@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
+using LetsTalk.Server.API.Core.Models;
 using LetsTalk.Server.Configuration.Models;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -21,13 +22,9 @@ public class TelemetryService(
         string callId,
         string chatId,
         string accountId,
-        string connectionState,
-        string localCandidateTypes,
-        string remoteCandidateTypes,
-        string browser,
-        string platform,
         int iceGatheringMs,
-        bool iceCollectedAll)
+        bool iceCollectedAll,
+        ConnectionDiagnostics connectionDiagnostics)
     {
         _telemetryClient.TrackEvent(VideoCallEventName, new Dictionary<string, string>
         {
@@ -36,13 +33,13 @@ public class TelemetryService(
             [nameof(accountId)] = accountId,
             ["role"] = "caller",
             ["event"] = "offer created",
-            [nameof(connectionState)] = connectionState,
-            [nameof(localCandidateTypes)] = localCandidateTypes,
-            [nameof(remoteCandidateTypes)] = remoteCandidateTypes,
-            [nameof(browser)] = browser,
-            [nameof(platform)] = platform,
             [nameof(iceGatheringMs)] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
-            [nameof(iceCollectedAll)] = iceCollectedAll.ToString()
+            [nameof(iceCollectedAll)] = iceCollectedAll.ToString(),
+            ["connectionState"] = connectionDiagnostics.ConnectionState!,
+            ["localCandidateTypes"] = connectionDiagnostics.LocalCandidateTypes!,
+            ["remoteCandidateTypes"] = connectionDiagnostics.RemoteCandidateTypes!,
+            ["browser"] = connectionDiagnostics.Browser!,
+            ["platform"] = connectionDiagnostics.Platform!
         });
     }
 
@@ -50,13 +47,9 @@ public class TelemetryService(
         string callId,
         string chatId,
         string accountId,
-        string connectionState,
-        string localCandidateTypes,
-        string remoteCandidateTypes,
-        string browser,
-        string platform,
         int iceGatheringMs,
-        bool iceCollectedAll)
+        bool iceCollectedAll,
+        ConnectionDiagnostics connectionDiagnostics)
     {
         _telemetryClient.TrackEvent(VideoCallEventName, new Dictionary<string, string>
         {
@@ -65,13 +58,13 @@ public class TelemetryService(
             [nameof(accountId)] = accountId,
             ["role"] = "callee",
             ["event"] = "answer created",
-            [nameof(connectionState)] = connectionState,
-            [nameof(localCandidateTypes)] = localCandidateTypes,
-            [nameof(remoteCandidateTypes)] = remoteCandidateTypes,
-            [nameof(browser)] = browser,
-            [nameof(platform)] = platform,
             [nameof(iceGatheringMs)] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
-            [nameof(iceCollectedAll)] = iceCollectedAll.ToString()
+            [nameof(iceCollectedAll)] = iceCollectedAll.ToString(),
+            ["connectionState"] = connectionDiagnostics.ConnectionState!,
+            ["localCandidateTypes"] = connectionDiagnostics.LocalCandidateTypes!,
+            ["remoteCandidateTypes"] = connectionDiagnostics.RemoteCandidateTypes!,
+            ["browser"] = connectionDiagnostics.Browser!,
+            ["platform"] = connectionDiagnostics.Platform!,
         });
     }
 }

@@ -1490,6 +1490,27 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ConnectionDiagnostics
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("connectionState")]
+        public string ConnectionState { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("localCandidateTypes")]
+        public string LocalCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("remoteCandidateTypes")]
+        public string RemoteCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("browser")]
+        public string Browser { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("platform")]
+        public string Platform { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CreateIndividualChatRequest
     {
 
@@ -1562,20 +1583,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("answer")]
         public string Answer { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("connectionState")]
-        public string ConnectionState { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("localCandidateTypes")]
-        public string LocalCandidateTypes { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("remoteCandidateTypes")]
-        public string RemoteCandidateTypes { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("browser")]
-        public string Browser { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("platform")]
-        public string Platform { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("connectionDiagnostics")]
+        public ConnectionDiagnostics ConnectionDiagnostics { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
         public int IceGatheringElapsedMs { get; set; }
@@ -1832,20 +1841,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("offer")]
         public string Offer { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("connectionState")]
-        public string ConnectionState { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("localCandidateTypes")]
-        public string LocalCandidateTypes { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("remoteCandidateTypes")]
-        public string RemoteCandidateTypes { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("browser")]
-        public string Browser { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("platform")]
-        public string Platform { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("connectionDiagnostics")]
+        public ConnectionDiagnostics ConnectionDiagnostics { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
         public int IceGatheringElapsedMs { get; set; }

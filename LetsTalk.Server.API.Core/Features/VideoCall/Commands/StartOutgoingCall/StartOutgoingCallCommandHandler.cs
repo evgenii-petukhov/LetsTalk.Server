@@ -38,13 +38,9 @@ public class StartOutgoingCallCommandHandler(
             callId,
             request.ChatId,
             request.AccountId,
-            request.ConnectionState,
-            request.LocalCandidateTypes,
-            request.RemoteCandidateTypes,
-            request.Browser,
-            request.Platform,
             request.IceGatheringElapsedMs,
-            request.IceGatheringCollectedAll);
+            request.IceGatheringCollectedAll,
+            request.ConnectionDiagnostics);
 
         return Unit.Value;
     }

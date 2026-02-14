@@ -1,0 +1,18 @@
+﻿using LetsTalk.Server.API.Core.Models;
+
+namespace LetsTalk.Server.API.Models.Call;
+
+public class HandleIncomingCallRequest
+{
+    public string? CallId { get; set; }
+
+    public string? ChatId { get; set; }
+
+    public string? Answer { get; set; }
+
+    public ConnectionDiagnostics? ConnectionDiagnostics { get; set; }
+
+    public int IceGatheringElapsedMs { get; set; }
+
+    public bool IceGatheringCollectedAll { get; set; }
+}

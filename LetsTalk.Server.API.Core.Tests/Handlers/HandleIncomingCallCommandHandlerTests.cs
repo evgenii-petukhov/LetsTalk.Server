@@ -2,6 +2,7 @@ using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.VideoCall.Commands.HandleIncomingCall;
+using LetsTalk.Server.API.Core.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
@@ -39,11 +40,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "sdp-answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -85,11 +89,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -125,11 +132,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -165,11 +175,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -207,11 +220,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -249,11 +265,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -289,11 +308,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-not-in-chat",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -329,11 +351,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -364,11 +389,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -405,11 +433,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = new CancellationToken(false);
@@ -446,11 +477,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: null!,
             ChatId: null!,
             Answer: null!,
-            ConnectionState: null!,
-            LocalCandidateTypes: null!,
-            RemoteCandidateTypes: null!,
-            Browser: null!,
-            Platform: null!,
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = null!,
+                LocalCandidateTypes = null!,
+                RemoteCandidateTypes = null!,
+                Browser = null!,
+                Platform = null!
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -492,11 +526,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-!@#$%",
             ChatId: "chat-^&*()",
             Answer: "answer-with-special-chars-!@#$%^&*()",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -534,11 +571,14 @@ public class HandleIncomingCallCommandHandlerTests
             CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             Answer: longAnswer,
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
@@ -578,11 +618,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "",
             ChatId: "",
             Answer: "",
-            ConnectionState: "",
-            LocalCandidateTypes: "",
-            RemoteCandidateTypes: "",
-            Browser: "",
-            Platform: "",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "",
+                LocalCandidateTypes = "",
+                RemoteCandidateTypes = "",
+                Browser = "",
+                Platform = ""
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -620,11 +663,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -660,11 +706,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "answer-data",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
@@ -702,11 +751,14 @@ public class HandleIncomingCallCommandHandlerTests
             AccountId: "caller-123",
             ChatId: "chat-456",
             Answer: "test-sdp-answer",
-            ConnectionState: "connected",
-            LocalCandidateTypes: "{}",
-            RemoteCandidateTypes: "{}",
-            Browser: "Chrome",
-            Platform: "Win32",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
             IceGatheringElapsedMs: 0,
             IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;

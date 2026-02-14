@@ -1,4 +1,6 @@
-﻿namespace LetsTalk.Server.API.Core.Abstractions;
+﻿using LetsTalk.Server.API.Core.Models;
+
+namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface ITelemetryService
 {
@@ -6,23 +8,15 @@ public interface ITelemetryService
         string callId,
         string chatId,
         string accountId,
-        string connectionState,
-        string localCandidateTypes,
-        string remoteCandidateTypes,
-        string browser,
-        string platform,
         int iceGatheringMs,
-        bool iceCollectedAll);
+        bool iceCollectedAll,
+        ConnectionDiagnostics connectionDiagnostics);
 
     void TrackIncomingCallHandled(
         string callId,
         string chatId,
         string accountId,
-        string connectionState,
-        string localCandidateTypes,
-        string remoteCandidateTypes,
-        string browser,
-        string platform,
         int iceGatheringMs,
-        bool iceCollectedAll);
+        bool iceCollectedAll,
+        ConnectionDiagnostics connectionDiagnostics);
 }

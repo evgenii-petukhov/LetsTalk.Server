@@ -1,9 +1,9 @@
-﻿using LetsTalk.Server.API.Models.Chat;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.VideoCall.Queries.GetCallSettings;
 using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.API.Models.Call;
 
 namespace LetsTalk.Server.API.Controllers;
 
@@ -28,13 +28,9 @@ public class CallController(
             GetAccountId(),
             request.ChatId!,
             request.Offer!,
-            request.ConnectionState!,
-            request.LocalCandidateTypes!,
-            request.RemoteCandidateTypes!,
-            request.Platform!,
-            request.Browser!,
             request.IceGatheringElapsedMs,
-            request.IceGatheringCollectedAll);
+            request.IceGatheringCollectedAll,
+            request.ConnectionDiagnostics!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }
@@ -47,13 +43,9 @@ public class CallController(
             GetAccountId(),
             request.ChatId!,
             request.Answer!,
-            request.ConnectionState!,
-            request.LocalCandidateTypes!,
-            request.RemoteCandidateTypes!,
-            request.Platform!,
-            request.Browser!,
             request.IceGatheringElapsedMs,
-            request.IceGatheringCollectedAll);
+            request.IceGatheringCollectedAll,
+            request.ConnectionDiagnostics!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

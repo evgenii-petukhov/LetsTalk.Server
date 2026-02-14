@@ -35,13 +35,9 @@ public class HandleIncomingCallCommandHandler(
             request.CallId,
             request.ChatId,
             request.AccountId,
-            request.ConnectionState,
-            request.LocalCandidateTypes,
-            request.RemoteCandidateTypes,
-            request.Browser,
-            request.Platform,
             request.IceGatheringElapsedMs,
-            request.IceGatheringCollectedAll);
+            request.IceGatheringCollectedAll,
+            request.ConnectionDiagnostics);
 
         return Unit.Value;
     }

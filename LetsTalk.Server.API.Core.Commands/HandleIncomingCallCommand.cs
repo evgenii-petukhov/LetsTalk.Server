@@ -7,5 +7,10 @@ public record HandleIncomingCallCommand(
     string AccountId,
     string ChatId,
     string Answer,
+    string ConnectionState,
+    string LocalCandidateTypes,
+    string RemoteCandidateTypes,
+    string Browser,
+    string Platform,
     int IceGatheringElapsedMs,
     bool IceGatheringCollectedAll) : IRequest<Unit>;

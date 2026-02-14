@@ -28,6 +28,11 @@ public class CallController(
             GetAccountId(),
             request.ChatId!,
             request.Offer!,
+            request.ConnectionState!,
+            request.LocalCandidateTypes!,
+            request.RemoteCandidateTypes!,
+            request.Platform!,
+            request.Browser!,
             request.IceGatheringElapsedMs,
             request.IceGatheringCollectedAll);
         await _mediator.Send(cmd, cancellationToken);
@@ -42,6 +47,11 @@ public class CallController(
             GetAccountId(),
             request.ChatId!,
             request.Answer!,
+            request.ConnectionState!,
+            request.LocalCandidateTypes!,
+            request.RemoteCandidateTypes!,
+            request.Platform!,
+            request.Browser!,
             request.IceGatheringElapsedMs,
             request.IceGatheringCollectedAll);
         await _mediator.Send(cmd, cancellationToken);

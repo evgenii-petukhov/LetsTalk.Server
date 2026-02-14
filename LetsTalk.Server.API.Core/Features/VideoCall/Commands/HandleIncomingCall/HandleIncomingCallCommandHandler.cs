@@ -31,10 +31,15 @@ public class HandleIncomingCallCommandHandler(
             }
         }, cancellationToken);
 
-        _telemetryService.TrackOutgoingCallStarted(
+        _telemetryService.TrackIncomingCallHandled(
             request.CallId,
             request.ChatId,
             request.AccountId,
+            request.ConnectionState,
+            request.LocalCandidateTypes,
+            request.RemoteCandidateTypes,
+            request.Browser,
+            request.Platform,
             request.IceGatheringElapsedMs,
             request.IceGatheringCollectedAll);
 

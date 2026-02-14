@@ -1562,6 +1562,21 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("answer")]
         public string Answer { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("connectionState")]
+        public string ConnectionState { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("localCandidateTypes")]
+        public string LocalCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("remoteCandidateTypes")]
+        public string RemoteCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("browser")]
+        public string Browser { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("platform")]
+        public string Platform { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
         public int IceGatheringElapsedMs { get; set; }
 
@@ -1816,6 +1831,21 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("offer")]
         public string Offer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("connectionState")]
+        public string ConnectionState { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("localCandidateTypes")]
+        public string LocalCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("remoteCandidateTypes")]
+        public string RemoteCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("browser")]
+        public string Browser { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("platform")]
+        public string Platform { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
         public int IceGatheringElapsedMs { get; set; }

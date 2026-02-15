@@ -11,14 +11,38 @@ namespace LetsTalk.Server.API.Core.Services;
 public class TelemetryService(
     IOptions<ApplicationInsightsSettings> options) : ITelemetryService
 {
-    private const string VideoCallEventName = "video-call";
+    private static class Roles
+    {
+        public const string Caller = "caller";
+        public const string Callee = "callee";
+    }
+
+    private static class Events
+    {
+        public const string StartOutgoingCall = "StartOutgoingCall";
+        public const string HandleIncomingCall = "HandleIncomingCall";
+    }
+
+    private const string VideoCall = "video-call";
+    private const string CallId = "callId";
+    private const string ChatId = "chatId";
+    private const string AccountId = "accountId";
+    private const string Role = "role";
+    private const string Event = "event";
+    private const string IceGatheringMs = "iceGatheringMs";
+    private const string IceCollectedAll = "iceCollectedAll";
+    private const string ConnectionState = "connectionState";
+    private const string LocalCandidateTypes = "localCandidateTypes";
+    private const string RemoteCandidateTypes = "remoteCandidateTypes";
+    private const string Browser = "browser";
+    private const string Platform = "platform";
 
     private readonly TelemetryClient _telemetryClient = new(new TelemetryConfiguration
     {
         ConnectionString = options.Value.ConnectionString,
     });
 
-    public void TrackOutgoingCallStarted(
+    public void TrackStartOutgoingCall(
         string callId,
         string chatId,
         string accountId,
@@ -26,24 +50,24 @@ public class TelemetryService(
         bool iceCollectedAll,
         ConnectionDiagnostics connectionDiagnostics)
     {
-        _telemetryClient.TrackEvent(VideoCallEventName, new Dictionary<string, string>
+        _telemetryClient.TrackEvent(VideoCall, new Dictionary<string, string>
         {
-            [nameof(callId)] = callId,
-            [nameof(chatId)] = chatId,
-            [nameof(accountId)] = accountId,
-            ["role"] = "caller",
-            ["event"] = "offer created",
-            [nameof(iceGatheringMs)] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
-            [nameof(iceCollectedAll)] = iceCollectedAll.ToString(),
-            ["connectionState"] = connectionDiagnostics.ConnectionState!,
-            ["localCandidateTypes"] = connectionDiagnostics.LocalCandidateTypes!,
-            ["remoteCandidateTypes"] = connectionDiagnostics.RemoteCandidateTypes!,
-            ["browser"] = connectionDiagnostics.Browser!,
-            ["platform"] = connectionDiagnostics.Platform!
+            [CallId] = callId,
+            [ChatId] = chatId,
+            [AccountId] = accountId,
+            [Role] = Roles.Caller,
+            [Event] = Events.StartOutgoingCall,
+            [IceGatheringMs] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
+            [IceCollectedAll] = iceCollectedAll.ToString(),
+            [ConnectionState] = connectionDiagnostics.ConnectionState!,
+            [LocalCandidateTypes] = connectionDiagnostics.LocalCandidateTypes!,
+            [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,
+            [Browser] = connectionDiagnostics.Browser!,
+            [Platform] = connectionDiagnostics.Platform!
         });
     }
 
-    public void TrackIncomingCallHandled(
+    public void TrackHandleIncomingCall(
         string callId,
         string chatId,
         string accountId,
@@ -51,20 +75,20 @@ public class TelemetryService(
         bool iceCollectedAll,
         ConnectionDiagnostics connectionDiagnostics)
     {
-        _telemetryClient.TrackEvent(VideoCallEventName, new Dictionary<string, string>
+        _telemetryClient.TrackEvent(VideoCall, new Dictionary<string, string>
         {
-            [nameof(callId)] = callId,
-            [nameof(chatId)] = chatId,
-            [nameof(accountId)] = accountId,
-            ["role"] = "callee",
-            ["event"] = "answer created",
-            [nameof(iceGatheringMs)] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
-            [nameof(iceCollectedAll)] = iceCollectedAll.ToString(),
-            ["connectionState"] = connectionDiagnostics.ConnectionState!,
-            ["localCandidateTypes"] = connectionDiagnostics.LocalCandidateTypes!,
-            ["remoteCandidateTypes"] = connectionDiagnostics.RemoteCandidateTypes!,
-            ["browser"] = connectionDiagnostics.Browser!,
-            ["platform"] = connectionDiagnostics.Platform!,
+            [CallId] = callId,
+            [ChatId] = chatId,
+            [AccountId] = accountId,
+            [Role] = Roles.Callee,
+            [Event] = Events.HandleIncomingCall,
+            [IceGatheringMs] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
+            [IceCollectedAll] = iceCollectedAll.ToString(),
+            [ConnectionState] = connectionDiagnostics.ConnectionState!,
+            [LocalCandidateTypes] = connectionDiagnostics.LocalCandidateTypes!,
+            [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,
+            [Browser] = connectionDiagnostics.Browser!,
+            [Platform] = connectionDiagnostics.Platform!,
         });
     }
 }

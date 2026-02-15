@@ -23,7 +23,7 @@ public class HtmlGeneratorTests
     public void GetHtml_ShouldReturnEmptyResult_WhenTextIsNull()
     {
         // Act
-        var result = _htmlGenerator.GetHtml(null);
+        var result = _htmlGenerator.GetHtml(null!);
 
         // Assert
         result.Should().Be(new HtmlGeneratorResult());

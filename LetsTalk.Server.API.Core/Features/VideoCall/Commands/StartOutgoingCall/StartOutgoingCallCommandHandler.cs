@@ -34,7 +34,7 @@ public class StartOutgoingCallCommandHandler(
             }
         }, cancellationToken);
 
-        _telemetryService.TrackOutgoingCallStarted(
+        _telemetryService.TrackStartOutgoingCall(
             callId,
             request.ChatId,
             request.AccountId,

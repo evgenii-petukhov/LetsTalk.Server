@@ -4,7 +4,7 @@ namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface ITelemetryService
 {
-    void TrackOutgoingCallStarted(
+    void TrackStartOutgoingCall(
         string callId,
         string chatId,
         string accountId,
@@ -12,7 +12,7 @@ public interface ITelemetryService
         bool iceCollectedAll,
         ConnectionDiagnostics connectionDiagnostics);
 
-    void TrackIncomingCallHandled(
+    void TrackHandleIncomingCall(
         string callId,
         string chatId,
         string accountId,

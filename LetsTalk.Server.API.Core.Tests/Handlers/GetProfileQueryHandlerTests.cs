@@ -479,8 +479,8 @@ public class GetProfileQueryHandlerTests
             .ReturnsAsync((ProfileDto?)null);
 
         _mapperMock
-            .Setup(x => x.Map<ProfileDto>((ProfileDto?)null))
-            .Returns((ProfileDto?)null);
+            .Setup(x => x.Map<ProfileDto>(null))
+            .Returns((ProfileDto?)null!);
 
         // Act
         var result = await _handler.Handle(query, cancellationToken);

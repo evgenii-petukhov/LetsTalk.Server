@@ -31,7 +31,7 @@ public class HandleIncomingCallCommandHandler(
             }
         }, cancellationToken);
 
-        _telemetryService.TrackIncomingCallHandled(
+        _telemetryService.TrackHandleIncomingCall(
             request.CallId,
             request.ChatId,
             request.AccountId,

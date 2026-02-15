@@ -224,7 +224,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Simple text message", html, null, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Simple text message", html, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -336,7 +336,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "New link to preview", html, null, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "New link to preview", html, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -434,7 +434,7 @@ public class CreateMessageCommandHandlerTests
             .Returns(new HtmlGeneratorResult(html, url));
 
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, null, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, null!, cancellationToken))
             .ThrowsAsync(new InvalidOperationException("Message creation failed"));
 
         // Act & Assert
@@ -464,7 +464,7 @@ public class CreateMessageCommandHandlerTests
 
         var message = new MessageServiceModel { Id = "msg-789" };
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, null, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -500,7 +500,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789", Text = "Group message" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Group message", html, null, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Group message", html, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -523,7 +523,7 @@ public class CreateMessageCommandHandlerTests
             _notificationProducerMock.Verify(
                 x => x.PublishAsync(It.Is<Notification>(n =>
                     n.RecipientId == accountId &&
-                    n.Message.Id == messageDto.Id &&
+                    n.Message!.Id == messageDto.Id &&
                     n.Message.IsMine == (accountId == "sender-123")), cancellationToken),
                 Times.Once);
 
@@ -641,7 +641,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", null!, "", null, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", null!, "", null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -717,7 +717,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync(command.SenderId!, command.ChatId!, command.Text!, html, null, cancellationToken))
+            .Setup(x => x.CreateMessageAsync(command.SenderId!, command.ChatId!, command.Text!, html, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -731,25 +731,6 @@ public class CreateMessageCommandHandlerTests
             .Setup(x => x.ClearAsync(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
 
-        _chatCacheManagerMock
-            .Setup(x => x.ClearAsync(It.IsAny<string>()))
-            .Returns(Task.CompletedTask);
-
-        _notificationProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<Notification>(), cancellationToken))
-            .Returns(Task.CompletedTask);
-
-        _linkPreviewProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<LinkPreviewRequest>(), cancellationToken))
-            .Returns(Task.CompletedTask);
-
-        _imageResizeProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<ImageResizeRequest>(), cancellationToken))
-            .Returns(Task.CompletedTask);
-    }
-
-    private void SetupOtherAsyncOperations(CancellationToken cancellationToken)
-    {
         _chatCacheManagerMock
             .Setup(x => x.ClearAsync(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
@@ -783,7 +764,7 @@ public class CreateMessageCommandHandlerTests
             _notificationProducerMock.Verify(
                 x => x.PublishAsync(It.Is<Notification>(n =>
                     n.RecipientId == accountId &&
-                    n.Message.Id == messageDto.Id), cancellationToken),
+                    n.Message!.Id == messageDto.Id), cancellationToken),
                 Times.Once);
         }
     }

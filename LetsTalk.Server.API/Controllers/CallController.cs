@@ -69,7 +69,9 @@ public class CallController(
             request.CallId!,
             GetAccountId(),
             request.ChatId!,
-            request.ConnectionDiagnostics!);
+            request.ConnectionDiagnostics!,
+            request.Error!,
+            request.StackTrace!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();
     }

@@ -2,7 +2,7 @@
 using LetsTalk.Server.API.Core.Commands;
 using MediatR;
 
-namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.LogConnectionEstablished;
+namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.LogConnectionFailed;
 
 internal class LogConnectionFailedCommandHandler(
     ITelemetryService telemetryService) : IRequestHandler<LogConnectionFailedCommand, Unit>
@@ -15,7 +15,9 @@ internal class LogConnectionFailedCommandHandler(
             request.CallId,
             request.ChatId,
             request.AccountId,
-            request.ConnectionDiagnostics);
+            request.ConnectionDiagnostics,
+            request.error,
+            request.StackTrace);
 
         return Unit.Value;
     }

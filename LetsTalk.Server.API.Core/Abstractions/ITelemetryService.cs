@@ -30,5 +30,7 @@ public interface ITelemetryService
         string callId,
         string chatId,
         string accountId,
-        ConnectionDiagnostics connectionDiagnostics);
+        ConnectionDiagnostics connectionDiagnostics,
+        string errorMessage,
+        string stackTrace);
 }

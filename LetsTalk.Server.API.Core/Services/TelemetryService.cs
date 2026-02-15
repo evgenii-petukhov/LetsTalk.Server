@@ -38,6 +38,8 @@ public class TelemetryService(
     private const string RemoteCandidateTypes = "remoteCandidateTypes";
     private const string Browser = "browser";
     private const string Platform = "platform";
+    private const string Error = "error";
+    private const string StackTrace = "stackTrace";
 
     private readonly TelemetryClient _telemetryClient = new(new TelemetryConfiguration
     {
@@ -118,7 +120,9 @@ public class TelemetryService(
         string callId,
         string chatId,
         string accountId,
-        ConnectionDiagnostics connectionDiagnostics)
+        ConnectionDiagnostics connectionDiagnostics,
+        string errorMessage,
+        string stackTrace)
     {
         _telemetryClient.TrackEvent(VideoCall, new Dictionary<string, string>
         {
@@ -131,6 +135,8 @@ public class TelemetryService(
             [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,
             [Browser] = connectionDiagnostics.Browser!,
             [Platform] = connectionDiagnostics.Platform!,
+            [Error] = errorMessage!,
+            [StackTrace] = stackTrace,
         });
     }
 }

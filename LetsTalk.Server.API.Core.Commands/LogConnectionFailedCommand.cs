@@ -7,4 +7,6 @@ public record LogConnectionFailedCommand(
     string CallId,
     string AccountId,
     string ChatId,
-    ConnectionDiagnostics ConnectionDiagnostics) : IRequest<Unit>;
+    ConnectionDiagnostics ConnectionDiagnostics,
+    string error,
+    string StackTrace) : IRequest<Unit>;

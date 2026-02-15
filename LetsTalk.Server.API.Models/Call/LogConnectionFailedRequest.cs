@@ -9,4 +9,8 @@ public class LogConnectionFailedRequest
     public string? ChatId { get; set; }
 
     public ConnectionDiagnostics? ConnectionDiagnostics { get; set; }
+
+    public string? Error { get; set; }
+
+    public string? StackTrace { get; set; }
 }

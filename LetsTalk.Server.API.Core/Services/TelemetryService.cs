@@ -19,8 +19,10 @@ public class TelemetryService(
 
     private static class Events
     {
-        public const string StartOutgoingCall = "StartOutgoingCall";
-        public const string HandleIncomingCall = "HandleIncomingCall";
+        public const string StartOutgoingCall = nameof(StartOutgoingCall);
+        public const string HandleIncomingCall = nameof(HandleIncomingCall);
+        public const string ConnectionEstablished = nameof(ConnectionEstablished);
+        public const string ConnectionFailed = nameof(ConnectionFailed);
     }
 
     private const string VideoCall = "video-call";
@@ -84,6 +86,46 @@ public class TelemetryService(
             [Event] = Events.HandleIncomingCall,
             [IceGatheringMs] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
             [IceCollectedAll] = iceCollectedAll.ToString(),
+            [ConnectionState] = connectionDiagnostics.ConnectionState!,
+            [LocalCandidateTypes] = connectionDiagnostics.LocalCandidateTypes!,
+            [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,
+            [Browser] = connectionDiagnostics.Browser!,
+            [Platform] = connectionDiagnostics.Platform!,
+        });
+    }
+
+    public void TrackConnectionEstablished(
+        string callId,
+        string chatId,
+        string accountId,
+        ConnectionDiagnostics connectionDiagnostics)
+    {
+        _telemetryClient.TrackEvent(VideoCall, new Dictionary<string, string>
+        {
+            [CallId] = callId,
+            [ChatId] = chatId,
+            [AccountId] = accountId,
+            [Event] = Events.ConnectionEstablished,
+            [ConnectionState] = connectionDiagnostics.ConnectionState!,
+            [LocalCandidateTypes] = connectionDiagnostics.LocalCandidateTypes!,
+            [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,
+            [Browser] = connectionDiagnostics.Browser!,
+            [Platform] = connectionDiagnostics.Platform!,
+        });
+    }
+
+    public void TrackConnectionFailed(
+        string callId,
+        string chatId,
+        string accountId,
+        ConnectionDiagnostics connectionDiagnostics)
+    {
+        _telemetryClient.TrackEvent(VideoCall, new Dictionary<string, string>
+        {
+            [CallId] = callId,
+            [ChatId] = chatId,
+            [AccountId] = accountId,
+            [Event] = Events.ConnectionFailed,
             [ConnectionState] = connectionDiagnostics.ConnectionState!,
             [LocalCandidateTypes] = connectionDiagnostics.LocalCandidateTypes!,
             [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,

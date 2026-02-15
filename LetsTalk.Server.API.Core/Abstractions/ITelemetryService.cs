@@ -19,4 +19,16 @@ public interface ITelemetryService
         int iceGatheringMs,
         bool iceCollectedAll,
         ConnectionDiagnostics connectionDiagnostics);
+
+    void TrackConnectionEstablished(
+        string callId,
+        string chatId,
+        string accountId,
+        ConnectionDiagnostics connectionDiagnostics);
+
+    void TrackConnectionFailed(
+        string callId,
+        string chatId,
+        string accountId,
+        ConnectionDiagnostics connectionDiagnostics);
 }

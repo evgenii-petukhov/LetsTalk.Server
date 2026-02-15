@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
@@ -9,13 +10,13 @@ namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.StartOutgoingCall
 public class StartOutgoingCallCommandHandler(
     IProducer<Notification> notificationProducer,
     IChatAgnosticService chatAgnosticService,
-    ITelemetryService telemetryService) : IRequestHandler<StartOutgoingCallCommand, Unit>
+    ITelemetryService telemetryService) : IRequestHandler<StartOutgoingCallCommand, StartOutgoingCallDto>
 {
     private readonly IProducer<Notification> _notificationProducer = notificationProducer;
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
     private readonly ITelemetryService _telemetryService = telemetryService;
 
-    public async Task<Unit> Handle(StartOutgoingCallCommand request, CancellationToken cancellationToken)
+    public async Task<StartOutgoingCallDto> Handle(StartOutgoingCallCommand request, CancellationToken cancellationToken)
     {
         var accountIds = await _chatAgnosticService.GetChatMemberAccountIdsAsync(request.ChatId, cancellationToken);
 
@@ -42,6 +43,9 @@ public class StartOutgoingCallCommandHandler(
             request.IceGatheringCollectedAll,
             request.ConnectionDiagnostics);
 
-        return Unit.Value;
+        return new StartOutgoingCallDto
+        {
+            CallId = callId
+        };
     }
 }

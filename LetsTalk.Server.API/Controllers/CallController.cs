@@ -22,7 +22,7 @@ public class CallController(
     }
 
     [HttpPost("StartOutgoingCall")]
-    public async Task<ActionResult> StartOutgoingCallAsync(StartOutgoingCallRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<StartOutgoingCallDto>> StartOutgoingCallAsync(StartOutgoingCallRequest request, CancellationToken cancellationToken)
     {
         var cmd = new StartOutgoingCallCommand(
             GetAccountId(),
@@ -31,8 +31,8 @@ public class CallController(
             request.IceGatheringElapsedMs,
             request.IceGatheringCollectedAll,
             request.ConnectionDiagnostics!);
-        await _mediator.Send(cmd, cancellationToken);
-        return Ok();
+        var dto = await _mediator.Send(cmd, cancellationToken);
+        return Ok(dto);
     }
 
     [HttpPost("HandleIncomingCall")]
@@ -45,6 +45,30 @@ public class CallController(
             request.Answer!,
             request.IceGatheringElapsedMs,
             request.IceGatheringCollectedAll,
+            request.ConnectionDiagnostics!);
+        await _mediator.Send(cmd, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPost("LogConnectionEstablished")]
+    public async Task<ActionResult> LogConnectionEstablishedAsync(LogConnectionEstablishedRequest request, CancellationToken cancellationToken)
+    {
+        var cmd = new LogConnectionEstablishedCommand(
+            request.CallId!,
+            GetAccountId(),
+            request.ChatId!,
+            request.ConnectionDiagnostics!);
+        await _mediator.Send(cmd, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPost("LogConnectionFailed")]
+    public async Task<ActionResult> LogConnectionFailedAsync(LogConnectionFailedRequest request, CancellationToken cancellationToken)
+    {
+        var cmd = new LogConnectionFailedCommand(
+            request.CallId!,
+            GetAccountId(),
+            request.ChatId!,
             request.ConnectionDiagnostics!);
         await _mediator.Send(cmd, cancellationToken);
         return Ok();

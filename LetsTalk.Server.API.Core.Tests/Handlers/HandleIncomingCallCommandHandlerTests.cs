@@ -785,7 +785,7 @@ public class HandleIncomingCallCommandHandlerTests
                 n.Connection != null &&
                 n.Connection.Answer == "test-sdp-answer" &&
                 n.Connection.Offer == null &&
-                n.Connection.ChatId == null), cancellationToken),
+                n.Connection.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 }

@@ -3,6 +3,7 @@ using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.VideoCall.Commands.StartOutgoingCall;
 using LetsTalk.Server.API.Core.Models;
+using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
@@ -65,7 +66,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _chatAgnosticServiceMock.Verify(
             x => x.GetChatMemberAccountIdsAsync("chat-456", cancellationToken),
@@ -114,7 +117,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -156,7 +161,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -198,7 +205,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -243,7 +252,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -288,7 +299,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -330,7 +343,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -495,7 +510,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _chatAgnosticServiceMock.Verify(
             x => x.GetChatMemberAccountIdsAsync(null!, cancellationToken),
@@ -544,7 +561,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -590,7 +609,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -636,7 +657,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -681,7 +704,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -723,7 +748,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -768,7 +795,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>

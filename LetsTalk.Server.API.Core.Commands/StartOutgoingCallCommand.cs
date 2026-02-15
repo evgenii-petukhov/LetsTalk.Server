@@ -1,4 +1,5 @@
 ﻿using LetsTalk.Server.API.Core.Models;
+using LetsTalk.Server.Dto.Models;
 using MediatR;
 
 namespace LetsTalk.Server.API.Core.Commands;
@@ -9,4 +10,4 @@ public record StartOutgoingCallCommand(
     string Offer,
     int IceGatheringElapsedMs,
     bool IceGatheringCollectedAll,
-    ConnectionDiagnostics ConnectionDiagnostics) : IRequest<Unit>;
+    ConnectionDiagnostics ConnectionDiagnostics) : IRequest<StartOutgoingCallDto>;

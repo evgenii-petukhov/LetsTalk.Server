@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Core.Models;
+using LetsTalk.Server.API.Logging.Models;
 using LetsTalk.Server.Configuration.Models;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;

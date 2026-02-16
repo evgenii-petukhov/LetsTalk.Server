@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.API.Core.Models;
+﻿using LetsTalk.Server.API.Logging.Models;
 using LetsTalk.Server.Dto.Models;
 using MediatR;
 

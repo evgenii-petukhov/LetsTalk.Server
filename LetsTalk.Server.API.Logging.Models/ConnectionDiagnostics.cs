@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.API.Core.Models;
+﻿namespace LetsTalk.Server.API.Logging.Models;
 
 public class ConnectionDiagnostics
 {

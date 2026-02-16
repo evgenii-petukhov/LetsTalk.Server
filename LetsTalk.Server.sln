@@ -155,7 +155,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Services.Tests", "LetsTalk.Server.Persistence.MongoDB.Services.Tests\LetsTalk.Server.Persistence.MongoDB.Services.Tests.csproj", "{1586C926-E13D-6673-D672-7E61ED7D3881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.API.Core.Models", "LetsTalk.Server.API.Core.Models\LetsTalk.Server.API.Core.Models.csproj", "{36FB9939-57CE-4021-AADF-795FE6E7A672}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.API.Logging.Models", "LetsTalk.Server.API.Logging.Models\LetsTalk.Server.API.Logging.Models.csproj", "{279F71D1-2798-04C8-9E90-F4F8CFE744DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -423,10 +423,10 @@ Global
 		{1586C926-E13D-6673-D672-7E61ED7D3881}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1586C926-E13D-6673-D672-7E61ED7D3881}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1586C926-E13D-6673-D672-7E61ED7D3881}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36FB9939-57CE-4021-AADF-795FE6E7A672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36FB9939-57CE-4021-AADF-795FE6E7A672}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36FB9939-57CE-4021-AADF-795FE6E7A672}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36FB9939-57CE-4021-AADF-795FE6E7A672}.Release|Any CPU.Build.0 = Release|Any CPU
+		{279F71D1-2798-04C8-9E90-F4F8CFE744DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{279F71D1-2798-04C8-9E90-F4F8CFE744DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{279F71D1-2798-04C8-9E90-F4F8CFE744DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{279F71D1-2798-04C8-9E90-F4F8CFE744DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -507,7 +507,7 @@ Global
 		{164A6D34-1560-481D-A0E0-64A1E632F8C3} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{7DBFA985-8061-ABDF-B4D9-2C8D7EFDA8D5} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
 		{1586C926-E13D-6673-D672-7E61ED7D3881} = {EA773367-D1CB-470C-9DB7-8E87CA9D637E}
-		{36FB9939-57CE-4021-AADF-795FE6E7A672} = {859FF76A-263A-4C97-A9BE-944BEF6BC3DF}
+		{279F71D1-2798-04C8-9E90-F4F8CFE744DE} = {9DA0D5F4-0AB9-46A9-8ACF-6396C4E351D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

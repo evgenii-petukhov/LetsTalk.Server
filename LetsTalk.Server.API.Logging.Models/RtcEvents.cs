@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LetsTalk.Server.API.Core.Models;
+namespace LetsTalk.Server.API.Logging.Models;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum RtcEvents

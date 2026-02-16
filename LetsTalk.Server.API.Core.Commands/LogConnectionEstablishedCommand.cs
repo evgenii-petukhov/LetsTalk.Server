@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.API.Core.Models;
+﻿using LetsTalk.Server.API.Logging.Models;
 using MediatR;
 
 namespace LetsTalk.Server.API.Core.Commands;

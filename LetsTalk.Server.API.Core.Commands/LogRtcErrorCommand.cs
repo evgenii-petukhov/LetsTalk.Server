@@ -3,10 +3,11 @@ using MediatR;
 
 namespace LetsTalk.Server.API.Core.Commands;
 
-public record LogConnectionFailedCommand(
+public record LogRtcErrorCommand(
     string CallId,
     string AccountId,
     string ChatId,
     ConnectionDiagnostics ConnectionDiagnostics,
-    string error,
+    RtcErrorType ErrorType,
+    string Error,
     string StackTrace) : IRequest<Unit>;

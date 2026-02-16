@@ -2,21 +2,22 @@
 using LetsTalk.Server.API.Core.Commands;
 using MediatR;
 
-namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.LogConnectionFailed;
+namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.LogRtcError;
 
-internal class LogConnectionFailedCommandHandler(
-    ITelemetryService telemetryService) : IRequestHandler<LogConnectionFailedCommand, Unit>
+internal class LogRtcErrorCommandHandler(
+    ITelemetryService telemetryService) : IRequestHandler<LogRtcErrorCommand, Unit>
 {
     private readonly ITelemetryService _telemetryService = telemetryService;
 
-    public async Task<Unit> Handle(LogConnectionFailedCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(LogRtcErrorCommand request, CancellationToken cancellationToken)
     {
         _telemetryService.TrackConnectionFailed(
             request.CallId,
             request.ChatId,
             request.AccountId,
             request.ConnectionDiagnostics,
-            request.error,
+            request.ErrorType,
+            request.Error,
             request.StackTrace);
 
         return Unit.Value;

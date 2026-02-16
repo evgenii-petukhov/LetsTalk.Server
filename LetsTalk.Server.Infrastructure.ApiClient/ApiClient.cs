@@ -628,15 +628,15 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task LogConnectionFailedAsync(LogConnectionFailedRequest body)
+        public virtual System.Threading.Tasks.Task LogRtcErrorAsync(LogRtcErrorRequest body)
         {
-            return LogConnectionFailedAsync(body, System.Threading.CancellationToken.None);
+            return LogRtcErrorAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task LogConnectionFailedAsync(LogConnectionFailedRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task LogRtcErrorAsync(LogRtcErrorRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -652,8 +652,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/Call/LogConnectionFailed"
-                    urlBuilder_.Append("api/Call/LogConnectionFailed");
+                    // Operation Path: "api/Call/LogRtcError"
+                    urlBuilder_.Append("api/Call/LogRtcError");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1849,7 +1849,7 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class LogConnectionFailedRequest
+    public partial class LogRtcErrorRequest
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("callId")]
@@ -1860,6 +1860,10 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("connectionDiagnostics")]
         public ConnectionDiagnostics ConnectionDiagnostics { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("errorType")]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<RtcErrorType>))]
+        public RtcErrorType ErrorType { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("error")]
         public string Error { get; set; }
@@ -1965,6 +1969,24 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("image")]
         public ImageDto Image { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum RtcErrorType
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"NotSet")]
+        NotSet = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"Connection")]
+        Connection = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"IceServer")]
+        IceServer = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"Media")]
+        Media = 3,
 
     }
 

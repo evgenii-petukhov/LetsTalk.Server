@@ -11,20 +11,6 @@ namespace LetsTalk.Server.API.Core.Services;
 public class TelemetryService(
     IOptions<ApplicationInsightsSettings> options) : ITelemetryService
 {
-    private static class Roles
-    {
-        public const string Caller = "caller";
-        public const string Callee = "callee";
-    }
-
-    private static class Events
-    {
-        public const string StartOutgoingCall = nameof(StartOutgoingCall);
-        public const string HandleIncomingCall = nameof(HandleIncomingCall);
-        public const string ConnectionEstablished = nameof(ConnectionEstablished);
-        public const string ConnectionFailed = nameof(ConnectionFailed);
-    }
-
     private const string VideoCall = "video-call";
     private const string CallId = "callId";
     private const string ChatId = "chatId";
@@ -39,6 +25,7 @@ public class TelemetryService(
     private const string Browser = "browser";
     private const string Platform = "platform";
     private const string Error = "error";
+    private const string ErrorType = "errorType";
     private const string StackTrace = "stackTrace";
 
     private readonly TelemetryClient _telemetryClient = new(new TelemetryConfiguration
@@ -59,8 +46,8 @@ public class TelemetryService(
             [CallId] = callId,
             [ChatId] = chatId,
             [AccountId] = accountId,
-            [Role] = Roles.Caller,
-            [Event] = Events.StartOutgoingCall,
+            [Role] = RtcRoles.Caller.ToString(),
+            [Event] = RtcEvents.StartOutgoingCall.ToString(),
             [IceGatheringMs] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
             [IceCollectedAll] = iceCollectedAll.ToString(),
             [ConnectionState] = connectionDiagnostics.ConnectionState!,
@@ -84,8 +71,8 @@ public class TelemetryService(
             [CallId] = callId,
             [ChatId] = chatId,
             [AccountId] = accountId,
-            [Role] = Roles.Callee,
-            [Event] = Events.HandleIncomingCall,
+            [Role] = RtcRoles.Callee.ToString(),
+            [Event] = RtcEvents.HandleIncomingCall.ToString(),
             [IceGatheringMs] = iceGatheringMs.ToString(CultureInfo.InvariantCulture),
             [IceCollectedAll] = iceCollectedAll.ToString(),
             [ConnectionState] = connectionDiagnostics.ConnectionState!,
@@ -107,7 +94,7 @@ public class TelemetryService(
             [CallId] = callId,
             [ChatId] = chatId,
             [AccountId] = accountId,
-            [Event] = Events.ConnectionEstablished,
+            [Event] = RtcEvents.ConnectionEstablished.ToString(),
             [ConnectionState] = connectionDiagnostics.ConnectionState!,
             [LocalCandidateTypes] = connectionDiagnostics.LocalCandidateTypes!,
             [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,
@@ -121,6 +108,7 @@ public class TelemetryService(
         string chatId,
         string accountId,
         ConnectionDiagnostics connectionDiagnostics,
+        RtcErrorType errorType,
         string errorMessage,
         string stackTrace)
     {
@@ -129,13 +117,14 @@ public class TelemetryService(
             [CallId] = callId,
             [ChatId] = chatId,
             [AccountId] = accountId,
-            [Event] = Events.ConnectionFailed,
+            [Event] = RtcEvents.Error.ToString(),
             [ConnectionState] = connectionDiagnostics.ConnectionState!,
             [LocalCandidateTypes] = connectionDiagnostics.LocalCandidateTypes!,
             [RemoteCandidateTypes] = connectionDiagnostics.RemoteCandidateTypes!,
             [Browser] = connectionDiagnostics.Browser!,
             [Platform] = connectionDiagnostics.Platform!,
             [Error] = errorMessage!,
+            [ErrorType] = errorType.ToString(),
             [StackTrace] = stackTrace,
         });
     }

@@ -62,14 +62,15 @@ public class CallController(
         return Ok();
     }
 
-    [HttpPost("LogConnectionFailed")]
-    public async Task<ActionResult> LogConnectionFailedAsync(LogConnectionFailedRequest request, CancellationToken cancellationToken)
+    [HttpPost("LogRtcError")]
+    public async Task<ActionResult> LogRtcErrorAsync(LogRtcErrorRequest request, CancellationToken cancellationToken)
     {
-        var cmd = new LogConnectionFailedCommand(
+        var cmd = new LogRtcErrorCommand(
             request.CallId!,
             GetAccountId(),
             request.ChatId!,
             request.ConnectionDiagnostics!,
+            request.ErrorType,
             request.Error!,
             request.StackTrace!);
         await _mediator.Send(cmd, cancellationToken);

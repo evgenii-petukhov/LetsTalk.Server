@@ -16,6 +16,9 @@ using Confluent.Kafka;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.API.Core.Services.Cache.Accounts;
 using LetsTalk.Server.API.Core.Services.Cache.IceServerConfiguration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -137,5 +140,17 @@ public static class CoreServicesRegistration
         services.AddScoped<ITelemetryService, TelemetryService>();
 
         return services;
+    }
+
+    public static WebApplication UseApplicationInsightsFlush(this WebApplication app)
+    {
+        var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+        lifetime.ApplicationStopping.Register(() =>
+        {
+            var telemetryConfiguration = app.Services.GetService<TelemetryConfiguration>();
+            telemetryConfiguration?.Dispose();
+        });
+
+        return app;
     }
 }

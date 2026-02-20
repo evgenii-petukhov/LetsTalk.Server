@@ -1,5 +1,6 @@
 using LetsTalk.Server.API;
 using LetsTalk.Server.API.Middleware;
+using LetsTalk.Server.Telemetry.AgnosticServices;
 using Serilog;
 using System.Globalization;
 
@@ -21,11 +22,11 @@ var app = builder.Build();
 
 app.UseCustomExceptionHandling();
 
-//if (app.Environment.IsDevelopment())
-//{
-app.UseSwagger();
-app.UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseCors("all");
 
@@ -38,5 +39,7 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.UseTelemetryFlush(builder.Configuration);
 
 app.Run();

@@ -104,7 +104,7 @@ public class EmailLoginCommandValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         _authenticationClientMock.Verify(
-            x => x.ValidateLoginCodeAsync(null, 1234),
+            x => x.ValidateLoginCodeAsync(null!, 1234),
             Times.Once);
     }
 }

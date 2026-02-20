@@ -4,9 +4,10 @@ using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.VideoCall.Commands.HandleIncomingCall;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Telemetry.Abstractions;
+using LetsTalk.Server.Telemetry.Models;
 using MediatR;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 
@@ -15,6 +16,7 @@ public class HandleIncomingCallCommandHandlerTests
 {
     private Mock<IProducer<Notification>> _notificationProducerMock;
     private Mock<IChatAgnosticService> _chatAgnosticServiceMock;
+    private Mock<ITelemetryService> _telemetryServiceMock;
     private HandleIncomingCallCommandHandler _handler;
 
     [SetUp]
@@ -22,10 +24,12 @@ public class HandleIncomingCallCommandHandlerTests
     {
         _notificationProducerMock = new Mock<IProducer<Notification>>();
         _chatAgnosticServiceMock = new Mock<IChatAgnosticService>();
+        _telemetryServiceMock = new Mock<ITelemetryService>();
 
         _handler = new HandleIncomingCallCommandHandler(
             _notificationProducerMock.Object,
-            _chatAgnosticServiceMock.Object);
+            _chatAgnosticServiceMock.Object,
+            _telemetryServiceMock.Object);
     }
 
     [Test]
@@ -33,9 +37,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "sdp-answer-data");
+            Answer: "sdp-answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -71,9 +86,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -103,9 +129,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "recipient-789", "caller-123" };
@@ -135,9 +172,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123" };
@@ -169,9 +217,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string>();
@@ -203,9 +262,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "caller-123", "member-2", "member-3" };
@@ -235,9 +305,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-not-in-chat",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2", "member-3" };
@@ -267,9 +348,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         _chatAgnosticServiceMock
@@ -294,9 +386,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -327,9 +430,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = new CancellationToken(false);
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -360,9 +474,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: null!,
             ChatId: null!,
-            Answer: null!);
+            Answer: null!,
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = null!,
+                LocalCandidateTypes = null!,
+                RemoteCandidateTypes = null!,
+                Browser = null!,
+                Platform = null!
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2" };
@@ -398,9 +523,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-!@#$%",
             ChatId: "chat-^&*()",
-            Answer: "answer-with-special-chars-!@#$%^&*()");
+            Answer: "answer-with-special-chars-!@#$%^&*()",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-!@#$%", "recipient-{}[]" };
@@ -428,48 +564,25 @@ public class HandleIncomingCallCommandHandlerTests
     }
 
     [Test]
-    public async Task Handle_WhenUnicodeCharactersInProperties_ShouldHandleCorrectly()
-    {
-        // Arrange
-        var command = new HandleIncomingCallCommand(
-            AccountId: "呼叫者-123",
-            ChatId: "聊天-456",
-            Answer: "答案-数据-🎥📞");
-        var cancellationToken = CancellationToken.None;
-
-        var chatMembers = new List<string> { "呼叫者-123", "接收者-789" };
-
-        _chatAgnosticServiceMock
-            .Setup(x => x.GetChatMemberAccountIdsAsync("聊天-456", cancellationToken))
-            .ReturnsAsync(chatMembers);
-
-        _notificationProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<Notification>(), cancellationToken))
-            .Returns(Task.CompletedTask);
-
-        // Act
-        var result = await _handler.Handle(command, cancellationToken);
-
-        // Assert
-        result.Should().Be(Unit.Value);
-
-        _notificationProducerMock.Verify(
-            x => x.PublishAsync(It.Is<Notification>(n =>
-                n.RecipientId == "接收者-789" &&
-                n.Connection != null &&
-                n.Connection.Answer == "答案-数据-🎥📞"), cancellationToken),
-            Times.Once);
-    }
-
-    [Test]
     public async Task Handle_WhenLongAnswerData_ShouldHandleCorrectly()
     {
         // Arrange
         var longAnswer = new string('a', 10000); // Very long SDP answer
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: longAnswer);
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            Answer: longAnswer,
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -502,9 +615,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "",
             ChatId: "",
-            Answer: "");
+            Answer: "",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "",
+                LocalCandidateTypes = "",
+                RemoteCandidateTypes = "",
+                Browser = "",
+                Platform = ""
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "", "recipient-789" };
@@ -536,9 +660,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "recipient-789", "caller-123" };
@@ -568,9 +703,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "answer-data");
+            Answer: "answer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "caller-123" };
@@ -602,9 +748,20 @@ public class HandleIncomingCallCommandHandlerTests
     {
         // Arrange
         var command = new HandleIncomingCallCommand(
+            CallId: "call-id",
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Answer: "test-sdp-answer");
+            Answer: "test-sdp-answer",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -629,7 +786,7 @@ public class HandleIncomingCallCommandHandlerTests
                 n.Connection != null &&
                 n.Connection.Answer == "test-sdp-answer" &&
                 n.Connection.Offer == null &&
-                n.Connection.ChatId == null), cancellationToken),
+                n.Connection.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 }

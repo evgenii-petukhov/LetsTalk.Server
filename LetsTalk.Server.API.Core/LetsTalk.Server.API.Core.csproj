@@ -32,6 +32,7 @@
     <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence\LetsTalk.Server.Persistence.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Telemetry.AgnosticServices\LetsTalk.Server.Telemetry.AgnosticServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

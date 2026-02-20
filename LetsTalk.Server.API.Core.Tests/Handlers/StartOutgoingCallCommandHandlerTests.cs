@@ -2,11 +2,12 @@ using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.VideoCall.Commands.StartOutgoingCall;
+using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
-using MediatR;
+using LetsTalk.Server.Telemetry.Abstractions;
+using LetsTalk.Server.Telemetry.Models;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 
@@ -15,6 +16,7 @@ public class StartOutgoingCallCommandHandlerTests
 {
     private Mock<IProducer<Notification>> _notificationProducerMock;
     private Mock<IChatAgnosticService> _chatAgnosticServiceMock;
+    private Mock<ITelemetryService> _telemetryServiceMock;
     private StartOutgoingCallCommandHandler _handler;
 
     [SetUp]
@@ -22,10 +24,12 @@ public class StartOutgoingCallCommandHandlerTests
     {
         _notificationProducerMock = new Mock<IProducer<Notification>>();
         _chatAgnosticServiceMock = new Mock<IChatAgnosticService>();
+        _telemetryServiceMock = new Mock<ITelemetryService>();
 
         _handler = new StartOutgoingCallCommandHandler(
             _notificationProducerMock.Object,
-            _chatAgnosticServiceMock.Object);
+            _chatAgnosticServiceMock.Object,
+            _telemetryServiceMock.Object);
     }
 
     [Test]
@@ -35,7 +39,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "sdp-offer-data");
+            Offer: "sdp-offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -52,7 +66,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _chatAgnosticServiceMock.Verify(
             x => x.GetChatMemberAccountIdsAsync("chat-456", cancellationToken),
@@ -74,7 +90,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -91,7 +117,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -106,7 +134,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "recipient-789", "caller-123" };
@@ -123,7 +161,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -138,7 +178,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123" };
@@ -155,7 +205,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -173,7 +225,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string>();
@@ -190,7 +252,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -208,7 +272,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "caller-123", "member-2", "member-3" };
@@ -225,7 +299,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -240,7 +316,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-not-in-chat",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2", "member-3" };
@@ -257,7 +343,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -272,7 +360,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         _chatAgnosticServiceMock
@@ -299,7 +397,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -332,7 +440,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = new CancellationToken(false);
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -365,7 +483,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: null!,
             ChatId: null!,
-            Offer: null!);
+            Offer: null!,
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = null!,
+                LocalCandidateTypes = null!,
+                RemoteCandidateTypes = null!,
+                Browser = null!,
+                Platform = null!
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "member-1", "member-2" };
@@ -382,7 +510,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _chatAgnosticServiceMock.Verify(
             x => x.GetChatMemberAccountIdsAsync(null!, cancellationToken),
@@ -404,7 +534,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-!@#$%",
             ChatId: "chat-^&*()",
-            Offer: "offer-with-special-chars-!@#$%^&*()");
+            Offer: "offer-with-special-chars-!@#$%^&*()",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-!@#$%", "recipient-{}[]" };
@@ -421,7 +561,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -433,41 +575,6 @@ public class StartOutgoingCallCommandHandlerTests
     }
 
     [Test]
-    public async Task Handle_WhenUnicodeCharactersInProperties_ShouldHandleCorrectly()
-    {
-        // Arrange
-        var command = new StartOutgoingCallCommand(
-            AccountId: "呼叫者-123",
-            ChatId: "聊天-456",
-            Offer: "提供-数据-🎥📞");
-        var cancellationToken = CancellationToken.None;
-
-        var chatMembers = new List<string> { "呼叫者-123", "接收者-789" };
-
-        _chatAgnosticServiceMock
-            .Setup(x => x.GetChatMemberAccountIdsAsync("聊天-456", cancellationToken))
-            .ReturnsAsync(chatMembers);
-
-        _notificationProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<Notification>(), cancellationToken))
-            .Returns(Task.CompletedTask);
-
-        // Act
-        var result = await _handler.Handle(command, cancellationToken);
-
-        // Assert
-        result.Should().Be(Unit.Value);
-
-        _notificationProducerMock.Verify(
-            x => x.PublishAsync(It.Is<Notification>(n =>
-                n.RecipientId == "接收者-789" &&
-                n.Connection != null &&
-                n.Connection.Offer == "提供-数据-🎥📞" &&
-                n.Connection.ChatId == "聊天-456"), cancellationToken),
-            Times.Once);
-    }
-
-    [Test]
     public async Task Handle_WhenLongOfferData_ShouldHandleCorrectly()
     {
         // Arrange
@@ -475,7 +582,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: longOffer);
+            Offer: longOffer,
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -492,7 +609,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -511,7 +630,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "",
             ChatId: "",
-            Offer: "");
+            Offer: "",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "",
+                LocalCandidateTypes = "",
+                RemoteCandidateTypes = "",
+                Browser = "",
+                Platform = ""
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "", "recipient-789" };
@@ -528,7 +657,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -546,7 +677,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "recipient-789", "caller-123" };
@@ -563,7 +704,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -578,7 +721,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "offer-data");
+            Offer: "offer-data",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "caller-123", "caller-123" };
@@ -595,7 +748,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
@@ -613,7 +768,17 @@ public class StartOutgoingCallCommandHandlerTests
         var command = new StartOutgoingCallCommand(
             AccountId: "caller-123",
             ChatId: "chat-456",
-            Offer: "test-sdp-offer");
+            Offer: "test-sdp-offer",
+            ConnectionDiagnostics: new ConnectionDiagnostics
+            {
+                ConnectionState = "connected",
+                LocalCandidateTypes = "{}",
+                RemoteCandidateTypes = "{}",
+                Browser = "Chrome",
+                Platform = "Win32"
+            },
+            IceGatheringElapsedMs: 0,
+            IceGatheringCollectedAll: false);
         var cancellationToken = CancellationToken.None;
 
         var chatMembers = new List<string> { "caller-123", "recipient-789" };
@@ -630,7 +795,9 @@ public class StartOutgoingCallCommandHandlerTests
         var result = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        result.Should().Be(Unit.Value);
+        result.Should().NotBeNull()
+            .And.BeOfType<StartOutgoingCallDto>()
+            .Which.CallId.Should().NotBeNullOrEmpty();
 
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>

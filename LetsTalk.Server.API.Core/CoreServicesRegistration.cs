@@ -16,6 +16,7 @@ using Confluent.Kafka;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.API.Core.Services.Cache.Accounts;
 using LetsTalk.Server.API.Core.Services.Cache.IceServerConfiguration;
+using LetsTalk.Server.Telemetry.AgnosticServices;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -76,6 +77,7 @@ public static class CoreServicesRegistration
         services.Configure<CachingSettings>(configuration.GetSection("Caching"));
         services.Configure<RtcSettings>(configuration.GetSection("Rtc"));
         services.Configure<CloudflareSettings>(configuration.GetSection("Cloudflare"));
+        services.Configure<ApplicationInsightsSettings>(configuration.GetSection("ApplicationInsights"));
 
         switch (configuration.GetValue<string>("Features:CachingMode"))
         {
@@ -126,8 +128,8 @@ public static class CoreServicesRegistration
         }
 
         services.AddHttpClient(nameof(IceServerConfigurationService));
-
         await services.AddPersistenceAgnosticServices(configuration);
+        services.AddTelemetryAgnosticServices(configuration);
 
         return services;
     }

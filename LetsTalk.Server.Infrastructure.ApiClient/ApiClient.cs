@@ -394,7 +394,7 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task StartOutgoingCallAsync(StartOutgoingCallRequest body)
+        public virtual System.Threading.Tasks.Task<StartOutgoingCallDto> StartOutgoingCallAsync(StartOutgoingCallRequest body)
         {
             return StartOutgoingCallAsync(body, System.Threading.CancellationToken.None);
         }
@@ -402,7 +402,89 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task StartOutgoingCallAsync(StartOutgoingCallRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<StartOutgoingCallDto> StartOutgoingCallAsync(StartOutgoingCallRequest body, System.Threading.CancellationToken cancellationToken)
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/Call/StartOutgoingCall"
+                    urlBuilder_.Append("api/Call/StartOutgoingCall");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<StartOutgoingCallDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task HandleIncomingCallAsync(HandleIncomingCallRequest body)
+        {
+            return HandleIncomingCallAsync(body, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task HandleIncomingCallAsync(HandleIncomingCallRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -418,8 +500,8 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/Call/StartOutgoingCall"
-                    urlBuilder_.Append("api/Call/StartOutgoingCall");
+                    // Operation Path: "api/Call/HandleIncomingCall"
+                    urlBuilder_.Append("api/Call/HandleIncomingCall");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -470,15 +552,15 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task HandleIncomingCallAsync(HandleIncomingCallRequest body)
+        public virtual System.Threading.Tasks.Task LogConnectionEstablishedAsync(LogConnectionEstablishedRequest body)
         {
-            return HandleIncomingCallAsync(body, System.Threading.CancellationToken.None);
+            return LogConnectionEstablishedAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task HandleIncomingCallAsync(HandleIncomingCallRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task LogConnectionEstablishedAsync(LogConnectionEstablishedRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -494,8 +576,84 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/Call/HandleIncomingCall"
-                    urlBuilder_.Append("api/Call/HandleIncomingCall");
+                    // Operation Path: "api/Call/LogConnectionEstablished"
+                    urlBuilder_.Append("api/Call/LogConnectionEstablished");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task LogRtcErrorAsync(LogRtcErrorRequest body)
+        {
+            return LogRtcErrorAsync(body, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task LogRtcErrorAsync(LogRtcErrorRequest body, System.Threading.CancellationToken cancellationToken)
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/Call/LogRtcError"
+                    urlBuilder_.Append("api/Call/LogRtcError");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1490,6 +1648,27 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ConnectionDiagnostics
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("connectionState")]
+        public string ConnectionState { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("localCandidateTypes")]
+        public string LocalCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("remoteCandidateTypes")]
+        public string RemoteCandidateTypes { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("browser")]
+        public string Browser { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("platform")]
+        public string Platform { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CreateIndividualChatRequest
     {
 
@@ -1553,11 +1732,23 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     public partial class HandleIncomingCallRequest
     {
 
+        [System.Text.Json.Serialization.JsonPropertyName("callId")]
+        public string CallId { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("chatId")]
         public string ChatId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("answer")]
         public string Answer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("connectionDiagnostics")]
+        public ConnectionDiagnostics ConnectionDiagnostics { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
+        public int IceGatheringElapsedMs { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringCollectedAll")]
+        public bool IceGatheringCollectedAll { get; set; }
 
     }
 
@@ -1639,6 +1830,46 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("url")]
         public string Url { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LogConnectionEstablishedRequest
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("callId")]
+        public string CallId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("chatId")]
+        public string ChatId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("connectionDiagnostics")]
+        public ConnectionDiagnostics ConnectionDiagnostics { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LogRtcErrorRequest
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("callId")]
+        public string CallId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("chatId")]
+        public string ChatId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("connectionDiagnostics")]
+        public ConnectionDiagnostics ConnectionDiagnostics { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("errorType")]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<RtcErrorType>))]
+        public RtcErrorType ErrorType { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("error")]
+        public string Error { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("stackTrace")]
+        public string StackTrace { get; set; }
 
     }
 
@@ -1742,6 +1973,24 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum RtcErrorType
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"NotSet")]
+        NotSet = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"Connection")]
+        Connection = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"IceServer")]
+        IceServer = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"Media")]
+        Media = 3,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class SetImagePreviewRequest
     {
 
@@ -1796,14 +2045,35 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class StartOutgoingCallDto
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("callId")]
+        public string CallId { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class StartOutgoingCallRequest
     {
+
+        [System.Text.Json.Serialization.JsonPropertyName("callId")]
+        public string CallId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("chatId")]
         public string ChatId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("offer")]
         public string Offer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("connectionDiagnostics")]
+        public ConnectionDiagnostics ConnectionDiagnostics { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringElapsedMs")]
+        public int IceGatheringElapsedMs { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("iceGatheringCollectedAll")]
+        public bool IceGatheringCollectedAll { get; set; }
 
     }
 

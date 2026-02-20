@@ -2,9 +2,10 @@ using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.VideoCall.Commands.HandleIncomingCall;
-using LetsTalk.Server.API.Logging.Models;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
+using LetsTalk.Server.Telemetry.Abstractions;
+using LetsTalk.Server.Telemetry.Models;
 using MediatR;
 using Moq;
 

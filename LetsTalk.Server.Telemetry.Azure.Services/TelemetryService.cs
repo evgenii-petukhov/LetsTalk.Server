@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Logging.Models;
-using LetsTalk.Server.Configuration.Models;
+﻿using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.Telemetry.Abstractions;
+using LetsTalk.Server.Telemetry.Models;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Options;

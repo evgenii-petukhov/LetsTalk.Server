@@ -1,6 +1,6 @@
 using LetsTalk.Server.API;
-using LetsTalk.Server.API.Core;
 using LetsTalk.Server.API.Middleware;
+using LetsTalk.Server.Telemetry.AgnosticServices;
 using Serilog;
 using System.Globalization;
 
@@ -40,6 +40,6 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-app.UseApplicationInsightsFlush();
+app.UseTelemetryFlush(builder.Configuration);
 
 app.Run();

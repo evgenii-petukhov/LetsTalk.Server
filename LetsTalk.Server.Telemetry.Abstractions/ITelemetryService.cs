@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.API.Logging.Models;
+﻿using LetsTalk.Server.Telemetry.Models;
 
-namespace LetsTalk.Server.API.Core.Abstractions;
+namespace LetsTalk.Server.Telemetry.Abstractions;
 
 public interface ITelemetryService
 {

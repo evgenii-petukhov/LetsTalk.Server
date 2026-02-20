@@ -1,14 +1,14 @@
-﻿using LetsTalk.Server.API.Logging.Models;
+﻿using LetsTalk.Server.Telemetry.Models;
 
-namespace LetsTalk.Server.API.Models.Call;
+namespace LetsTalk.Server.API.Models.VideoCall;
 
-public class StartOutgoingCallRequest
+public class HandleIncomingCallRequest
 {
     public string? CallId { get; set; }
 
     public string? ChatId { get; set; }
 
-    public string? Offer { get; set; }
+    public string? Answer { get; set; }
 
     public ConnectionDiagnostics? ConnectionDiagnostics { get; set; }
 

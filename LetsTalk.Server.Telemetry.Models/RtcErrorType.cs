@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LetsTalk.Server.API.Logging.Models;
+namespace LetsTalk.Server.Telemetry.Models;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum RtcErrorType

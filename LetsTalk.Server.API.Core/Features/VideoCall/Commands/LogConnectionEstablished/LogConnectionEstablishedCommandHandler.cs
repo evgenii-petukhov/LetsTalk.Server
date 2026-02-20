@@ -1,5 +1,5 @@
-﻿using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.API.Core.Commands;
+﻿using LetsTalk.Server.API.Core.Commands;
+using LetsTalk.Server.Telemetry.Abstractions;
 using MediatR;
 
 namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.LogConnectionEstablished;

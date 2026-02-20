@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.API.Logging.Models;
+﻿using LetsTalk.Server.Telemetry.Models;
 
-namespace LetsTalk.Server.API.Models.Call;
+namespace LetsTalk.Server.API.Models.VideoCall;
 
 public class LogRtcErrorRequest
 {

@@ -16,9 +16,7 @@ using Confluent.Kafka;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.API.Core.Services.Cache.Accounts;
 using LetsTalk.Server.API.Core.Services.Cache.IceServerConfiguration;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
-using Microsoft.ApplicationInsights.Extensibility;
+using LetsTalk.Server.Telemetry.AgnosticServices;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -131,26 +129,8 @@ public static class CoreServicesRegistration
 
         services.AddHttpClient(nameof(IceServerConfigurationService));
         await services.AddPersistenceAgnosticServices(configuration);
-        services.AddApplicationInsightsTelemetry(options =>
-        {
-            options.EnablePerformanceCounterCollectionModule = false;
-            options.EnableRequestTrackingTelemetryModule = false;
-            options.EnableDependencyTrackingTelemetryModule = false;
-        });
-        services.AddScoped<ITelemetryService, TelemetryService>();
+        services.AddTelemetryAgnosticServices(configuration);
 
         return services;
-    }
-
-    public static WebApplication UseApplicationInsightsFlush(this WebApplication app)
-    {
-        var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
-        lifetime.ApplicationStopping.Register(() =>
-        {
-            var telemetryConfiguration = app.Services.GetService<TelemetryConfiguration>();
-            telemetryConfiguration?.Dispose();
-        });
-
-        return app;
     }
 }

@@ -28,16 +28,25 @@ public partial class RegexService : IRegexService
 
     public (string wrapped, int count, bool emojisOnly) WrapEmojisWithSpan(string input)
     {
+        if (string.IsNullOrEmpty(input))
+        {
+            return (input, 0, false);
+        }
+
         var count = 0;
+        var trimmedInput = input.Trim();
+        var emojiBuilder = new System.Text.StringBuilder();
+        var emojiLength = 0;
+
         var result = MatchEmoji().Replace(input, match =>
         {
             count++;
+            emojiBuilder.Append(match.Value);
+            emojiLength += match.Value.Length;
             return $"<span class=\"emoji\">{match.Value}</span>";
         });
 
-        var matches = MatchEmoji().Matches(input);
-        var emojiConcat = string.Concat(matches.Select(m => m.Value));
-        var emojisOnly = emojiConcat == input.Trim();
+        var emojisOnly = count > 0 && emojiBuilder.ToString() == trimmedInput;
 
         return (result, count, emojisOnly);
     }

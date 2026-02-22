@@ -141,4 +141,105 @@ public class RegexServiceTests
         html.Should().Be("");
         url.Should().BeNull();
     }
+
+    [Test]
+    public void WrapEmojisWithSpan_ShouldReturnOriginalText_WhenNoEmojisPresent()
+    {
+        // Arrange
+        var input = "This is plain text";
+
+        // Act
+        var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(input);
+
+        // Assert
+        wrapped.Should().Be(input);
+        count.Should().Be(0);
+        emojisOnly.Should().BeFalse();
+    }
+
+    [Test]
+    public void WrapEmojisWithSpan_ShouldWrapSingleEmoji()
+    {
+        // Arrange
+        var input = "Hello 😀 world";
+
+        // Act
+        var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(input);
+
+        // Assert
+        wrapped.Should().Be("Hello <span class=\"emoji\">😀</span> world");
+        count.Should().Be(1);
+        emojisOnly.Should().BeFalse();
+    }
+
+    [Test]
+    public void WrapEmojisWithSpan_ShouldWrapMultipleEmojis()
+    {
+        // Arrange
+        var input = "😀😎🎉";
+
+        // Act
+        var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(input);
+
+        // Assert
+        wrapped.Should().Be("<span class=\"emoji\">😀</span><span class=\"emoji\">😎</span><span class=\"emoji\">🎉</span>");
+        count.Should().Be(3);
+        emojisOnly.Should().BeTrue();
+    }
+
+    [Test]
+    public void WrapEmojisWithSpan_ShouldDetectEmojisOnly_WhenOnlyEmojisPresent()
+    {
+        // Arrange
+        var input = "👍";
+
+        // Act
+        var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(input);
+
+        // Assert
+        wrapped.Should().Be("<span class=\"emoji\">👍</span>");
+        count.Should().Be(1);
+        emojisOnly.Should().BeTrue();
+    }
+
+    [Test]
+    public void WrapEmojisWithSpan_ShouldHandleEmojisWithWhitespace()
+    {
+        // Arrange
+        var input = "  😀  ";
+
+        // Act
+        var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(input);
+
+        // Assert
+        wrapped.Should().Be("  <span class=\"emoji\">😀</span>  ");
+        count.Should().Be(1);
+        emojisOnly.Should().BeTrue();
+    }
+
+    [Test]
+    public void WrapEmojisWithSpan_ShouldHandleEmptyString()
+    {
+        // Act
+        var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan("");
+
+        // Assert
+        wrapped.Should().Be("");
+        count.Should().Be(0);
+        emojisOnly.Should().BeFalse();
+    }
+
+    [Test]
+    public void WrapEmojisWithSpan_ShouldNotDetectEmojisOnly_WhenTextPresent()
+    {
+        // Arrange
+        var input = "😀 text";
+
+        // Act
+        var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(input);
+
+        // Assert
+        count.Should().Be(1);
+        emojisOnly.Should().BeFalse();
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Models.HtmlGenerator;
+using System.Globalization;
 
 namespace LetsTalk.Server.API.Core.Services;
 
@@ -20,28 +21,34 @@ public class HtmlGenerator(IRegexService regexService) : IHtmlGenerator
             return new HtmlGeneratorResult();
         }
 
-        var paragraphInfos = input
-            .Split(_separators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Select(s =>
+        var paragraphs = input
+            .Split(_separators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        var sb = new System.Text.StringBuilder();
+        var emojisOnly = false;
+        var emojiCount = 0;
+
+        if (paragraphs.Length == 1)
+        {
+            (var wrapped, emojiCount, emojisOnly) = _regexService.WrapEmojisWithSpan(paragraphs[0]);
+            sb.Append(CultureInfo.InvariantCulture, $"<p>{wrapped}</p>");
+        }
+        else
+        {
+            foreach (var paragraph in paragraphs)
             {
-                var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(s);
+                var (wrapped, count, _) = _regexService.WrapEmojisWithSpan(paragraph);
+                sb.Append(CultureInfo.InvariantCulture, $"<p>{wrapped}</p>");
+                emojiCount += count;
+            }
+        }
 
-                return new
-                {
-                    Html = $"<p>{wrapped}</p>",
-                    EmojisOnly = emojisOnly,
-                    EmojiCount = count,
-                };
-            })
-            .ToList();
-
-        var lines = string.Concat(paragraphInfos.Select(p => p.Html));
-        var (html, url) = _regexService.ReplaceUrlsByHref(lines);
+        var (html, url) = _regexService.ReplaceUrlsByHref(sb.ToString());
 
         return new HtmlGeneratorResult(
             html,
             url,
-            paragraphInfos.Count == 1 && paragraphInfos[0].EmojisOnly,
-            paragraphInfos.Sum(p => p.EmojiCount));
+            emojisOnly,
+            emojiCount);
     }
 }

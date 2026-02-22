@@ -58,17 +58,21 @@ public class HtmlGeneratorTests
         // Arrange
         var text = "Hello world";
         var expectedHtml = "<p>Hello world</p>";
-        var expectedResult = new HtmlGeneratorResult("processed html", "url");
+        var expectedResult = ("processed html", "url");
 
         _regexServiceMock
             .Setup(x => x.ReplaceUrlsByHref(expectedHtml))
             .Returns(expectedResult);
 
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Hello world")))
+            .Returns(("Hello world", 0, false));
+
         // Act
         var result = _htmlGenerator.GetHtml(text);
 
         // Assert
-        result.Should().Be(expectedResult);
+        result.Should().BeEquivalentTo(new HtmlGeneratorResult("processed html", "url", false, 0));
         _regexServiceMock.Verify(x => x.ReplaceUrlsByHref(expectedHtml), Times.Once);
     }
 
@@ -78,17 +82,29 @@ public class HtmlGeneratorTests
         // Arrange
         var text = "Line 1\r\nLine 2\r\nLine 3";
         var expectedHtml = "<p>Line 1</p><p>Line 2</p><p>Line 3</p>";
-        var expectedResult = new HtmlGeneratorResult("processed html", "url");
+        var expectedResult = ("processed html", "url");
 
         _regexServiceMock
             .Setup(x => x.ReplaceUrlsByHref(expectedHtml))
             .Returns(expectedResult);
 
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 1")))
+            .Returns(("Line 1", 0, false));
+
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 2")))
+            .Returns(("Line 2", 0, false));
+
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 3")))
+            .Returns(("Line 3", 0, false));
+
         // Act
         var result = _htmlGenerator.GetHtml(text);
 
         // Assert
-        result.Should().Be(expectedResult);
+        result.Should().BeEquivalentTo(new HtmlGeneratorResult("processed html", "url", false, 0));
         _regexServiceMock.Verify(x => x.ReplaceUrlsByHref(expectedHtml), Times.Once);
     }
 
@@ -98,17 +114,29 @@ public class HtmlGeneratorTests
         // Arrange
         var text = "Line 1\nLine 2\nLine 3";
         var expectedHtml = "<p>Line 1</p><p>Line 2</p><p>Line 3</p>";
-        var expectedResult = new HtmlGeneratorResult("processed html", "url");
+        var expectedResult = ("processed html", "url");
 
         _regexServiceMock
             .Setup(x => x.ReplaceUrlsByHref(expectedHtml))
             .Returns(expectedResult);
 
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 1")))
+            .Returns(("Line 1", 0, false));
+
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 2")))
+            .Returns(("Line 2", 0, false));
+
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 3")))
+            .Returns(("Line 3", 0, false));
+
         // Act
         var result = _htmlGenerator.GetHtml(text);
 
         // Assert
-        result.Should().Be(expectedResult);
+        result.Should().BeEquivalentTo(new HtmlGeneratorResult("processed html", "url", false, 0));
         _regexServiceMock.Verify(x => x.ReplaceUrlsByHref(expectedHtml), Times.Once);
     }
 
@@ -118,17 +146,29 @@ public class HtmlGeneratorTests
         // Arrange
         var text = "Line 1\r\n\r\nLine 2\r\n   \r\nLine 3";
         var expectedHtml = "<p>Line 1</p><p>Line 2</p><p>Line 3</p>";
-        var expectedResult = new HtmlGeneratorResult("processed html", "url");
+        var expectedResult = ("processed html", "url");
 
         _regexServiceMock
             .Setup(x => x.ReplaceUrlsByHref(expectedHtml))
             .Returns(expectedResult);
 
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 1")))
+            .Returns(("Line 1", 0, false));
+
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 2")))
+            .Returns(("Line 2", 0, false));
+
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 3")))
+            .Returns(("Line 3", 0, false));
+
         // Act
         var result = _htmlGenerator.GetHtml(text);
 
         // Assert
-        result.Should().Be(expectedResult);
+        result.Should().BeEquivalentTo(new HtmlGeneratorResult("processed html", "url", false, 0));
         _regexServiceMock.Verify(x => x.ReplaceUrlsByHref(expectedHtml), Times.Once);
     }
 
@@ -138,17 +178,25 @@ public class HtmlGeneratorTests
         // Arrange
         var text = "  Line 1  \r\n  Line 2  ";
         var expectedHtml = "<p>Line 1</p><p>Line 2</p>";
-        var expectedResult = new HtmlGeneratorResult("processed html", "url");
+        var expectedResult = ("processed html", "url");
 
         _regexServiceMock
             .Setup(x => x.ReplaceUrlsByHref(expectedHtml))
             .Returns(expectedResult);
 
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 1")))
+            .Returns(("Line 1", 0, false));
+
+        _regexServiceMock
+            .Setup(x => x.WrapEmojisWithSpan(It.Is<string>(x => x == "Line 2")))
+            .Returns(("Line 2", 0, false));
+
         // Act
         var result = _htmlGenerator.GetHtml(text);
 
         // Assert
-        result.Should().Be(expectedResult);
+        result.Should().BeEquivalentTo(new HtmlGeneratorResult("processed html", "url", false, 0));
         _regexServiceMock.Verify(x => x.ReplaceUrlsByHref(expectedHtml), Times.Once);
     }
 }

@@ -72,7 +72,7 @@ public class MessageEntityFrameworkServiceTests
                 .Returns(expectedResult);
 
             // Act
-            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, CancellationToken.None);
+            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, CancellationToken.None);
 
             // Assert
             result.Should().BeEquivalentTo(expectedResult);
@@ -112,7 +112,7 @@ public class MessageEntityFrameworkServiceTests
                 .Returns(expectedResult);
 
             // Act
-            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, CancellationToken.None);
+            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, CancellationToken.None);
 
             // Assert
             result.Should().BeEquivalentTo(expectedResult);
@@ -150,7 +150,7 @@ public class MessageEntityFrameworkServiceTests
                 .Returns(expectedResult);
 
             // Act
-            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, CancellationToken.None);
+            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, CancellationToken.None);
 
             // Assert
             result.Should().BeEquivalentTo(expectedResult);
@@ -167,7 +167,7 @@ public class MessageEntityFrameworkServiceTests
             const string linkPreviewId = "789";
 
             // Act & Assert
-            var act = async () => await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, CancellationToken.None);
+            var act = async () => await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, CancellationToken.None);
             act.Should().ThrowAsync<FormatException>();
         }
 
@@ -182,7 +182,7 @@ public class MessageEntityFrameworkServiceTests
             const string linkPreviewId = "789";
 
             // Act & Assert
-            var act = async () => await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, CancellationToken.None);
+            var act = async () => await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, CancellationToken.None);
             act.Should().ThrowAsync<FormatException>();
         }
     }
@@ -670,7 +670,7 @@ public class MessageEntityFrameworkServiceTests
 
     private static Message CreateMessageWithId(int id)
     {
-        var message = new Message(1, 1, "Test message", "<p>Test message</p>");
+        var message = new Message(1, 1, "Test message", "<p>Test message</p>", false, 0);
         var idProperty = typeof(BaseEntity).GetProperty("Id");
         idProperty!.SetValue(message, id);
         return message;

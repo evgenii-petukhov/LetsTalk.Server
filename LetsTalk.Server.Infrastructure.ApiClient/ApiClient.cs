@@ -1916,6 +1916,12 @@ namespace LetsTalk.Server.Infrastructure.ApiClient
         [System.Text.Json.Serialization.JsonPropertyName("imagePreview")]
         public ImagePreviewDto ImagePreview { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("emojisOnly")]
+        public bool EmojisOnly { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("emojiCount")]
+        public int EmojiCount { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]

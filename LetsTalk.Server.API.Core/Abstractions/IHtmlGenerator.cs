@@ -4,5 +4,5 @@ namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface IHtmlGenerator
 {
-    HtmlGeneratorResult GetHtml(string text);
+    HtmlGeneratorResult GetHtml(string input);
 }

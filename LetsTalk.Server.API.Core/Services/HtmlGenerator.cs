@@ -13,19 +13,35 @@ public class HtmlGenerator(IRegexService regexService) : IHtmlGenerator
 
     private readonly IRegexService _regexService = regexService;
 
-    public HtmlGeneratorResult GetHtml(string text)
+    public HtmlGeneratorResult GetHtml(string input)
     {
-        if (string.IsNullOrWhiteSpace(text))
+        if (string.IsNullOrWhiteSpace(input))
         {
             return new HtmlGeneratorResult();
         }
 
-        var lines = text
-            .Split(_separators, StringSplitOptions.TrimEntries)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Select(s => $"<p>{s}</p>");
+        var paragraphInfos = input
+            .Split(_separators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(s =>
+            {
+                var (wrapped, count, emojisOnly) = _regexService.WrapEmojisWithSpan(s);
 
-        var html = string.Concat(lines);
-        return _regexService.ReplaceUrlsByHref(html);
+                return new
+                {
+                    Html = $"<p>{wrapped}</p>",
+                    EmojisOnly = emojisOnly,
+                    EmojiCount = count,
+                };
+            })
+            .ToList();
+
+        var lines = string.Concat(paragraphInfos.Select(p => p.Html));
+        var (html, url) = _regexService.ReplaceUrlsByHref(lines);
+
+        return new HtmlGeneratorResult(
+            html,
+            url,
+            paragraphInfos.Count == 1 && paragraphInfos[0].EmojisOnly,
+            paragraphInfos.Sum(p => p.EmojiCount));
     }
 }

@@ -29,6 +29,8 @@ public class MessageEntityFrameworkService(
         string chatId,
         string text,
         string textHtml,
+        bool emojisOnly,
+        int emojiCount,
         string linkPreviewId,
         CancellationToken cancellationToken)
     {
@@ -37,6 +39,8 @@ public class MessageEntityFrameworkService(
             int.Parse(chatId, CultureInfo.InvariantCulture),
             text,
             textHtml,
+            emojisOnly,
+            emojiCount,
             int.TryParse(linkPreviewId, out int linkPreviewIdInt) ? linkPreviewIdInt : null);
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
@@ -62,6 +66,8 @@ public class MessageEntityFrameworkService(
             int.Parse(chatId, CultureInfo.InvariantCulture),
             text,
             textHtml,
+            false,
+            0,
             image: image);
         await _messageRepository.CreateAsync(message, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);

@@ -45,7 +45,7 @@ public class CreateMessageCommandHandler(
             throw new BadRequestException("Invalid request", validationResult);
         }
 
-        var (html, url) = _htmlGenerator.GetHtml(request.Text!);
+        var (html, url, emojisOnly, emojiCount) = _htmlGenerator.GetHtml(request.Text!);
 
         var linkPreviewId = string.IsNullOrWhiteSpace(url)
             ? null
@@ -57,6 +57,8 @@ public class CreateMessageCommandHandler(
                 request.ChatId!,
                 request.Text!,
                 html!,
+                emojisOnly,
+                emojiCount,
                 linkPreviewId!,
                 cancellationToken)
             : await _messageAgnosticService.CreateMessageAsync(

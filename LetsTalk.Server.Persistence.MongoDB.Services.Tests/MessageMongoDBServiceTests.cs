@@ -69,7 +69,7 @@ public class MessageMongoDBServiceTests
             };
 
             _mockMessageRepository
-                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken))
+                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken))
                 .ReturnsAsync(createdMessage);
 
             _mockMessageRepository
@@ -81,11 +81,11 @@ public class MessageMongoDBServiceTests
                 .Returns(expectedServiceModel);
 
             // Act
-            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken);
+            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken);
 
             // Assert
             result.Should().BeEquivalentTo(expectedServiceModel);
-            _mockMessageRepository.Verify(x => x.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken), Times.Once);
+            _mockMessageRepository.Verify(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken), Times.Once);
             _mockMessageRepository.Verify(x => x.GetByIdAsync(createdMessage.Id, cancellationToken), Times.Once);
             _mockMapper.Verify(x => x.Map<MessageServiceModel>(retrievedMessage), Times.Once);
         }
@@ -94,11 +94,11 @@ public class MessageMongoDBServiceTests
         public async Task CreateMessageAsync_WithLinkPreviewAndNullParameters_ShouldPassNullsToRepository()
         {
             // Arrange
-            string senderId = null;
-            string chatId = null;
-            string text = null;
-            string textHtml = null;
-            string linkPreviewId = null;
+            string senderId = null!;
+            string chatId = null!;
+            string text = null!;
+            string textHtml = null!;
+            string linkPreviewId = null!;
             var cancellationToken = new CancellationToken();
 
             var createdMessage = new Message { Id = "507f1f77bcf86cd799439015" };
@@ -106,7 +106,7 @@ public class MessageMongoDBServiceTests
             var expectedServiceModel = new MessageServiceModel { Id = "507f1f77bcf86cd799439015" };
 
             _mockMessageRepository
-                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken))
+                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken))
                 .ReturnsAsync(createdMessage);
 
             _mockMessageRepository
@@ -118,11 +118,11 @@ public class MessageMongoDBServiceTests
                 .Returns(expectedServiceModel);
 
             // Act
-            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken);
+            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken);
 
             // Assert
             result.Should().BeEquivalentTo(expectedServiceModel);
-            _mockMessageRepository.Verify(x => x.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken), Times.Once);
+            _mockMessageRepository.Verify(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken), Times.Once);
         }
 
         [Test]
@@ -141,7 +141,7 @@ public class MessageMongoDBServiceTests
             var expectedServiceModel = new MessageServiceModel { Id = "507f1f77bcf86cd799439016" };
 
             _mockMessageRepository
-                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken))
+                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken))
                 .ReturnsAsync(createdMessage);
 
             _mockMessageRepository
@@ -153,11 +153,11 @@ public class MessageMongoDBServiceTests
                 .Returns(expectedServiceModel);
 
             // Act
-            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken);
+            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken);
 
             // Assert
             result.Should().BeEquivalentTo(expectedServiceModel);
-            _mockMessageRepository.Verify(x => x.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken), Times.Once);
+            _mockMessageRepository.Verify(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken), Times.Once);
         }
 
         [Test]
@@ -176,7 +176,7 @@ public class MessageMongoDBServiceTests
             MessageServiceModel expectedServiceModel = null;
 
             _mockMessageRepository
-                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken))
+                .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken))
                 .ReturnsAsync(createdMessage);
 
             _mockMessageRepository
@@ -188,7 +188,7 @@ public class MessageMongoDBServiceTests
                 .Returns(expectedServiceModel);
 
             // Act
-            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken);
+            var result = await _service.CreateMessageAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken);
 
             // Assert
             result.Should().BeNull();

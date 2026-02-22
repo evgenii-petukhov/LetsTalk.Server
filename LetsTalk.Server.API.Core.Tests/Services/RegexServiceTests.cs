@@ -1,5 +1,4 @@
 using FluentAssertions;
-using LetsTalk.Server.API.Core.Models.HtmlGenerator;
 using LetsTalk.Server.API.Core.Services;
 
 namespace LetsTalk.Server.API.Core.Tests.Services;
@@ -22,11 +21,11 @@ public class RegexServiceTests
         var input = "This is just plain text without any URLs.";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Html.Should().Be(input);
-        result.Url.Should().BeNull();
+        html.Should().Be(input);
+        url.Should().BeNull();
     }
 
     [Test]
@@ -37,11 +36,11 @@ public class RegexServiceTests
         var expectedHtml = "Visit <a href=\"http://example.com\" target=\"_blank\">http://example.com</a> for more info";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Html.Should().Be(expectedHtml);
-        result.Url.Should().Be("http://example.com");
+        html.Should().Be(expectedHtml);
+        url.Should().Be("http://example.com");
     }
 
     [Test]
@@ -52,11 +51,11 @@ public class RegexServiceTests
         var expectedHtml = "Check out <a href=\"https://secure.example.com/path\" target=\"_blank\">https://secure.example.com/path</a>";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Html.Should().Be(expectedHtml);
-        result.Url.Should().Be("https://secure.example.com/path");
+        html.Should().Be(expectedHtml);
+        url.Should().Be("https://secure.example.com/path");
     }
 
     [Test]
@@ -67,11 +66,11 @@ public class RegexServiceTests
         var expectedHtml = "Download from <a href=\"ftp://files.example.com/file.zip\" target=\"_blank\">ftp://files.example.com/file.zip</a>";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Html.Should().Be(expectedHtml);
-        result.Url.Should().Be("ftp://files.example.com/file.zip");
+        html.Should().Be(expectedHtml);
+        url.Should().Be("ftp://files.example.com/file.zip");
     }
 
     [Test]
@@ -82,11 +81,11 @@ public class RegexServiceTests
         var expectedHtml = "Visit <a href=\"http://example.com\" target=\"_blank\">http://example.com</a> and <a href=\"https://another.com\" target=\"_blank\">https://another.com</a>";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Html.Should().Be(expectedHtml);
-        result.Url.Should().Be("http://example.com");
+        html.Should().Be(expectedHtml);
+        url.Should().Be("http://example.com");
     }
 
     [Test]
@@ -97,11 +96,11 @@ public class RegexServiceTests
         var expectedHtml = "Search <a href=\"https://example.com/search?q=test&page=1\" target=\"_blank\">https://example.com/search?q=test&page=1</a>";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Html.Should().Be(expectedHtml);
-        result.Url.Should().Be("https://example.com/search?q=test&page=1");
+        html.Should().Be(expectedHtml);
+        url.Should().Be("https://example.com/search?q=test&page=1");
     }
 
     [Test]
@@ -112,11 +111,11 @@ public class RegexServiceTests
         var expectedHtml = "Go to <a href=\"https://example.com/page#section\" target=\"_blank\">https://example.com/page#section</a>";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Html.Should().Be(expectedHtml);
-        result.Url.Should().Be("https://example.com/page#section");
+        html.Should().Be(expectedHtml);
+        url.Should().Be("https://example.com/page#section");
     }
 
     [Test]
@@ -126,20 +125,20 @@ public class RegexServiceTests
         var input = "First https://first.com then https://second.com";
 
         // Act
-        var result = _regexService.ReplaceUrlsByHref(input);
+        var (html, url) = _regexService.ReplaceUrlsByHref(input);
 
         // Assert
-        result.Url.Should().Be("https://first.com");
+        url.Should().Be("https://first.com");
     }
 
     [Test]
     public void ReplaceUrlsByHref_ShouldHandleEmptyString()
     {
         // Act
-        var result = _regexService.ReplaceUrlsByHref("");
+        var (html, url) = _regexService.ReplaceUrlsByHref("");
 
         // Assert
-        result.Html.Should().Be("");
-        result.Url.Should().BeNull();
+        html.Should().Be("");
+        url.Should().BeNull();
     }
 }

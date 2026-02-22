@@ -16,6 +16,8 @@ public interface IMessageRepository
         string chatId,
         string text,
         string textHtml,
+        bool emojisOnly,
+        int emojiCount,
         string linkPreviewId,
         CancellationToken cancellationToken = default);
 

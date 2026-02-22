@@ -18,10 +18,20 @@ public class MessageMongoDBService(
         string chatId,
         string text,
         string textHtml,
+        bool emojisOnly,
+        int emojiCount,
         string linkPreviewId,
         CancellationToken cancellationToken)
     {
-        var message = await _messageRepository.CreateAsync(senderId, chatId, text, textHtml, linkPreviewId, cancellationToken);
+        var message = await _messageRepository.CreateAsync(
+            senderId,
+            chatId,
+            text,
+            textHtml,
+            emojisOnly,
+            emojiCount,
+            linkPreviewId,
+            cancellationToken);
 
         return _mapper.Map<MessageServiceModel>(await _messageRepository.GetByIdAsync(message.Id!, cancellationToken: cancellationToken));
     }

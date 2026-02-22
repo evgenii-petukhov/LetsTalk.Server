@@ -187,18 +187,18 @@ public class ChatEntityFrameworkServiceIntegrationTests
 
         var messages = new[]
         {
-            new Message(NeilJohnston.Id, neilWithBob.Id, "Hi Bob", "<p>Hi Bob</p>"),// 0
-            new Message(BobPettit.Id, neilWithBob.Id, "Hi Neil", "<p>Hi Neil</p>"),// 1
-            new Message(NeilJohnston.Id, neilWithBob.Id, "How is it going?", "<p>How is it going?</p>"),// 2
-            new Message(BobPettit.Id, neilWithBob.Id, "Fine", "<p>Fine</p>"),// 3
-            new Message(BobPettit.Id, neilWithBob.Id, "Thanks", "<p>Thanks</p>"),// 4
-            new Message(NeilJohnston.Id, neilWithRick.Id, "Hi Rick", "<p>Hi Rick</p>"),// 5
-            new Message(RickBarry.Id, neilWithRick.Id, "Hi Neil", "<p>Hi Neil</p>"),// 6
-            new Message(NeilJohnston.Id, neilWithRick.Id, "What's up?", "<p>What's up?</p>"),// 7
-            new Message(RickBarry.Id, neilWithRick.Id, "Great", "<p>Great</p>"),// 8
-            new Message(RickBarry.Id, neilWithRick.Id, "Thanks", "<p>Thanks</p>"),// 9
-            new Message(RickBarry.Id, neilWithRick.Id, "What's the weather like in your city?", "<p>What's the weather like in your city?</p>"),// 10
-            new Message(NeilJohnston.Id, neilWithRick.Id, "It's sunny", "<p>It's sunny</p>")// 11
+            new Message(NeilJohnston.Id, neilWithBob.Id, "Hi Bob", "<p>Hi Bob</p>", false, 0),// 0
+            new Message(BobPettit.Id, neilWithBob.Id, "Hi Neil", "<p>Hi Neil</p>", false, 0),// 1
+            new Message(NeilJohnston.Id, neilWithBob.Id, "How is it going?", "<p>How is it going?</p>", false, 0),// 2
+            new Message(BobPettit.Id, neilWithBob.Id, "Fine", "<p>Fine</p>", false, 0),// 3
+            new Message(BobPettit.Id, neilWithBob.Id, "Thanks", "<p>Thanks</p>", false, 0),// 4
+            new Message(NeilJohnston.Id, neilWithRick.Id, "Hi Rick", "<p>Hi Rick</p>", false, 0),// 5
+            new Message(RickBarry.Id, neilWithRick.Id, "Hi Neil", "<p>Hi Neil</p>", false, 0),// 6
+            new Message(NeilJohnston.Id, neilWithRick.Id, "What's up?", "<p>What's up?</p>", false, 0),// 7
+            new Message(RickBarry.Id, neilWithRick.Id, "Great", "<p>Great</p>", false, 0),// 8
+            new Message(RickBarry.Id, neilWithRick.Id, "Thanks", "<p>Thanks</p>", false, 0),// 9
+            new Message(RickBarry.Id, neilWithRick.Id, "What's the weather like in your city?", "<p>What's the weather like in your city?</p>", false, 0),// 10
+            new Message(NeilJohnston.Id, neilWithRick.Id, "It's sunny", "<p>It's sunny</p>", false, 0)// 11
         };
 
         _context.Messages.AddRange(messages);
@@ -503,18 +503,18 @@ public class ChatEntityFrameworkServiceIntegrationTests
 
         var messages = new[]
         {
-            new Message(NeilJohnston.Id, neilWithBob.Id, "Hi Bob", "<p>Hi Bob</p>"),// 0
-            new Message(BobPettit.Id, neilWithBob.Id, "Hi Neil", "<p>Hi Neil</p>"),// 1
-            new Message(NeilJohnston.Id, neilWithBob.Id, "How is it going?", "<p>How is it going?</p>"),// 2
-            new Message(BobPettit.Id, neilWithBob.Id, "Fine", "<p>Fine</p>"),// 3
-            new Message(BobPettit.Id, neilWithBob.Id, "Thanks", "<p>Thanks</p>"),// 4
-            new Message(NeilJohnston.Id, neilWithRick.Id, "Hi Rick", "<p>Hi Rick</p>"),// 5
-            new Message(RickBarry.Id, neilWithRick.Id, "Hi Neil", "<p>Hi Neil</p>"),// 6
-            new Message(NeilJohnston.Id, neilWithRick.Id, "What's up?", "<p>What's up?</p>"),// 7
-            new Message(RickBarry.Id, neilWithRick.Id, "Great", "<p>Great</p>"),// 8
-            new Message(RickBarry.Id, neilWithRick.Id, "Thanks", "<p>Thanks</p>"),// 9
-            new Message(RickBarry.Id, neilWithRick.Id, "What's the weather like in your city?", "<p>What's the weather like in your city?</p>"),// 10
-            new Message(NeilJohnston.Id, neilWithRick.Id, "It's sunny", "<p>It's sunny</p>")// 11
+            new Message(NeilJohnston.Id, neilWithBob.Id, "Hi Bob", "<p>Hi Bob</p>", false, 0),// 0
+            new Message(BobPettit.Id, neilWithBob.Id, "Hi Neil", "<p>Hi Neil</p>", false, 0),// 1
+            new Message(NeilJohnston.Id, neilWithBob.Id, "How is it going?", "<p>How is it going?</p>", false, 0),// 2
+            new Message(BobPettit.Id, neilWithBob.Id, "Fine", "<p>Fine</p>", false, 0),// 3
+            new Message(BobPettit.Id, neilWithBob.Id, "Thanks", "<p>Thanks</p>", false, 0),// 4
+            new Message(NeilJohnston.Id, neilWithRick.Id, "Hi Rick", "<p>Hi Rick</p>", false, 0),// 5
+            new Message(RickBarry.Id, neilWithRick.Id, "Hi Neil", "<p>Hi Neil</p>", false, 0),// 6
+            new Message(NeilJohnston.Id, neilWithRick.Id, "What's up?", "<p>What's up?</p>", false, 0),// 7
+            new Message(RickBarry.Id, neilWithRick.Id, "Great", "<p>Great</p>", false, 0),// 8
+            new Message(RickBarry.Id, neilWithRick.Id, "Thanks", "<p>Thanks</p>", false, 0),// 9
+            new Message(RickBarry.Id, neilWithRick.Id, "What's the weather like in your city?", "<p>What's the weather like in your city?</p>", false, 0),// 10
+            new Message(NeilJohnston.Id, neilWithRick.Id, "It's sunny", "<p>It's sunny</p>", false, 0)// 11
         };
 
         _context.Messages.AddRange(messages);

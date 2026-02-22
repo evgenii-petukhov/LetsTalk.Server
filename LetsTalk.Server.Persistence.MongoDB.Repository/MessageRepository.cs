@@ -52,11 +52,13 @@ public class MessageRepository : IMessageRepository
                 Image = g.Message.Image,
                 ImagePreview = g.Message.ImagePreview,
                 ChatId = g.Message.ChatId,
+                EmojisOnly = g.Message.EmojisOnly,
+                EmojiCount = g.Message.EmojiCount,
             })
-            .OrderByDescending(mesage => mesage.DateCreatedUnix)
+            .OrderByDescending(message => message.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
             .Take(messagesPerPage)
-            .OrderBy(mesage => mesage.DateCreatedUnix)
+            .OrderBy(message => message.DateCreatedUnix)
             .ToListAsync(cancellationToken);
     }
 
@@ -65,6 +67,8 @@ public class MessageRepository : IMessageRepository
         string chatId,
         string text,
         string textHtml,
+        bool emojisOnly,
+        int emojiCount,
         string linkPreviewId,
         CancellationToken cancellationToken = default)
     {
@@ -75,7 +79,9 @@ public class MessageRepository : IMessageRepository
             Text = text,
             TextHtml = textHtml,
             LinkPreviewId = linkPreviewId,
-            DateCreatedUnix = DateHelper.GetUnixTimestamp()
+            DateCreatedUnix = DateHelper.GetUnixTimestamp(),
+            EmojisOnly = emojisOnly,
+            EmojiCount = emojiCount
         };
 
         await _messageCollection.InsertOneAsync(message, cancellationToken: cancellationToken);

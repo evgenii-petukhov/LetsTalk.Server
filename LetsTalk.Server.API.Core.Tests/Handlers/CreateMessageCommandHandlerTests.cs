@@ -78,7 +78,7 @@ public class CreateMessageCommandHandlerTests
         var url = "https://example.com";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("Hello world"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         var linkPreviewId = "preview-123";
         _linkPreviewAgnosticServiceMock
@@ -89,7 +89,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789", Text = "Hello world" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, linkPreviewId, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, false, 0, linkPreviewId, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -144,7 +144,7 @@ public class CreateMessageCommandHandlerTests
         var url = "";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("Check this image"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         var messageDto = new MessageDto { Id = "msg-789", Text = "Check this image" };
         var message = new MessageServiceModel { Id = "msg-789", Text = "Check this image" };
@@ -218,13 +218,13 @@ public class CreateMessageCommandHandlerTests
         var url = "";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("Simple text message"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         var messageDto = new MessageDto { Id = "msg-789" };
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Simple text message", html, null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Simple text message", html, false, 0, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -273,7 +273,7 @@ public class CreateMessageCommandHandlerTests
         var url = "https://example.com";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("Check this link"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         var existingLinkPreviewId = "existing-preview-123";
         _linkPreviewAgnosticServiceMock
@@ -284,7 +284,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Check this link", html, existingLinkPreviewId, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Check this link", html, false, 0, existingLinkPreviewId, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -326,7 +326,7 @@ public class CreateMessageCommandHandlerTests
         var url = "https://newsite.com";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("New link to preview"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         _linkPreviewAgnosticServiceMock
             .Setup(x => x.GetIdByUrlAsync(url, cancellationToken))
@@ -336,7 +336,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "New link to preview", html, null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "New link to preview", html, false, 0, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -431,10 +431,10 @@ public class CreateMessageCommandHandlerTests
         var url = "";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("Hello world"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, false, 0, null!, cancellationToken))
             .ThrowsAsync(new InvalidOperationException("Message creation failed"));
 
         // Act & Assert
@@ -460,11 +460,11 @@ public class CreateMessageCommandHandlerTests
         var url = "";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("Hello world"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         var message = new MessageServiceModel { Id = "msg-789" };
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Hello world", html, false, 0, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -494,13 +494,13 @@ public class CreateMessageCommandHandlerTests
         var url = "";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml("Group message"))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         var messageDto = new MessageDto { Id = "msg-789", Text = "Group message" };
         var message = new MessageServiceModel { Id = "msg-789", Text = "Group message" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Group message", html, null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "Group message", html, false, 0, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -635,13 +635,13 @@ public class CreateMessageCommandHandlerTests
         
         _htmlGeneratorMock
             .Setup(x => x.GetHtml(null!))
-            .Returns(new HtmlGeneratorResult("", ""));
+            .Returns(new HtmlGeneratorResult("", "", false, 0));
 
         var messageDto = new MessageDto { Id = "msg-789" };
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", null!, "", null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", null!, "", false, 0, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -711,13 +711,13 @@ public class CreateMessageCommandHandlerTests
         var url = "";
         _htmlGeneratorMock
             .Setup(x => x.GetHtml(command.Text!))
-            .Returns(new HtmlGeneratorResult(html, url));
+            .Returns(new HtmlGeneratorResult(html, url, false, 0));
 
         var messageDto = new MessageDto { Id = "msg-789" };
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync(command.SenderId!, command.ChatId!, command.Text!, html, null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync(command.SenderId!, command.ChatId!, command.Text!, html, false, 0, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -752,7 +752,7 @@ public class CreateMessageCommandHandlerTests
     {
         _htmlGeneratorMock.Verify(x => x.GetHtml(command.Text!), Times.Once);
         _messageAgnosticServiceMock.Verify(
-            x => x.CreateMessageAsync(command.SenderId!, command.ChatId!, command.Text!, html, linkPreviewId, cancellationToken),
+            x => x.CreateMessageAsync(command.SenderId!, command.ChatId!, command.Text!, html, false, 0, linkPreviewId, cancellationToken),
             Times.Once);
         _messageCacheManagerMock.Verify(x => x.ClearAsync(command.ChatId!), Times.Once);
     }

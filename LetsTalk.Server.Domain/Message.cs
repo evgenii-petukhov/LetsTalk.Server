@@ -31,6 +31,10 @@ public class Message : BaseEntity
 
     public int ChatId { get; protected set; }
 
+    public bool EmojisOnly { get; protected set; }
+
+    public int EmojiCount { get; protected set; }
+
     protected Message()
     {
     }
@@ -39,7 +43,15 @@ public class Message : BaseEntity
     {
     }
 
-    public Message(int senderId, int chatId, string? text, string? textHtml, int? linkPreviewId = null, Image? image = null)
+    public Message(
+        int senderId,
+        int chatId,
+        string? text,
+        string? textHtml,
+        bool emojisOnly,
+        int emojiCount,
+        int? linkPreviewId = null,
+        Image? image = null)
     {
         SenderId = senderId;
         ChatId = chatId;
@@ -47,6 +59,8 @@ public class Message : BaseEntity
         TextHtml = textHtml;
         Image = image;
         LinkPreviewId = linkPreviewId;
+        EmojisOnly = emojisOnly;
+        EmojiCount = emojiCount;
     }
 
     public void SetImagePreview(Image image)

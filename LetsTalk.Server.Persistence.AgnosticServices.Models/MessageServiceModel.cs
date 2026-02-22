@@ -19,4 +19,8 @@ public class MessageServiceModel
     public ImagePreviewServiceModel? ImagePreview { get; set; }
 
     public LinkPreviewServiceModel? LinkPreview { get; set; }
+
+    public bool EmojisOnly { get; set; }
+
+    public int EmojiCount { get; set; }
 }

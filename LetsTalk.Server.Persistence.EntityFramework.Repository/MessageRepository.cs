@@ -15,10 +15,10 @@ public class MessageRepository(LetsTalkDbContext context)
             .Include(message => message.ImagePreview)
             .Include(message => message.Image)
             .Where(message => message.ChatId == chatId)
-            .OrderByDescending(mesage => mesage.DateCreatedUnix)
+            .OrderByDescending(message => message.DateCreatedUnix)
             .Skip(messagesPerPage * pageIndex)
             .Take(messagesPerPage)
-            .OrderBy(mesage => mesage.DateCreatedUnix)
+            .OrderBy(message => message.DateCreatedUnix)
             .ToListAsync(cancellationToken);
     }
 

@@ -1,8 +1,8 @@
-﻿using LetsTalk.Server.API.Core.Models.HtmlGenerator;
-
-namespace LetsTalk.Server.API.Core.Abstractions;
+﻿namespace LetsTalk.Server.API.Core.Abstractions;
 
 public interface IRegexService
 {
-    HtmlGeneratorResult ReplaceUrlsByHref(string input);
+    (string html, string url) ReplaceUrlsByHref(string input);
+
+    (string wrapped, int count, bool emojisOnly) WrapEmojisWithSpan(string input);
 }

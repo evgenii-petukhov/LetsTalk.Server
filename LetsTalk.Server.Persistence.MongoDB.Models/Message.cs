@@ -29,4 +29,8 @@ public class Message
     public string? LinkPreviewId { get; set; }
 
     public LinkPreview? LinkPreview { get; set; }
+
+    public bool EmojisOnly { get; set; }
+
+    public int EmojiCount { get; set; }
 }

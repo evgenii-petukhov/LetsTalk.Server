@@ -19,4 +19,8 @@ public record MessageDto
     public ImageDto? Image { get; set; }
 
     public ImagePreviewDto? ImagePreview { get; set; }
+
+    public bool EmojisOnly { get; set; }
+
+    public int EmojiCount { get; set; }
 }

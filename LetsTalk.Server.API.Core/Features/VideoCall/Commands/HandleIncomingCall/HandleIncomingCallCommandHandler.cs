@@ -25,7 +25,7 @@ public class HandleIncomingCallCommandHandler(
         await _notificationProducer.PublishAsync(new Notification
         {
             RecipientId = recipientId,
-            Connection = new RtcSessionSettings
+            EstablishConnection = new EstablishConnectionRequest
             {
                 CallId = request.CallId,
                 ChatId = request.ChatId,

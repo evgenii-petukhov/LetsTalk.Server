@@ -28,7 +28,7 @@ public class StartOutgoingCallCommandHandler(
         await _notificationProducer.PublishAsync(new Notification
         {
             RecipientId = recipientId,
-            Connection = new RtcSessionSettings
+            IncomingCall = new IncomingCallRequest
             {
                 CallId = callId,
                 Offer = request.Offer,

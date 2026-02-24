@@ -12,5 +12,7 @@ public class Notification
 
     public ImagePreviewDto? ImagePreview { get; set; }
 
-    public RtcSessionSettings? Connection { get; set; }
+    public IncomingCallRequest? IncomingCall { get; set; }
+
+    public EstablishConnectionRequest? EstablishConnection { get; set; }
 }

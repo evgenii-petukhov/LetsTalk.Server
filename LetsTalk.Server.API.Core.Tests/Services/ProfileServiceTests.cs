@@ -11,16 +11,16 @@ namespace LetsTalk.Server.API.Core.Tests.Services;
 [TestFixture]
 public class ProfileServiceTests
 {
-    private Mock<IAccountAgnosticService> _accountAgnosticServiceMock;
+    private Mock<IProfileAgnosticService> _profileAgnosticServiceMock;
     private Mock<IMapper> _mapperMock;
     private ProfileService _profileService;
 
     [SetUp]
     public void SetUp()
     {
-        _accountAgnosticServiceMock = new Mock<IAccountAgnosticService>();
+        _profileAgnosticServiceMock = new Mock<IProfileAgnosticService>();
         _mapperMock = new Mock<IMapper>();
-        _profileService = new ProfileService(_accountAgnosticServiceMock.Object, _mapperMock.Object);
+        _profileService = new ProfileService(_profileAgnosticServiceMock.Object, _mapperMock.Object);
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class ProfileServiceTests
             Email = "john.doe@example.com"
         };
 
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.GetByIdAsync(accountId, cancellationToken))
             .ReturnsAsync(serviceModel);
         _mapperMock
@@ -56,7 +56,7 @@ public class ProfileServiceTests
 
         // Assert
         result.Should().BeEquivalentTo(expectedDto);
-        _accountAgnosticServiceMock.Verify(x => x.GetByIdAsync(accountId, cancellationToken), Times.Once);
+        _profileAgnosticServiceMock.Verify(x => x.GetByIdAsync(accountId, cancellationToken), Times.Once);
         _mapperMock.Verify(x => x.Map<ProfileDto>(serviceModel), Times.Once);
     }
 
@@ -69,7 +69,7 @@ public class ProfileServiceTests
         var serviceModel = new ProfileServiceModel();
         var dto = new ProfileDto();
 
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.GetByIdAsync(accountId, cancellationToken))
             .ReturnsAsync(serviceModel);
         _mapperMock
@@ -80,7 +80,7 @@ public class ProfileServiceTests
         await _profileService.GetProfileAsync(accountId, cancellationToken);
 
         // Assert
-        _accountAgnosticServiceMock.Verify(x => x.GetByIdAsync(accountId, cancellationToken), Times.Once);
+        _profileAgnosticServiceMock.Verify(x => x.GetByIdAsync(accountId, cancellationToken), Times.Once);
     }
 
     [Test]
@@ -106,7 +106,7 @@ public class ProfileServiceTests
             PhotoUrl = "https://example.com/photo.jpg"
         };
 
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.GetByIdAsync(accountId, cancellationToken))
             .ReturnsAsync(serviceModel);
         _mapperMock

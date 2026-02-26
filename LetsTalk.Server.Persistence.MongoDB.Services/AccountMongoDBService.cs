@@ -13,47 +13,11 @@ public class AccountMongoDBService(
     private readonly IAccountRepository _accountRepository = accountRepository;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<ProfileServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
 
-        return _mapper.Map<ProfileServiceModel>(account);
-    }
-
-    public async Task<ProfileServiceModel> UpdateProfileAsync(
-        string accountId,
-        string firstName,
-        string lastName,
-        CancellationToken cancellationToken = default)
-    {
-        var account = await _accountRepository.UpdateProfileAsync(accountId, firstName, lastName, cancellationToken);
-
-        return _mapper.Map<ProfileServiceModel>(account);
-    }
-
-    public async Task<ProfileServiceModel> UpdateProfileAsync(
-        string accountId,
-        string firstName,
-        string lastName,
-        string imageId,
-        int width,
-        int height,
-        ImageFormats imageFormat,
-        FileStorageTypes fileStorageType,
-        CancellationToken cancellationToken = default)
-    {
-        var account = await _accountRepository.UpdateProfileAsync(
-            accountId,
-            firstName,
-            lastName,
-            imageId,
-            width,
-            height,
-            imageFormat,
-            fileStorageType,
-            cancellationToken);
-
-        return _mapper.Map<ProfileServiceModel>(account);
+        return _mapper.Map<AccountServiceModel>(account);
     }
 
     public async Task<string> GetOrCreateAsync(

@@ -9,16 +9,14 @@ using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.Enums;
-using MediatR;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 
 [TestFixture]
 public class UpdateProfileCommandHandlerTests
 {
-    private Mock<IAccountAgnosticService> _accountAgnosticServiceMock;
+    private Mock<IProfileAgnosticService> _profileAgnosticServiceMock;
     private Mock<IChatAgnosticService> _chatAgnosticServiceMock;
     private Mock<IMapper> _mapperMock;
     private Mock<IProfileCacheManager> _profileCacheManagerMock;
@@ -30,7 +28,7 @@ public class UpdateProfileCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _accountAgnosticServiceMock = new Mock<IAccountAgnosticService>();
+        _profileAgnosticServiceMock = new Mock<IProfileAgnosticService>();
         _chatAgnosticServiceMock = new Mock<IChatAgnosticService>();
         _mapperMock = new Mock<IMapper>();
         _profileCacheManagerMock = new Mock<IProfileCacheManager>();
@@ -39,7 +37,7 @@ public class UpdateProfileCommandHandlerTests
         _producerMock = new Mock<IProducer<RemoveImageRequest>>();
 
         _handler = new UpdateProfileCommandHandler(
-            _accountAgnosticServiceMock.Object,
+            _profileAgnosticServiceMock.Object,
             _chatAgnosticServiceMock.Object,
             _mapperMock.Object,
             _profileCacheManagerMock.Object,
@@ -358,7 +356,7 @@ public class UpdateProfileCommandHandlerTests
         };
         var cancellationToken = CancellationToken.None;
 
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.GetByIdAsync("account-123", cancellationToken))
             .ThrowsAsync(new InvalidOperationException("Account not found"));
 
@@ -366,7 +364,7 @@ public class UpdateProfileCommandHandlerTests
         Assert.ThrowsAsync<InvalidOperationException>(
             () => _handler.Handle(command, cancellationToken));
 
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Never);
 
@@ -391,7 +389,7 @@ public class UpdateProfileCommandHandlerTests
 
         SetupGetByIdAsync(command.AccountId!, existingAccount, cancellationToken);
 
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.UpdateProfileAsync("account-123", "John", "Doe", cancellationToken))
             .ThrowsAsync(new InvalidOperationException("Update failed"));
 
@@ -541,11 +539,11 @@ public class UpdateProfileCommandHandlerTests
         await _handler.Handle(command, cancellationToken);
 
         // Assert - Verification is done in the setup methods that check cancellationToken
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.GetByIdAsync("account-123", cancellationToken),
             Times.Once);
 
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync("account-123", "John", "Doe", cancellationToken),
             Times.Once);
     }
@@ -567,11 +565,11 @@ public class UpdateProfileCommandHandlerTests
         var updatedAccount = new ProfileServiceModel { Id = null };
         var profileDto = new ProfileDto { Id = null };
 
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.GetByIdAsync(null!, cancellationToken))
             .ReturnsAsync(existingAccount);
 
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.UpdateProfileAsync(null!, null!, null!, cancellationToken))
             .ReturnsAsync(updatedAccount);
 
@@ -584,7 +582,7 @@ public class UpdateProfileCommandHandlerTests
         // Assert
         result.Should().BeEquivalentTo(profileDto);
 
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync(null!, null!, null!, cancellationToken),
             Times.Once);
 
@@ -622,7 +620,7 @@ public class UpdateProfileCommandHandlerTests
 
         SetupGetByIdAsync(command.AccountId!, existingAccount, cancellationToken);
         
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.UpdateProfileAsync("account-!@#$%", "John-O'Connor", "Müller & Sons", cancellationToken))
             .ReturnsAsync(updatedAccount);
 
@@ -635,7 +633,7 @@ public class UpdateProfileCommandHandlerTests
         // Assert
         result.Should().BeEquivalentTo(profileDto);
 
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync("account-!@#$%", "John-O'Connor", "Müller & Sons", cancellationToken),
             Times.Once);
     }
@@ -669,7 +667,7 @@ public class UpdateProfileCommandHandlerTests
 
         SetupGetByIdAsync(command.AccountId!, existingAccount, cancellationToken);
         
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.UpdateProfileAsync("账户-123", "张三", "李四 🌟", cancellationToken))
             .ReturnsAsync(updatedAccount);
 
@@ -682,7 +680,7 @@ public class UpdateProfileCommandHandlerTests
         // Assert
         result.Should().BeEquivalentTo(profileDto);
 
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync("账户-123", "张三", "李四 🌟", cancellationToken),
             Times.Once);
     }
@@ -774,7 +772,7 @@ public class UpdateProfileCommandHandlerTests
             // Assert
             result.Should().BeEquivalentTo(profileDto);
 
-            _accountAgnosticServiceMock.Verify(
+            _profileAgnosticServiceMock.Verify(
                 x => x.UpdateProfileAsync(
                     "account-123",
                     "John",
@@ -788,7 +786,7 @@ public class UpdateProfileCommandHandlerTests
                 Times.Once);
 
             // Reset mocks for next iteration
-            _accountAgnosticServiceMock.Reset();
+            _profileAgnosticServiceMock.Reset();
             _mapperMock.Reset();
             _profileCacheManagerMock.Reset();
             _accountCacheManagerMock.Reset();
@@ -797,21 +795,21 @@ public class UpdateProfileCommandHandlerTests
 
     private void SetupGetByIdAsync(string accountId, ProfileServiceModel account, CancellationToken cancellationToken)
     {
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.GetByIdAsync(accountId, cancellationToken))
             .ReturnsAsync(account);
     }
 
     private void SetupUpdateProfileWithoutImage(UpdateProfileCommand command, ProfileServiceModel updatedAccount, CancellationToken cancellationToken)
     {
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.UpdateProfileAsync(command.AccountId!, command.FirstName!, command.LastName!, cancellationToken))
             .ReturnsAsync(updatedAccount);
     }
 
     private void SetupUpdateProfileWithImage(UpdateProfileCommand command, ProfileServiceModel updatedAccount, CancellationToken cancellationToken)
     {
-        _accountAgnosticServiceMock
+        _profileAgnosticServiceMock
             .Setup(x => x.UpdateProfileAsync(
                 command.AccountId!,
                 command.FirstName!,
@@ -864,11 +862,11 @@ public class UpdateProfileCommandHandlerTests
 
     private void VerifyUpdateProfileWithoutImage(UpdateProfileCommand command, CancellationToken cancellationToken)
     {
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync(command.AccountId!, command.FirstName!, command.LastName!, cancellationToken),
             Times.Once);
 
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync(
                 It.IsAny<string>(),
                 It.IsAny<string>(),
@@ -884,7 +882,7 @@ public class UpdateProfileCommandHandlerTests
 
     private void VerifyUpdateProfileWithImage(UpdateProfileCommand command, CancellationToken cancellationToken)
     {
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync(
                 command.AccountId!,
                 command.FirstName!,
@@ -897,7 +895,7 @@ public class UpdateProfileCommandHandlerTests
                 cancellationToken),
             Times.Once);
 
-        _accountAgnosticServiceMock.Verify(
+        _profileAgnosticServiceMock.Verify(
             x => x.UpdateProfileAsync(
                 It.IsAny<string>(),
                 It.IsAny<string>(),

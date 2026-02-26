@@ -1,4 +1,5 @@
-﻿using LetsTalk.Server.API.Core.Abstractions;
+﻿using AutoMapper;
+using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Kafka.Models;
@@ -11,11 +12,15 @@ namespace LetsTalk.Server.API.Core.Features.VideoCall.Commands.StartOutgoingCall
 public class StartOutgoingCallCommandHandler(
     IProducer<Notification> notificationProducer,
     IChatAgnosticService chatAgnosticService,
-    ITelemetryService telemetryService) : IRequestHandler<StartOutgoingCallCommand, StartOutgoingCallDto>
+    IAccountAgnosticService accountAgnosticService,
+    ITelemetryService telemetryService,
+    IMapper mapper) : IRequestHandler<StartOutgoingCallCommand, StartOutgoingCallDto>
 {
     private readonly IProducer<Notification> _notificationProducer = notificationProducer;
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
+    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
     private readonly ITelemetryService _telemetryService = telemetryService;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<StartOutgoingCallDto> Handle(StartOutgoingCallCommand request, CancellationToken cancellationToken)
     {
@@ -25,6 +30,8 @@ public class StartOutgoingCallCommandHandler(
 
         var callId = Guid.NewGuid().ToString();
 
+        var caller = await _accountAgnosticService.GetByIdAsync(request.AccountId, cancellationToken);
+
         await _notificationProducer.PublishAsync(new Notification
         {
             RecipientId = recipientId,
@@ -33,6 +40,7 @@ public class StartOutgoingCallCommandHandler(
                 CallId = callId,
                 Offer = request.Offer,
                 ChatId = request.ChatId,
+                Caller = _mapper.Map<AccountDto>(caller)
             }
         }, cancellationToken);
 

@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
@@ -16,7 +17,9 @@ public class StartOutgoingCallCommandHandlerTests
 {
     private Mock<IProducer<Notification>> _notificationProducerMock;
     private Mock<IChatAgnosticService> _chatAgnosticServiceMock;
+    private Mock<IAccountAgnosticService> _accountAgnosticServiceMock;
     private Mock<ITelemetryService> _telemetryServiceMock;
+    private Mock<IMapper> _mapperMock;
     private StartOutgoingCallCommandHandler _handler;
 
     [SetUp]
@@ -24,12 +27,16 @@ public class StartOutgoingCallCommandHandlerTests
     {
         _notificationProducerMock = new Mock<IProducer<Notification>>();
         _chatAgnosticServiceMock = new Mock<IChatAgnosticService>();
+        _accountAgnosticServiceMock = new Mock<IAccountAgnosticService>();
         _telemetryServiceMock = new Mock<ITelemetryService>();
+        _mapperMock = new Mock<IMapper>();
 
         _handler = new StartOutgoingCallCommandHandler(
             _notificationProducerMock.Object,
             _chatAgnosticServiceMock.Object,
-            _telemetryServiceMock.Object);
+            _accountAgnosticServiceMock.Object,
+            _telemetryServiceMock.Object,
+            _mapperMock.Object);
     }
 
     [Test]
@@ -77,9 +84,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Offer == "sdp-offer-data" &&
-                n.Connection.ChatId == "chat-456"), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == "sdp-offer-data" &&
+                n.IncomingCall.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 
@@ -212,9 +219,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == null &&
-                n.Connection != null &&
-                n.Connection.Offer == "offer-data" &&
-                n.Connection.ChatId == "chat-456"), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == "offer-data" &&
+                n.IncomingCall.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 
@@ -259,9 +266,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == null &&
-                n.Connection != null &&
-                n.Connection.Offer == "offer-data" &&
-                n.Connection.ChatId == "chat-456"), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == "offer-data" &&
+                n.IncomingCall.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 
@@ -521,9 +528,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "member-1" &&
-                n.Connection != null &&
-                n.Connection.Offer == null &&
-                n.Connection.ChatId == null), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == null &&
+                n.IncomingCall.ChatId == null), cancellationToken),
             Times.Once);
     }
 
@@ -568,9 +575,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-{}[]" &&
-                n.Connection != null &&
-                n.Connection.Offer == "offer-with-special-chars-!@#$%^&*()" &&
-                n.Connection.ChatId == "chat-^&*()"), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == "offer-with-special-chars-!@#$%^&*()" &&
+                n.IncomingCall.ChatId == "chat-^&*()"), cancellationToken),
             Times.Once);
     }
 
@@ -616,10 +623,10 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Offer == longOffer &&
-                n.Connection.Offer!.Length == 10000 &&
-                n.Connection.ChatId == "chat-456"), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == longOffer &&
+                n.IncomingCall.Offer!.Length == 10000 &&
+                n.IncomingCall.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 
@@ -664,9 +671,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Offer == "" &&
-                n.Connection.ChatId == ""), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == "" &&
+                n.IncomingCall.ChatId == ""), cancellationToken),
             Times.Once);
     }
 
@@ -755,9 +762,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == null &&
-                n.Connection != null &&
-                n.Connection.Offer == "offer-data" &&
-                n.Connection.ChatId == "chat-456"), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == "offer-data" &&
+                n.IncomingCall.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 
@@ -802,10 +809,9 @@ public class StartOutgoingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Offer == "test-sdp-offer" &&
-                n.Connection.ChatId == "chat-456" &&
-                n.Connection.Answer == null), cancellationToken),
+                n.IncomingCall != null &&
+                n.IncomingCall.Offer == "test-sdp-offer" &&
+                n.IncomingCall.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 }

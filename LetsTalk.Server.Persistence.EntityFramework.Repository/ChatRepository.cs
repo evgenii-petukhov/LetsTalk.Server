@@ -43,17 +43,16 @@ public class ChatRepository(LetsTalkDbContext context)
                 LastMessageDate = g.Max(m => m.DateCreatedUnix),
                 LastReadMessageId = g.Max(m => m.ReadMessageId)
             })
-            .Join(Context.Messages.Where(m => m.SenderId != accountId),
+            .GroupJoin(Context.Messages.Where(m => m.SenderId != accountId),
                 metric => metric.ChatId,
                 message => message.ChatId,
-                (metric, message) => new { metric, message })
-            .GroupBy(x => x.metric)
+                (metric, messages) => new { Metric = metric, Messages = messages })
             .Select(g => new ChatMetric
             {
-                ChatId = g.Key.ChatId,
-                LastMessageId = g.Key.LastMessageId,
-                LastMessageDate = g.Key.LastMessageDate,
-                UnreadCount = g.Count(x => x.message.Id > g.Key.LastReadMessageId)
+                ChatId = g.Metric.ChatId,
+                LastMessageId = g.Metric.LastMessageId,
+                LastMessageDate = g.Metric.LastMessageDate,
+                UnreadCount = g.Messages.Count(x => x.Id > g.Metric.LastReadMessageId)
             })
             .ToDictionaryAsync(x => x.ChatId, cancellationToken);
     }

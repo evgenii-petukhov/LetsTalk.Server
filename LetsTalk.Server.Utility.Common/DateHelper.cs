@@ -6,7 +6,12 @@ public static class DateHelper
 
     public static long GetUnixTimestamp()
     {
-        var diff = DateTime.UtcNow - Origin;
+        return GetUnixTimestamp(DateTime.UtcNow);
+    }
+
+    public static long GetUnixTimestamp(DateTime dateUtc)
+    {
+        var diff = dateUtc - Origin;
         return (long)diff.TotalSeconds;
     }
 }

@@ -5,15 +5,15 @@ using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.DatabaseContext;
 using LetsTalk.Server.Persistence.EntityFramework.Repository;
 using LetsTalk.Server.Persistence.EntityFramework.Repository.Abstractions;
-using LetsTalk.Server.Persistence.EntityFramework.Services;
 using LetsTalk.Server.Persistence.EntityFramework.Tests.MappingProfiles;
 using LetsTalk.Server.Persistence.EntityFramework.Tests.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Tests.TestData;
 using LetsTalk.Server.Persistence.Enums;
+using LetsTalk.Server.Utility.Common;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace LetsTalk.Server.Persistence.EntityFramework.Tests;
+namespace LetsTalk.Server.Persistence.EntityFramework.Services.Tests;
 
 [TestFixture]
 public class ChatEntityFrameworkServiceIntegrationTests
@@ -26,6 +26,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
     private Account BobPettit;
     private Account RickBarry;
     private Account GeorgeGervin;
+    private Account AlexEnglish;
 
     [SetUp]
     public void SetUp()
@@ -53,11 +54,12 @@ public class ChatEntityFrameworkServiceIntegrationTests
             Mock.Of<IUnitOfWork>(),
             _mapper);
 
-        NeilJohnston = CreateAcccount(Accounts.NeilJohnston);
-        BobPettit = CreateAcccount(Accounts.BobPettit);
-        RickBarry = CreateAcccount(Accounts.RickBarry);
-        GeorgeGervin = CreateAcccount(Accounts.GeorgeGervin);
-        _context.Accounts.AddRange(NeilJohnston, BobPettit, RickBarry, GeorgeGervin);
+        NeilJohnston = CreateAccount(Accounts.NeilJohnston);
+        BobPettit = CreateAccount(Accounts.BobPettit);
+        RickBarry = CreateAccount(Accounts.RickBarry);
+        GeorgeGervin = CreateAccount(Accounts.GeorgeGervin);
+        AlexEnglish = CreateAccount(Accounts.AlexEnglish);
+        _context.Accounts.AddRange(NeilJohnston, BobPettit, RickBarry, GeorgeGervin, AlexEnglish);
     }
 
     [TearDown]
@@ -619,7 +621,178 @@ public class ChatEntityFrameworkServiceIntegrationTests
         chats.Should().BeEmpty();
     }
 
-    private static Account CreateAcccount(AccountModel accountModel)
+    [Test]
+    public async Task GetChatsAsync_ShouldReturnCorrectLastMessageIdAndDate_WhenMessagesFromSingleSender()
+    {
+        // Arrange
+        var neilWithBob = new Chat([NeilJohnston.Id, BobPettit.Id]);
+        var neilWithRick = new Chat([NeilJohnston.Id, RickBarry.Id]);
+        var neilWithGervin = new Chat([NeilJohnston.Id, GeorgeGervin.Id]);
+        var neilWithAlex = new Chat([NeilJohnston.Id, AlexEnglish.Id]);
+        _context.Chats.AddRange(neilWithBob, neilWithRick, neilWithGervin, neilWithAlex);
+
+        var neilWithBobCreated = new DateTime(2026, 3, 21).ToUniversalTime();
+        var neilWithRickCreated = new DateTime(2026, 3, 20).ToUniversalTime();
+        var neilWithGervinCreated = new DateTime(2026, 3, 19).ToUniversalTime();
+        var neilWithAlexCreated = new DateTime(2026, 3, 18).ToUniversalTime();
+
+        var messages = new[]
+        {
+            new Message(
+                NeilJohnston.Id,
+                neilWithBob.Id,
+                "Hi Bob",
+                "<p>Hi Bob</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-4))),// 0
+            new Message(
+                BobPettit.Id,
+                neilWithBob.Id,
+                "Hi Neil",
+                "<p>Hi Neil</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-3))),// 1
+            new Message(
+                NeilJohnston.Id,
+                neilWithBob.Id,
+                "How is it going?",
+                "<p>How is it going?</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-2))),// 2
+            new Message(
+                BobPettit.Id,
+                neilWithBob.Id,
+                "Fine",
+                "<p>Fine</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-1))),// 3
+            new Message(
+                BobPettit.Id,
+                neilWithBob.Id,
+                "Thanks",
+                "<p>Thanks</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated)),// 4
+            new Message(
+                NeilJohnston.Id,
+                neilWithRick.Id,
+                "Hi Rick",
+                "<p>Hi Rick</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithRickCreated.AddSeconds(-1))),// 5
+            new Message(
+                NeilJohnston.Id,
+                neilWithRick.Id,
+                "What's up?",
+                "<p>What's up?</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithRickCreated)),// 6
+            new Message(
+                NeilJohnston.Id,
+                neilWithGervin.Id,
+                "Hi Gervin",
+                "<p>Hi Gervin</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithGervinCreated.AddSeconds(-1))),// 7
+            new Message(
+                NeilJohnston.Id,
+                neilWithGervin.Id,
+                "What's up?",
+                "<p>What's up?</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithGervinCreated)),// 8
+            new Message(
+                NeilJohnston.Id,
+                neilWithAlex.Id,
+                "Hi Alex",
+                "<p>Hi Alex</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithAlexCreated.AddSeconds(-1))),// 9
+            new Message(
+                NeilJohnston.Id,
+                neilWithAlex.Id,
+                "What's up?",
+                "<p>What's up?</p>",
+                false,
+                0,
+                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithAlexCreated)),// 10
+        };
+
+        _context.Messages.AddRange(messages);
+
+        var statuses = new[]
+        {
+            new ChatMessageStatus(neilWithBob.Id, BobPettit.Id, messages[4].Id),
+        };
+        _context.ChatMessageStatuses.AddRange(statuses);
+
+        await _context.SaveChangesAsync();
+
+        // Act (as Neil Johnston)
+        var chats = await _service.GetChatsAsync(NeilJohnston.Id.ToString());
+
+        // Assert
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
+            new() {
+                Id = neilWithBob.Id.ToString(),
+                ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.ImageId,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
+                IsIndividual = true,
+                UnreadCount = 3,
+                LastMessageId = messages[4].Id.ToString(),
+                LastMessageDate = messages[4].DateCreatedUnix,
+                AccountIds = [BobPettit.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithRick.Id.ToString(),
+                ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[6].Id.ToString(),
+                LastMessageDate = messages[6].DateCreatedUnix,
+                AccountIds = [RickBarry.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithGervin.Id.ToString(),
+                ChatName = $"{GeorgeGervin.FirstName} {GeorgeGervin.LastName}",
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[8].Id.ToString(),
+                LastMessageDate = messages[8].DateCreatedUnix,
+                AccountIds = [GeorgeGervin.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithAlex.Id.ToString(),
+                ChatName = $"{AlexEnglish.FirstName} {AlexEnglish.LastName}",
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[10].Id.ToString(),
+                LastMessageDate = messages[10].DateCreatedUnix,
+                AccountIds = [AlexEnglish.Id.ToString()],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+        ]);
+    }
+
+    private static Account CreateAccount(AccountModel accountModel)
     {
         var account = new Account((int)AccountTypes.Email, accountModel.Email!);
         var image = string.IsNullOrEmpty(accountModel.ImageId)

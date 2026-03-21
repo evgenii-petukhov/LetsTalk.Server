@@ -51,7 +51,8 @@ public class Message : BaseEntity
         bool emojisOnly,
         int emojiCount,
         int? linkPreviewId = null,
-        Image? image = null)
+        Image? image = null,
+        long? dateCreatedUnix = null)
     {
         SenderId = senderId;
         ChatId = chatId;
@@ -61,6 +62,7 @@ public class Message : BaseEntity
         LinkPreviewId = linkPreviewId;
         EmojisOnly = emojisOnly;
         EmojiCount = emojiCount;
+        DateCreatedUnix = dateCreatedUnix;
     }
 
     public void SetImagePreview(Image image)

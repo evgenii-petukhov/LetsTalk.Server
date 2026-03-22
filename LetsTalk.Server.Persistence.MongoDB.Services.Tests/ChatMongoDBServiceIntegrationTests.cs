@@ -4,7 +4,6 @@ using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.Enums;
 using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository;
-using LetsTalk.Server.Persistence.MongoDB.Services;
 using LetsTalk.Server.Persistence.MongoDB.Tests.Models;
 using LetsTalk.Server.Persistence.MongoDB.Tests.TestData;
 using LetsTalk.Server.Utility.Common;
@@ -32,6 +31,7 @@ public class ChatMongoDBServiceIntegrationTests
     private Account BobPettit;
     private Account RickBarry;
     private Account GeorgeGervin;
+    private Account AlexEnglish;
 
     [SetUp]
     public async Task SetUp()
@@ -44,12 +44,13 @@ public class ChatMongoDBServiceIntegrationTests
         _messageCollection = database.GetCollection<Message>(nameof(Message));
         _chatMessageStatusCollection = database.GetCollection<ChatMessageStatus>(nameof(ChatMessageStatus));
 
-        NeilJohnston = CreateAcccount(Accounts.NeilJohnston);
-        BobPettit = CreateAcccount(Accounts.BobPettit);
-        RickBarry = CreateAcccount(Accounts.RickBarry);
-        GeorgeGervin = CreateAcccount(Accounts.GeorgeGervin);
+        NeilJohnston = CreateAccount(Accounts.NeilJohnston);
+        BobPettit = CreateAccount(Accounts.BobPettit);
+        RickBarry = CreateAccount(Accounts.RickBarry);
+        GeorgeGervin = CreateAccount(Accounts.GeorgeGervin);
+        AlexEnglish = CreateAccount(Accounts.AlexEnglish);
 
-        _accountCollection.InsertMany([NeilJohnston, BobPettit, RickBarry, GeorgeGervin]);
+        _accountCollection.InsertMany([NeilJohnston, BobPettit, RickBarry, GeorgeGervin, AlexEnglish]);
 
         await MigrationEngineBuilder
             .Create()
@@ -876,7 +877,196 @@ public class ChatMongoDBServiceIntegrationTests
         chats.Should().BeEmpty();
     }
 
-    private static Account CreateAcccount(AccountModel accountModel)
+    [Test]
+    public async Task GetChatsAsync_ShouldReturnCorrectLastMessageIdAndDate_WhenMessagesFromSingleSender()
+    {
+        // Arrange
+        var neilWithBob = new Chat
+        {
+            AccountIds = [NeilJohnston.Id!, BobPettit.Id!],
+            IsIndividual = true
+        };
+        var neilWithRick = new Chat
+        {
+            AccountIds = [NeilJohnston.Id!, RickBarry.Id!],
+            IsIndividual = true
+        };
+        var neilWithGervin = new Chat
+        {
+            AccountIds = [NeilJohnston.Id!, GeorgeGervin.Id!],
+            IsIndividual = true
+        };
+        var neilWithAlex = new Chat
+        {
+            AccountIds = [NeilJohnston.Id!, AlexEnglish.Id!],
+            IsIndividual = true
+        };
+        _chatCollection.InsertMany([neilWithBob, neilWithRick, neilWithGervin, neilWithAlex]);
+
+        var neilWithBobCreated = DateHelper.GetUnixTimestamp(DateTime.Now.ToUniversalTime().AddDays(-1));
+        var othersCreated = DateHelper.GetUnixTimestamp(DateTime.Now.ToUniversalTime().AddDays(-2));
+
+        var messages = new[]
+        {
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithBob.Id,
+                Text = "Hi Bob",
+                TextHtml = "<p>Hi Bob</p>",
+                DateCreatedUnix = neilWithBobCreated
+            },// 0
+            new Message
+            {
+                SenderId = BobPettit.Id,
+                ChatId = neilWithBob.Id,
+                Text = "Hi Neil",
+                TextHtml = "<p>Hi Neil</p>",
+                DateCreatedUnix = ++neilWithBobCreated
+            },// 1
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithBob.Id,
+                Text = "How is it going?",
+                TextHtml = "<p>How is it going?</p>",
+                DateCreatedUnix = ++neilWithBobCreated
+            },// 2
+            new Message
+            {
+                SenderId = BobPettit.Id,
+                ChatId = neilWithBob.Id,
+                Text = "Fine",
+                TextHtml = "<p>Fine</p>",
+                DateCreatedUnix = ++neilWithBobCreated
+            },// 3
+            new Message
+            {
+                SenderId = BobPettit.Id,
+                ChatId = neilWithBob.Id,
+                Text = "Thanks",
+                TextHtml = "<p>Thanks</p>",
+                DateCreatedUnix = ++neilWithBobCreated
+            },// 4
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithAlex.Id,
+                Text = "Hi Alex",
+                TextHtml = "<p>Hi Alex</p>",
+                DateCreatedUnix = othersCreated
+            },// 5
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithAlex.Id,
+                Text = "What's up?",
+                TextHtml = "<p>What's up?</p>",
+                DateCreatedUnix = ++othersCreated
+            },// 6
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithGervin.Id,
+                Text = "Hi Gervin",
+                TextHtml = "<p>Hi Gervin</p>",
+                DateCreatedUnix = ++othersCreated
+            },// 7
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithGervin.Id,
+                Text = "What's up?",
+                TextHtml = "<p>What's up?</p>",
+                DateCreatedUnix = ++othersCreated
+            },// 8
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithRick.Id,
+                Text = "Hi Rick",
+                TextHtml = "<p>Hi Rick</p>",
+                DateCreatedUnix = ++othersCreated
+            },// 9
+            new Message
+            {
+                SenderId = NeilJohnston.Id,
+                ChatId = neilWithRick.Id,
+                Text = "What's up?",
+                TextHtml = "<p>What's up?</p>",
+                DateCreatedUnix = ++othersCreated
+            },// 10
+        };
+
+        _messageCollection.InsertMany(messages);
+
+        var statuses = new[]
+        {
+            new ChatMessageStatus
+            {
+                ChatId = neilWithBob.Id,
+                AccountId = NeilJohnston.Id,
+                MessageId = messages[4].Id,
+                DateReadUnix = DateHelper.GetUnixTimestamp(DateTime.Now.ToUniversalTime())
+            }
+        };
+        _chatMessageStatusCollection.InsertMany(statuses);
+
+        // Act (as Neil Johnston)
+        var chats = await _service.GetChatsAsync(NeilJohnston.Id!);
+
+        // Assert
+        chats.Should().BeEquivalentTo<ChatServiceModel>(
+        [
+            new() {
+                Id = neilWithBob.Id,
+                ChatName = $"{BobPettit.FirstName} {BobPettit.LastName}",
+                Image = new ImageServiceModel
+                {
+                    Id = BobPettit.Image!.Id,
+                    FileStorageTypeId = (int)FileStorageTypes.AmazonS3
+                },
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[4].Id,
+                LastMessageDate = messages[4].DateCreatedUnix,
+                AccountIds = [BobPettit.Id!],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithAlex.Id,
+                ChatName = $"{AlexEnglish.FirstName} {AlexEnglish.LastName}",
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[6].Id,
+                LastMessageDate = messages[6].DateCreatedUnix,
+                AccountIds = [AlexEnglish.Id!],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithGervin.Id,
+                ChatName = $"{GeorgeGervin.FirstName} {GeorgeGervin.LastName}",
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[8].Id,
+                LastMessageDate = messages[8].DateCreatedUnix,
+                AccountIds = [GeorgeGervin.Id!],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+            new() {
+                Id = neilWithRick.Id,
+                ChatName = $"{RickBarry.FirstName} {RickBarry.LastName}",
+                IsIndividual = true,
+                UnreadCount = 0,
+                LastMessageId = messages[10].Id,
+                LastMessageDate = messages[10].DateCreatedUnix,
+                AccountIds = [RickBarry.Id!],
+                AccountTypeId = (int)AccountTypes.Email
+            },
+        ]);
+    }
+
+    private static Account CreateAccount(AccountModel accountModel)
     {
         return new Account
         {

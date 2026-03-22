@@ -631,10 +631,8 @@ public class ChatEntityFrameworkServiceIntegrationTests
         var neilWithAlex = new Chat([NeilJohnston.Id, AlexEnglish.Id]);
         _context.Chats.AddRange(neilWithBob, neilWithRick, neilWithGervin, neilWithAlex);
 
-        var neilWithBobCreated = new DateTime(2026, 3, 21).ToUniversalTime();
-        var neilWithRickCreated = new DateTime(2026, 3, 20).ToUniversalTime();
-        var neilWithGervinCreated = new DateTime(2026, 3, 19).ToUniversalTime();
-        var neilWithAlexCreated = new DateTime(2026, 3, 18).ToUniversalTime();
+        var neilWithBobCreated = DateHelper.GetUnixTimestamp(DateTime.Now.ToUniversalTime().AddDays(-1));
+        var othersCreated = DateHelper.GetUnixTimestamp(DateTime.Now.ToUniversalTime().AddDays(-2));
 
         var messages = new[]
         {
@@ -645,7 +643,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>Hi Bob</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-4))),// 0
+                dateCreatedUnix: neilWithBobCreated),// 0
             new Message(
                 BobPettit.Id,
                 neilWithBob.Id,
@@ -653,7 +651,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>Hi Neil</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-3))),// 1
+                dateCreatedUnix: ++neilWithBobCreated),// 1
             new Message(
                 NeilJohnston.Id,
                 neilWithBob.Id,
@@ -661,7 +659,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>How is it going?</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-2))),// 2
+                dateCreatedUnix: ++neilWithBobCreated),// 2
             new Message(
                 BobPettit.Id,
                 neilWithBob.Id,
@@ -669,7 +667,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>Fine</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated.AddSeconds(-1))),// 3
+                dateCreatedUnix: ++neilWithBobCreated),// 3
             new Message(
                 BobPettit.Id,
                 neilWithBob.Id,
@@ -677,7 +675,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>Thanks</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithBobCreated)),// 4
+                dateCreatedUnix: ++neilWithBobCreated),// 4
             new Message(
                 NeilJohnston.Id,
                 neilWithRick.Id,
@@ -685,7 +683,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>Hi Rick</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithRickCreated.AddSeconds(-1))),// 5
+                dateCreatedUnix: othersCreated),// 5
             new Message(
                 NeilJohnston.Id,
                 neilWithRick.Id,
@@ -693,7 +691,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>What's up?</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithRickCreated)),// 6
+                dateCreatedUnix: ++othersCreated),// 6
             new Message(
                 NeilJohnston.Id,
                 neilWithGervin.Id,
@@ -701,7 +699,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>Hi Gervin</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithGervinCreated.AddSeconds(-1))),// 7
+                dateCreatedUnix: ++othersCreated),// 7
             new Message(
                 NeilJohnston.Id,
                 neilWithGervin.Id,
@@ -709,7 +707,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>What's up?</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithGervinCreated)),// 8
+                dateCreatedUnix: ++othersCreated),// 8
             new Message(
                 NeilJohnston.Id,
                 neilWithAlex.Id,
@@ -717,7 +715,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>Hi Alex</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithAlexCreated.AddSeconds(-1))),// 9
+                dateCreatedUnix: ++othersCreated),// 9
             new Message(
                 NeilJohnston.Id,
                 neilWithAlex.Id,
@@ -725,7 +723,7 @@ public class ChatEntityFrameworkServiceIntegrationTests
                 "<p>What's up?</p>",
                 false,
                 0,
-                dateCreatedUnix: DateHelper.GetUnixTimestamp(neilWithAlexCreated)),// 10
+                dateCreatedUnix: ++othersCreated),// 10
         };
 
         _context.Messages.AddRange(messages);

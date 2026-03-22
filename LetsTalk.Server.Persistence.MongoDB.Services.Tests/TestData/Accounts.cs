@@ -35,4 +35,11 @@ public static class Accounts
         FirstName = "George",
         LastName = "Gervin",
     };
+
+    public static AccountModel AlexEnglish { get; } = new AccountModel
+    {
+        Email = "alex.english@hotmail.com",
+        FirstName = "Alex",
+        LastName = "English",
+    };
 }

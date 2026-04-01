@@ -14,7 +14,7 @@
 
 ![scheme](demo.gif)
 
-🔴 [Live demo](https://chat2.epetukhov.cyou/)
+🔴 [Live demo](https://chat.petukhov.fyi/)
 
 ## Description
 

@@ -76,8 +76,8 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Answer == "sdp-answer-data"), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == "sdp-answer-data"), cancellationToken),
             Times.Once);
     }
 
@@ -207,8 +207,8 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == null &&
-                n.Connection != null &&
-                n.Connection.Answer == "answer-data"), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == "answer-data"), cancellationToken),
             Times.Once);
     }
 
@@ -252,8 +252,8 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == null &&
-                n.Connection != null &&
-                n.Connection.Answer == "answer-data"), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == "answer-data"), cancellationToken),
             Times.Once);
     }
 
@@ -513,8 +513,8 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "member-1" &&
-                n.Connection != null &&
-                n.Connection.Answer == null), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == null), cancellationToken),
             Times.Once);
     }
 
@@ -558,8 +558,8 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-{}[]" &&
-                n.Connection != null &&
-                n.Connection.Answer == "answer-with-special-chars-!@#$%^&*()"), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == "answer-with-special-chars-!@#$%^&*()"), cancellationToken),
             Times.Once);
     }
 
@@ -604,9 +604,9 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Answer == longAnswer &&
-                n.Connection.Answer!.Length == 10000), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == longAnswer &&
+                n.EstablishConnection.Answer!.Length == 10000), cancellationToken),
             Times.Once);
     }
 
@@ -650,8 +650,8 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Answer == ""), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == ""), cancellationToken),
             Times.Once);
     }
 
@@ -738,8 +738,8 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == null &&
-                n.Connection != null &&
-                n.Connection.Answer == "answer-data"), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == "answer-data"), cancellationToken),
             Times.Once);
     }
 
@@ -783,10 +783,9 @@ public class HandleIncomingCallCommandHandlerTests
         _notificationProducerMock.Verify(
             x => x.PublishAsync(It.Is<Notification>(n =>
                 n.RecipientId == "recipient-789" &&
-                n.Connection != null &&
-                n.Connection.Answer == "test-sdp-answer" &&
-                n.Connection.Offer == null &&
-                n.Connection.ChatId == "chat-456"), cancellationToken),
+                n.EstablishConnection != null &&
+                n.EstablishConnection.Answer == "test-sdp-answer" &&
+                n.EstablishConnection.ChatId == "chat-456"), cancellationToken),
             Times.Once);
     }
 }

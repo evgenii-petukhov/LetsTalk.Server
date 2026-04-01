@@ -14,6 +14,7 @@ public static class EntityFrameworkServiceRegistration
     {
         services.AddScoped<IMessageAgnosticService, MessageEntityFrameworkService>();
         services.AddScoped<IAccountAgnosticService, AccountEntityFrameworkService>();
+        services.AddScoped<IProfileAgnosticService, ProfileEntityFrameworkService>();
         services.AddScoped<IChatAgnosticService, ChatEntityFrameworkService>();
         services.AddScoped<ILinkPreviewAgnosticService, LinkPreviewEntityFrameworkService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

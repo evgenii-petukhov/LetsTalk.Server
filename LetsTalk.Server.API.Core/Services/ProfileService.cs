@@ -6,15 +6,15 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 namespace LetsTalk.Server.API.Core.Services;
 
 public class ProfileService(
-    IAccountAgnosticService accountAgnosticService,
+    IProfileAgnosticService profileAgnosticService,
     IMapper mapper) : IProfileService
 {
-    private readonly IAccountAgnosticService _accountAgnosticService = accountAgnosticService;
+    private readonly IProfileAgnosticService _profileAgnosticService = profileAgnosticService;
     private readonly IMapper _mapper = mapper;
 
     public async Task<ProfileDto> GetProfileAsync(string accountId, CancellationToken cancellationToken)
     {
-        var accounts = await _accountAgnosticService.GetByIdAsync(accountId, cancellationToken);
+        var accounts = await _profileAgnosticService.GetByIdAsync(accountId, cancellationToken);
 
         return _mapper.Map<ProfileDto>(accounts);
     }

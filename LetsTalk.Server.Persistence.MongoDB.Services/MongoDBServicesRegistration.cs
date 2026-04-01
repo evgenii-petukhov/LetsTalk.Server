@@ -18,6 +18,7 @@ public static class MongoDBServicesRegistration
 
         services.AddScoped<IMessageAgnosticService, MessageMongoDBService>();
         services.AddScoped<IAccountAgnosticService, AccountMongoDBService>();
+        services.AddScoped<IProfileAgnosticService, ProfileMongoDBService>();
         services.AddScoped<IChatAgnosticService, ChatMongoDBService>();
         services.AddScoped<ILinkPreviewAgnosticService, LinkPreviewMongoDBService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

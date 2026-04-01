@@ -26,17 +26,14 @@ public class NotificationConsumer(
             await SendNotificationAsync(context.Message.RecipientId!, context.Message.ImagePreview);
         }
 
-        if (context.Message.Connection != null)
+        if (context.Message.IncomingCall != null)
         {
-            if (!string.IsNullOrWhiteSpace(context.Message.Connection.Offer))
-            {
-                await SendNotificationAsync(context.Message.RecipientId!, context.Message.Connection, "RtcSessionOffer");
-            }
+            await SendNotificationAsync(context.Message.RecipientId!, context.Message.IncomingCall, nameof(context.Message.IncomingCall));
+        }
 
-            if (!string.IsNullOrWhiteSpace(context.Message.Connection.Answer))
-            {
-                await SendNotificationAsync(context.Message.RecipientId!, context.Message.Connection, "RtcSessionAnswer");
-            }
+        if (context.Message.EstablishConnection != null)
+        {
+            await SendNotificationAsync(context.Message.RecipientId!, context.Message.EstablishConnection, nameof(context.Message.EstablishConnection));
         }
     }
 

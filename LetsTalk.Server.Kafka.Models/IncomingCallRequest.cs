@@ -1,6 +1,4 @@
-﻿using LetsTalk.Server.Dto.Models;
-
-namespace LetsTalk.Server.Kafka.Models;
+﻿namespace LetsTalk.Server.Kafka.Models;
 
 public class IncomingCallRequest
 {
@@ -9,6 +7,4 @@ public class IncomingCallRequest
     public string? Offer { get; set; }
 
     public string? ChatId { get; set; }
-
-    public AccountDto? Caller { get; set; }
 }

@@ -13,13 +13,6 @@ public class AccountMongoDBService(
     private readonly IAccountRepository _accountRepository = accountRepository;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var account = await _accountRepository.GetByIdAsync(id, cancellationToken);
-
-        return _mapper.Map<AccountServiceModel>(account);
-    }
-
     public async Task<string> GetOrCreateAsync(
         AccountTypes accountType,
         string email,

@@ -34,9 +34,7 @@ public class StartOutgoingCallCommandHandlerTests
         _handler = new StartOutgoingCallCommandHandler(
             _notificationProducerMock.Object,
             _chatAgnosticServiceMock.Object,
-            _accountAgnosticServiceMock.Object,
-            _telemetryServiceMock.Object,
-            _mapperMock.Object);
+            _telemetryServiceMock.Object);
     }
 
     [Test]

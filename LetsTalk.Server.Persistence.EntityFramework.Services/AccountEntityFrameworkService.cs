@@ -19,13 +19,6 @@ public class AccountEntityFrameworkService(
     private readonly IMapper _mapper = mapper;
     private readonly IEntityFactory _entityFactory = entityFactory;
 
-    public async Task<AccountServiceModel> GetByIdAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var account = await _accountRepository.GetByIdAsync(int.Parse(id, CultureInfo.InvariantCulture), cancellationToken);
-
-        return _mapper.Map<AccountServiceModel>(account);
-    }
-
     public async Task<string> GetOrCreateAsync(AccountTypes accountType, string email, CancellationToken cancellationToken = default)
     {
         var account = await _accountRepository.GetByEmailAsync(email, accountType, cancellationToken);

@@ -101,7 +101,7 @@ public class LinkPreviewEntityFrameworkServiceTests
         public async Task GetIdByUrlAsync_WithNullUrl_ShouldPassNullUrlToRepository()
         {
             // Arrange
-            string url = null;
+            string url = null!;
             const int linkPreviewId = 0;
 
             _mockLinkPreviewRepository

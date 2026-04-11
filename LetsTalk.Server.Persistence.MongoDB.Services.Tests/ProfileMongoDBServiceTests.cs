@@ -71,8 +71,8 @@ public class ProfileMongoDBServiceTests
         {
             // Arrange
             const string accountId = "507f1f77bcf86cd799439011";
-            Account account = null;
-            ProfileServiceModel expectedProfile = null;
+            Account account = null!;
+            ProfileServiceModel expectedProfile = null!;
 
             _mockAccountRepository
                 .Setup(x => x.GetByIdAsync(accountId, It.IsAny<CancellationToken>()))
@@ -119,9 +119,9 @@ public class ProfileMongoDBServiceTests
         public async Task GetByIdAsync_WithNullId_ShouldPassNullToRepository()
         {
             // Arrange
-            string accountId = null;
-            Account account = null;
-            ProfileServiceModel expectedProfile = null;
+            string accountId = null!;
+            Account account = null!;
+            ProfileServiceModel expectedProfile = null!;
 
             _mockAccountRepository
                 .Setup(x => x.GetByIdAsync(accountId, It.IsAny<CancellationToken>()))
@@ -263,9 +263,9 @@ public class ProfileMongoDBServiceTests
         public async Task UpdateProfileAsync_WithNullParameters_ShouldPassNullsToRepository()
         {
             // Arrange
-            string accountId = null;
-            string firstName = null;
-            string lastName = null;
+            string accountId = null!;
+            string firstName = null!;
+            string lastName = null!;
 
             var updatedAccount = new Account();
             var expectedProfile = new ProfileServiceModel();
@@ -477,7 +477,7 @@ public class ProfileMongoDBServiceTests
             const string accountId = "507f1f77bcf86cd799439011";
             const string firstName = "John";
             const string lastName = "Doe";
-            string imageId = null;
+            string imageId = null!;
             const int width = 100;
             const int height = 100;
             const ImageFormats imageFormat = ImageFormats.Unknown;

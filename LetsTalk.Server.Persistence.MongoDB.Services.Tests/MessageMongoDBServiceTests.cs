@@ -172,8 +172,8 @@ public class MessageMongoDBServiceTests
             var cancellationToken = new CancellationToken();
 
             var createdMessage = new Message { Id = "507f1f77bcf86cd799439017" };
-            Message retrievedMessage = null;
-            MessageServiceModel expectedServiceModel = null;
+            Message retrievedMessage = null!;
+            MessageServiceModel expectedServiceModel = null!;
 
             _mockMessageRepository
                 .Setup(x => x.CreateAsync(senderId, chatId, text, textHtml, false, 0, linkPreviewId, cancellationToken))
@@ -339,7 +339,7 @@ public class MessageMongoDBServiceTests
             const string chatId = "507f1f77bcf86cd799439012";
             const string text = "No image";
             const string textHtml = "<p>No image</p>";
-            string imageId = null;
+            string imageId = null!;
             const int width = 100;
             const int height = 100;
             const ImageFormats imageFormat = ImageFormats.Webp;
@@ -496,7 +496,7 @@ public class MessageMongoDBServiceTests
         public async Task GetPagedAsync_WithNullChatId_ShouldPassNullToRepository()
         {
             // Arrange
-            string chatId = null;
+            string chatId = null!;
             const int pageIndex = 0;
             const int messagesPerPage = 10;
 
@@ -608,8 +608,8 @@ public class MessageMongoDBServiceTests
             const int pageIndex = 0;
             const int messagesPerPage = 10;
 
-            List<Message> messages = null;
-            List<MessageServiceModel> expectedServiceModels = null;
+            List<Message> messages = null!;
+            List<MessageServiceModel> expectedServiceModels = null!;
 
             _mockMessageRepository
                 .Setup(x => x.GetPagedAsync(chatId, pageIndex, messagesPerPage, It.IsAny<CancellationToken>()))
@@ -674,8 +674,8 @@ public class MessageMongoDBServiceTests
         public async Task SetLinkPreviewAsync_WithNullParameters_ShouldPassNullsToRepository()
         {
             // Arrange
-            string messageId = null;
-            string linkPreviewId = null;
+            string messageId = null!;
+            string linkPreviewId = null!;
 
             var updatedMessage = new Message { Id = "507f1f77bcf86cd799439013" };
             var expectedServiceModel = new MessageServiceModel { Id = "507f1f77bcf86cd799439013" };
@@ -782,9 +782,9 @@ public class MessageMongoDBServiceTests
         {
             // Arrange
             const string messageId = "507f1f77bcf86cd799439012";
-            string url = null;
-            string title = null;
-            string imageUrl = null;
+            string url = null!;
+            string title = null!;
+            string imageUrl = null!;
 
             var updatedMessage = new Message { Id = messageId };
             var expectedServiceModel = new MessageServiceModel { Id = messageId };
@@ -888,9 +888,9 @@ public class MessageMongoDBServiceTests
         public async Task MarkAsReadAsync_WithNullParameters_ShouldPassNullsToRepository()
         {
             // Arrange
-            string chatId = null;
-            string accountId = null;
-            string messageId = null;
+            string chatId = null!;
+            string accountId = null!;
+            string messageId = null!;
             var cancellationToken = new CancellationToken();
 
             _mockMessageRepository
@@ -1093,7 +1093,7 @@ public class MessageMongoDBServiceTests
         {
             // Arrange
             const string messageId = "507f1f77bcf86cd799439014";
-            string filename = null;
+            string filename = null!;
             const ImageFormats imageFormat = ImageFormats.Webp;
             const int width = 100;
             const int height = 100;

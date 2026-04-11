@@ -69,7 +69,7 @@ public class AccountEntityFrameworkServiceTests
 
             _mockAccountRepository
                 .Setup(x => x.GetByEmailAsync(email, accountType, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Account)null);
+                .ReturnsAsync((Account)null!);
 
             _mockEntityFactory
                 .Setup(x => x.CreateAccount((int)accountType, email))
@@ -105,7 +105,7 @@ public class AccountEntityFrameworkServiceTests
 
             _mockAccountRepository
                 .SetupSequence(x => x.GetByEmailAsync(email, accountType, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Account)null)
+                .ReturnsAsync((Account)null!)
                 .ReturnsAsync(existingAccount);
 
             _mockEntityFactory

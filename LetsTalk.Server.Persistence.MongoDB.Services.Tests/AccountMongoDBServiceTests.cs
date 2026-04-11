@@ -67,7 +67,7 @@ public class AccountMongoDBServiceTests
 
             _mockAccountRepository
                 .Setup(x => x.GetByEmailAsync(email, accountType, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Account)null);
+                .ReturnsAsync((Account)null!);
 
             _mockAccountRepository
                 .Setup(x => x.CreateAccountAsync(accountType, email, It.IsAny<CancellationToken>()))
@@ -97,7 +97,7 @@ public class AccountMongoDBServiceTests
 
             _mockAccountRepository
                 .SetupSequence(x => x.GetByEmailAsync(email, accountType, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Account)null)  // First call returns null
+                .ReturnsAsync((Account)null!)  // First call returns null
                 .ReturnsAsync(existingAccount);  // Second call (after exception) returns existing account
 
             _mockAccountRepository
@@ -148,7 +148,7 @@ public class AccountMongoDBServiceTests
 
             _mockAccountRepository
                 .Setup(x => x.GetByEmailAsync(email, accountType, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Account)null);
+                .ReturnsAsync((Account)null!);
 
             _mockAccountRepository
                 .Setup(x => x.CreateAccountAsync(accountType, email, It.IsAny<CancellationToken>()))
@@ -167,7 +167,7 @@ public class AccountMongoDBServiceTests
         {
             // Arrange
             const AccountTypes accountType = AccountTypes.Email;
-            string email = null;
+            string email = null!;
             var account = new Account { Id = "507f1f77bcf86cd799439015" };
 
             _mockAccountRepository
@@ -191,7 +191,7 @@ public class AccountMongoDBServiceTests
 
             _mockAccountRepository
                 .Setup(x => x.GetByEmailAsync(email, accountType, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Account)null);
+                .ReturnsAsync((Account)null!);
 
             _mockAccountRepository
                 .Setup(x => x.CreateAccountAsync(accountType, email, It.IsAny<CancellationToken>()))
@@ -355,15 +355,15 @@ public class AccountMongoDBServiceTests
             // Assert
             result.Should().BeEquivalentTo(expectedAccountModels);
             result.First().Image.Should().NotBeNull();
-            result.First().Image.Id.Should().Be("image123");
+            result.First().Image!.Id.Should().Be("image123");
         }
 
         [Test]
         public async Task GetAccountsAsync_WithNullAccountsList_ShouldReturnMappedResult()
         {
             // Arrange
-            List<Account> accounts = null;
-            List<AccountServiceModel> expectedAccountModels = null;
+            List<Account> accounts = null!;
+            List<AccountServiceModel> expectedAccountModels = null!;
 
             _mockAccountRepository
                 .Setup(x => x.GetAccountsAsync(It.IsAny<CancellationToken>()))
@@ -444,7 +444,7 @@ public class AccountMongoDBServiceTests
         public async Task IsAccountIdValidAsync_WithNullId_ShouldPassNullToRepository()
         {
             // Arrange
-            string accountId = null;
+            string accountId = null!;
 
             _mockAccountRepository
                 .Setup(x => x.IsAccountIdValidAsync(accountId, It.IsAny<CancellationToken>()))

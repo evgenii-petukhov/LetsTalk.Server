@@ -269,7 +269,7 @@ public class ChatEntityFrameworkServiceTests
                 .Setup(x => x.GetIndividualChatByAccountIdsAsync(
                     It.Is<List<int>>(ids => ids.SequenceEqual(accountIdsAsInt)), 
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             _mockChatRepository
                 .Setup(x => x.CreateAsync(It.IsAny<Chat>(), It.IsAny<CancellationToken>()))
@@ -333,7 +333,7 @@ public class ChatEntityFrameworkServiceTests
                 .Setup(x => x.GetIndividualChatByAccountIdsAsync(
                     It.Is<List<int>>(ids => ids.SequenceEqual(accountIdsAsInt)), 
                     cancellationToken))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             _mockChatRepository
                 .Setup(x => x.CreateAsync(It.IsAny<Chat>(), cancellationToken))
@@ -376,7 +376,7 @@ public class ChatEntityFrameworkServiceTests
                 .Setup(x => x.GetIndividualChatByAccountIdsAsync(
                     It.Is<List<int>>(ids => ids.SequenceEqual(accountIdsAsInt)), 
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             _mockChatRepository
                 .Setup(x => x.CreateAsync(It.IsAny<Chat>(), It.IsAny<CancellationToken>()))

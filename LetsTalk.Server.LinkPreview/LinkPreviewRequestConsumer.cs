@@ -38,10 +38,14 @@ public class LinkPreviewRequestConsumer(
         var model = await _linkPreviewService.GenerateLinkPreviewAsync(new Utility.Abstractions.Models.LinkPreviewRequest
         {
             Url = context.Message.Url,
-            SecretKey = _linkPreviewSettings.SecretKey
+            SecretKey = _linkPreviewSettings.SecretKey,
+            ChatId = context.Message.ChatId,
+            MessageId = context.Message.MessageId,
+            Token = context.Message.Token,
+            ApiUrl = _applicationUrlSettings.Api
         });
 
-        if (model == null)
+        /*if (model == null)
         {
             _logTitleEmpty(_logger, context.Message.Url, null);
             return;
@@ -65,6 +69,6 @@ public class LinkPreviewRequestConsumer(
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {context.Message.Token}");
         var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
         await apiClient.SetLinkPreviewAsync(payload, context.CancellationToken);
-        _logSuccess(_logger, context.Message.Url, null);
+        _logSuccess(_logger, context.Message.Url, null);*/
     }
 }

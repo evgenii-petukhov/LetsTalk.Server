@@ -82,7 +82,7 @@ public static class LinkPreviewServiceRegistration
         {
             case "aws":
                 services.Configure<AwsSettings>(configuration.GetSection("Aws"));
-                services.AddScoped<ILinkPreviewService, LambdaLinkPreviewGenerator>();
+                services.AddScoped<ILinkPreviewService, LinkPreviewLambdaLauncher>();
                 break;
             default:
                 services.AddScoped<IDownloadService, DownloadService>();

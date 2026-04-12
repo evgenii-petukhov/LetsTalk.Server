@@ -11,14 +11,14 @@ using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 
 namespace LetsTalk.Server.LinkPreview.Services;
 
-public class LambdaLinkPreviewGenerator(
-    ILogger<LambdaLinkPreviewGenerator> logger,
+public class LinkPreviewLambdaLauncher(
+    ILogger<LinkPreviewLambdaLauncher> logger,
     IOptions<AwsSettings> awsOptions) : ILinkPreviewService
 {
     private static readonly Action<ILogger, string, Exception?> _logTitleEmpty =
-        LoggerMessage.Define<string>(LogLevel.Information, new EventId(1, nameof(LambdaLinkPreviewGenerator)), "Title is empty: {Url}");
+        LoggerMessage.Define<string>(LogLevel.Information, new EventId(1, nameof(LinkPreviewLambdaLauncher)), "Title is empty: {Url}");
 
-    private readonly ILogger<LambdaLinkPreviewGenerator> _logger = logger;
+    private readonly ILogger<LinkPreviewLambdaLauncher> _logger = logger;
     private readonly AwsSettings _awsSettings = awsOptions.Value;
 
     public async Task<LinkPreviewResponse> GenerateLinkPreviewAsync(LinkPreviewRequest request, CancellationToken cancellationToken)

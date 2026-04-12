@@ -3,7 +3,6 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.LinkPreview.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LetsTalk.Server.SignPackage;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 using LetsTalk.Server.LinkPreview.Utility.Services;
 using MassTransit;
@@ -70,7 +69,6 @@ public static class LinkPreviewServiceRegistration
         });
         services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
         services.Configure<LinkPreviewSettings>(configuration.GetSection("LinkPreview"));
-        services.AddSignPackageServices(configuration);
         services.AddScoped<IHttpClientService, HttpClientService>();
         services.AddHttpClient(nameof(HttpClientService)).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {

@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Lambda" Version="3.7.412.36" />
     <PackageReference Include="MassTransit" Version="8.4.1" />
     <PackageReference Include="MassTransit.AmazonSQS" Version="8.4.1" />
     <PackageReference Include="MassTransit.Kafka" Version="8.4.1" />

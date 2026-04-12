@@ -28,7 +28,7 @@ public class CreateMessageCommandHandlerTests
     private Mock<ILinkPreviewAgnosticService> _linkPreviewAgnosticServiceMock;
     private Mock<IChatCacheManager> _chatCacheManagerMock;
     private Mock<IProducer<Notification>> _notificationProducerMock;
-    private Mock<IProducer<LinkPreviewRequest>> _linkPreviewProducerMock;
+    private Mock<ILinkPreviewLauncher> _linkPreviewLauncherMock;
     private Mock<IProducer<ImageResizeRequest>> _imageResizeProducerMock;
     private CreateMessageCommandHandler _handler;
 
@@ -43,7 +43,7 @@ public class CreateMessageCommandHandlerTests
         _linkPreviewAgnosticServiceMock = new Mock<ILinkPreviewAgnosticService>();
         _chatCacheManagerMock = new Mock<IChatCacheManager>();
         _notificationProducerMock = new Mock<IProducer<Notification>>();
-        _linkPreviewProducerMock = new Mock<IProducer<LinkPreviewRequest>>();
+        _linkPreviewLauncherMock = new Mock<ILinkPreviewLauncher>();
         _imageResizeProducerMock = new Mock<IProducer<ImageResizeRequest>>();
 
         _handler = new CreateMessageCommandHandler(
@@ -55,7 +55,7 @@ public class CreateMessageCommandHandlerTests
             _linkPreviewAgnosticServiceMock.Object,
             _chatCacheManagerMock.Object,
             _notificationProducerMock.Object,
-            _linkPreviewProducerMock.Object,
+            _linkPreviewLauncherMock.Object,
             _imageResizeProducerMock.Object);
     }
 
@@ -249,8 +249,8 @@ public class CreateMessageCommandHandlerTests
             x => x.GetIdByUrlAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Never);
 
-        _linkPreviewProducerMock.Verify(
-            x => x.PublishAsync(It.IsAny<LinkPreviewRequest>(), It.IsAny<CancellationToken>()),
+        _linkPreviewLauncherMock.Verify(
+            x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 
@@ -302,8 +302,8 @@ public class CreateMessageCommandHandlerTests
         await _handler.Handle(command, cancellationToken);
 
         // Assert
-        _linkPreviewProducerMock.Verify(
-            x => x.PublishAsync(It.IsAny<LinkPreviewRequest>(), It.IsAny<CancellationToken>()),
+        _linkPreviewLauncherMock.Verify(
+            x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 
@@ -311,10 +311,12 @@ public class CreateMessageCommandHandlerTests
     public async Task Handle_WhenUrlExistsAndNoLinkPreview_ShouldPublishLinkPreviewRequest()
     {
         // Arrange
+        const string chatId = "chat-456";
+
         var command = new CreateMessageCommand
         {
             SenderId = "sender-123",
-            ChatId = "chat-456",
+            ChatId = chatId,
             Text = "New link to preview",
             Image = null
         };
@@ -336,7 +338,7 @@ public class CreateMessageCommandHandlerTests
         var message = new MessageServiceModel { Id = "msg-789" };
         
         _messageAgnosticServiceMock
-            .Setup(x => x.CreateMessageAsync("sender-123", "chat-456", "New link to preview", html, false, 0, null!, cancellationToken))
+            .Setup(x => x.CreateMessageAsync("sender-123", chatId, "New link to preview", html, false, 0, null!, cancellationToken))
             .ReturnsAsync(message);
 
         _mapperMock
@@ -345,7 +347,7 @@ public class CreateMessageCommandHandlerTests
 
         var accountIds = new List<string> { "sender-123", "recipient-456" };
         _chatAgnosticServiceMock
-            .Setup(x => x.GetChatMemberAccountIdsAsync("chat-456", cancellationToken))
+            .Setup(x => x.GetChatMemberAccountIdsAsync(chatId, cancellationToken))
             .ReturnsAsync(accountIds);
 
         SetupAsyncOperations(cancellationToken);
@@ -354,12 +356,8 @@ public class CreateMessageCommandHandlerTests
         await _handler.Handle(command, cancellationToken);
 
         // Assert
-        _linkPreviewProducerMock.Verify(
-            x => x.PublishAsync(It.Is<LinkPreviewRequest>(req =>
-                req.AccountIds == accountIds &&
-                req.MessageId == messageDto.Id &&
-                req.Url == url &&
-                req.ChatId == "chat-456"), cancellationToken),
+        _linkPreviewLauncherMock.Verify(
+            x => x.LaunchAsync(messageDto.Id, url, chatId, It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -558,8 +556,8 @@ public class CreateMessageCommandHandlerTests
             .Setup(x => x.ClearAsync(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
 
-        _linkPreviewProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<LinkPreviewRequest>(), cancellationToken))
+        _linkPreviewLauncherMock
+            .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         _imageResizeProducerMock
@@ -601,8 +599,8 @@ public class CreateMessageCommandHandlerTests
             .Setup(x => x.PublishAsync(It.IsAny<Notification>(), cancellationToken))
             .Returns(Task.CompletedTask);
 
-        _linkPreviewProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<LinkPreviewRequest>(), cancellationToken))
+        _linkPreviewLauncherMock
+            .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         _imageResizeProducerMock
@@ -739,8 +737,8 @@ public class CreateMessageCommandHandlerTests
             .Setup(x => x.PublishAsync(It.IsAny<Notification>(), cancellationToken))
             .Returns(Task.CompletedTask);
 
-        _linkPreviewProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<LinkPreviewRequest>(), cancellationToken))
+        _linkPreviewLauncherMock
+            .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         _imageResizeProducerMock

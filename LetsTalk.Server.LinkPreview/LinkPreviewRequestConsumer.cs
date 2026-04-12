@@ -45,7 +45,7 @@ public class LinkPreviewRequestConsumer(
             ApiUrl = _applicationUrlSettings.Api
         });
 
-        /*if (model == null)
+        if (model == null)
         {
             _logTitleEmpty(_logger, context.Message.Url, null);
             return;
@@ -69,6 +69,6 @@ public class LinkPreviewRequestConsumer(
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {context.Message.Token}");
         var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
         await apiClient.SetLinkPreviewAsync(payload, context.CancellationToken);
-        _logSuccess(_logger, context.Message.Url, null);*/
+        _logSuccess(_logger, context.Message.Url, null);
     }
 }

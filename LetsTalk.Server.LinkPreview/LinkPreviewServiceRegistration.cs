@@ -76,19 +76,10 @@ public static class LinkPreviewServiceRegistration
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 #endif
         });
-        switch (configuration.GetValue<string>("Features:LinkPreviewMode"))
-        {
-            case "aws":
-                services.Configure<AwsSettings>(configuration.GetSection("Aws"));
-                services.AddScoped<ILinkPreviewService, LinkPreviewLambdaLauncher>();
-                break;
-            default:
-                services.AddScoped<IDownloadService, DownloadService>();
-                services.AddScoped<IRegexService, RegexService>();
-                services.AddScoped<ILinkPreviewService, FallbackLinkPreviewService>();
-                services.DecorateScoped<ILinkPreviewService, LinkPreviewService>();
-                break;
-        }
+        services.AddScoped<IDownloadService, DownloadService>();
+        services.AddScoped<IRegexService, RegexService>();
+        services.AddScoped<ILinkPreviewService, FallbackLinkPreviewService>();
+        services.DecorateScoped<ILinkPreviewService, LinkPreviewService>();
 
         return services;
     }

@@ -476,7 +476,7 @@ public class GetProfileQueryHandlerTests
 
         _profileServiceMock
             .Setup(x => x.GetProfileAsync("account-123", cancellationToken))
-            .ReturnsAsync((ProfileDto?)null);
+            .ReturnsAsync((ProfileDto?)null!);
 
         _mapperMock
             .Setup(x => x.Map<ProfileDto>(null))

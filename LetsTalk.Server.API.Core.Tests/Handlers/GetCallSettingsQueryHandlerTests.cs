@@ -104,7 +104,7 @@ public class GetCallSettingsQueryHandlerTests
 
         _iceServerConfigurationServiceMock
             .Setup(x => x.GetIceServerConfigurationAsync(cancellationToken))
-            .ReturnsAsync((string?)null);
+            .ReturnsAsync((string?)null!);
 
         _optionsMock
             .Setup(x => x.Value)

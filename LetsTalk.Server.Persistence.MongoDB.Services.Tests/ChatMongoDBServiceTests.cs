@@ -82,7 +82,7 @@ public class ChatMongoDBServiceTests
         public async Task GetChatMemberAccountIdsAsync_WithNullChatId_ShouldPassNullToRepository()
         {
             // Arrange
-            string chatId = null;
+            string chatId = null!;
             var expectedAccountIds = new List<string>();
 
             _mockChatRepository
@@ -159,7 +159,7 @@ public class ChatMongoDBServiceTests
         public async Task IsChatIdValidAsync_WithNullChatId_ShouldPassNullToRepository()
         {
             // Arrange
-            string chatId = null;
+            string chatId = null!;
 
             _mockChatRepository
                 .Setup(x => x.IsChatIdValidAsync(chatId, It.IsAny<CancellationToken>()))
@@ -234,7 +234,7 @@ public class ChatMongoDBServiceTests
 
             _mockChatRepository
                 .Setup(x => x.GetIndividualChatByAccountIdsAsync(accountIds, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             _mockChatRepository
                 .Setup(x => x.CreateIndividualChatAsync(accountIds, It.IsAny<CancellationToken>()))
@@ -287,7 +287,7 @@ public class ChatMongoDBServiceTests
 
             _mockChatRepository
                 .Setup(x => x.GetIndividualChatByAccountIdsAsync(accountIds, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             _mockChatRepository
                 .Setup(x => x.CreateIndividualChatAsync(accountIds, It.IsAny<CancellationToken>()))
@@ -316,7 +316,7 @@ public class ChatMongoDBServiceTests
 
             _mockChatRepository
                 .Setup(x => x.GetIndividualChatByAccountIdsAsync(accountIds, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             _mockChatRepository
                 .Setup(x => x.CreateIndividualChatAsync(accountIds, It.IsAny<CancellationToken>()))
@@ -338,11 +338,11 @@ public class ChatMongoDBServiceTests
 
             _mockChatRepository
                 .Setup(x => x.GetIndividualChatByAccountIdsAsync(accountIds, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             _mockChatRepository
                 .Setup(x => x.CreateIndividualChatAsync(accountIds, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Chat)null);
+                .ReturnsAsync((Chat)null!);
 
             // Act & Assert
             var act = async () => await _service.CreateIndividualChatAsync(accountIds);
@@ -417,7 +417,7 @@ public class ChatMongoDBServiceTests
         public async Task GetAccountIdsInIndividualChatsAsync_WithNullAccountId_ShouldPassNullToRepository()
         {
             // Arrange
-            string accountId = null;
+            string accountId = null!;
             var expectedAccountIds = new List<string>();
 
             _mockChatRepository
@@ -516,7 +516,7 @@ public class ChatMongoDBServiceTests
         public async Task IsAccountChatMemberAsync_WithNullChatId_ShouldPassNullToRepository()
         {
             // Arrange
-            string chatId = null;
+            string chatId = null!;
             const string accountId = "507f1f77bcf86cd799439012";
 
             _mockChatRepository
@@ -536,7 +536,7 @@ public class ChatMongoDBServiceTests
         {
             // Arrange
             const string chatId = "507f1f77bcf86cd799439011";
-            string accountId = null;
+            string accountId = null!;
 
             _mockChatRepository
                 .Setup(x => x.IsAccountChatMemberAsync(chatId, accountId, It.IsAny<CancellationToken>()))

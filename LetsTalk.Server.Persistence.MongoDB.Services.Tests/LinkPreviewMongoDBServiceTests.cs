@@ -47,7 +47,7 @@ public class LinkPreviewMongoDBServiceTests
 
             _mockLinkPreviewRepository
                 .Setup(x => x.GetIdByUrlAsync(url, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((string)null);
+                .ReturnsAsync((string)null!);
 
             // Act
             var result = await _service.GetIdByUrlAsync(url);
@@ -80,11 +80,11 @@ public class LinkPreviewMongoDBServiceTests
         public async Task GetIdByUrlAsync_WithNullUrl_ShouldPassNullToRepository()
         {
             // Arrange
-            string url = null;
+            string url = null!;
 
             _mockLinkPreviewRepository
                 .Setup(x => x.GetIdByUrlAsync(url, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((string)null);
+                .ReturnsAsync((string)null!);
 
             // Act
             var result = await _service.GetIdByUrlAsync(url);
@@ -102,7 +102,7 @@ public class LinkPreviewMongoDBServiceTests
 
             _mockLinkPreviewRepository
                 .Setup(x => x.GetIdByUrlAsync(url, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((string)null);
+                .ReturnsAsync((string)null!);
 
             // Act
             var result = await _service.GetIdByUrlAsync(url);
@@ -120,7 +120,7 @@ public class LinkPreviewMongoDBServiceTests
 
             _mockLinkPreviewRepository
                 .Setup(x => x.GetIdByUrlAsync(url, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((string)null);
+                .ReturnsAsync((string)null!);
 
             // Act
             var result = await _service.GetIdByUrlAsync(url);
@@ -252,7 +252,7 @@ public class LinkPreviewMongoDBServiceTests
 
             _mockLinkPreviewRepository
                 .Setup(x => x.GetIdByUrlAsync(url, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((string)null);
+                .ReturnsAsync((string)null!);
 
             // Act
             var result = await _service.GetIdByUrlAsync(url);

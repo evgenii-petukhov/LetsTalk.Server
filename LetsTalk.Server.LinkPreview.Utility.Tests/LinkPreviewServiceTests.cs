@@ -62,7 +62,7 @@ public class LinkPreviewServiceTests
         _downloadServiceMock.Setup(x => x.DownloadAsStringAsync(request.Url, cancellationToken))
             .ReturnsAsync(pageContent);
         _regexServiceMock.Setup(x => x.GetOpenGraphModel(pageContent))
-            .Returns((OpenGraphModel)null);
+            .Returns((OpenGraphModel)null!);
 
         // Act
         var result = await _linkPreviewService.GenerateLinkPreviewAsync(request, cancellationToken);

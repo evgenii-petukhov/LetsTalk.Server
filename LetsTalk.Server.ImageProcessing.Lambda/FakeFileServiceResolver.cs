@@ -10,11 +10,11 @@ public class FakeFileServiceResolver(string bucketName) : IFileServiceResolver
 
     public IFileService Resolve()
     {
-        return new AmazonFileService(_bucketName);
+        throw new NotImplementedException();
     }
 
     public IFileService Resolve(FileStorageTypes fileStorageType)
     {
-        throw new NotImplementedException();
+        return new AmazonFileService(_bucketName);
     }
 }

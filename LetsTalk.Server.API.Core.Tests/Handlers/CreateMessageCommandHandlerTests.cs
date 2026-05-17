@@ -13,7 +13,6 @@ using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using LetsTalk.Server.Persistence.Enums;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 
@@ -29,7 +28,7 @@ public class CreateMessageCommandHandlerTests
     private Mock<IChatCacheManager> _chatCacheManagerMock;
     private Mock<IProducer<Notification>> _notificationProducerMock;
     private Mock<ILinkPreviewLauncher> _linkPreviewLauncherMock;
-    private Mock<IProducer<ImageResizeRequest>> _imageResizeProducerMock;
+    private Mock<IImageProcessingLauncher> _imageProcessingLauncherMock;
     private CreateMessageCommandHandler _handler;
 
     [SetUp]
@@ -44,7 +43,7 @@ public class CreateMessageCommandHandlerTests
         _chatCacheManagerMock = new Mock<IChatCacheManager>();
         _notificationProducerMock = new Mock<IProducer<Notification>>();
         _linkPreviewLauncherMock = new Mock<ILinkPreviewLauncher>();
-        _imageResizeProducerMock = new Mock<IProducer<ImageResizeRequest>>();
+        _imageProcessingLauncherMock = new Mock<IImageProcessingLauncher>();
 
         _handler = new CreateMessageCommandHandler(
             _chatAgnosticServiceMock.Object,
@@ -56,7 +55,7 @@ public class CreateMessageCommandHandlerTests
             _chatCacheManagerMock.Object,
             _notificationProducerMock.Object,
             _linkPreviewLauncherMock.Object,
-            _imageResizeProducerMock.Object);
+            _imageProcessingLauncherMock.Object);
     }
 
     [Test]
@@ -120,6 +119,8 @@ public class CreateMessageCommandHandlerTests
     public async Task Handle_WhenValidMessageWithImage_ShouldCreateMessageWithImageSuccessfully()
     {
         // Arrange
+        const string chatId = "chat-456";
+
         var imageRequest = new ImageRequestModel
         {
             Id = "image-123",
@@ -132,7 +133,7 @@ public class CreateMessageCommandHandlerTests
         var command = new CreateMessageCommand
         {
             SenderId = "sender-123",
-            ChatId = "chat-456",
+            ChatId = chatId,
             Text = "Check this image",
             Image = imageRequest
         };
@@ -151,8 +152,8 @@ public class CreateMessageCommandHandlerTests
         
         _messageAgnosticServiceMock
             .Setup(x => x.CreateMessageAsync(
-                "sender-123", 
-                "chat-456", 
+                "sender-123",
+                chatId, 
                 "Check this image", 
                 html, 
                 "image-123", 
@@ -169,7 +170,7 @@ public class CreateMessageCommandHandlerTests
 
         var accountIds = new List<string> { "sender-123", "recipient-456" };
         _chatAgnosticServiceMock
-            .Setup(x => x.GetChatMemberAccountIdsAsync("chat-456", cancellationToken))
+            .Setup(x => x.GetChatMemberAccountIdsAsync(chatId, cancellationToken))
             .ReturnsAsync(accountIds);
 
         SetupAsyncOperations(cancellationToken);
@@ -184,8 +185,8 @@ public class CreateMessageCommandHandlerTests
 
         _messageAgnosticServiceMock.Verify(
             x => x.CreateMessageAsync(
-                "sender-123", 
-                "chat-456", 
+                "sender-123",
+                chatId, 
                 "Check this image", 
                 html, 
                 "image-123", 
@@ -196,7 +197,9 @@ public class CreateMessageCommandHandlerTests
                 cancellationToken),
             Times.Once);
 
-        VerifyImageResizePublishing(accountIds, messageDto, imageRequest, cancellationToken);
+        _imageProcessingLauncherMock.Verify(
+            x => x.LaunchAsync(messageDto.Id, imageRequest.Id, chatId, imageRequest.FileStorageTypeId, It.IsAny<string>(), cancellationToken),
+            Times.Once);
     }
 
     [Test]
@@ -560,8 +563,8 @@ public class CreateMessageCommandHandlerTests
             .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        _imageResizeProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<ImageResizeRequest>(), cancellationToken))
+        _imageProcessingLauncherMock
+            .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), cancellationToken))
             .Returns(Task.CompletedTask);
 
         // Setup notification producer to fail - this must be last to override any other setups
@@ -603,8 +606,8 @@ public class CreateMessageCommandHandlerTests
             .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        _imageResizeProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<ImageResizeRequest>(), cancellationToken))
+        _imageProcessingLauncherMock
+            .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), cancellationToken))
             .Returns(Task.CompletedTask);
 
         // Setup message cache manager to fail - this must be last to override any other setups
@@ -741,8 +744,8 @@ public class CreateMessageCommandHandlerTests
             .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        _imageResizeProducerMock
-            .Setup(x => x.PublishAsync(It.IsAny<ImageResizeRequest>(), cancellationToken))
+        _imageProcessingLauncherMock
+            .Setup(x => x.LaunchAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), cancellationToken))
             .Returns(Task.CompletedTask);
     }
 
@@ -775,17 +778,5 @@ public class CreateMessageCommandHandlerTests
         {
             _chatCacheManagerMock.Verify(x => x.ClearAsync(accountId), Times.Once);
         }
-    }
-
-    private void VerifyImageResizePublishing(List<string> accountIds, MessageDto messageDto, ImageRequestModel imageRequest, CancellationToken cancellationToken)
-    {
-        _imageResizeProducerMock.Verify(
-            x => x.PublishAsync(It.Is<ImageResizeRequest>(req =>
-                req.AccountIds == accountIds &&
-                req.MessageId == messageDto.Id &&
-                req.ImageId == imageRequest.Id &&
-                req.ChatId == "chat-456" &&
-                req.FileStorageTypeId == imageRequest.FileStorageTypeId), cancellationToken),
-            Times.Once);
     }
 }

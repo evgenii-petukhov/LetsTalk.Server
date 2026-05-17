@@ -42,6 +42,7 @@ public static class FileStorageServiceRegistration
         services.AddLoggingServices();
         services.AddImageResizeEngineServices();
         services.Configure<FileStorageSettings>(configuration.GetSection("FileStorage"));
+        services.Configure<ImageConstraints>(configuration.GetSection("ImageConstraints"));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMassTransit(x =>
         {

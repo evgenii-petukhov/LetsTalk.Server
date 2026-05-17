@@ -21,7 +21,7 @@ public class CreateMessageCommandHandler(
     IChatCacheManager chatCacheManager,
     IProducer<Notification> notificationProducer,
     ILinkPreviewLauncher linkPreviewLauncher,
-    IProducer<ImageResizeRequest> imageResizeProducer
+    IImageProcessingLauncher imageProcessingLauncher
 ) : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
@@ -33,7 +33,7 @@ public class CreateMessageCommandHandler(
     private readonly IChatCacheManager _chatCacheManager = chatCacheManager;
     private readonly IProducer<Notification> _notificationProducer = notificationProducer;
     private readonly ILinkPreviewLauncher _linkPreviewLauncher = linkPreviewLauncher;
-    private readonly IProducer<ImageResizeRequest> _imageResizeProducer = imageResizeProducer;
+    private readonly IImageProcessingLauncher _imageProcessingLauncher = imageProcessingLauncher;
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
@@ -91,18 +91,21 @@ public class CreateMessageCommandHandler(
             Task.WhenAll(accountIds.Select(_chatCacheManager.ClearAsync)),
             (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId))
                 ? Task.CompletedTask
-                : _linkPreviewLauncher.LaunchAsync(messageDto.Id!, url, request.ChatId!, request.Token!, cancellationToken),
+                : _linkPreviewLauncher.LaunchAsync(
+                    messageDto.Id!,
+                    url,
+                    request.ChatId!,
+                    request.Token!,
+                    cancellationToken),
             request.Image == null
                 ? Task.CompletedTask
-                : _imageResizeProducer.PublishAsync(new ImageResizeRequest
-                {
-                    AccountIds = accountIds,
-                    MessageId = messageDto.Id,
-                    ImageId = request.Image.Id,
-                    ChatId = request.ChatId,
-                    FileStorageTypeId = request.Image.FileStorageTypeId,
-                    Token = request.Token,
-                }, cancellationToken));
+                : _imageProcessingLauncher.LaunchAsync(
+                    messageDto.Id!,
+                    request.Image.Id!,
+                    request.ChatId!,
+                    request.Image.FileStorageTypeId,
+                    request.Token!,
+                    cancellationToken));
 
         return new CreateMessageResponse
         {

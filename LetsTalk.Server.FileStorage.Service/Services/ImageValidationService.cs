@@ -11,13 +11,13 @@ namespace LetsTalk.Server.FileStorage.Service.Services;
 
 public class ImageValidationService(
     IImageInfoService imageInfoService,
-    IOptions<FileStorageSettings> options) : IImageValidationService
+    IOptions<ImageConstraints> options) : IImageValidationService
 {
     private const string ImageDimensionsErrorMessage = "Image size exceeds max dimensions";
     private const string ImageFormatErrorMessage = "Image format is not supported";
 
     private readonly IImageInfoService _imageInfoService = imageInfoService;
-    private readonly FileStorageSettings _fileStorageSettings = options.Value;
+    private readonly ImageConstraints _imageConstraints = options.Value;
 
     public ImageValidationResult ValidateImage(byte[] data, ImageRoles imageRole)
     {
@@ -29,12 +29,14 @@ public class ImageValidationService(
         }
 
         (int width, int height) = _imageInfoService.GetImageSize(data);
-        if (imageRole == ImageRoles.Avatar && (width > _fileStorageSettings.AvatarMaxWidth || height > _fileStorageSettings.AvatarMaxHeight))
+        if (imageRole == ImageRoles.Avatar &&
+            (width > _imageConstraints.AvatarMaxWidth || height > _imageConstraints.AvatarMaxHeight))
         {
             throw new ImageSizeException(ImageDimensionsErrorMessage);
         }
 
-        if (imageRole == ImageRoles.Message && (width > _fileStorageSettings.PictureMaxWidth || height > _fileStorageSettings.PictureMaxHeight))
+        if (imageRole == ImageRoles.Message &&
+            (width > _imageConstraints.PictureMaxWidth || height > _imageConstraints.PictureMaxHeight))
         {
             throw new ImageSizeException(ImageDimensionsErrorMessage);
         }

@@ -78,6 +78,7 @@ public static class CoreServicesRegistration
         services.Configure<RtcSettings>(configuration.GetSection("Rtc"));
         services.Configure<CloudflareSettings>(configuration.GetSection("Cloudflare"));
         services.Configure<ApplicationInsightsSettings>(configuration.GetSection("ApplicationInsights"));
+        services.Configure<ImageConstraints>(configuration.GetSection("ImageConstraints"));
 
         switch (configuration.GetValue<string>("Features:CachingMode"))
         {
@@ -141,6 +142,17 @@ public static class CoreServicesRegistration
                 break;
             default:
                 services.AddScoped<ILinkPreviewLauncher, LinkPreviewServiceLauncher>();
+                break;
+        }
+
+        switch (configuration.GetValue<string>("Features:ImageProcessingMode"))
+        {
+            case "aws":
+                services.Configure<AwsSettings>(configuration.GetSection("Aws"));
+                services.AddScoped<IImageProcessingLauncher, ImageProcessingLambdaLauncher>();
+                break;
+            default:
+                services.AddScoped<IImageProcessingLauncher, ImageProcessingServiceLauncher>();
                 break;
         }
 

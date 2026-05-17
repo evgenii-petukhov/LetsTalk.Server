@@ -11,20 +11,19 @@ namespace LetsTalk.Server.ImageProcessing.Service;
 public class ImageResizeRequestConsumer(
     IImageProcessingService imageProcessingService,
     IHttpClientFactory httpClientFactory,
-    IOptions<ApplicationUrlSettings> applicationUrlOptions,
-    IOptions<FileStorageSettings> fileStorageOptions) : IConsumer<ImageResizeRequest>
+    IOptions<ApplicationUrlSettings> applicationUrlOptions) : IConsumer<ImageResizeRequest>
 {
     private readonly IImageProcessingService _imageProcessingService = imageProcessingService;
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
     private readonly ApplicationUrlSettings _applicationUrlSettings = applicationUrlOptions.Value;
-    private readonly FileStorageSettings _fileStorageSettings = fileStorageOptions.Value;
 
     public async Task Consume(ConsumeContext<ImageResizeRequest> context)
     {
         var response = await _imageProcessingService.ProcessImageAsync(
             context.Message.ImageId!,
-            _fileStorageSettings.ImagePreviewMaxWidth,
-            _fileStorageSettings.ImagePreviewMaxHeight,
+            context.Message.MaxWidth,
+            context.Message.MaxHeight,
+            (FileStorageTypes)context.Message.FileStorageTypeId,
             context.CancellationToken);
 
         var payload = new SetImagePreviewRequest

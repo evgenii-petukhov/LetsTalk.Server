@@ -45,15 +45,19 @@ public class LinkPreviewRequestConsumer(
             ApiUrl = _applicationUrlSettings.Api
         });
 
-        if (model == null)
-        {
-            _logTitleEmpty(_logger, context.Message.Url, null);
-            return;
-        }
-
         if (model.Error != null)
         {
             _logUnableToDownload(_logger, context.Message.Url, model.Error);
+
+            if (model.OpenGraphModel == null)
+            {
+                return;
+            }
+        }
+
+        if (model.OpenGraphModel == null || string.IsNullOrWhiteSpace(model.OpenGraphModel.Title))
+        {
+            _logTitleEmpty(_logger, context.Message.Url, null);
             return;
         }
 

@@ -26,15 +26,19 @@ namespace LetsTalk.Server.LinkPreview.Lambda
 
             var model = await linkPreviewService.GenerateLinkPreviewAsync(request);
 
-            if (model == null)
-            {
-                context.Logger.LogInformation($"Title is empty: {request.Url}");
-                return;
-            }
-
             if (model.Error != null)
             {
-                context.Logger.LogError($"Unable to download: {request.Url}");
+                context.Logger.LogError(model.Error, $"Unable to download: {request.Url}");
+
+                if (model.OpenGraphModel == null)
+                {
+                    return;
+                }
+            }
+
+            if (model.OpenGraphModel == null || string.IsNullOrWhiteSpace(model.OpenGraphModel.Title))
+            {
+                context.Logger.LogInformation($"Title is empty: {request.Url}");
                 return;
             }
 

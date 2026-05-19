@@ -149,6 +149,7 @@ public static class CoreServicesRegistration
         {
             case "aws":
                 services.Configure<AwsSettings>(configuration.GetSection("Aws"));
+                services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
                 services.AddScoped<IImageProcessingLauncher, ImageProcessingLambdaLauncher>();
                 break;
             default:

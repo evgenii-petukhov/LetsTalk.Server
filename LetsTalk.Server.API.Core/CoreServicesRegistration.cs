@@ -1,22 +1,22 @@
-﻿using LetsTalk.Server.Configuration;
-using LetsTalk.Server.Configuration.Models;
+﻿using Confluent.Kafka;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Services;
+using LetsTalk.Server.API.Core.Services.Cache.Accounts;
+using LetsTalk.Server.API.Core.Services.Cache.Chats;
+using LetsTalk.Server.API.Core.Services.Cache.IceServerConfiguration;
+using LetsTalk.Server.API.Core.Services.Cache.Messages;
+using LetsTalk.Server.API.Core.Services.Cache.Profile;
+using LetsTalk.Server.Configuration;
+using LetsTalk.Server.Configuration.Models;
+using LetsTalk.Server.DependencyInjection;
+using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Persistence.AgnosticServices;
+using LetsTalk.Server.Persistence.Redis;
+using LetsTalk.Server.Telemetry.AgnosticServices;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using LetsTalk.Server.API.Core.Services.Cache.Messages;
-using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.API.Core.Services.Cache.Chats;
-using LetsTalk.Server.API.Core.Services.Cache.Profile;
-using LetsTalk.Server.Persistence.AgnosticServices;
-using LetsTalk.Server.Persistence.Redis;
-using MassTransit;
-using Confluent.Kafka;
-using LetsTalk.Server.Kafka.Models;
-using LetsTalk.Server.API.Core.Services.Cache.Accounts;
-using LetsTalk.Server.API.Core.Services.Cache.IceServerConfiguration;
-using LetsTalk.Server.Telemetry.AgnosticServices;
 
 namespace LetsTalk.Server.API.Core;
 
@@ -78,6 +78,7 @@ public static class CoreServicesRegistration
         services.Configure<RtcSettings>(configuration.GetSection("Rtc"));
         services.Configure<CloudflareSettings>(configuration.GetSection("Cloudflare"));
         services.Configure<ApplicationInsightsSettings>(configuration.GetSection("ApplicationInsights"));
+        services.Configure<ImageConstraints>(configuration.GetSection("ImageConstraints"));
 
         switch (configuration.GetValue<string>("Features:CachingMode"))
         {
@@ -130,6 +131,31 @@ public static class CoreServicesRegistration
         services.AddHttpClient(nameof(IceServerConfigurationService));
         await services.AddPersistenceAgnosticServices(configuration);
         services.AddTelemetryAgnosticServices(configuration);
+
+        switch (configuration.GetValue<string>("Features:LinkPreviewMode"))
+        {
+            case "aws":
+                services.Configure<AwsSettings>(configuration.GetSection("Aws"));
+                services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
+                services.Configure<LinkPreviewSettings>(configuration.GetSection("LinkPreview"));
+                services.AddScoped<ILinkPreviewLauncher, LinkPreviewLambdaLauncher>();
+                break;
+            default:
+                services.AddScoped<ILinkPreviewLauncher, LinkPreviewServiceLauncher>();
+                break;
+        }
+
+        switch (configuration.GetValue<string>("Features:ImageProcessingMode"))
+        {
+            case "aws":
+                services.Configure<AwsSettings>(configuration.GetSection("Aws"));
+                services.Configure<ApplicationUrlSettings>(configuration.GetSection("ApplicationUrls"));
+                services.AddScoped<IImageProcessingLauncher, ImageProcessingLambdaLauncher>();
+                break;
+            default:
+                services.AddScoped<IImageProcessingLauncher, ImageProcessingServiceLauncher>();
+                break;
+        }
 
         return services;
     }

@@ -1,6 +1,8 @@
 using Amazon.Lambda.Core;
+using LetsTalk.Server.Infrastructure.ApiClient;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions.Models;
 using LetsTalk.Server.LinkPreview.Utility.Services;
+using System.Text.Json;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
@@ -8,14 +10,52 @@ namespace LetsTalk.Server.LinkPreview.Lambda
 {
     public static class LinkPreviewLambda
     {
-        public static Task<LinkPreviewResponse> GenerateAsync(LinkPreviewRequest request)
+        public static async Task GenerateAsync(LinkPreviewRequest request, ILambdaContext context)
         {
-            var downloadService = new DownloadService(new FakeHttpClientService());
+            var serializedRequest = JsonSerializer.Serialize(request);
+            context.Logger.LogLine($"Request received: {serializedRequest}");
+
+            var httpClientService = new FakeHttpClientService();
+
+            var downloadService = new DownloadService(httpClientService);
+
             var linkPreviewService = new LinkPreviewService(
                 downloadService,
                 new RegexService(),
                 new FallbackLinkPreviewService(downloadService));
-            return linkPreviewService.GenerateLinkPreviewAsync(request);
+
+            var model = await linkPreviewService.GenerateLinkPreviewAsync(request);
+
+            if (model.Error != null)
+            {
+                context.Logger.LogError(model.Error, $"Unable to download: {request.Url}");
+
+                if (model.OpenGraphModel == null)
+                {
+                    return;
+                }
+            }
+
+            if (model.OpenGraphModel == null || string.IsNullOrWhiteSpace(model.OpenGraphModel.Title))
+            {
+                context.Logger.LogInformation($"Title is empty: {request.Url}");
+                return;
+            }
+
+            var payload = new SetLinkPreviewRequest
+            {
+                MessageId = request.MessageId,
+                ChatId = request.ChatId,
+                Url = request.Url,
+                Title = model.OpenGraphModel?.Title,
+                ImageUrl = model.OpenGraphModel?.ImageUrl
+            };
+            using var client = httpClientService.GetHttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {request.Token}");
+            var apiClient = new ApiClient(request.ApiUrl, client);
+            await apiClient.SetLinkPreviewAsync(payload);
+
+            context.Logger.LogInformation($"New LinkPreview added: {request.Url}");
         }
     }
 }

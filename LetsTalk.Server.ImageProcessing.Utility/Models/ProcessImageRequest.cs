@@ -9,4 +9,14 @@ public class ProcessImageRequest
     public int MaxWidth { get; set; }
 
     public int MaxHeight { get; set; }
+
+    public string? MessageId { get; set; }
+
+    public string? ChatId { get; set; }
+
+    public int FileStorageTypeId { get; set; }
+
+    public string? Token { get; set; }
+
+    public string? ApiUrl { get; set; }
 }

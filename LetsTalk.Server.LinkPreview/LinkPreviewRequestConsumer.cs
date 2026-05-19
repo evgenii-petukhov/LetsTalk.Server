@@ -1,6 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.Kafka.Models;
-using LetsTalk.Server.SignPackage.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
@@ -39,18 +38,26 @@ public class LinkPreviewRequestConsumer(
         var model = await _linkPreviewService.GenerateLinkPreviewAsync(new Utility.Abstractions.Models.LinkPreviewRequest
         {
             Url = context.Message.Url,
-            SecretKey = _linkPreviewSettings.SecretKey
+            SecretKey = _linkPreviewSettings.SecretKey,
+            ChatId = context.Message.ChatId,
+            MessageId = context.Message.MessageId,
+            Token = context.Message.Token,
+            ApiUrl = _applicationUrlSettings.Api
         });
-
-        if (model == null)
-        {
-            _logTitleEmpty(_logger, context.Message.Url, null);
-            return;
-        }
 
         if (model.Error != null)
         {
             _logUnableToDownload(_logger, context.Message.Url, model.Error);
+
+            if (model.OpenGraphModel == null)
+            {
+                return;
+            }
+        }
+
+        if (model.OpenGraphModel == null || string.IsNullOrWhiteSpace(model.OpenGraphModel.Title))
+        {
+            _logTitleEmpty(_logger, context.Message.Url, null);
             return;
         }
 

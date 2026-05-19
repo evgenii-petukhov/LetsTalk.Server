@@ -6,11 +6,13 @@ public class ImageResizeRequest
 
     public string? MessageId { get; set; }
 
-    public List<string>? AccountIds { get; set; }
-
     public string? ChatId { get; set; }
 
     public int FileStorageTypeId { get; set; }
 
     public string? Token {  get; set; }
+
+    public int MaxWidth { get; set; }
+
+    public int MaxHeight { get; set; }
 }

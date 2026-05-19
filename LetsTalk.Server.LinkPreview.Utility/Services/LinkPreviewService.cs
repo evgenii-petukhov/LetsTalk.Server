@@ -34,7 +34,10 @@ public class LinkPreviewService(
         catch (HttpRequestException e)
         when (e.StatusCode == System.Net.HttpStatusCode.Forbidden && !string.IsNullOrWhiteSpace(request.SecretKey))
         {
-            return await _linkPreviewService.GenerateLinkPreviewAsync(request, cancellationToken);
+            var result = await _linkPreviewService.GenerateLinkPreviewAsync(request, cancellationToken);
+            result.Error = e;
+
+            return result;
         }
     }
 }

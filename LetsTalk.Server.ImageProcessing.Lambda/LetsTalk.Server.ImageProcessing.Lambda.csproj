@@ -20,5 +20,6 @@
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.Amazon.Services\LetsTalk.Server.FileStorage.Amazon.Services.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.Infrastructure.ApiClient\LetsTalk.Server.Infrastructure.ApiClient.csproj" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,6 @@ using LetsTalk.Server.ImageProcessing.Utility;
 using MassTransit;
 using LetsTalk.Server.Kafka.Models;
 using System.Net.Mime;
-using LetsTalk.Server.ImageProcessing.Service.Services;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
 
@@ -80,15 +79,7 @@ public static class ImageProcessingServiceRegistration
 #endif
         });
 
-        switch (configuration.GetValue<string>("Features:FileStorage"))
-        {
-            case "aws":
-                services.AddScoped<IImageProcessingService, LambdaImageProcessingService>();
-                break;
-            default:
-                services.AddScoped<IImageProcessingService, ImageProcessingService>();
-                break;
-        }
+        services.AddScoped<IImageProcessingService, ImageProcessingService>();
 
         return services;
     }

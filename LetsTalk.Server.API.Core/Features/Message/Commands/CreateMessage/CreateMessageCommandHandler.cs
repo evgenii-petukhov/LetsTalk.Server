@@ -20,8 +20,8 @@ public class CreateMessageCommandHandler(
     ILinkPreviewAgnosticService linkPreviewAgnosticService,
     IChatCacheManager chatCacheManager,
     IProducer<Notification> notificationProducer,
-    IProducer<LinkPreviewRequest> linkPreviewProducer,
-    IProducer<ImageResizeRequest> imageResizeProducer
+    ILinkPreviewLauncher linkPreviewLauncher,
+    IImageProcessingLauncher imageProcessingLauncher
 ) : IRequestHandler<CreateMessageCommand, CreateMessageResponse>
 {
     private readonly IChatAgnosticService _chatAgnosticService = chatAgnosticService;
@@ -32,8 +32,8 @@ public class CreateMessageCommandHandler(
     private readonly ILinkPreviewAgnosticService _linkPreviewAgnosticService = linkPreviewAgnosticService;
     private readonly IChatCacheManager _chatCacheManager = chatCacheManager;
     private readonly IProducer<Notification> _notificationProducer = notificationProducer;
-    private readonly IProducer<LinkPreviewRequest> _linkPreviewProducer = linkPreviewProducer;
-    private readonly IProducer<ImageResizeRequest> _imageResizeProducer = imageResizeProducer;
+    private readonly ILinkPreviewLauncher _linkPreviewLauncher = linkPreviewLauncher;
+    private readonly IImageProcessingLauncher _imageProcessingLauncher = imageProcessingLauncher;
 
     public async Task<CreateMessageResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
@@ -91,25 +91,21 @@ public class CreateMessageCommandHandler(
             Task.WhenAll(accountIds.Select(_chatCacheManager.ClearAsync)),
             (string.IsNullOrWhiteSpace(url) || !string.IsNullOrWhiteSpace(linkPreviewId))
                 ? Task.CompletedTask
-                : _linkPreviewProducer.PublishAsync(new LinkPreviewRequest
-                {
-                    AccountIds = accountIds,
-                    MessageId = messageDto.Id,
-                    Url = url,
-                    ChatId = request.ChatId,
-                    Token = request.Token,
-                }, cancellationToken),
+                : _linkPreviewLauncher.LaunchAsync(
+                    messageDto.Id!,
+                    url,
+                    request.ChatId!,
+                    request.Token!,
+                    cancellationToken),
             request.Image == null
                 ? Task.CompletedTask
-                : _imageResizeProducer.PublishAsync(new ImageResizeRequest
-                {
-                    AccountIds = accountIds,
-                    MessageId = messageDto.Id,
-                    ImageId = request.Image.Id,
-                    ChatId = request.ChatId,
-                    FileStorageTypeId = request.Image.FileStorageTypeId,
-                    Token = request.Token,
-                }, cancellationToken));
+                : _imageProcessingLauncher.LaunchAsync(
+                    messageDto.Id!,
+                    request.Image.Id!,
+                    request.ChatId!,
+                    request.Image.FileStorageTypeId,
+                    request.Token!,
+                    cancellationToken));
 
         return new CreateMessageResponse
         {

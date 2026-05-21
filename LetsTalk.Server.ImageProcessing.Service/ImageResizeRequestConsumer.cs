@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
-using LetsTalk.Server.Infrastructure.ApiClient;
+using LetsTalk.Server.ApiClient;
 using LetsTalk.Server.Kafka.Models;
 using LetsTalk.Server.Persistence.Enums;
 using MassTransit;
@@ -38,7 +38,7 @@ public class ImageResizeRequestConsumer(
         };
         using var client = _httpClientFactory.CreateClient(nameof(ImageResizeRequestConsumer));
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {context.Message.Token}");
-        var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
+        var apiClient = new ApiClient.ApiClient(_applicationUrlSettings.Api, client);
         await apiClient.SetImagePreviewAsync(payload, context.CancellationToken);
     }
 }

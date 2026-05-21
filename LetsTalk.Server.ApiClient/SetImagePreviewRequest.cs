@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.SignPackage.Models;
 
-namespace LetsTalk.Server.Infrastructure.ApiClient;
+namespace LetsTalk.Server.ApiClient;
 
 public partial class SetImagePreviewRequest : ISignable
 {

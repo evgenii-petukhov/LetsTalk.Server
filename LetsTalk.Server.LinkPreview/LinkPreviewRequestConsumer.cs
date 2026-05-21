@@ -3,7 +3,7 @@ using LetsTalk.Server.Kafka.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
-using LetsTalk.Server.Infrastructure.ApiClient;
+using LetsTalk.Server.ApiClient;
 using MassTransit;
 
 namespace LetsTalk.Server.LinkPreview;
@@ -71,7 +71,7 @@ public class LinkPreviewRequestConsumer(
         };
         using var client = _httpClientService.GetHttpClient();
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {context.Message.Token}");
-        var apiClient = new ApiClient(_applicationUrlSettings.Api, client);
+        var apiClient = new ApiClient.ApiClient(_applicationUrlSettings.Api, client);
         await apiClient.SetLinkPreviewAsync(payload, context.CancellationToken);
         _logSuccess(_logger, context.Message.Url, null);
     }

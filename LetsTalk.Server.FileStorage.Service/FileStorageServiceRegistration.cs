@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.AuthenticationClient;
+﻿using LetsTalk.Server.Authentication.Client;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.Service.Abstractions;

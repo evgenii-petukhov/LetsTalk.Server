@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.AuthenticationClient;
+﻿using LetsTalk.Server.Authentication.Client;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core;
 using LetsTalk.Server.Logging;

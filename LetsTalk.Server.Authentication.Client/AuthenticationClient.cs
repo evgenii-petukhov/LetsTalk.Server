@@ -1,9 +1,8 @@
-﻿using LetsTalk.Server.Authentication;
-using LetsTalk.Server.Authentication.Abstractions;
+﻿using LetsTalk.Server.Authentication.Abstractions;
 using static LetsTalk.Server.Authentication.JwtTokenGrpcService;
 using static LetsTalk.Server.Authentication.LoginCodeGrpcService;
 
-namespace LetsTalk.Server.AuthenticationClient;
+namespace LetsTalk.Server.Authentication.Client;
 
 public class AuthenticationClient(
     JwtTokenGrpcServiceClient tokenClient,

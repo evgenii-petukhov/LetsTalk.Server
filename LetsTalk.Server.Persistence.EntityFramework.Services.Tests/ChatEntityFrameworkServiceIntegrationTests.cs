@@ -9,7 +9,7 @@ using LetsTalk.Server.Persistence.EntityFramework.Tests.MappingProfiles;
 using LetsTalk.Server.Persistence.EntityFramework.Tests.Models;
 using LetsTalk.Server.Persistence.EntityFramework.Tests.TestData;
 using LetsTalk.Server.Persistence.Enums;
-using LetsTalk.Server.Utility.Common;
+using LetsTalk.Server.Common.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Utility.Common;
+using LetsTalk.Server.Common.Helpers;
 
 namespace LetsTalk.Server.API.Validation.Tests;
 

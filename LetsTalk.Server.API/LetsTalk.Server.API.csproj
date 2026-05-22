@@ -40,7 +40,7 @@
     <ProjectReference Include="..\LetsTalk.Server.API.Validation\LetsTalk.Server.API.Validation.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Authentication.Client\LetsTalk.Server.Authentication.Client.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
+    <ProjectReference Include="..\Infrastructure\Logging\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
     <ProjectReference Include="..\Infrastructure\SignPackage\LetsTalk.Server.SignPackage\LetsTalk.Server.SignPackage.csproj" />
   </ItemGroup>
 

@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\SignPackage\LetsTalk.Server.SignPackage.Abstractions\LetsTalk.Server.SignPackage.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Core\LetsTalk.Server.API.Core.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Validation\LetsTalk.Server.API.Validation.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.SignPackage.Abstractions\LetsTalk.Server.SignPackage.Abstractions.csproj" />
     <ProjectReference Include="..\Persistence\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
   </ItemGroup>
 

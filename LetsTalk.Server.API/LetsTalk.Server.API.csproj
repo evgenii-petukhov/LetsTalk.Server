@@ -34,13 +34,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\SignPackage\LetsTalk.Server.SignPackage.Abstractions\LetsTalk.Server.SignPackage.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Core\LetsTalk.Server.API.Core.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Middleware\LetsTalk.Server.API.Middleware.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Validation\LetsTalk.Server.API.Validation.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Authentication.Client\LetsTalk.Server.Authentication.Client.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.SignPackage\LetsTalk.Server.SignPackage.csproj" />
+    <ProjectReference Include="..\Infrastructure\SignPackage\LetsTalk.Server.SignPackage\LetsTalk.Server.SignPackage.csproj" />
   </ItemGroup>
 
 </Project>

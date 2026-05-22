@@ -8,16 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
-    <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
-    <PackageReference Include="SimpleMongoMigrations" Version="1.0.16" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.MongoDB.Repository\LetsTalk.Server.Persistence.MongoDB.Repository.csproj" />
+    <ProjectReference Include="..\EntityFramework\LetsTalk.Server.Persistence.EntityFramework.Services\LetsTalk.Server.Persistence.EntityFramework.Services.csproj" />
+    <ProjectReference Include="..\MongoDB\LetsTalk.Server.Persistence.MongoDB.Services\LetsTalk.Server.Persistence.MongoDB.Services.csproj" />
   </ItemGroup>
 
 </Project>

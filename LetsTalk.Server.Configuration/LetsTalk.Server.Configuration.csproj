@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration.Abstractions\LetsTalk.Server.Configuration.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj" />
   </ItemGroup>
 
 </Project>

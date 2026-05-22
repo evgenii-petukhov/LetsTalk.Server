@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.MongoDB.Repository\LetsTalk.Server.Persistence.MongoDB.Repository.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.MongoDB.Services\LetsTalk.Server.Persistence.MongoDB.Services.csproj" />
   </ItemGroup>
 

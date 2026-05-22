@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
+    <ProjectReference Include="..\..\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
+    <ProjectReference Include="..\..\LetsTalk.Server.Persistence.AgnosticServices.Abstractions\LetsTalk.Server.Persistence.AgnosticServices.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.EntityFramework.Repository\LetsTalk.Server.Persistence.EntityFramework.Repository.csproj" />
   </ItemGroup>
 

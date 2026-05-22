@@ -29,7 +29,6 @@
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility.Abstractions\LetsTalk.Server.ImageProcessing.Utility.Abstractions.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj" />
     <ProjectReference Include="..\Models\LetsTalk.Server.Models.Kafka\LetsTalk.Server.Models.Kafka.csproj" />
   </ItemGroup>
 

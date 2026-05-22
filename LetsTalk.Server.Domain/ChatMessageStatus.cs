@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Common.Helpers;
+﻿using LetsTalk.Server.DateHelpers;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 

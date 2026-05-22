@@ -1,6 +1,6 @@
 using FluentAssertions;
 
-namespace LetsTalk.Server.Common.Helpers.Tests;
+namespace LetsTalk.Server.DateHelpers.Tests;
 
 [TestFixture]
 public class DateHelperTests

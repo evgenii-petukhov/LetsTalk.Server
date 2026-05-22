@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Common.Helpers;
+﻿namespace LetsTalk.Server.DateHelpers;
 
 public static class DateHelper
 {

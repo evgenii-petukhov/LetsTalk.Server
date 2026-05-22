@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using LetsTalk.Server.API.Models.Login;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Common.Helpers;
+using LetsTalk.Server.DateHelpers;
 
 namespace LetsTalk.Server.API.Validation;
 

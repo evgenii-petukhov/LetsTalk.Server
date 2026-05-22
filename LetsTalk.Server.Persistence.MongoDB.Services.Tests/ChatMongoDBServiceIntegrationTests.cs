@@ -6,7 +6,7 @@ using LetsTalk.Server.Persistence.MongoDB.Models;
 using LetsTalk.Server.Persistence.MongoDB.Repository;
 using LetsTalk.Server.Persistence.MongoDB.Tests.Models;
 using LetsTalk.Server.Persistence.MongoDB.Tests.TestData;
-using LetsTalk.Server.Common.Helpers;
+using LetsTalk.Server.DateHelpers;
 using Microsoft.Extensions.Options;
 using Mongo2Go;
 using MongoDB.Driver;

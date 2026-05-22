@@ -34,10 +34,10 @@
     <ProjectReference Include="..\Infrastructure\Authentication\LetsTalk.Server.Authentication.Client\LetsTalk.Server.Authentication.Client.csproj" />
     <ProjectReference Include="..\Infrastructure\FileStorage\LetsTalk.Server.FileStorage.AgnosticServices\LetsTalk.Server.FileStorage.AgnosticServices.csproj" />
     <ProjectReference Include="..\Infrastructure\ImageProcessing\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
+    <ProjectReference Include="..\Infrastructure\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
     <ProjectReference Include="..\Infrastructure\Logging\LetsTalk.Server.Logging\LetsTalk.Server.Logging.csproj" />
     <ProjectReference Include="..\Infrastructure\SignPackage\LetsTalk.Server.SignPackage.Models\LetsTalk.Server.SignPackage.Models.csproj" />
     <ProjectReference Include="..\Infrastructure\SignPackage\LetsTalk.Server.SignPackage\LetsTalk.Server.SignPackage.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
     <ProjectReference Include="..\Models\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
     <ProjectReference Include="..\Models\LetsTalk.Server.Models.Kafka\LetsTalk.Server.Models.Kafka.csproj" />
     <ProjectReference Include="..\Persistence\LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj" />

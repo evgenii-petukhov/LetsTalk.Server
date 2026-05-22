@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Configuration\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\Infrastructure\ImageProcessing\LetsTalk.Server.ImageProcessing.Utility.Abstractions\LetsTalk.Server.ImageProcessing.Utility.Abstractions.csproj" />
+    <ProjectReference Include="..\Infrastructure\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
     <ProjectReference Include="..\Infrastructure\LinkPreview\LetsTalk.Server.LinkPreview.Utility.Abstractions\LetsTalk.Server.LinkPreview.Utility.Abstractions.csproj" />
     <ProjectReference Include="..\Infrastructure\Telemetry\LetsTalk.Server.Telemetry.AgnosticServices\LetsTalk.Server.Telemetry.AgnosticServices.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Core.Commands\LetsTalk.Server.API.Core.Commands.csproj" />

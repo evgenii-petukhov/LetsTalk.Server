@@ -4,7 +4,7 @@ using Amazon.Lambda.Model;
 using Amazon.Runtime;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.ImageProcessing.Utility.Models;
+using LetsTalk.Server.ImageProcessing.Utility.Abstractions.Models;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 

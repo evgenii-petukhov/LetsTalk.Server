@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.ImageProcessing.Utility.Models;
+﻿namespace LetsTalk.Server.ImageProcessing.Utility.Abstractions.Models;
 
 public class ProcessImageRequest
 {

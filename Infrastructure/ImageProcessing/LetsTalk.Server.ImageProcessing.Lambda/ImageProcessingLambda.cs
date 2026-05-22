@@ -1,7 +1,7 @@
 using Amazon.Lambda.Core;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using LetsTalk.Server.ImageProcessing.Utility;
-using LetsTalk.Server.ImageProcessing.Utility.Models;
+using LetsTalk.Server.ImageProcessing.Utility.Abstractions.Models;
 using LetsTalk.Server.ApiClient;
 using LetsTalk.Server.Persistence.Enums;
 using System.Text.Json;

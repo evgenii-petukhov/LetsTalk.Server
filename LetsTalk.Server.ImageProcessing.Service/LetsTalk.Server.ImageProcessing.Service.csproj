@@ -23,12 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\ImageProcessing\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
+    <ProjectReference Include="..\Infrastructure\ImageProcessing\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.ApiClient\LetsTalk.Server.ApiClient.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.FileStorage.AgnosticServices\LetsTalk.Server.FileStorage.AgnosticServices.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.ImageResizeEngine\LetsTalk.Server.ImageProcessing.ImageResizeEngine.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility.Abstractions\LetsTalk.Server.ImageProcessing.Utility.Abstractions.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.ImageProcessing.Utility\LetsTalk.Server.ImageProcessing.Utility.csproj" />
     <ProjectReference Include="..\Models\LetsTalk.Server.Models.Kafka\LetsTalk.Server.Models.Kafka.csproj" />
   </ItemGroup>
 

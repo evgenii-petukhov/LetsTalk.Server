@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;

@@ -3,13 +3,12 @@ using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.Message.Commands.SetLinkPreview;
-using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Dtos;
+using LetsTalk.Server.Models.Kafka;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using MediatR;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 

@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.FileStorage.Abstractions;
 using LetsTalk.Server.FileStorage.Service.Abstractions;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using LetsTalk.Server.Persistence.Enums;
 using MassTransit;
 

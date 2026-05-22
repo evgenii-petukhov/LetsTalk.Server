@@ -2,12 +2,9 @@ using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Features.VideoCall.Queries.GetCallSettings;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Dto.Models;
 using LetsTalk.Server.Exceptions;
-using MediatR;
 using Microsoft.Extensions.Options;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 

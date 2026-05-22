@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 

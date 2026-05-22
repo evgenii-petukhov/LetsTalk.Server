@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.Configuration.Models;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using LetsTalk.Server.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Options;

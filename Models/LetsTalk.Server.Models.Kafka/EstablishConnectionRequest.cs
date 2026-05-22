@@ -1,10 +1,8 @@
-﻿namespace LetsTalk.Server.Kafka.Models;
+﻿namespace LetsTalk.Server.Models.Kafka;
 
-public class RtcSessionSettings
+public class EstablishConnectionRequest
 {
     public string? CallId { get; set; }
-
-    public string? Offer { get; set; }
 
     public string? Answer { get; set; }
 

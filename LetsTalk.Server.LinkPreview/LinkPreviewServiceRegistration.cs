@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions;
 using LetsTalk.Server.LinkPreview.Utility.Services;
 using MassTransit;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using System.Net.Mime;
 using LetsTalk.Server.DependencyInjection;
 

@@ -13,7 +13,7 @@ using LetsTalk.Server.DependencyInjection;
 using LetsTalk.Server.SignPackage;
 using LetsTalk.Server.Persistence.Redis;
 using MassTransit;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using System.Net.Mime;
 
 namespace LetsTalk.Server.FileStorage.Service;

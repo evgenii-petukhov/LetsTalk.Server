@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 
 namespace LetsTalk.Server.API.Core.Services;

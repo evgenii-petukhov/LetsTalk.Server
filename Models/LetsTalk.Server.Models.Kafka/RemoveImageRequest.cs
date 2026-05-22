@@ -1,6 +1,6 @@
-﻿namespace LetsTalk.Server.Dto.Models;
+﻿namespace LetsTalk.Server.Models.Kafka;
 
-public record ImageDto
+public class RemoveImageRequest
 {
     public string? Id { get; set; }
 

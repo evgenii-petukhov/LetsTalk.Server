@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Kafka.Models;
+﻿using LetsTalk.Server.Models.Kafka;
 using LetsTalk.Server.Notifications.Abstractions;
 using MassTransit;
 

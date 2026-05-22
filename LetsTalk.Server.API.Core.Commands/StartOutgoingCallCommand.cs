@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Telemetry.Models;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using MediatR;
 
 namespace LetsTalk.Server.API.Core.Commands;

@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Kafka.Models;
+﻿namespace LetsTalk.Server.Models.Kafka;
 
 public class SetImageDimensionsRequest
 {

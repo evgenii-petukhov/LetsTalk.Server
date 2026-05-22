@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;

@@ -2,7 +2,7 @@ using AutoMapper;
 using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Features.Chat.Queries.GetChats;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using Moq;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Profile;
 using LetsTalk.Server.API.Core.Features.Profile.Queries.GetProfile;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.SignPackage.Abstractions;

@@ -3,8 +3,7 @@ using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.Authentication.Commands.GenerateLoginCode;
 using LetsTalk.Server.Authentication.Abstractions;
-using LetsTalk.Server.Dto.Models;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using Moq;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;

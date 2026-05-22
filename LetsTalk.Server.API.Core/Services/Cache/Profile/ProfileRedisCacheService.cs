@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using LetsTalk.Server.Persistence.Redis;

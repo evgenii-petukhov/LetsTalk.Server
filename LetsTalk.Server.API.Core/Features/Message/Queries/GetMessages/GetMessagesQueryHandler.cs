@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Middleware.Exceptions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using MediatR;
 
 namespace LetsTalk.Server.API.Core.Features.Message.Queries.GetMessages;

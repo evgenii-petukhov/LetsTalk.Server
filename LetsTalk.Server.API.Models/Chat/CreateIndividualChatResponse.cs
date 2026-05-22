@@ -1,4 +1,4 @@
-﻿using LetsTalk.Server.Dto.Models;
+﻿using LetsTalk.Server.Models.Dtos;
 
 namespace LetsTalk.Server.API.Models.Chat;
 

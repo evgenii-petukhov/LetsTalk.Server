@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj" />
+    <ProjectReference Include="..\Models\LetsTalk.Server.Models.Dtos\LetsTalk.Server.Models.Dtos.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-﻿using LetsTalk.Server.Dto.Models;
+﻿using LetsTalk.Server.Models.Dtos;
 
-namespace LetsTalk.Server.Kafka.Models;
+namespace LetsTalk.Server.Models.Kafka;
 
 public class Notification
 {

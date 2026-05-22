@@ -1,7 +1,7 @@
 using AutoMapper;
 using FluentAssertions;
 using LetsTalk.Server.API.Core.Services;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 using Moq;

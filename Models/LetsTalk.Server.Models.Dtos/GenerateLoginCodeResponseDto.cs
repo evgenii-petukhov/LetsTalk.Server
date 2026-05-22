@@ -1,4 +1,4 @@
-﻿namespace LetsTalk.Server.Dto.Models;
+﻿namespace LetsTalk.Server.Models.Dtos;
 
 public class GenerateLoginCodeResponseDto
 {

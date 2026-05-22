@@ -1,7 +1,7 @@
 ﻿using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.ImageProcessing.Utility.Abstractions;
 using LetsTalk.Server.ApiClient;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using LetsTalk.Server.Persistence.Enums;
 using MassTransit;
 using Microsoft.Extensions.Options;

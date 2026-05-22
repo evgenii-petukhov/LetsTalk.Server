@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 
 namespace LetsTalk.Server.API.Core.Services;
 

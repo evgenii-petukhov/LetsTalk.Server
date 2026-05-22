@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Kafka.Models\LetsTalk.Server.Kafka.Models.csproj" />
+    <ProjectReference Include="..\Models\LetsTalk.Server.Models.Kafka\LetsTalk.Server.Models.Kafka.csproj" />
   </ItemGroup>
 
   <ItemGroup>

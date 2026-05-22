@@ -2,10 +2,8 @@ using AutoMapper;
 using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Features.Profile.Queries.GetProfile;
-using LetsTalk.Server.Dto.Models;
-using MediatR;
+using LetsTalk.Server.Models.Dtos;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 

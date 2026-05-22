@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.Authentication.Client;
 using LetsTalk.Server.Configuration;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using LetsTalk.Server.Logging;
 using LetsTalk.Server.Notifications.Abstractions;
 using LetsTalk.Server.Notifications.Handlers;

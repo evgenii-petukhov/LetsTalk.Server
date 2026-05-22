@@ -5,7 +5,6 @@ using LetsTalk.Server.API.Core.Features.Message.Commands.ReadMessage;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;
 using Moq;
-using NUnit.Framework;
 
 namespace LetsTalk.Server.API.Core.Tests.Handlers;
 

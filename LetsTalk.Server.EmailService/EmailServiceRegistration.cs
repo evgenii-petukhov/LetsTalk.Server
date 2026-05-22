@@ -2,7 +2,7 @@
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.EmailService.Abstractions;
 using LetsTalk.Server.EmailService.Services;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

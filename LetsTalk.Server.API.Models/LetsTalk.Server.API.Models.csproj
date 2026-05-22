@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.Dto.Models\LetsTalk.Server.Dto.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.SignPackage.Models\LetsTalk.Server.SignPackage.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.Telemetry.Abstractions\LetsTalk.Server.Telemetry.Abstractions.csproj" />
+    <ProjectReference Include="..\Models\LetsTalk.Server.Models.Dtos\LetsTalk.Server.Models.Dtos.csproj" />
   </ItemGroup>
 
 </Project>

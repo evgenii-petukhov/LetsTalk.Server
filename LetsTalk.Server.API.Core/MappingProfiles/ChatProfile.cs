@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Chat;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.Persistence.AgnosticServices.Models;
 

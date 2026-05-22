@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.API.Models.Chat;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using MediatR;

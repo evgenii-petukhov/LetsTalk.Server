@@ -1,5 +1,5 @@
 ﻿using LetsTalk.Server.EmailService.Abstractions;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using MassTransit;
 
 namespace LetsTalk.Server.EmailService;

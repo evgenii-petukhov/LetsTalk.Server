@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.API.Core.Abstractions;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using LetsTalk.Server.Exceptions;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using LetsTalk.Server.Persistence.Enums;
 using MediatR;

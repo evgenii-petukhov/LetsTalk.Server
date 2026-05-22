@@ -2,7 +2,6 @@ using FluentAssertions;
 using LetsTalk.Server.API.Core.Abstractions;
 using LetsTalk.Server.API.Core.Commands;
 using LetsTalk.Server.API.Core.Features.Chat.Commands.CreateIndividualChat;
-using LetsTalk.Server.API.Models.Chat;
 using LetsTalk.Server.Exceptions;
 using LetsTalk.Server.Persistence.AgnosticServices.Abstractions;
 using Moq;

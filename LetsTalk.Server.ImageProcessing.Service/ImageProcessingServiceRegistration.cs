@@ -5,7 +5,7 @@ using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.FileStorage.AgnosticServices;
 using LetsTalk.Server.ImageProcessing.Utility;
 using MassTransit;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using System.Net.Mime;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using LetsTalk.Server.ImageProcessing.Utility.Abstractions;

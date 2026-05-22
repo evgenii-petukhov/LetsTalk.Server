@@ -9,7 +9,7 @@ using LetsTalk.Server.API.Core.Services.Cache.Profile;
 using LetsTalk.Server.Configuration;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.DependencyInjection;
-using LetsTalk.Server.Kafka.Models;
+using LetsTalk.Server.Models.Kafka;
 using LetsTalk.Server.Persistence.AgnosticServices;
 using LetsTalk.Server.Persistence.Redis;
 using LetsTalk.Server.Telemetry.AgnosticServices;

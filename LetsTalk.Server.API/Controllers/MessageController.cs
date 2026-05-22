@@ -2,7 +2,7 @@
 using LetsTalk.Server.API.Models.Message;
 using LetsTalk.Server.Configuration.Models;
 using LetsTalk.Server.API.Core.Features.Message.Queries.GetMessages;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

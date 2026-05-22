@@ -1,6 +1,6 @@
 ﻿using LetsTalk.Server.API.Models.Chat;
 using LetsTalk.Server.API.Core.Features.Chat.Queries.GetChats;
-using LetsTalk.Server.Dto.Models;
+using LetsTalk.Server.Models.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LetsTalk.Server.API.Validation;

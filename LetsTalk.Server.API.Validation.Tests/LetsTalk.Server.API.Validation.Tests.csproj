@@ -28,7 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.API.Validation\LetsTalk.Server.API.Validation.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
   </ItemGroup>
 
   <ItemGroup>

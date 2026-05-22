@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LetsTalk.Server.DateHelpers\LetsTalk.Server.DateHelpers.csproj" />
+    <ProjectReference Include="..\Shared\LetsTalk.Server.DateHelpers\LetsTalk.Server.DateHelpers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -107,15 +107,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.LinkPreview
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Configuration.Tests", "LetsTalk.Server.Configuration.Tests\LetsTalk.Server.Configuration.Tests.csproj", "{707474FC-C17D-47B9-A7AA-2A792D4A464D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.Abstractions", "LetsTalk.Server.Telemetry.Abstractions\LetsTalk.Server.Telemetry.Abstractions.csproj", "{F77653DC-D6F2-477E-A972-AC43EB260385}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telemetry", "Telemetry", "{6199B55A-3481-404D-80E3-CF146C730EB8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.Azure.Services", "LetsTalk.Server.Telemetry.Azure.Services\LetsTalk.Server.Telemetry.Azure.Services.csproj", "{E5F5DE96-81C0-4157-91DC-43B05B699F83}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.AgnosticServices", "LetsTalk.Server.Telemetry.AgnosticServices\LetsTalk.Server.Telemetry.AgnosticServices.csproj", "{51269E60-98D7-43D6-B5BE-CF80B33A56BA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.Models", "LetsTalk.Server.Telemetry.Models\LetsTalk.Server.Telemetry.Models.csproj", "{3574A236-295D-4BCA-B336-48E4B21D5C5E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SignPackage", "SignPackage", "{92DF14BD-7098-4F9F-8D42-37260F6DF7BD}"
 EndProject
@@ -176,6 +168,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Services", "Persistence\MongoDB\LetsTalk.Server.Persistence.MongoDB.Services\LetsTalk.Server.Persistence.MongoDB.Services.csproj", "{19ED34A0-7325-13C0-77CE-186C61695EC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Persistence.MongoDB.Services.Tests", "Persistence\MongoDB\LetsTalk.Server.Persistence.MongoDB.Services.Tests\LetsTalk.Server.Persistence.MongoDB.Services.Tests.csproj", "{0D4EAFAF-3E63-DFF7-52DC-F07B5F8981B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.Abstractions", "Infrastructure\Telemetry\LetsTalk.Server.Telemetry.Abstractions\LetsTalk.Server.Telemetry.Abstractions.csproj", "{4788B6CB-30CA-C7BE-D56C-5C53B82F5437}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.AgnosticServices", "Infrastructure\Telemetry\LetsTalk.Server.Telemetry.AgnosticServices\LetsTalk.Server.Telemetry.AgnosticServices.csproj", "{8F15FEB4-798B-9223-4A48-A4DB329110D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.Azure.Services", "Infrastructure\Telemetry\LetsTalk.Server.Telemetry.Azure.Services\LetsTalk.Server.Telemetry.Azure.Services.csproj", "{B97EFA82-025D-21EA-DFF4-E1DC6A470A9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsTalk.Server.Telemetry.Models", "Infrastructure\Telemetry\LetsTalk.Server.Telemetry.Models\LetsTalk.Server.Telemetry.Models.csproj", "{F949CC05-1C1F-B79C-B70E-CF784B2BADD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -351,22 +351,6 @@ Global
 		{707474FC-C17D-47B9-A7AA-2A792D4A464D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{707474FC-C17D-47B9-A7AA-2A792D4A464D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{707474FC-C17D-47B9-A7AA-2A792D4A464D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F77653DC-D6F2-477E-A972-AC43EB260385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F77653DC-D6F2-477E-A972-AC43EB260385}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F77653DC-D6F2-477E-A972-AC43EB260385}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F77653DC-D6F2-477E-A972-AC43EB260385}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5F5DE96-81C0-4157-91DC-43B05B699F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5F5DE96-81C0-4157-91DC-43B05B699F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5F5DE96-81C0-4157-91DC-43B05B699F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5F5DE96-81C0-4157-91DC-43B05B699F83}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51269E60-98D7-43D6-B5BE-CF80B33A56BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51269E60-98D7-43D6-B5BE-CF80B33A56BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51269E60-98D7-43D6-B5BE-CF80B33A56BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51269E60-98D7-43D6-B5BE-CF80B33A56BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3574A236-295D-4BCA-B336-48E4B21D5C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3574A236-295D-4BCA-B336-48E4B21D5C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3574A236-295D-4BCA-B336-48E4B21D5C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3574A236-295D-4BCA-B336-48E4B21D5C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5ED512C8-2FD2-8F58-32D5-074EC6FD7826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5ED512C8-2FD2-8F58-32D5-074EC6FD7826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ED512C8-2FD2-8F58-32D5-074EC6FD7826}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -459,6 +443,22 @@ Global
 		{0D4EAFAF-3E63-DFF7-52DC-F07B5F8981B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D4EAFAF-3E63-DFF7-52DC-F07B5F8981B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D4EAFAF-3E63-DFF7-52DC-F07B5F8981B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4788B6CB-30CA-C7BE-D56C-5C53B82F5437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4788B6CB-30CA-C7BE-D56C-5C53B82F5437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4788B6CB-30CA-C7BE-D56C-5C53B82F5437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4788B6CB-30CA-C7BE-D56C-5C53B82F5437}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F15FEB4-798B-9223-4A48-A4DB329110D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F15FEB4-798B-9223-4A48-A4DB329110D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F15FEB4-798B-9223-4A48-A4DB329110D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F15FEB4-798B-9223-4A48-A4DB329110D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B97EFA82-025D-21EA-DFF4-E1DC6A470A9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B97EFA82-025D-21EA-DFF4-E1DC6A470A9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B97EFA82-025D-21EA-DFF4-E1DC6A470A9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B97EFA82-025D-21EA-DFF4-E1DC6A470A9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F949CC05-1C1F-B79C-B70E-CF784B2BADD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F949CC05-1C1F-B79C-B70E-CF784B2BADD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F949CC05-1C1F-B79C-B70E-CF784B2BADD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F949CC05-1C1F-B79C-B70E-CF784B2BADD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -515,11 +515,7 @@ Global
 		{9EE193BC-4AE0-4985-B24D-EC56D12FF87E} = {5686F7F7-B6BB-40D6-A0BC-BA7D8A853981}
 		{75B8982C-CAC6-4E43-A48E-7C20431D40FD} = {7BE105C3-AC06-4F62-B258-B76667C957EB}
 		{707474FC-C17D-47B9-A7AA-2A792D4A464D} = {FE7EB757-F44A-4C1A-9561-AD0793CC8671}
-		{F77653DC-D6F2-477E-A972-AC43EB260385} = {6199B55A-3481-404D-80E3-CF146C730EB8}
 		{6199B55A-3481-404D-80E3-CF146C730EB8} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
-		{E5F5DE96-81C0-4157-91DC-43B05B699F83} = {6199B55A-3481-404D-80E3-CF146C730EB8}
-		{51269E60-98D7-43D6-B5BE-CF80B33A56BA} = {6199B55A-3481-404D-80E3-CF146C730EB8}
-		{3574A236-295D-4BCA-B336-48E4B21D5C5E} = {6199B55A-3481-404D-80E3-CF146C730EB8}
 		{92DF14BD-7098-4F9F-8D42-37260F6DF7BD} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{9AAF661E-F07F-4B29-98F7-B540895529F2} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
 		{FE7EB757-F44A-4C1A-9561-AD0793CC8671} = {AEEA38DD-12D9-4A3B-A544-99FA1FC0E53F}
@@ -550,6 +546,10 @@ Global
 		{ADBC1647-B095-8380-CADA-C7C51C78E6ED} = {7E47C1D1-1EA6-4AA1-A274-52EBE6EA1578}
 		{19ED34A0-7325-13C0-77CE-186C61695EC3} = {7E47C1D1-1EA6-4AA1-A274-52EBE6EA1578}
 		{0D4EAFAF-3E63-DFF7-52DC-F07B5F8981B5} = {7E47C1D1-1EA6-4AA1-A274-52EBE6EA1578}
+		{4788B6CB-30CA-C7BE-D56C-5C53B82F5437} = {6199B55A-3481-404D-80E3-CF146C730EB8}
+		{8F15FEB4-798B-9223-4A48-A4DB329110D3} = {6199B55A-3481-404D-80E3-CF146C730EB8}
+		{B97EFA82-025D-21EA-DFF4-E1DC6A470A9B} = {6199B55A-3481-404D-80E3-CF146C730EB8}
+		{F949CC05-1C1F-B79C-B70E-CF784B2BADD8} = {6199B55A-3481-404D-80E3-CF146C730EB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3787FEEA-6175-4B41-A979-51B2D1E11B8D}

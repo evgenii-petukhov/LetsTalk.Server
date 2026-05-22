@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Telemetry\LetsTalk.Server.Telemetry.Models\LetsTalk.Server.Telemetry.Models.csproj" />
     <ProjectReference Include="..\LetsTalk.Server.SignPackage.Models\LetsTalk.Server.SignPackage.Models.csproj" />
-    <ProjectReference Include="..\LetsTalk.Server.Telemetry.Abstractions\LetsTalk.Server.Telemetry.Abstractions.csproj" />
     <ProjectReference Include="..\Models\LetsTalk.Server.Models.Dtos\LetsTalk.Server.Models.Dtos.csproj" />
   </ItemGroup>
 

@@ -12,7 +12,7 @@
 
 🔔 Please also see the [front-end repository](https://github.com/evgenii-petukhov/LetsTalk.Angular.App) 🙏
 
-![scheme](demo.gif)
+![scheme](Images/demo.gif)
 
 🔴 [Live demo](https://chat.petukhov.fyi/)
 
@@ -36,7 +36,7 @@ This project showcases my technical skills for potential IT recruiters, employer
 
 ## Architecture
 
-![scheme](scheme-compressed.svg)
+![scheme](Images/scheme-compressed.svg)
 
 The front-end is an Angular single-page application using NgRx for reactive state management.
 

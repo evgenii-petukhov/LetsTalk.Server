@@ -59,10 +59,10 @@ dotnet publish -r win-x64 --self-contained false --configuration Debug
 
 Write-Host "`Launching..."
 dotnet publish -r win-x64 --self-contained false --configuration Debug
-Start-Process -FilePath "LetsTalk.Server.API\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.API.exe"
-Start-Process -FilePath "LetsTalk.Server.Authentication\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.Authentication.exe"
-Start-Process -FilePath "LetsTalk.Server.FileStorage.Service\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.FileStorage.Service.exe"
-Start-Process -FilePath "LetsTalk.Server.ImageProcessing.Service\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.ImageProcessing.Service.exe"
-Start-Process -FilePath "LetsTalk.Server.LinkPreview\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.LinkPreview.exe"
-Start-Process -FilePath "LetsTalk.Server.Notifications\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.Notifications.exe"
-Start-Process -FilePath "LetsTalk.Server.EmailService\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.EmailService.exe"
+Start-Process -FilePath "Applications\LetsTalk.Server.API\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.API.exe"
+Start-Process -FilePath "Applications\LetsTalk.Server.Authentication\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.Authentication.exe"
+Start-Process -FilePath "Applications\LetsTalk.Server.FileStorage.Service\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.FileStorage.Service.exe"
+Start-Process -FilePath "Applications\LetsTalk.Server.ImageProcessing.Service\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.ImageProcessing.Service.exe"
+Start-Process -FilePath "Applications\LetsTalk.Server.LinkPreview\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.LinkPreview.exe"
+Start-Process -FilePath "Applications\LetsTalk.Server.Notifications\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.Notifications.exe"
+Start-Process -FilePath "Applications\LetsTalk.Server.EmailService\bin\Debug\net9.0\win-x64\publish\LetsTalk.Server.EmailService.exe"

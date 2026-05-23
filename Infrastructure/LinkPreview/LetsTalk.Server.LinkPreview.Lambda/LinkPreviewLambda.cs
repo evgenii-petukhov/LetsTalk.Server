@@ -1,5 +1,5 @@
 using Amazon.Lambda.Core;
-using LetsTalk.Server.ApiClient;
+using LetsTalk.Server.API.Client;
 using LetsTalk.Server.LinkPreview.Utility.Abstractions.Models;
 using LetsTalk.Server.LinkPreview.Utility.Services;
 using System.Text.Json;
@@ -52,7 +52,7 @@ namespace LetsTalk.Server.LinkPreview.Lambda
             };
             using var client = httpClientService.GetHttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {request.Token}");
-            var apiClient = new ApiClient.ApiClient(request.ApiUrl, client);
+            var apiClient = new ApiClient(request.ApiUrl, client);
             await apiClient.SetLinkPreviewAsync(payload);
 
             context.Logger.LogInformation($"New LinkPreview added: {request.Url}");

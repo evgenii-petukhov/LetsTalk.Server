@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\SignPackage\LetsTalk.Server.SignPackage.Models\LetsTalk.Server.SignPackage.Models.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Telemetry\LetsTalk.Server.Telemetry.Models\LetsTalk.Server.Telemetry.Models.csproj" />
+    <ProjectReference Include="..\..\Models\LetsTalk.Server.Models.Dtos\LetsTalk.Server.Models.Dtos.csproj" />
+  </ItemGroup>
+
+</Project>

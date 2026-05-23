@@ -2,7 +2,7 @@ using Amazon.Lambda.Core;
 using LetsTalk.Server.ImageProcessing.ImageResizeEngine;
 using LetsTalk.Server.ImageProcessing.Utility;
 using LetsTalk.Server.ImageProcessing.Utility.Abstractions.Models;
-using LetsTalk.Server.ApiClient;
+using LetsTalk.Server.API.Client;
 using LetsTalk.Server.Persistence.Enums;
 using System.Text.Json;
 
@@ -41,7 +41,7 @@ namespace LetsTalk.Server.ImageProcessing.Lambda
             var httpClientService = new FakeHttpClientService();
             using var client = httpClientService.GetHttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {request.Token}");
-            var apiClient = new ApiClient.ApiClient(request.ApiUrl, client);
+            var apiClient = new ApiClient(request.ApiUrl, client);
             await apiClient.SetImagePreviewAsync(payload);
         }
     }

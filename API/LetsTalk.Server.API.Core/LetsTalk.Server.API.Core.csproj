@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="AWSSDK.Lambda" Version="3.7.412.36" />
+    <PackageReference Include="MassTransit" Version="8.4.1" />
+    <PackageReference Include="MassTransit.AmazonSQS" Version="8.4.1" />
+    <PackageReference Include="MassTransit.Kafka" Version="8.4.1" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Configuration\LetsTalk.Server.Configuration\LetsTalk.Server.Configuration.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ImageProcessing\LetsTalk.Server.ImageProcessing.Utility.Abstractions\LetsTalk.Server.ImageProcessing.Utility.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\LinkPreview\LetsTalk.Server.LinkPreview.Utility.Abstractions\LetsTalk.Server.LinkPreview.Utility.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Telemetry\LetsTalk.Server.Telemetry.AgnosticServices\LetsTalk.Server.Telemetry.AgnosticServices.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.API.Core.Commands\LetsTalk.Server.API.Core.Commands.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.API.Middleware\LetsTalk.Server.API.Middleware.csproj" />
+    <ProjectReference Include="..\LetsTalk.Server.API.Models\LetsTalk.Server.API.Models.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\LetsTalk.Server.DependencyInjection\LetsTalk.Server.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\Models\LetsTalk.Server.Exceptions\LetsTalk.Server.Exceptions.csproj" />
+    <ProjectReference Include="..\..\Models\LetsTalk.Server.Models.Dtos\LetsTalk.Server.Models.Dtos.csproj" />
+    <ProjectReference Include="..\..\Models\LetsTalk.Server.Models.Kafka\LetsTalk.Server.Models.Kafka.csproj" />
+    <ProjectReference Include="..\..\Persistence\LetsTalk.Server.Domain\LetsTalk.Server.Domain.csproj" />
+    <ProjectReference Include="..\..\Persistence\LetsTalk.Server.Persistence.AgnosticServices.Models\LetsTalk.Server.Persistence.AgnosticServices.Models.csproj" />
+    <ProjectReference Include="..\..\Persistence\LetsTalk.Server.Persistence.AgnosticServices\LetsTalk.Server.Persistence.AgnosticServices.csproj" />
+    <ProjectReference Include="..\..\Persistence\LetsTalk.Server.Persistence.Enums\LetsTalk.Server.Persistence.Enums.csproj" />
+    <ProjectReference Include="..\..\Persistence\LetsTalk.Server.Persistence.Redis\LetsTalk.Server.Persistence.Redis.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Localization.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Localization.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

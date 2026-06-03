@@ -80,6 +80,7 @@ public static class LinkPreviewServiceRegistration
         services.AddScoped<IRegexService, RegexService>();
         services.AddScoped<ILinkPreviewService, FallbackLinkPreviewService>();
         services.DecorateScoped<ILinkPreviewService, LinkPreviewService>();
+        services.AddScoped<ILinkPreviewLogger, LinkPreviewLogger>();
 
         return services;
     }

@@ -16,27 +16,18 @@ namespace LetsTalk.Server.LinkPreview.Lambda
             context.Logger.LogLine($"Request received: {serializedRequest}");
 
             var httpClientService = new FakeHttpClientService();
-
             var downloadService = new DownloadService(httpClientService);
+            var logger = new AmazonLambdaLogger(context.Logger);
 
             var linkPreviewService = new LinkPreviewService(
                 downloadService,
                 new RegexService(),
-                new FallbackLinkPreviewService(downloadService));
+                new FallbackLinkPreviewService(downloadService, logger),
+                logger);
 
             var model = await linkPreviewService.GenerateLinkPreviewAsync(request);
 
-            if (model.Error != null)
-            {
-                context.Logger.LogError(model.Error, $"Unable to download: {request.Url}");
-
-                if (model.OpenGraphModel == null)
-                {
-                    return;
-                }
-            }
-
-            if (model.OpenGraphModel == null || string.IsNullOrWhiteSpace(model.OpenGraphModel.Title))
+            if (model == null || string.IsNullOrWhiteSpace(model.Title))
             {
                 context.Logger.LogInformation($"Title is empty: {request.Url}");
                 return;
@@ -47,8 +38,8 @@ namespace LetsTalk.Server.LinkPreview.Lambda
                 MessageId = request.MessageId,
                 ChatId = request.ChatId,
                 Url = request.Url,
-                Title = model.OpenGraphModel?.Title,
-                ImageUrl = model.OpenGraphModel?.ImageUrl
+                Title = model.Title,
+                ImageUrl = model.ImageUrl
             };
             using var client = httpClientService.GetHttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {request.Token}");
